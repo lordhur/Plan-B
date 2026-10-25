@@ -173,6 +173,12 @@ async function main() {
 
   // Nettoyage (ordre respectant les contraintes)
   await prisma.notification.deleteMany()
+  await prisma.forumReply.deleteMany()
+  await prisma.forumPost.deleteMany()
+  await prisma.groupMember.deleteMany()
+  await prisma.interestGroup.deleteMany()
+  await prisma.pageFollow.deleteMany()
+  await prisma.page.deleteMany()
   await prisma.redeemedOffer.deleteMany()
   await prisma.partnerOffer.deleteMany()
   await prisma.partner.deleteMany()
@@ -838,6 +844,107 @@ async function main() {
       },
     })
   }
+
+  // ----------------------------- Pages & groupes (Phase 5) -----------------------------
+
+  // Page vérifiée du Café des Arcades (gérée par marie) + abonnés
+  const cafePage = await prisma.page.create({
+    data: {
+      ownerId: U('marie@planb.app'),
+      name: 'Café des Arcades',
+      slug: 'cafe-des-arcades',
+      description: 'Le QG des sorties dracénoises : concerts jazz, quiz, soirées jeux et bonne humeur, place des Arcades.',
+      category: 'restaurant',
+      city: 'Draguignan',
+      address: '12 place des Arcades',
+      phone: '04 94 68 12 34',
+      isVerified: true,
+      followerCount: 3,
+    },
+  })
+  for (const email of ['thomas@planb.app', 'julie@planb.app', 'lea@planb.app']) {
+    await prisma.pageFollow.create({ data: { pageId: cafePage.id, userId: U(email) } })
+  }
+  await prisma.page.create({
+    data: {
+      ownerId: U('karim@planb.app'),
+      name: 'Var Rando Évasion',
+      slug: 'var-rando-evasion',
+      description: 'Association de randonnée pédestre dans le Var : sorties hebdomadaires tous niveaux, de l’Estérel aux Gorges du Verdon.',
+      category: 'association',
+      city: 'Draguignan',
+      followerCount: 1,
+    },
+  })
+
+  // Groupes d'intérêt avec forum
+  const randonneurs = await prisma.interestGroup.create({
+    data: {
+      name: 'Randonneurs du Var',
+      slug: 'randonneurs-du-var',
+      description: 'Le groupe des amoureux des sentiers varois : comptes-rendus, conseils matos et bons plans rando.',
+      category: 'nature',
+      memberCount: 4,
+    },
+  })
+  for (const [email, role] of [
+    ['karim@planb.app', 'ADMIN'],
+    ['thomas@planb.app', 'MEMBER'],
+    ['sophie@planb.app', 'MEMBER'],
+    ['lea@planb.app', 'MODERATOR'],
+  ] as const) {
+    await prisma.groupMember.create({ data: { groupId: randonneurs.id, userId: U(email), role } })
+  }
+  const gamers = await prisma.interestGroup.create({
+    data: {
+      name: 'Soirées jeux du 83',
+      slug: 'soirees-jeux-du-83',
+      description: 'Jeux de société, quiz et tournois : trouvez des joueurs partout dans le Var.',
+      category: 'jeux',
+      memberCount: 2,
+    },
+  })
+  for (const email of ['julie@planb.app', 'antoine@planb.app']) {
+    await prisma.groupMember.create({ data: { groupId: gamers.id, userId: U(email), role: 'MEMBER' } })
+  }
+  await prisma.groupMember.create({ data: { groupId: gamers.id, userId: U('lea@planb.app'), role: 'ADMIN' } })
+  await prisma.interestGroup.update({ where: { id: gamers.id }, data: { memberCount: 3 } })
+
+  // Discussions du forum
+  const thread1 = await prisma.forumPost.create({
+    data: {
+      groupId: randonneurs.id,
+      authorId: U('karim@planb.app'),
+      title: 'Les plus belles cascades du Var — vos incontournables ?',
+      content: 'Je compile mes spots pour la sortie de printemps. Pour moi : Nartuby, Caramy et le Vallon Sourn. Et vous ?',
+      isPinned: true,
+      createdAt: daysAgo(6),
+    },
+  })
+  await prisma.forumReply.create({
+    data: { postId: thread1.id, authorId: U('thomas@planb.app'), content: 'La Nartuby reste ma préférée, surtout au printemps quand le débit est bon 💦', createdAt: daysAgo(5) },
+  })
+  await prisma.forumReply.create({
+    data: { postId: thread1.id, authorId: U('sophie@planb.app'), content: 'Ajoutez le Caramy près de Brignoles — peu de monde même le week-end !', createdAt: daysAgo(4) },
+  })
+  await prisma.forumPost.create({
+    data: {
+      groupId: randonneurs.id,
+      authorId: U('lea@planb.app'),
+      title: 'Chaussures : trail ou rando classique pour le Rocher de Roquebrune ?',
+      content: 'Le rocher est abrasif, j’hésite entre mes chaussures de trail et mes montantes. Des retours ?',
+      createdAt: daysAgo(2),
+    },
+  })
+  await prisma.forumPost.create({
+    data: {
+      groupId: gamers.id,
+      authorId: U('lea@planb.app'),
+      title: 'Qui pour un 7 Wonders mercredi soir ?',
+      content: 'Il manque 2 joueurs pour mercredi 20h au Café des Arcades. Niveau détendu, on explique les règles sur place.',
+      createdAt: daysAgo(1),
+    },
+  })
 
   // ----------------------------- Badges attribués -----------------------------
 

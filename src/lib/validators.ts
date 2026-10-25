@@ -91,6 +91,8 @@ export const createEventSchema = z
     shortDescription: z.string().trim().max(180).optional(),
     coverImage: z.string().url().optional(),
     tags: z.array(z.string().trim().min(1).max(30)).max(8).default([]),
+    // Publier au nom d'une page (Phase 5)
+    pageId: z.string().min(1).optional(),
     // Étape 2 — quand et où
     startDate: z.coerce.date(),
     endDate: z.coerce.date().nullable().optional(),

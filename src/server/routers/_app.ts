@@ -3,11 +3,13 @@ import { authRouter } from './auth'
 import { billingRouter } from './billing'
 import { carpoolRouter } from './carpool'
 import { eventsRouter } from './events'
+import { groupsRouter } from './groups'
 import { friendsRouter } from './friends'
 import { leaderboardRouter } from './leaderboard'
 import { messagesRouter } from './messages'
 import { notificationsRouter } from './notifications'
 import { offersRouter } from './offers'
+import { pagesRouter } from './pages'
 import { ratingsRouter } from './ratings'
 import { usersRouter } from './users'
 import { createTRPCRouter } from '../trpc'
@@ -29,6 +31,8 @@ export const appRouter = createTRPCRouter({
   leaderboard: leaderboardRouter,
   billing: billingRouter,
   offers: offersRouter,
+  pages: pagesRouter,
+  groups: groupsRouter,
 })
 
 export type AppRouter = typeof appRouter

@@ -6,6 +6,7 @@ import { computeFeedScore } from '@/lib/feed'
 import { prisma } from '../db'
 import { notify } from '../notifications'
 import { promoteFromWaitlist } from '../waitlist'
+import { notifyPageFollowers } from './pages'
 import { createTRPCRouter, protectedProcedure, publicProcedure, verifiedProcedure } from '../trpc'
 import type { Event, EventCategory, User } from '@/generated/prisma/client'
 
@@ -408,6 +409,14 @@ export const eventsRouter = createTRPCRouter({
     const category = await prisma.eventCategory.findUnique({ where: { id: input.categoryId } })
     if (!category) throw new TRPCError({ code: 'BAD_REQUEST', message: 'Catégorie inconnue' })
 
+    // Publication au nom d'une page : le compte doit en être propriétaire
+    if (input.pageId) {
+      const page = await prisma.page.findUnique({ where: { id: input.pageId }, select: { ownerId: true } })
+      if (!page || page.ownerId !== ctx.user.id) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Vous ne pouvez publier qu’au nom de vos propres pages' })
+      }
+    }
+
     // Slug unique
     const baseSlug = slugify(input.title) || 'plan'
     let slug = baseSlug
@@ -428,6 +437,11 @@ export const eventsRouter = createTRPCRouter({
         visibility: input.isDraft ? 'UNLISTED' : input.visibility,
       },
     })
+
+    // Publication via une page : alerte les abonnés (Phase 5 §5.1)
+    if (!input.isDraft && input.pageId) {
+      await notifyPageFollowers(input.pageId, event.slug, event.title)
+    }
 
     // L'organisateur participe automatiquement à son événement
     if (!input.isDraft) {
