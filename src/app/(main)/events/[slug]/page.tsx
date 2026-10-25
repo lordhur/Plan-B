@@ -9,6 +9,7 @@ import {
   Globe,
   Info,
   Lock,
+  Camera,
   MapPin,
   MessageSquare,
   Share2,
@@ -30,6 +31,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EventMap } from '@/components/events/EventMap'
 import { JoinButton } from '@/components/events/JoinButton'
 import { ShareEventModal } from '@/components/events/ShareEventModal'
+import { CarpoolSection } from '@/components/events/CarpoolSection'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -340,6 +342,23 @@ export default function EventDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Album photos (pendant/après l'événement) */}
+      {(event.status === 'COMPLETED' || event.status === 'ONGOING') && (
+        <Button asChild variant="outline">
+          <Link href={`/events/${event.slug}/photos`}>
+            <Camera className="h-4 w-4" aria-hidden /> Voir l’album photos
+          </Link>
+        </Button>
+      )}
+
+      {/* Covoiturage — événement à venir */}
+      {event.status === 'UPCOMING' && (
+        <CarpoolSection
+          eventId={event.id}
+          canParticipate={event.isOrganizer || myStatus === 'CONFIRMED' || myStatus === 'ATTENDED'}
+        />
+      )}
 
       {/* Chat d'événement — organisateur + participants confirmés */}
       {(myStatus === 'CONFIRMED' || myStatus === 'ATTENDED' || event.isOrganizer) &&

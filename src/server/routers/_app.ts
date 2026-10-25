@@ -1,6 +1,9 @@
+import { albumsRouter } from './albums'
 import { authRouter } from './auth'
+import { carpoolRouter } from './carpool'
 import { eventsRouter } from './events'
 import { friendsRouter } from './friends'
+import { leaderboardRouter } from './leaderboard'
 import { messagesRouter } from './messages'
 import { notificationsRouter } from './notifications'
 import { ratingsRouter } from './ratings'
@@ -19,6 +22,9 @@ export const appRouter = createTRPCRouter({
   friends: friendsRouter,
   messages: messagesRouter,
   ratings: ratingsRouter,
+  albums: albumsRouter,
+  carpool: carpoolRouter,
+  leaderboard: leaderboardRouter,
 })
 
 export type AppRouter = typeof appRouter

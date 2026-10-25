@@ -2,6 +2,7 @@ import { prisma } from '@/server/db'
 import { promoteAllPendingWaitlists } from '@/server/waitlist'
 import { refreshAllTrustScores } from '@/server/trust'
 import { awardAllBadges } from '@/server/badges'
+import { refreshLeaderboards } from '@/server/leaderboard'
 import { notify } from '@/server/notifications'
 
 /**
@@ -57,6 +58,8 @@ export async function GET(request: Request, { params }: { params: Promise<{ job:
         return respond(await awardAllBadges())
       case 'update-trust-scores':
         return respond({ updated: await refreshAllTrustScores() })
+      case 'update-leaderboards':
+        return respond(await refreshLeaderboards())
       case 'cleanup-expired':
         return respond(await cleanupExpired())
       default:

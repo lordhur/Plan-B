@@ -7,6 +7,9 @@
  * Autres comptes  : marie@planb.app, julie@planb.app… (même mot de passe)
  */
 import 'dotenv/config'
+import { mkdir, writeFile } from 'node:fs/promises'
+import path from 'node:path'
+import sharp from 'sharp'
 import { hash } from '@node-rs/argon2'
 import { PrismaPg } from '@prisma/adapter-pg'
 import { PrismaClient } from '../src/generated/prisma/client'
@@ -170,6 +173,10 @@ async function main() {
 
   // Nettoyage (ordre respectant les contraintes)
   await prisma.notification.deleteMany()
+  await prisma.media.deleteMany()
+  await prisma.eventAlbum.deleteMany()
+  await prisma.carpoolRequest.deleteMany()
+  await prisma.carpoolOffer.deleteMany()
   await prisma.directMessage.deleteMany()
   await prisma.conversation.deleteMany()
   await prisma.eventChatMessage.deleteMany()
@@ -737,6 +744,59 @@ async function main() {
         content,
         createdAt: new Date(Date.now() - minutesAgo * 60_000),
       },
+    })
+  }
+
+  // ----------------------------- Album photos + covoiturage (Phase 3) -----------------------------
+
+  // Album de la rando passée : 3 photos générées (dégradés) dans data/uploads
+  const album = await prisma.eventAlbum.create({ data: { eventId: past.id } })
+  const uploadDir = path.join(process.cwd(), 'data', 'uploads')
+  await mkdir(uploadDir, { recursive: true })
+  const photoSeeds: [name: string, from: string, to: string, caption: string, uploader: string][] = [
+    ['cascades', '#0ea5e9', '#14532d', 'Les cascades de la Nartuby 💦', 'sophie@planb.app'],
+    ['sommet', '#f59e0b', '#7c2d12', 'Pause au sommet, vue sur les Maures', 'karim@planb.app'],
+    ['groupe', '#ec4899', '#4c1d95', 'Le groupe au complet ! 🥾', 'lea@planb.app'],
+  ]
+  for (const [name, from, to, caption, uploader] of photoSeeds) {
+    const svg = `<svg width="800" height="800"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/></linearGradient></defs><rect width="800" height="800" fill="url(#g)"/><text x="400" y="420" font-size="120" text-anchor="middle" fill="white" opacity="0.85" font-family="sans-serif">📷</text></svg>`
+    const full = await sharp(Buffer.from(svg)).jpeg({ quality: 82 }).toBuffer()
+    const thumb = await sharp(Buffer.from(svg)).resize(400, 400).jpeg({ quality: 75 }).toBuffer()
+    await writeFile(path.join(uploadDir, `seed-${name}.jpg`), full)
+    await writeFile(path.join(uploadDir, `thumb-seed-${name}.jpg`), thumb)
+    await prisma.media.create({
+      data: {
+        albumId: album.id,
+        uploaderId: U(uploader),
+        url: `/api/media/file/seed-${name}.jpg`,
+        thumbnailUrl: `/api/media/file/thumb-seed-${name}.jpg`,
+        type: 'IMAGE',
+        caption,
+      },
+    })
+  }
+
+  // Covoiturage pour la rando de Roquebrune : karim conduit, thomas accepté, sophie en attente
+  const roquebrune = await prisma.event.findUnique({ where: { slug: 'rando-rocher-roquebrune' } })
+  if (roquebrune) {
+    const offer = await prisma.carpoolOffer.create({
+      data: {
+        eventId: roquebrune.id,
+        driverId: U('karim@planb.app'),
+        departurePoint: 'Place René Cassin, Draguignan',
+        departureLatitude: 43.5377,
+        departureLongitude: 6.4661,
+        departureTime: new Date(roquebrune.startDate.getTime() - 45 * 60_000),
+        availableSeats: 4,
+        pricePerSeat: 3,
+        notes: 'Je passe par la N7, départ précis !',
+      },
+    })
+    await prisma.carpoolRequest.create({
+      data: { offerId: offer.id, passengerId: U('thomas@planb.app'), status: 'ACCEPTED' },
+    })
+    await prisma.carpoolRequest.create({
+      data: { offerId: offer.id, passengerId: U('sophie@planb.app'), status: 'PENDING' },
     })
   }
 

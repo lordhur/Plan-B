@@ -111,6 +111,31 @@ export const eventsRouter = createTRPCRouter({
     prisma.eventCategory.findMany({ orderBy: { name: 'asc' } }),
   ),
 
+  /** Événements d'un intervalle de dates (vue calendrier). */
+  inRange: publicProcedure
+    .input(z.object({ from: z.coerce.date(), to: z.coerce.date() }))
+    .query(async ({ input }) =>
+      prisma.event.findMany({
+        where: {
+          status: { in: ['UPCOMING', 'ONGOING'] },
+          startDate: { gte: input.from, lte: input.to },
+        },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          startDate: true,
+          endDate: true,
+          city: true,
+          price: true,
+          currentParticipants: true,
+          maxParticipants: true,
+          category: { select: { slug: true, name: true, icon: true, color: true } },
+        },
+        orderBy: { startDate: 'asc' },
+      }),
+    ),
+
   /** Fil d'actualité : plans à venir, classés par l'algorithme de pertinence. */
   feed: publicProcedure
     .input(
