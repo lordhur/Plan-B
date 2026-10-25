@@ -1,0 +1,1005 @@
+// ============================================================
+// schema.prisma — PlanB Database Schema
+// ============================================================
+// Prisma 7 : client TypeScript pur (générateur "prisma-client"),
+// connexion via driver adapter (voir src/server/db.ts).
+//
+// Production (Supabase/PostgreSQL) : activer au besoin
+//   extensions = [pg_trgm, postgis] (preview feature "postgresqlExtensions")
+// Local : PGlite (PostgreSQL compilé en WASM) via scripts/pglite-server.ts
+// ============================================================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // Prisma 7 : l'URL de connexion est définie dans prisma.config.ts (CLI/migrations)
+  // et via le driver adapter dans src/server/db.ts (runtime).
+}
+
+// ========================
+// 1. UTILISATEURS
+// ========================
+
+model User {
+  id            String  @id @default(cuid())
+  email         String  @unique
+  emailVerified Boolean @default(false)
+  phone         String? @unique
+  phoneVerified Boolean @default(false)
+  passwordHash  String
+
+  // Profil
+  firstName   String
+  lastName    String
+  displayName String?
+  dateOfBirth DateTime
+  gender      Gender
+  bio         String?  @db.Text
+  city        String?
+  latitude    Float?
+  longitude   Float?
+
+  // Photos de profil (une ou plusieurs)
+  profilePhotos ProfilePhoto[]
+  avatarUrl     String? // Photo principale
+
+  // Préférences
+  interests          Interest[]
+  favoriteCategories EventCategory[]
+
+  // Confidentialité
+  privacyLevel        PrivacyLevel      @default(PUBLIC)
+  allowMessagesFrom   MessagePermission @default(EVERYONE)
+  allowFriendRequests Boolean           @default(true)
+  showAge             Boolean           @default(true)
+  showLastName        Boolean           @default(false)
+
+  // Statistiques & Réputation
+  averageRating  Float @default(5.0)
+  totalRatings   Int   @default(0)
+  trustScore     Int   @default(50) // 0-100
+  eventsCreated  Int   @default(0)
+  eventsAttended Int   @default(0)
+
+  // Système de badges
+  badges UserBadge[]
+
+  // Relations sociales
+  sentFriendRequests     FriendRequest[] @relation("SentRequests")
+  receivedFriendRequests FriendRequest[] @relation("ReceivedRequests")
+  friendshipsA           Friendship[]    @relation("FriendA")
+  friendshipsB           Friendship[]    @relation("FriendB")
+  friendCount            Int             @default(0)
+
+  // Événements
+  organizedEvents     Event[]              @relation("Organizer")
+  eventParticipations EventParticipation[]
+  waitlistEntries     WaitlistEntry[]
+  eventInvitations    EventInvitation[]
+
+  // Messagerie
+  sentMessages        DirectMessage[]      @relation("Sender")
+  receivedMessages    DirectMessage[]      @relation("Receiver")
+  conversationMembers ConversationMember[]
+  eventChatMessages   EventChatMessage[]
+
+  // Albums & Médias
+  uploadedMedia        Media[]
+  mediaIdentifications MediaIdentification[]
+
+  // Pages
+  ownedPages  Page[]       @relation("PageOwner")
+  pageFollows PageFollow[]
+
+  // Groupes d'intérêt
+  groupMemberships GroupMember[]
+  forumPosts       ForumPost[]
+  forumReplies     ForumReply[]
+
+  // Covoiturage
+  offeredRides    CarpoolOffer[]
+  carpoolRequests CarpoolRequest[]
+
+  // Classements
+  leaderboardEntries LeaderboardEntry[]
+
+  // Abonnement premium
+  subscription Subscription?
+
+  // Signalements
+  reportsMade     Report[]     @relation("Reporter")
+  reportsReceived Report[]     @relation("Reported")
+  ratingsGiven    UserRating[] @relation("RatingFrom")
+  ratingsReceived UserRating[] @relation("RatingTo")
+
+  // Notifications
+  notifications     Notification[]
+  pushSubscriptions PushSubscription[]
+
+  // Partenariats
+  redeemedOffers RedeemedOffer[]
+
+  // Codes de vérification (email, téléphone, reset mot de passe)
+  verificationCodes VerificationCode[]
+
+  // Méta
+  isActive     Boolean   @default(true)
+  isBanned     Boolean   @default(false)
+  banReason    String?
+  lastActiveAt DateTime  @default(now())
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([latitude, longitude])
+  @@index([city])
+  @@index([averageRating])
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  NON_BINARY
+  OTHER
+  PREFER_NOT_TO_SAY
+}
+
+enum PrivacyLevel {
+  PUBLIC
+  FRIENDS_OF_FRIENDS
+  FRIENDS_ONLY
+  PRIVATE
+}
+
+enum MessagePermission {
+  EVERYONE
+  FRIENDS_OF_FRIENDS
+  FRIENDS_ONLY
+  NOBODY
+}
+
+model ProfilePhoto {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  url       String
+  isPrimary Boolean  @default(false)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Vérification email / téléphone / reset mot de passe
+// (Extension du schéma : nécessaire au flux d'inscription multi-étapes)
+model VerificationCode {
+  id        String             @id @default(cuid())
+  userId    String?
+  user      User?              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  target    String // email ou téléphone concerné
+  codeHash  String
+  type      VerificationType
+  expiresAt DateTime
+  attempts  Int                @default(0)
+  consumedAt DateTime?
+  createdAt DateTime           @default(now())
+
+  @@index([target, type])
+}
+
+enum VerificationType {
+  EMAIL_VERIFICATION
+  PHONE_VERIFICATION
+  PASSWORD_RESET
+}
+
+// ========================
+// 2. CENTRES D'INTÉRÊT
+// ========================
+
+model Interest {
+  id    String @id @default(cuid())
+  name  String @unique
+  icon  String?
+  users User[]
+}
+
+// ========================
+// 3. BADGES
+// ========================
+
+model Badge {
+  id          String        @id @default(cuid())
+  code        String        @unique
+  name        String
+  description String
+  icon        String
+  color       String
+  category    BadgeCategory
+  criteria    Json // Critères automatiques pour obtenir le badge
+  userBadges  UserBadge[]
+}
+
+model UserBadge {
+  id       String   @id @default(cuid())
+  userId   String
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badgeId  String
+  badge    Badge    @relation(fields: [badgeId], references: [id])
+  earnedAt DateTime @default(now())
+
+  @@unique([userId, badgeId])
+}
+
+enum BadgeCategory {
+  TRUST // Badge de confiance
+  ORGANIZER // Badge organisateur (bronze, argent, or)
+  PARTICIPANT // Participant actif
+  SOCIAL // Réseau social étendu
+  CATEGORY // Spécialiste d'une catégorie
+  SPECIAL // Badges spéciaux
+}
+
+// ========================
+// 4. AMIS
+// ========================
+
+model FriendRequest {
+  id         String              @id @default(cuid())
+  senderId   String
+  sender     User                @relation("SentRequests", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId String
+  receiver   User                @relation("ReceivedRequests", fields: [receiverId], references: [id], onDelete: Cascade)
+  status     FriendRequestStatus @default(PENDING)
+  message    String?
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  @@unique([senderId, receiverId])
+}
+
+model Friendship {
+  id        String   @id @default(cuid())
+  userAId   String
+  userA     User     @relation("FriendA", fields: [userAId], references: [id], onDelete: Cascade)
+  userBId   String
+  userB     User     @relation("FriendB", fields: [userBId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+enum FriendRequestStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  BLOCKED
+}
+
+// ========================
+// 5. ÉVÉNEMENTS
+// ========================
+
+model EventCategory {
+  id     String @id @default(cuid())
+  name   String @unique
+  slug   String @unique
+  icon   String
+  color  String
+  users  User[] // Catégories favorites des utilisateurs
+  events Event[]
+}
+
+model Event {
+  id         String @id @default(cuid())
+  slug       String @unique // pour les liens partageables
+  shareToken String @unique @default(cuid()) // lien sans auth
+
+  // Organisateur
+  organizerId String
+  organizer   User    @relation("Organizer", fields: [organizerId], references: [id])
+  pageId      String? // Si créé par une page
+  page        Page?   @relation(fields: [pageId], references: [id])
+
+  // Informations générales
+  title            String
+  description      String  @db.Text
+  shortDescription String?
+  coverImage       String?
+
+  // Catégorie
+  categoryId String
+  category   EventCategory @relation(fields: [categoryId], references: [id])
+  tags       String[]
+
+  // Date & Lieu
+  startDate DateTime
+  endDate   DateTime?
+  timezone  String    @default("Europe/Paris")
+
+  // Lieu
+  locationName String
+  address      String
+  city         String
+  zipCode      String?
+  latitude     Float
+  longitude    Float
+  isOnline     Boolean @default(false)
+  onlineLink   String?
+
+  // Capacité & Inscription
+  maxParticipants     Int?
+  minParticipants     Int?             @default(1)
+  currentParticipants Int              @default(0)
+  registrationType    RegistrationType @default(OPEN)
+
+  // Restrictions
+  minAge            Int?
+  maxAge            Int?
+  genderRestriction GenderRestriction @default(ALL)
+  minRating         Float? // Note minimale de profil requise
+
+  // Accessibilité
+  wheelchairAccessible Boolean @default(false)
+  hearingAccessible    Boolean @default(false)
+  visuallyAccessible   Boolean @default(false)
+  accessibilityNotes   String?
+
+  // Type d'événement
+  visibility      EventVisibility       @default(PUBLIC)
+  isCollaborative Boolean               @default(false) // Plusieurs organisateurs
+  collaborators   EventCollaborator[]
+
+  // Billetterie
+  isFree             Boolean  @default(true)
+  price              Float?   @default(0)
+  currency           String   @default("EUR")
+  stripePriceId      String?
+  platformFeePercent Float    @default(5.0) // Commission PlanB
+
+  // Sponsoring
+  isSponsored Boolean  @default(false)
+  sponsorId   String?
+  sponsor     Partner? @relation(fields: [sponsorId], references: [id])
+
+  // État
+  status       EventStatus @default(UPCOMING)
+  cancelReason String?
+
+  // Relations
+  participations EventParticipation[]
+  waitlist       WaitlistEntry[]
+  invitations    EventInvitation[]
+  chatMessages   EventChatMessage[]
+  album          EventAlbum?
+  carpoolOffers  CarpoolOffer[]
+
+  // Notifications
+  lastLocationUpdate DateTime?
+  lastUpdate         String?
+
+  // Méta
+  viewCount Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([latitude, longitude])
+  @@index([city])
+  @@index([startDate])
+  @@index([status])
+  @@index([categoryId])
+}
+
+enum RegistrationType {
+  OPEN // Inscription libre
+  APPROVAL_REQUIRED // Confirmation de l'organisateur
+  INVITATION_ONLY // Sur invitation uniquement
+}
+
+enum GenderRestriction {
+  ALL
+  MALE_ONLY
+  FEMALE_ONLY
+  NON_BINARY_ONLY
+}
+
+enum EventVisibility {
+  PUBLIC // Visible par tous
+  FRIENDS_ONLY // Amis uniquement
+  PRIVATE // Invitation uniquement
+  UNLISTED // Accessible via lien uniquement
+}
+
+enum EventStatus {
+  DRAFT
+  UPCOMING
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+model EventCollaborator {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  role      String   @default("co-organizer")
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+}
+
+model EventParticipation {
+  id      String              @id @default(cuid())
+  eventId String
+  event   Event               @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status  ParticipationStatus @default(CONFIRMED)
+  joinedAt DateTime           @default(now())
+
+  // Billetterie
+  ticketId   String? @unique
+  paymentId  String?
+  amountPaid Float?
+
+  // Notation post-événement
+  hasRated Boolean @default(false)
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
+enum ParticipationStatus {
+  PENDING // En attente de validation
+  CONFIRMED // Confirmé
+  DECLINED // Refusé par l'organisateur
+  CANCELLED // Annulé par le participant
+  ATTENDED // A participé (confirmé après l'event)
+  NO_SHOW // Ne s'est pas présenté
+}
+
+model WaitlistEntry {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  position  Int
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+  @@index([eventId, position])
+}
+
+model EventInvitation {
+  id        String           @id @default(cuid())
+  eventId   String
+  event     Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  invitedBy String
+  status    InvitationStatus @default(PENDING)
+  createdAt DateTime         @default(now())
+
+  @@unique([eventId, userId])
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
+// ========================
+// 6. MESSAGERIE INSTANTANÉE
+// ========================
+
+// Chat de groupe par événement
+model EventChatMessage {
+  id        String     @id @default(cuid())
+  eventId   String
+  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  content   String     @db.Text
+  mediaUrl  String?
+  mediaType MediaType?
+  isSystem  Boolean    @default(false) // Messages système
+  createdAt DateTime   @default(now())
+  editedAt  DateTime?
+  isDeleted Boolean    @default(false)
+
+  @@index([eventId, createdAt])
+}
+
+// Messagerie privée (conversations 1-1 ou groupe)
+model Conversation {
+  id        String               @id @default(cuid())
+  name      String? // Nom du groupe (null pour 1-1)
+  isGroup   Boolean              @default(false)
+  avatarUrl String?
+  members   ConversationMember[]
+  messages  DirectMessage[]
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
+
+model ConversationMember {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String       @default("member") // admin, member
+  joinedAt       DateTime     @default(now())
+  lastReadAt     DateTime     @default(now())
+  isMuted        Boolean      @default(false)
+
+  @@unique([conversationId, userId])
+}
+
+model DirectMessage {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("Sender", fields: [senderId], references: [id])
+  receiverId     String? // null pour les messages de groupe
+  receiver       User?        @relation("Receiver", fields: [receiverId], references: [id])
+  content        String       @db.Text
+  mediaUrl       String?
+  mediaType      MediaType?
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  editedAt       DateTime?
+  isDeleted      Boolean      @default(false)
+
+  @@index([conversationId, createdAt])
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+}
+
+// ========================
+// 7. ALBUMS & MÉDIAS
+// ========================
+
+model EventAlbum {
+  id        String   @id @default(cuid())
+  eventId   String   @unique
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  media     Media[]
+  isLocked  Boolean  @default(false) // Verrouillé après un certain temps
+  createdAt DateTime @default(now())
+}
+
+model Media {
+  id              String              @id @default(cuid())
+  albumId         String
+  album           EventAlbum          @relation(fields: [albumId], references: [id], onDelete: Cascade)
+  uploaderId      String
+  uploader        User                @relation(fields: [uploaderId], references: [id])
+  url             String
+  thumbnailUrl    String?
+  type            MediaType
+  caption         String?
+  identifications MediaIdentification[]
+  createdAt       DateTime            @default(now())
+}
+
+model MediaIdentification {
+  id        String   @id @default(cuid())
+  mediaId   String
+  media     Media    @relation(fields: [mediaId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  taggedBy  String // ID de la personne qui a identifié
+  confirmed Boolean  @default(false) // L'utilisateur identifié confirme
+  positionX Float? // Position sur la photo (%)
+  positionY Float?
+  createdAt DateTime @default(now())
+
+  @@unique([mediaId, userId])
+}
+
+// ========================
+// 8. NOTATION & RÉPUTATION
+// ========================
+
+model UserRating {
+  id        String   @id @default(cuid())
+  fromId    String
+  from      User     @relation("RatingFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  toId      String
+  to        User     @relation("RatingTo", fields: [toId], references: [id], onDelete: Cascade)
+  eventId   String // Toujours lié à un événement
+  rating    Int // 1-5
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@unique([fromId, toId, eventId])
+  @@index([toId])
+}
+
+// ========================
+// 9. SIGNALEMENTS
+// ========================
+
+model Report {
+  id          String       @id @default(cuid())
+  reporterId  String
+  reporter    User         @relation("Reporter", fields: [reporterId], references: [id])
+  reportedId  String
+  reported    User         @relation("Reported", fields: [reportedId], references: [id])
+  eventId     String?
+  reason      ReportReason
+  description String?      @db.Text
+  status      ReportStatus @default(PENDING)
+  createdAt   DateTime     @default(now())
+  resolvedAt  DateTime?
+}
+
+enum ReportReason {
+  HARASSMENT
+  INAPPROPRIATE_BEHAVIOR
+  NO_SHOW
+  FAKE_PROFILE
+  SPAM
+  VIOLENCE
+  OTHER
+}
+
+enum ReportStatus {
+  PENDING
+  INVESTIGATING
+  RESOLVED
+  DISMISSED
+}
+
+// ========================
+// 10. COVOITURAGE
+// ========================
+
+model CarpoolOffer {
+  id                 String           @id @default(cuid())
+  eventId            String
+  event              Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  driverId           String
+  driver             User             @relation(fields: [driverId], references: [id])
+  departurePoint     String
+  departureLatitude  Float
+  departureLongitude Float
+  departureTime      DateTime
+  availableSeats     Int
+  pricePerSeat       Float            @default(0)
+  notes              String?
+  requests           CarpoolRequest[]
+  createdAt          DateTime         @default(now())
+}
+
+model CarpoolRequest {
+  id             String        @id @default(cuid())
+  offerId        String
+  offer          CarpoolOffer  @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  passengerId    String
+  passenger      User          @relation(fields: [passengerId], references: [id])
+  status         CarpoolStatus @default(PENDING)
+  seatsRequested Int           @default(1)
+  createdAt      DateTime      @default(now())
+
+  @@unique([offerId, passengerId])
+}
+
+enum CarpoolStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  CANCELLED
+}
+
+// ========================
+// 11. PAGES (Commerces/Organisations)
+// ========================
+
+model Page {
+  id            String         @id @default(cuid())
+  ownerId       String
+  owner         User           @relation("PageOwner", fields: [ownerId], references: [id])
+  name          String
+  slug          String         @unique
+  description   String?        @db.Text
+  category      String
+  avatarUrl     String?
+  coverUrl      String?
+  address       String?
+  city          String?
+  phone         String?
+  website       String?
+  email         String?
+  isVerified    Boolean        @default(false)
+  followerCount Int            @default(0)
+  followers     PageFollow[]
+  events        Event[]
+  partnerOffers PartnerOffer[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model PageFollow {
+  id        String   @id @default(cuid())
+  pageId    String
+  page      Page     @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([pageId, userId])
+}
+
+// ========================
+// 12. GROUPES D'INTÉRÊT
+// ========================
+
+model InterestGroup {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  description String?       @db.Text
+  coverImage  String?
+  category    String
+  isPrivate   Boolean       @default(false)
+  memberCount Int           @default(0)
+  members     GroupMember[]
+  forumPosts  ForumPost[]
+  createdAt   DateTime      @default(now())
+}
+
+model GroupMember {
+  id       String        @id @default(cuid())
+  groupId  String
+  group    InterestGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role     GroupRole     @default(MEMBER)
+  joinedAt DateTime      @default(now())
+
+  @@unique([groupId, userId])
+}
+
+enum GroupRole {
+  ADMIN
+  MODERATOR
+  MEMBER
+}
+
+model ForumPost {
+  id        String        @id @default(cuid())
+  groupId   String
+  group     InterestGroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User          @relation(fields: [authorId], references: [id])
+  title     String
+  content   String        @db.Text
+  isPinned  Boolean       @default(false)
+  replies   ForumReply[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ForumReply {
+  id        String    @id @default(cuid())
+  postId    String
+  post      ForumPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  content   String    @db.Text
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+// ========================
+// 13. PARTENARIATS & OFFRES
+// ========================
+
+model Partner {
+  id              String         @id @default(cuid())
+  name            String
+  slug            String         @unique
+  description     String?
+  logoUrl         String?
+  type            PartnerType
+  offers          PartnerOffer[]
+  sponsoredEvents Event[]
+  advertisements  Advertisement[]
+  createdAt       DateTime       @default(now())
+}
+
+enum PartnerType {
+  LOCAL_BUSINESS
+  BRAND
+  ORGANIZATION
+  VENUE
+}
+
+model PartnerOffer {
+  id                 String          @id @default(cuid())
+  partnerId          String
+  partner            Partner         @relation(fields: [partnerId], references: [id])
+  pageId             String?
+  page               Page?           @relation(fields: [pageId], references: [id])
+  title              String
+  description        String
+  discountPercent    Float?
+  discountCode       String?
+  validFrom          DateTime
+  validUntil         DateTime
+  maxRedemptions     Int?
+  currentRedemptions Int             @default(0)
+  redeemedOffers     RedeemedOffer[]
+  createdAt          DateTime        @default(now())
+}
+
+model RedeemedOffer {
+  id        String       @id @default(cuid())
+  offerId   String
+  offer     PartnerOffer @relation(fields: [offerId], references: [id])
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime     @default(now())
+
+  @@unique([offerId, userId])
+}
+
+// ========================
+// 14. ABONNEMENTS PREMIUM
+// ========================
+
+model Subscription {
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  user                 User               @relation(fields: [userId], references: [id])
+  plan                 SubscriptionPlan
+  stripeSubscriptionId String?            @unique
+  stripeCustomerId     String?
+  status               SubscriptionStatus @default(ACTIVE)
+  currentPeriodStart   DateTime
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+enum SubscriptionPlan {
+  FREE
+  ORGANIZER_PRO // Pour organisateurs récurrents
+  PREMIUM // Avantages utilisateur
+  BUSINESS // Pour les pages/commerces
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  UNPAID
+}
+
+// ========================
+// 15. CLASSEMENTS
+// ========================
+
+model LeaderboardEntry {
+  id         String            @id @default(cuid())
+  userId     String
+  user       User              @relation(fields: [userId], references: [id])
+  period     LeaderboardPeriod
+  scope      LeaderboardScope
+  scopeValue String? // Département, région, etc.
+  categoryId String? // Catégorie d'événement spécifique
+  score      Int               @default(0)
+  rank       Int?
+  updatedAt  DateTime          @updatedAt
+
+  @@unique([userId, period, scope, scopeValue, categoryId])
+  @@index([period, scope, scopeValue, score])
+}
+
+enum LeaderboardPeriod {
+  WEEKLY
+  MONTHLY
+  ALL_TIME
+}
+
+enum LeaderboardScope {
+  NATIONAL
+  REGIONAL
+  DEPARTMENTAL
+  CITY
+}
+
+// ========================
+// 16. NOTIFICATIONS
+// ========================
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  body      String
+  data      Json? // Données additionnelles (eventId, userId, etc.)
+  link      String?
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, isRead, createdAt])
+}
+
+enum NotificationType {
+  EVENT_INVITATION
+  EVENT_UPDATE
+  EVENT_CANCELLED
+  EVENT_REMINDER
+  EVENT_LOCATION_CHANGE
+  EVENT_FULL
+  EVENT_NEW_PARTICIPANT
+  EVENT_PARTICIPANT_LEFT
+  PARTICIPATION_APPROVED
+  PARTICIPATION_DECLINED
+  WAITLIST_PROMOTED
+  FRIEND_REQUEST
+  FRIEND_ACCEPTED
+  MESSAGE_RECEIVED
+  RATING_RECEIVED
+  BADGE_EARNED
+  PAGE_NEW_EVENT
+  CARPOOL_REQUEST
+  CARPOOL_ACCEPTED
+  GROUP_NEW_POST
+  PARTNER_OFFER
+  SYSTEM
+}
+
+model PushSubscription {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  endpoint  String   @unique
+  p256dh    String
+  auth      String
+  createdAt DateTime @default(now())
+}
+
+// ========================
+// 17. PUBLICITÉS
+// ========================
+
+model Advertisement {
+  id               String   @id @default(cuid())
+  partnerId        String?
+  partner          Partner? @relation(fields: [partnerId], references: [id])
+  title            String
+  description      String?
+  imageUrl         String?
+  linkUrl          String
+  targetCity       String?
+  targetCategories String[]
+  impressions      Int      @default(0)
+  clicks           Int      @default(0)
+  budget           Float
+  costPerClick     Float
+  isActive         Boolean  @default(true)
+  startDate        DateTime
+  endDate          DateTime
+  createdAt        DateTime @default(now())
+}

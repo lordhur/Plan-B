@@ -1,0 +1,50 @@
+'use client'
+
+import { ArrowLeft } from 'lucide-react'
+import Link from 'next/link'
+import { use, useMemo } from 'react'
+import { trpc } from '@/lib/trpc'
+import { useCurrentUser } from '@/lib/session'
+import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { ChatThread } from '@/components/messages/ChatThread'
+import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+
+/** Conversation privée 1-1 (spec Phase 2 §1.2). */
+export default function ConversationPage({ params }: { params: Promise<{ conversationId: string }> }) {
+  const { conversationId } = use(params)
+  const { user, isAuthenticated, isLoading: loadingMe } = useCurrentUser()
+
+  const meta = trpc.messages.messages.useQuery(
+    { conversationId, limit: 1 },
+    { enabled: isAuthenticated, refetchInterval: false },
+  )
+
+  const other = useMemo(() => {
+    const members = meta.data?.members ?? []
+    return members.find((m) => m.id !== user?.id) ?? null
+  }, [meta.data, user?.id])
+
+  if (loadingMe) return <LoadingSpinner label="Chargement" />
+
+  const name = other ? `${other.firstName} ${other.lastName}` : 'Conversation'
+
+  return (
+    <div className="mx-auto flex h-[calc(100dvh-8.5rem)] max-w-2xl flex-col px-4 md:h-[calc(100dvh-6rem)] md:px-0">
+      <header className="flex items-center gap-3 border-b border-border py-3">
+        <Button asChild variant="ghost" size="icon" aria-label="Retour aux messages">
+          <Link href="/messages">
+            <ArrowLeft className="h-5 w-5" aria-hidden />
+          </Link>
+        </Button>
+        {other && (
+          <Link href={`/profile/${other.id}`} className="flex items-center gap-3">
+            <Avatar src={other.avatarUrl} name={name} size="sm" />
+            <span className="font-semibold">{name}</span>
+          </Link>
+        )}
+      </header>
+      <ChatThread kind="dm" id={conversationId} />
+    </div>
+  )
+}

@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   Surfaces du thème clair / sombre (variables RGB pour Tailwind)
+   ============================================================ */
+@layer base {
+  :root {
+    --bg: 255 255 255;
+    --bg-secondary: 248 250 252;
+    --card: 255 255 255;
+    --border: 226 232 240;
+    --fg: 15 23 42;
+    --fg-muted: 100 116 139;
+  }
+
+  .dark {
+    --bg: 15 23 42;
+    --bg-secondary: 30 41 59;
+    --card: 30 41 59;
+    --border: 51 65 85;
+    --fg: 241 245 249;
+    --fg-muted: 148 163 184;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg text-fg antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+  }
+
+  /* Accessibilité : focus clavier visible partout (WCAG 2.4.7) */
+  :focus-visible {
+    @apply outline-none ring-2 ring-primary-500 ring-offset-2 ring-offset-bg;
+  }
+
+  /* Cibles tactiles ≥ 44px */
+  button,
+  [role='button'],
+  a.btn {
+    min-height: 2.75rem;
+  }
+  button.h-auto,
+  a.h-auto {
+    min-height: 0;
+  }
+}
+
+@layer utilities {
+  /* Masquer visuellement mais garder accessible aux lecteurs d'écran */
+  .sr-only-focusable:not(:focus):not(:focus-within) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+}
+
+/* ============================================================
+   Leaflet — ajustements thème sombre
+   ============================================================ */
+.leaflet-container {
+  font-family: inherit;
+  z-index: 0;
+}
+
+.dark .leaflet-tile-pane {
+  filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
+}
+
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Marqueur d'événement PlanB */
+.planb-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px 9999px 9999px 4px;
+  transform: rotate(-45deg);
+  border: 2px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.planb-marker > * {
+  transform: rotate(45deg);
+}
+
+/* Animations d'entrée des cartes du fil */
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-card-in {
+  animation: card-in 0.35s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-card-in,
+  .animate-slide-up,
+  .animate-fade-in {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}

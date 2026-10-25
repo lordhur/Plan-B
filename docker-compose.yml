@@ -1,0 +1,23 @@
+# PostgreSQL local — alternative à PGlite si Docker est disponible
+# Usage : docker compose up -d && npm run db:push && npm run db:seed
+# Puis : DATABASE_URL="postgresql://planb:planb@localhost:5432/planb"
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: planb
+      POSTGRES_PASSWORD: planb
+      POSTGRES_DB: planb
+    ports:
+      - '5432:5432'
+    volumes:
+      - planb_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U planb']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  planb_pgdata:
