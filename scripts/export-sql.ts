@@ -19,6 +19,7 @@ const IDENTITY = (v: string) => v
 pg.types.setTypeParser(1114, IDENTITY) // timestamp
 pg.types.setTypeParser(1184, IDENTITY) // timestamptz
 pg.types.setTypeParser(3802, IDENTITY) // jsonb
+// @ts-expect-error — l'OID 1009 (text[]) n'est pas dans l'union TypeId de pg-types
 pg.types.setTypeParser(1009, IDENTITY) // text[]
 
 /** Ordre d'insertion respectant les clés étrangères. */
