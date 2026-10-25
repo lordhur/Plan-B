@@ -30,7 +30,25 @@ liens de partage viraux (QR code, sans compte requis), système de confiance et 
 | SEO : sitemap dynamique, robots, Open Graph | ✅ |
 | Rate limiting (login, inscription, création d'événements) | ✅ |
 
-**Phases 2-5** (amis, messagerie, albums, covoiturage, Stripe, pages, groupes…) :
+## 🤝 Phase 2 (Social) — implémentée
+
+| Fonctionnalité | Statut |
+|---|---|
+| Système d'amis : demande / acceptation / refus / retrait (`friendCount` maintenu) | ✅ |
+| Demandes croisées acceptées automatiquement | ✅ |
+| Messagerie privée 1-1 (conversations, non-lus, `lastReadAt`) | ✅ |
+| Chat d'événement (organisateur + participants confirmés uniquement) | ✅ |
+| Confidentialité : qui peut m'écrire (tous / amis d'amis / amis / personne), demandes d'amis on/off | ✅ |
+| Notation post-événement (1-5 ★ + commentaire, moyenne recalculée, doublons bloqués) | ✅ |
+| Signalement de comportement (harcelement, no-show, spam…) | ✅ |
+| Moteur de badges automatique (critères JSON dans `src/lib/constants.ts`) | ✅ |
+| Score de confiance (note pondérée, présence, no-shows, signalements, ancienneté) | ✅ |
+| Tâches CRON (`vercel.json` + `/api/cron/[job]`, protégées par `CRON_SECRET`) : | ✅ |
+| — `update-event-status` (UPCOMING → ONGOING → COMPLETED + passage ATTENDED) | ✅ |
+| — `promote-waitlist`, `send-reminders` (J-1 / H-1), `update-badges`, `update-trust-scores`, `cleanup-expired` | ✅ |
+| Temps réel : polling React Query (3,5-4 s) — compatible serverless, swap WebSocket possible | ✅ |
+
+**Phases 3-5** (albums photos, covoiturage, Stripe, pages, groupes…) :
 le schéma de base de données complet est déjà en place — voir `prisma/schema.prisma`.
 
 ## 🧱 Stack
@@ -121,7 +139,7 @@ src/
   (`@prisma/prisma-schema-wasm`) lorsque le moteur Rust de la CLI n'est pas téléchargeable.
   Avec un réseau complet : utilisez `npm run db:push:prisma`.
 
-## 🔐 Sécurité (Phase 1)
+## 🔐 Sécurité
 
 - Argon2id (memory-hard) pour les mots de passe
 - Sessions JWT signées HS256, cookie httpOnly + SameSite=Lax

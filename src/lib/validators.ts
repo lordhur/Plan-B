@@ -70,6 +70,7 @@ export const updateProfileSchema = z.object({
   allowMessagesFrom: z
     .enum(['EVERYONE', 'FRIENDS_OF_FRIENDS', 'FRIENDS_ONLY', 'NOBODY'])
     .optional(),
+  allowFriendRequests: z.boolean().optional(),
 })
 export type UpdateProfileInput = z.infer<typeof updateProfileSchema>
 

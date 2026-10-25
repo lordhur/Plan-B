@@ -10,6 +10,7 @@ import { toast } from '@/components/ui/toast'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Select } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
@@ -94,6 +95,9 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
+      {/* Réglages sociaux */}
+      <SocialPrivacyCard />
+
       {/* Confidentialité */}
       <Card>
         <CardHeader>
@@ -131,5 +135,70 @@ export default function SettingsPage() {
         Se déconnecter
       </Button>
     </div>
+  )
+}
+
+const MESSAGE_OPTIONS = [
+  ['EVERYONE', 'Tout le monde'],
+  ['FRIENDS_OF_FRIENDS', 'Amis d’amis'],
+  ['FRIENDS_ONLY', 'Mes amis uniquement'],
+  ['NOBODY', 'Personne'],
+] as const
+
+/** Réglages amitié + messagerie (spec Phase 2 : allowMessagesFrom / allowFriendRequests). */
+function SocialPrivacyCard() {
+  const { user } = useCurrentUser()
+  const utils = trpc.useUtils()
+  const update = trpc.users.updateProfile.useMutation({
+    onSuccess: () => {
+      void utils.auth.me.invalidate()
+      toast.success('Préférences enregistrées')
+    },
+    onError: (e) => toast.error(e.message),
+  })
+  if (!user) return null
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <Shield className="h-4 w-4 text-primary-600" aria-hidden /> Amis & messages
+        </CardTitle>
+        <CardDescription>Qui peut vous écrire et vous ajouter en ami ?</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div>
+          <Label htmlFor="allow-messages">Qui peut m’envoyer un message ?</Label>
+          <Select
+            id="allow-messages"
+            className="mt-1.5"
+            value={user.allowMessagesFrom}
+            disabled={update.isPending}
+            onChange={(e) =>
+              update.mutate({
+                allowMessagesFrom: e.target.value as (typeof MESSAGE_OPTIONS)[number][0],
+              })
+            }
+          >
+            {MESSAGE_OPTIONS.map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </Select>
+        </div>
+        <div className="flex items-center justify-between gap-4">
+          <Label htmlFor="allow-friend-requests" className="cursor-pointer">
+            Autoriser les demandes d’amis
+          </Label>
+          <Switch
+            id="allow-friend-requests"
+            checked={user.allowFriendRequests}
+            disabled={update.isPending}
+            onCheckedChange={(checked) => update.mutate({ allowFriendRequests: checked })}
+          />
+        </div>
+      </CardContent>
+    </Card>
   )
 }

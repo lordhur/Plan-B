@@ -1,8 +1,8 @@
 'use client'
 
-import { Award, ArrowLeft, MapPin, MessageCircle, Star, UserPlus } from 'lucide-react'
+import { Award, ArrowLeft, MapPin, MessageCircle, Star } from 'lucide-react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { trpc } from '@/lib/trpc'
 import { ageFromBirthDate } from '@/lib/utils'
 import { formatRelative } from '@/lib/date'
@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
-import { toast } from '@/components/ui/toast'
+import { FriendButton } from '@/components/friends/FriendButton'
 
 /** PROFIL PUBLIC d'un autre utilisateur. */
 export default function PublicProfilePage() {
@@ -110,20 +110,9 @@ export default function PublicProfilePage() {
           )}
 
           {!profile.isMe && (
-            <div className="mt-5 flex w-full gap-2">
-              <Button
-                className="flex-1"
-                onClick={() => toast.info('Bientôt disponible', 'Le système d’amis arrive en Phase 2 👥')}
-              >
-                <UserPlus className="h-4 w-4" aria-hidden /> Ajouter en ami
-              </Button>
-              <Button
-                variant="secondary"
-                className="flex-1"
-                onClick={() => toast.info('Bientôt disponible', 'La messagerie arrive en Phase 2 💬')}
-              >
-                <MessageCircle className="h-4 w-4" aria-hidden /> Message
-              </Button>
+            <div className="mt-5 flex w-full items-center gap-2">
+              <FriendButton userId={profile.id} variant="default" className="flex-1" />
+              <MessageUserButton userId={profile.id} />
             </div>
           )}
         </CardContent>
@@ -162,5 +151,24 @@ export default function PublicProfilePage() {
         </Card>
       )}
     </div>
+  )
+}
+
+
+/** Ouvre (ou crée) la conversation privée avec cet utilisateur. */
+function MessageUserButton({ userId }: { userId: string }) {
+  const router = useRouter()
+  const startWith = trpc.messages.startWith.useMutation({
+    onSuccess: (res) => router.push(`/messages/${res.conversationId}`),
+  })
+  return (
+    <Button
+      variant="secondary"
+      className="flex-1"
+      disabled={startWith.isPending}
+      onClick={() => startWith.mutate({ userId })}
+    >
+      <MessageCircle className="h-4 w-4" aria-hidden /> Message
+    </Button>
   )
 }

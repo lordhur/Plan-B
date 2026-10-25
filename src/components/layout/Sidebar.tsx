@@ -5,6 +5,7 @@ import {
   CalendarDays,
   Compass,
   Home,
+  MessageCircle,
   Plus,
   Settings,
   Trophy,
@@ -29,13 +30,14 @@ interface NavEntry {
 const NAV: NavEntry[] = [
   { href: '/', label: 'Fil d’actualité', icon: Home },
   { href: '/explore', label: 'Explorer', icon: Compass },
+  { href: '/friends', label: 'Amis', icon: Users },
+  { href: '/messages', label: 'Messages', icon: MessageCircle, badge: true },
   { href: '/notifications', label: 'Notifications', icon: Bell, badge: true },
   { href: '/profile', label: 'Mon profil', icon: User },
   { href: '/profile/settings', label: 'Paramètres', icon: Settings },
 ]
 
 const SOON = [
-  { href: '/friends', label: 'Amis', icon: Users, phase: 2 },
   { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays, phase: 2 },
   { href: '/leaderboard', label: 'Classements', icon: Trophy, phase: 3 },
 ] as const
@@ -47,6 +49,10 @@ export function Sidebar() {
   const { data: unread } = trpc.notifications.unreadCount.useQuery(undefined, {
     enabled: isAuthenticated,
     refetchInterval: 60_000,
+  })
+  const { data: unreadMessages } = trpc.messages.totalUnread.useQuery(undefined, {
+    enabled: isAuthenticated,
+    refetchInterval: 30_000,
   })
 
   return (

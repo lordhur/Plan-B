@@ -5,6 +5,7 @@ import { createEventSchema, eventFiltersSchema } from '@/lib/validators'
 import { computeFeedScore } from '@/lib/feed'
 import { prisma } from '../db'
 import { notify } from '../notifications'
+import { promoteFromWaitlist } from '../waitlist'
 import { createTRPCRouter, protectedProcedure, publicProcedure, verifiedProcedure } from '../trpc'
 import type { Event, EventCategory, User } from '@/generated/prisma/client'
 
@@ -102,40 +103,6 @@ async function checkEligibility(
   if (event.visibility === 'PRIVATE') return 'Événement privé — sur invitation uniquement'
 
   return null
-}
-
-/**
- * Promotion automatique de la liste d'attente :
- * le premier en attente devient participant et reçoit une notification.
- */
-async function promoteFromWaitlist(eventId: string): Promise<void> {
-  const next = await prisma.waitlistEntry.findFirst({
-    where: { eventId },
-    orderBy: { position: 'asc' },
-    include: { event: true },
-  })
-  if (!next) return
-
-  const event = next.event
-  const isFull =
-    event.maxParticipants != null && event.currentParticipants >= event.maxParticipants
-  if (isFull) return
-
-  await prisma.$transaction([
-    prisma.waitlistEntry.delete({ where: { id: next.id } }),
-    prisma.eventParticipation.create({
-      data: { eventId, userId: next.userId, status: 'CONFIRMED' },
-    }),
-    prisma.event.update({
-      where: { id: eventId },
-      data: { currentParticipants: { increment: 1 } },
-    }),
-  ])
-
-  await notify(next.userId, 'WAITLIST_PROMOTED', 'Place libérée ! 🎉', `Vous participez à « ${event.title} »`, {
-    link: `/events/${event.slug}`,
-    data: { eventId },
-  })
 }
 
 export const eventsRouter = createTRPCRouter({

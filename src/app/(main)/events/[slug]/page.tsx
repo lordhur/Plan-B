@@ -10,6 +10,7 @@ import {
   Info,
   Lock,
   MapPin,
+  MessageSquare,
   Share2,
   Star,
   Ticket,
@@ -339,6 +340,25 @@ export default function EventDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Chat d'événement — organisateur + participants confirmés */}
+      {(myStatus === 'CONFIRMED' || myStatus === 'ATTENDED' || event.isOrganizer) &&
+        event.status !== 'CANCELLED' && (
+          <div className="flex flex-wrap gap-2">
+            <Button asChild variant="outline" className="flex-1">
+              <Link href={`/events/${event.slug}/chat`}>
+                <MessageSquare className="h-4 w-4" aria-hidden /> Chat des participants
+              </Link>
+            </Button>
+            {event.status === 'COMPLETED' && (
+              <Button asChild variant="secondary" className="flex-1">
+                <Link href={`/events/${event.slug}/rate`}>
+                  <Star className="h-4 w-4" aria-hidden /> Noter les participants
+                </Link>
+              </Button>
+            )}
+          </div>
+        )}
 
       {/* Barre d'action */}
       {event.status === 'UPCOMING' && (

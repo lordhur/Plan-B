@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Compass, Home, Plus, User, type LucideIcon } from 'lucide-react'
+import { Compass, Home, MessageCircle, Plus, User, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -19,7 +19,7 @@ const ITEMS: NavItem[] = [
   { href: '/', label: 'Accueil', icon: Home, exact: true },
   { href: '/explore', label: 'Explorer', icon: Compass, exact: false },
   { href: '/events/create', label: 'Créer', icon: Plus, exact: false, accent: true },
-  { href: '/notifications', label: 'Alertes', icon: Bell, exact: false },
+  { href: '/messages', label: 'Messages', icon: MessageCircle, exact: false },
   { href: '/profile', label: 'Profil', icon: User, exact: false },
 ]
 
@@ -27,9 +27,9 @@ const ITEMS: NavItem[] = [
 export function BottomNav() {
   const pathname = usePathname()
   const { isAuthenticated } = useCurrentUser()
-  const { data: unread } = trpc.notifications.unreadCount.useQuery(undefined, {
+  const { data: unread } = trpc.messages.totalUnread.useQuery(undefined, {
     enabled: isAuthenticated,
-    refetchInterval: 60_000,
+    refetchInterval: 30_000,
   })
 
   return (
@@ -65,7 +65,7 @@ export function BottomNav() {
               >
                 <span className="relative">
                   <Icon className="h-5 w-5" aria-hidden />
-                  {href === '/notifications' && (unread?.count ?? 0) > 0 && (
+                  {href === '/messages' && (unread?.count ?? 0) > 0 && (
                     <span
                       aria-hidden
                       className="absolute -right-2 -top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger-500 px-1 text-[9px] font-bold text-white"

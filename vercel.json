@@ -1,0 +1,29 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/update-event-status",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/promote-waitlist",
+      "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/send-reminders",
+      "schedule": "*/30 * * * *"
+    },
+    {
+      "path": "/api/cron/update-badges",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/update-trust-scores",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/cleanup-expired",
+      "schedule": "0 4 * * 0"
+    }
+  ]
+}

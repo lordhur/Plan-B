@@ -170,6 +170,11 @@ async function main() {
 
   // Nettoyage (ordre respectant les contraintes)
   await prisma.notification.deleteMany()
+  await prisma.directMessage.deleteMany()
+  await prisma.conversation.deleteMany()
+  await prisma.eventChatMessage.deleteMany()
+  await prisma.friendRequest.deleteMany()
+  await prisma.friendship.deleteMany()
   await prisma.userRating.deleteMany()
   await prisma.waitlistEntry.deleteMany()
   await prisma.eventParticipation.deleteMany()
@@ -667,6 +672,71 @@ async function main() {
   for (const [from, to, rating, comment] of ratings) {
     await prisma.userRating.create({
       data: { fromId: U(from), toId: U(to), eventId: past.id, rating, comment },
+    })
+  }
+
+  // ----------------------------- Réseau social (Phase 2) -----------------------------
+
+  // Amitiés : thomas ↔ marie, karim, lea · marie ↔ karim
+  const friendships: [a: string, b: string][] = [
+    ['thomas@planb.app', 'marie@planb.app'],
+    ['thomas@planb.app', 'karim@planb.app'],
+    ['thomas@planb.app', 'lea@planb.app'],
+    ['marie@planb.app', 'karim@planb.app'],
+  ]
+  for (const [a, b] of friendships) {
+    const [x, y] = U(a) < U(b) ? [U(a), U(b)] : [U(b), U(a)]
+    await prisma.friendship.create({ data: { userAId: x, userBId: y, createdAt: daysAgo(30) } })
+    await prisma.user.update({ where: { id: x }, data: { friendCount: { increment: 1 } } })
+    await prisma.user.update({ where: { id: y }, data: { friendCount: { increment: 1 } } })
+  }
+
+  // Demandes en attente : sophie → thomas (démo acceptation), pierre → thomas
+  for (const from of ['sophie@planb.app', 'pierre@planb.app']) {
+    await prisma.friendRequest.create({
+      data: { senderId: U(from), receiverId: U('thomas@planb.app'), createdAt: daysAgo(1) },
+    })
+  }
+
+  // Conversation privée thomas ↔ julie avec quelques messages
+  const conv = await prisma.conversation.create({
+    data: {
+      isGroup: false,
+      members: { create: [{ userId: U('thomas@planb.app') }, { userId: U('julie@planb.app') }] },
+    },
+  })
+  const dmScript: [from: string, content: string, minutesAgo: number][] = [
+    ['julie@planb.app', 'Salut Thomas ! Tu viens au brunch dimanche ? 🥐', 180],
+    ['thomas@planb.app', 'Oui bien sûr ! J’adore le Marché des Halles.', 170],
+    ['julie@planb.app', 'Top ! On se retrouve sur place vers 11h ?', 45],
+  ]
+  for (const [from, content, minutesAgo] of dmScript) {
+    await prisma.directMessage.create({
+      data: {
+        conversationId: conv.id,
+        senderId: U(from),
+        receiverId: U(from === 'julie@planb.app' ? 'thomas@planb.app' : 'julie@planb.app'),
+        content,
+        createdAt: new Date(Date.now() - minutesAgo * 60_000),
+      },
+    })
+  }
+
+  // Chat de l'événement passé (rando) — visible par les participants
+  const chatScript: [from: string, content: string, minutesAgo: number][] = [
+    ['karim@planb.app', 'Bienvenue à tous ! Départ dans 10 minutes du parking 🥾', 60 * 24 * 14 + 30],
+    ['sophie@planb.app', 'J’apporte de quoi pique-niquer pour tout le monde 🥗', 60 * 24 * 14 + 10],
+    ['thomas@planb.app', 'Les cascades étaient magnifiques, merci Karim !', 60 * 24 * 14 - 60],
+    ['lea@planb.app', 'On remet ça quand ? 😄', 60 * 24 * 14 - 55],
+  ]
+  for (const [from, content, minutesAgo] of chatScript) {
+    await prisma.eventChatMessage.create({
+      data: {
+        eventId: past.id,
+        userId: U(from),
+        content,
+        createdAt: new Date(Date.now() - minutesAgo * 60_000),
+      },
     })
   }
 
