@@ -3,15 +3,15 @@
   "crons": [
     {
       "path": "/api/cron/update-event-status",
-      "schedule": "0 * * * *"
+      "schedule": "0 3 * * *"
     },
     {
       "path": "/api/cron/promote-waitlist",
-      "schedule": "*/5 * * * *"
+      "schedule": "30 3 * * *"
     },
     {
       "path": "/api/cron/send-reminders",
-      "schedule": "*/30 * * * *"
+      "schedule": "0 7 * * *"
     },
     {
       "path": "/api/cron/update-badges",
