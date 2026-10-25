@@ -1,0 +1,31 @@
+# Dépendances
+node_modules/
+
+# Build Next.js
+.next/
+out/
+build/
+
+# PWA (service workers générés)
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map
+public/swe-worker-*.js
+public/fallback-*.js
+
+# Base de données locale (PGlite)
+data/pgdata/
+
+# Environnement
+.env
+.env.local
+.env.*.local
+
+# Divers
+.DS_Store
+*.pem
+npm-debug.log*
+coverage/
+*.tsbuildinfo
+next-env.d.ts
