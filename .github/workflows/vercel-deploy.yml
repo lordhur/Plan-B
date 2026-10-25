@@ -1,0 +1,136 @@
+# Provisionne le projet Vercel et déploie PlanB en production.
+#
+# Déclenché par chaque push sur main (et sur les branches de travail arena/*
+# pendant la mise en place) — l'environnement de développement n'a pas d'accès
+# réseau direct à api.vercel.com, ce sont donc les runners GitHub qui parlent
+# à l'API Vercel.
+#
+# Secrets requis (Settings → Secrets and variables → Actions) :
+#   VERCEL_TOKEN : jeton Vercel « Full Access » (vercel.com/account/tokens)
+#   PLANB_ENV    : variables applicatives, une par ligne, au format CLÉ=VALEUR
+#                  (DATABASE_URL, AUTH_SECRET, CRON_SECRET)
+#
+# Le script est idempotent : projet existant réutilisé, variables écrasées,
+# liaison GitHub conservée. Une exécution complète = 2 builds (le second
+# injecte NEXT_PUBLIC_APP_URL avec l'URL réelle du projet).
+name: Vercel Provision & Deploy
+
+on:
+  push:
+    branches: [main, 'arena/**']
+  workflow_dispatch:
+
+concurrency:
+  group: vercel-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Provisionner et déployer sur Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          PLANB_ENV: ${{ secrets.PLANB_ENV }}
+        run: |
+          set -euo pipefail
+          API=https://api.vercel.com
+          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+
+          # --- 0. Vérifications préalables ---
+          if [ -z "${VERCEL_TOKEN:-}" ]; then
+            echo "❌ Secret VERCEL_TOKEN absent (Settings → Secrets and variables → Actions)." >&2
+            exit 1
+          fi
+          if [ -z "${PLANB_ENV:-}" ]; then
+            echo "❌ Secret PLANB_ENV absent. Ajoutez-le avec 3 lignes CLÉ=VALEUR :" >&2
+            echo "   DATABASE_URL=… / AUTH_SECRET=… / CRON_SECRET=…" >&2
+            exit 1
+          fi
+          USER_JSON=$(api "$API/v2/user")
+          USERNAME=$(echo "$USER_JSON" | jq -r '.user.username // empty')
+          if [ -z "$USERNAME" ]; then echo "❌ Jeton Vercel invalide : $USER_JSON" >&2; exit 1; fi
+          echo "✅ Jeton Vercel OK — compte : $USERNAME"
+          while IFS='=' read -r k v; do
+            if [ -n "${v:-}" ]; then echo "::add-mask::$v"; fi
+          done <<< "$PLANB_ENV"
+
+          # --- 1. Projet (création idempotente) ---
+          PROJECT=planb
+          CREATE=$(api -X POST "$API/v11/projects" -d '{"name":"'"$PROJECT"'","framework":"nextjs"}')
+          if echo "$CREATE" | jq -e '.id' >/dev/null 2>&1; then
+            echo "✅ Projet « $PROJECT » créé"
+          elif echo "$CREATE" | jq -r '.error.code // .error.message // empty' | grep -qi 'already'; then
+            echo "ℹ️ Projet « $PROJECT » déjà présent"
+          else
+            echo "❌ Création du projet refusée : $CREATE" >&2
+            exit 1
+          fi
+
+          # --- 2. Variables d'environnement (upsert idempotent) ---
+          upsert_env() {
+            local key=$1 value=$2 ids id resp
+            ids=$(api "$API/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
+            for id in $ids; do api -X DELETE "$API/v9/projects/$PROJECT/env/$id" >/dev/null; done
+            resp=$(jq -n --arg k "$key" --arg v "$value" \
+              '{key:$k, value:$v, type:"encrypted", target:["production","preview","development"]}' \
+              | api -X POST "$API/v10/projects/$PROJECT/env" -d @-)
+            echo "$resp" | jq -e '.created' >/dev/null 2>&1 || { echo "❌ Variable $key : $resp" >&2; exit 1; }
+            echo "✅ Variable $key définie"
+          }
+          while IFS='=' read -r k v; do
+            if [ -n "$k" ]; then upsert_env "$k" "$v"; fi
+          done <<< "$PLANB_ENV"
+
+          # --- 3. Liaison du dépôt GitHub (déploiements automatiques sur push) ---
+          PROJ=$(api "$API/v9/projects/$PROJECT")
+          REPO_ID=$(echo "$PROJ" | jq -r '.linkedRepository.repoId // empty')
+          if [ -z "$REPO_ID" ]; then
+            LINK=$(api -X POST "$API/v9/projects/$PROJECT/link" -d '{"type":"github","repo":"lordhur/Plan-B"}')
+            REPO_ID=$(echo "$LINK" | jq -r '.linkedRepository.repoId // empty')
+            if [ -z "$REPO_ID" ]; then
+              echo "❌ Liaison GitHub impossible (l'app Vercel a-t-elle accès au dépôt ?) : $LINK" >&2
+              exit 1
+            fi
+          fi
+          echo "✅ Dépôt lordhur/Plan-B lié (repoId $REPO_ID)"
+
+          # --- 4. Déploiement de production + attente ---
+          LAST_URL=""
+          deploy_and_wait() {
+            local dep id state i url
+            dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" \
+              '{name:$n, target:"production", gitSource:{type:"github", ref:$ref, repoId:$r}}' \
+              | api -X POST "$API/v13/deployments" -d @-)
+            id=$(echo "$dep" | jq -r '.id // empty')
+            if [ -z "$id" ]; then echo "❌ Déploiement refusé : $dep" >&2; exit 1; fi
+            echo "⏳ Déploiement $id (branche $GITHUB_REF_NAME)…"
+            for i in $(seq 1 80); do
+              state=$(api "$API/v3/deployments/$id" | jq -r '.readyState')
+              case "$state" in
+                READY)
+                  url=$(api "$API/v3/deployments/$id" | jq -r '.alias[0] // .url')
+                  echo "✅ Prêt : https://$url"
+                  LAST_URL=$url
+                  return 0 ;;
+                ERROR|CANCELED)
+                  echo "❌ Build en échec ($state) — derniers logs :" >&2
+                  api "$API/v2/deployments/$id/events" \
+                    | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' \
+                    | tail -60 >&2
+                  return 1 ;;
+              esac
+              sleep 10
+            done
+            echo "❌ Délai dépassé pour le déploiement $id" >&2
+            return 1
+          }
+          deploy_and_wait || exit 1
+
+          # --- 5. URL canonique (NEXT_PUBLIC_APP_URL) puis build final ---
+          upsert_env NEXT_PUBLIC_APP_URL "https://$LAST_URL"
+          deploy_and_wait || exit 1
+
+          echo ""
+          echo "🎉 PlanB est en ligne : https://$LAST_URL"
