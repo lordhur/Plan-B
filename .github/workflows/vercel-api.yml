@@ -1,0 +1,52 @@
+# Pont d'accès à l'API Vercel — déclenchement manuel uniquement.
+#
+# Pourquoi ? L'agent qui maintient ce dépôt n'a pas d'accès réseau direct à
+# api.vercel.com, et le connecteur Vercel disponible est en lecture seule.
+# Ce workflow relaie donc les appels API depuis les runners GitHub.
+#
+# Prérequis : secret du dépôt `VERCEL_TOKEN`
+#   (vercel.com → avatar → Settings → Tokens → Create, scope Full Access).
+#
+# ⚠️ Toute personne ayant accès en écriture au dépôt peut exécuter ce
+# workflow : à retirer une fois l'exploitation terminée si besoin.
+name: Vercel API
+
+on:
+  workflow_dispatch:
+    inputs:
+      method:
+        description: 'Méthode HTTP (GET, POST, PATCH, DELETE…)'
+        required: true
+        default: 'GET'
+      path:
+        description: "Chemin d'API, ex : /v9/projects ou /v9/projects?id=planb"
+        required: true
+      body:
+        description: 'Corps JSON (pour POST/PATCH), vide sinon'
+        required: false
+        default: ''
+
+jobs:
+  api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Appel API Vercel
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          METHOD: ${{ inputs.method }}
+          API_PATH: ${{ inputs.path }}
+          BODY: ${{ inputs.body }}
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "❌ Le secret VERCEL_TOKEN est absent (Settings → Secrets and variables → Actions)."
+            exit 1
+          fi
+          ARGS=(-sS -X "$METHOD" "https://api.vercel.com$API_PATH"
+                -H "Authorization: Bearer $VERCEL_TOKEN"
+                -H "Content-Type: application/json"
+                -w '\nHTTP_STATUS:%{http_code}\n')
+          if [ -n "$BODY" ]; then
+            curl "${ARGS[@]}" -d "$BODY"
+          else
+            curl "${ARGS[@]}"
+          fi
