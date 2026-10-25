@@ -107,3 +107,53 @@ export const VISIBILITY_LABELS: Record<string, string> = {
   PRIVATE: 'Privé',
   UNLISTED: 'Non-listé (lien direct)',
 }
+
+// ========================
+// Abonnements premium (Phase 4 §4.2)
+// ========================
+
+export interface PlanDef {
+  id: 'ORGANIZER_PRO' | 'PREMIUM' | 'BUSINESS'
+  name: string
+  price: number // €/mois
+  tagline: string
+  perks: string[]
+}
+
+export const PLANS: PlanDef[] = [
+  {
+    id: 'PREMIUM',
+    name: 'Premium',
+    price: 4.9,
+    tagline: 'Pour les membres actifs',
+    perks: [
+      'Badge Premium sur le profil',
+      'Inscription prioritaire aux plans complets',
+      'Voir qui a consulté votre profil',
+    ],
+  },
+  {
+    id: 'ORGANIZER_PRO',
+    name: 'Organisateur Pro',
+    price: 9.9,
+    tagline: 'Pour les organisateurs réguliers',
+    perks: [
+      'Statistiques détaillées de vos plans',
+      'Plans mis en avant dans le fil',
+      'Export des participants (CSV)',
+      'Sondages de date intégrés',
+    ],
+  },
+  {
+    id: 'BUSINESS',
+    name: 'Business',
+    price: 19.9,
+    tagline: 'Pour les pages et commerces',
+    perks: [
+      'Page vérifiée avec badge ✓',
+      'Offres partenaires illimitées',
+      'Événements sponsorisés',
+      'Statistiques d’audience',
+    ],
+  },
+]

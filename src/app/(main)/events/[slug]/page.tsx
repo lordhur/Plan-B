@@ -32,6 +32,7 @@ import { EventMap } from '@/components/events/EventMap'
 import { JoinButton } from '@/components/events/JoinButton'
 import { ShareEventModal } from '@/components/events/ShareEventModal'
 import { CarpoolSection } from '@/components/events/CarpoolSection'
+import { TicketBanner } from '@/components/events/TicketBanner'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -342,6 +343,20 @@ export default function EventDetailPage() {
           )}
         </CardContent>
       </Card>
+
+      {/* Billetterie — plans payants */}
+      {event.status === 'UPCOMING' && event.price != null && event.price > 0 && (
+        <TicketBanner
+          eventId={event.id}
+          eventSlug={event.slug}
+          title={event.title}
+          price={event.price}
+          currency={event.currency}
+          myStatus={myStatus}
+          paymentId={event.myParticipation?.paymentId ?? null}
+          isOrganizer={event.isOrganizer}
+        />
+      )}
 
       {/* Album photos (pendant/après l'événement) */}
       {(event.status === 'COMPLETED' || event.status === 'ONGOING') && (

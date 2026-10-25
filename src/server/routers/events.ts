@@ -343,7 +343,7 @@ export const eventsRouter = createTRPCRouter({
     if (ctx.user) {
       myParticipation = await prisma.eventParticipation.findUnique({
         where: { eventId_userId: { eventId: event.id, userId: ctx.user.id } },
-        select: { id: true, status: true, joinedAt: true },
+        select: { id: true, status: true, joinedAt: true, paymentId: true, amountPaid: true, ticketId: true },
       })
       const wl = await prisma.waitlistEntry.findUnique({
         where: { eventId_userId: { eventId: event.id, userId: ctx.user.id } },

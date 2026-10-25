@@ -173,6 +173,11 @@ async function main() {
 
   // Nettoyage (ordre respectant les contraintes)
   await prisma.notification.deleteMany()
+  await prisma.redeemedOffer.deleteMany()
+  await prisma.partnerOffer.deleteMany()
+  await prisma.partner.deleteMany()
+  await prisma.leaderboardEntry.deleteMany()
+  await prisma.subscription.deleteMany()
   await prisma.media.deleteMany()
   await prisma.eventAlbum.deleteMany()
   await prisma.carpoolRequest.deleteMany()
@@ -797,6 +802,40 @@ async function main() {
     })
     await prisma.carpoolRequest.create({
       data: { offerId: offer.id, passengerId: U('sophie@planb.app'), status: 'PENDING' },
+    })
+  }
+
+  // ----------------------------- Partenaires & offres (Phase 4) -----------------------------
+
+  const partners: [slug: string, name: string, type: 'LOCAL_BUSINESS' | 'VENUE' | 'BRAND', description: string][] = [
+    ['cafe-des-arcades', 'Café des Arcades', 'VENUE', 'Le QG des sorties dracénoises : concerts, quiz et bonne humeur place des Arcades.'],
+    ['decathlon-draguignan', 'Decathlon Draguignan', 'LOCAL_BUSINESS', 'Tout l’équipement pour vos randos, escalades et sessions vélo dans le Var.'],
+    ['domaine-sainte-roseline', 'Domaine de Sainte-Roseline', 'BRAND', 'Vins de Provence bio au cœur des Arcs-sur-Argens.'],
+  ]
+  const partnerIds: Record<string, string> = {}
+  for (const [slug, name, type, description] of partners) {
+    const partner = await prisma.partner.create({ data: { slug, name, type, description } })
+    partnerIds[slug] = partner.id
+  }
+
+  const DAY_MS = 24 * 3600 * 1000
+  const offers: [partnerSlug: string, title: string, description: string, percent: number, code: string | null, validDays: number, max: number | null][] = [
+    ['cafe-des-arcades', '−15 % sur la carte des cocktails', 'Valable tous les soirs de concert jazz, sur présentation de votre profil PlanB.', 15, 'PLANB15', 30, 50],
+    ['decathlon-draguignan', '−10 % sur le rayon randonnée', 'Chaussures, bâtons, sacs : tout l’équipement rando à prix PlanB.', 10, null, 45, null],
+    ['domaine-sainte-roseline', 'Une bouteille de rosé offerte', 'Pour tout achat de 3 bouteilles à la cave, du lundi au samedi.', 100, 'PLANBROS', 21, 20],
+  ]
+  for (const [partnerSlug, title, description, percent, code, validDays, max] of offers) {
+    await prisma.partnerOffer.create({
+      data: {
+        partnerId: partnerIds[partnerSlug]!,
+        title,
+        description,
+        discountPercent: percent,
+        discountCode: code,
+        validFrom: daysAgo(2),
+        validUntil: new Date(Date.now() + validDays * DAY_MS),
+        maxRedemptions: max,
+      },
     })
   }
 
