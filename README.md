@@ -48,8 +48,38 @@ liens de partage viraux (QR code, sans compte requis), système de confiance et 
 | — `promote-waitlist`, `send-reminders` (J-1 / H-1), `update-badges`, `update-trust-scores`, `cleanup-expired` | ✅ |
 | Temps réel : polling React Query (3,5-4 s) — compatible serverless, swap WebSocket possible | ✅ |
 
-**Phases 3-5** (albums photos, covoiturage, Stripe, pages, groupes…) :
-le schéma de base de données complet est déjà en place — voir `prisma/schema.prisma`.
+## 📸 Phase 3 (Albums & Covoiturage) — implémentée
+
+| Fonctionnalité | Statut |
+|---|---|
+| Albums photos d'événement (upload multipart, miniatures sharp, verrouillage 30 j) | ✅ |
+| Stockage local `data/uploads` servi par `/api/media/file` (anti path-traversal) — swap Supabase Storage documenté | ✅ |
+| Identification sur photos + confirmation | ✅ |
+| Covoiturage : offres (géocodage Nominatim), demandes, acceptation conducteur, notifications | ✅ |
+| Classements hebdo/mensuel/global (moteur + cron + page `/leaderboard`) | ✅ |
+| Calendrier mensuel des plans (`/events/calendar`) | ✅ |
+
+## 💳 Phase 4 (Monétisation) — implémentée
+
+| Fonctionnalité | Statut |
+|---|---|
+| Couche paiement abstraite : MockProvider (démo) / StripeProvider (production, points d'intégration documentés) | ✅ |
+| Billetterie : achat de billet (plan payant), doublons bloqués, remboursement + départ | ✅ |
+| Abonnements PREMIUM / ORGANIZER_PRO / BUSINESS (période 1 mois, annulation en fin de période) | ✅ |
+| Offres partenaires : bons plans locaux, code promo, une utilisation par membre, stocks | ✅ |
+
+## 🏪 Phase 5 (Pages & Groupes) — implémentée
+
+| Fonctionnalité | Statut |
+|---|---|
+| Pages organisateurs/commerces : annuaire, profil, suivi (followerCount), vérification | ✅ |
+| Publication de plans au nom d'une page + notification des abonnés (PAGE_NEW_EVENT) | ✅ |
+| Groupes d'intérêt : annuaire, création (ADMIN), rôles, groupes privés | ✅ |
+| Forum : sujets épinglés, réponses, modération (auteur/staff), notification staff | ✅ |
+
+**L'ensemble des 5 phases du cahier des charges est implémenté.**
+Extensions possibles : WebSocket temps réel, Supabase Storage, Stripe live,
+push web (PushSubscription déjà au schéma), modération admin des signalements.
 
 ## 🧱 Stack
 
