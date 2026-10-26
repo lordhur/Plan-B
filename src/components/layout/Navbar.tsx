@@ -3,6 +3,7 @@
 import {
   Bell,
   CalendarDays,
+  CalendarPlus,
   HelpCircle,
   LogOut,
   Mail,
@@ -33,13 +34,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-const LEFT_LINKS = [
-  { href: '/friends', label: 'Les Membres', icon: Users },
-  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays },
-]
-const RIGHT_LINKS = [
-  { href: '/groups', label: 'Groupes', icon: UsersRound },
-  { href: '/pages', label: 'Pages', icon: Store },
+/** Navigation principale — bloc unique centré autour du fil d'actualité. */
+const NAV_LINKS = [
+  { href: '/friends', label: 'Les Membres', icon: Users, centered: false },
+  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays, centered: false },
+  { href: '/', label: 'Fil d’actualité', icon: Home, centered: true },
+  { href: '/groups', label: 'Groupes', icon: UsersRound, centered: false },
+  { href: '/pages', label: 'Pages', icon: Store, centered: false },
 ]
 
 function NavLink({
@@ -60,7 +61,7 @@ function NavLink({
       href={href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors',
+        'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3',
         centered && 'text-base',
         active
           ? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
@@ -68,12 +69,40 @@ function NavLink({
       )}
     >
       <Icon className="h-4 w-4" aria-hidden />
-      <span className={cn(centered ? 'font-extrabold' : 'hidden lg:inline')}>{label}</span>
+      <span className={cn('hidden xl:inline', centered && 'font-extrabold')}>{label}</span>
     </Link>
   )
 }
 
-/** Barre de navigation principale : membres/calendrier à gauche, fil centré, groupes/pages à droite. */
+/** Menu « Créer » — nouveau plan, groupe ou page, sous le bouton +. */
+export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
+      <DropdownMenuContent align="center" className="min-w-48">
+        <DropdownMenuLabel>Créer…</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <Link href="/events/create">
+            <CalendarPlus className="h-4 w-4" aria-hidden /> Un plan
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/groups/new">
+            <UsersRound className="h-4 w-4" aria-hidden /> Un groupe
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/pages/new">
+            <Store className="h-4 w-4" aria-hidden /> Une page
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
+/** Barre de navigation principale : bloc d'onglets centré, actions à droite. */
 export function Navbar() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading } = useCurrentUser()
@@ -100,34 +129,29 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
-        {/* Gauche : logo + membres + calendrier */}
-        <div className="flex min-w-0 items-center gap-1">
-          <Logo />
-          <nav aria-label="Navigation gauche" className="ml-1 hidden items-center gap-0.5 md:flex">
-            {LEFT_LINKS.map((l) => (
-              <NavLink key={l.href} {...l} />
-            ))}
-          </nav>
-        </div>
+        {/* Gauche : logo */}
+        <Logo />
 
-        {/* Centre : fil d'actualité */}
-        <div className="absolute left-1/2 hidden -translate-x-1/2 md:block">
-          <NavLink href="/" label="Fil d’actualité" icon={Home} centered />
-        </div>
+        {/* Centre : tous les onglets regroupés et centrés */}
+        <nav
+          aria-label="Navigation principale"
+          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-2xl border border-border bg-card/70 p-1 md:flex"
+        >
+          {NAV_LINKS.map((l) => (
+            <NavLink key={l.href} {...l} />
+          ))}
+        </nav>
 
-        {/* Droite : groupes + pages + actions */}
-        <div className="flex items-center gap-1.5">
-          <nav aria-label="Navigation droite" className="hidden items-center gap-0.5 xl:flex">
-            {RIGHT_LINKS.map((l) => (
-              <NavLink key={l.href} {...l} />
-            ))}
-          </nav>
-
-          <Button asChild variant="accent" size="sm" className="hidden sm:inline-flex">
-            <Link href="/events/create">
-              <Plus className="h-4 w-4" aria-hidden /> Créer un plan
-            </Link>
-          </Button>
+        {/* Droite : création + thème + profil */}
+        <div className="ml-auto flex items-center gap-1.5">
+          <CreateMenu
+            trigger={
+              <Button variant="accent" size="sm" className="hidden sm:inline-flex">
+                <Plus className="h-4 w-4" aria-hidden />
+                <span className="hidden lg:inline">Créer</span>
+              </Button>
+            }
+          />
 
           <ThemeToggle />
 
