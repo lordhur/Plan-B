@@ -35,6 +35,7 @@ jobs:
       - name: Vérifier les secrets et le jeton Vercel
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           if [ -z "${VERCEL_TOKEN:-}" ]; then
             echo "::error::Secret VERCEL_TOKEN absent — Settings → Secrets and variables → Actions"
             exit 1
@@ -59,10 +60,12 @@ jobs:
       - name: Créer le projet Vercel (idempotent)
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
           PROJECT=planb
           echo "PROJECT=$PROJECT" >> "$GITHUB_ENV"
-          CREATE=$(api -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
+          CREATE=$(apir -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
           if echo "$CREATE" | jq -e '.id' >/dev/null 2>&1; then
             echo "Projet « $PROJECT » créé"
           elif echo "$CREATE" | jq -r '[(.error.code // ""), (.error.message // "")] | join(" ")' | grep -qiE 'already|conflict'; then
@@ -75,11 +78,13 @@ jobs:
       - name: Injecter les variables d'environnement
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
           upsert_env() {
             key=$1; value=$2
-            ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
-            for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null; done
+            ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
+            for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null || true; done
             resp=$(jq -n --arg k "$key" --arg v "$value" '{key:$k,value:$v,type:"encrypted",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
             echo "$resp" | jq -e '.created' >/dev/null 2>&1 || { echo "::error::Variable $key refusée : $resp"; exit 1; }
             echo "Variable $key définie"
@@ -93,16 +98,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
           REPO_ID=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lordhur/Plan-B | jq -r '.id // empty')
           if [ -z "$REPO_ID" ]; then echo "::error::ID numérique du dépôt GitHub introuvable"; exit 1; fi
           echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
-          PROJ=$(api "https://api.vercel.com/v9/projects/$PROJECT")
+          PROJ=$(apir "https://api.vercel.com/v9/projects/$PROJECT")
           ALREADY=$(echo "$PROJ" | jq -r '(.link.repo // .linkedRepository.repo // empty)')
           if [ -n "$ALREADY" ]; then
             echo "Dépôt déjà lié ($ALREADY)"
           else
-            LINK=$(api -X POST "https://api.vercel.com/v9/projects/$PROJECT/link" -d '{"type":"github","repo":"lordhur/Plan-B"}')
+            LINK=$(apir -X POST "https://api.vercel.com/v9/projects/$PROJECT/link" -d '{"type":"github","repo":"lordhur/Plan-B"}')
             NOW=$(echo "$LINK" | jq -r '(.link.repo // .linkedRepository.repo // empty)')
             ERR=$(echo "$LINK" | jq -r '.error.message // empty')
             if [ -z "$NOW" ] && [ -n "$ERR" ] && ! echo "$ERR" | grep -qi already; then
@@ -115,8 +122,10 @@ jobs:
       - name: Déployer et attendre (build 1/2)
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          LIST=$(api "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
+          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          LIST=$(apir "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
           id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
             id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and ((.readyState // .state)=="BUILDING" or (.readyState // .state)=="QUEUED"))] | first | .id // empty')
@@ -132,7 +141,7 @@ jobs:
           echo "Suivi du déploiement $id…"
           prev=""
           for i in $(seq 1 90); do
-            D=$(api "https://api.vercel.com/v3/deployments/$id")
+            D=$(apir "https://api.vercel.com/v3/deployments/$id")
             state=$(echo "$D" | jq -r '(.readyState // .state // empty)')
             if [ -z "$state" ]; then
               echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
@@ -146,7 +155,7 @@ jobs:
                 echo "::notice::Build 1/2 prêt : https://$url"
                 exit 0 ;;
               ERROR|CANCELED)
-                logs=$(api "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200)
+                logs=$({ apir "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200; } || true)
                 echo "::error::Build Vercel en échec ($state) — logs : $logs"
                 exit 1 ;;
             esac
@@ -158,9 +167,11 @@ jobs:
       - name: URL canonique + build final (2/2)
         run: |
           set -euo pipefail
+          trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
-          for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null; done
+          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
+          for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null || true; done
           resp=$(jq -n --arg v "https://$LAST_URL" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
           echo "$resp" | jq -e '.created' >/dev/null 2>&1 || { echo "::error::NEXT_PUBLIC_APP_URL refusée : $resp"; exit 1; }
           dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
@@ -169,7 +180,7 @@ jobs:
           echo "Déploiement final $id en cours…"
           prev=""
           for i in $(seq 1 90); do
-            D=$(api "https://api.vercel.com/v3/deployments/$id")
+            D=$(apir "https://api.vercel.com/v3/deployments/$id")
             state=$(echo "$D" | jq -r '(.readyState // .state // empty)')
             if [ -z "$state" ]; then
               echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
@@ -182,7 +193,7 @@ jobs:
                 echo "::notice::🎉 PlanB est en ligne : https://$url"
                 exit 0 ;;
               ERROR|CANCELED)
-                logs=$(api "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200)
+                logs=$({ apir "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200; } || true)
                 echo "::error::Build final en échec ($state) — logs : $logs"
                 exit 1 ;;
             esac
