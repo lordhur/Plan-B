@@ -108,6 +108,27 @@
 }
 
 /* ============================================================
+   Zéro zoom applicatif — pinch/double-tap neutralisés partout
+   ============================================================ */
+html,
+body {
+  touch-action: manipulation;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Barres de navigation : jamais de zoom au tap, jamais de callout iOS,
+   ancrage fixe qui ne disparaît pas au scroll. */
+nav,
+nav * {
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+
+/* ============================================================
    Leaflet — ajustements thème sombre
    ============================================================ */
 .leaflet-container {

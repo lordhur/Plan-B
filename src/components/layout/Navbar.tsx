@@ -61,7 +61,7 @@ function NavLink({
       href={href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-xl px-2.5 py-2 text-sm font-semibold transition-colors xl:px-3',
+        'inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-semibold transition-colors',
         centered && 'text-base',
         active
           ? 'bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
@@ -69,7 +69,7 @@ function NavLink({
       )}
     >
       <Icon className="h-4 w-4" aria-hidden />
-      <span className={cn('hidden xl:inline', centered && 'font-extrabold')}>{label}</span>
+      <span className={cn(centered && 'font-extrabold')}>{label}</span>
     </Link>
   )
 }
