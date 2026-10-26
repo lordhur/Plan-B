@@ -38,6 +38,7 @@ model User {
   displayName String?
   dateOfBirth DateTime
   gender      Gender
+  orientation Orientation?
   bio         String?  @db.Text
   city        String?
   latitude    Float?
@@ -145,6 +146,13 @@ enum Gender {
   NON_BINARY
   OTHER
   PREFER_NOT_TO_SAY
+}
+
+enum Orientation {
+  HETEROSEXUAL
+  HOMOSEXUAL
+  BISEXUAL
+  OTHER
 }
 
 enum PrivacyLevel {
@@ -555,6 +563,7 @@ model DirectMessage {
   content        String       @db.Text
   mediaUrl       String?
   mediaType      MediaType?
+  mediaName      String? // nom de fichier affiché pour la pièce jointe
   isRead         Boolean      @default(false)
   createdAt      DateTime     @default(now())
   editedAt       DateTime?
@@ -1014,9 +1023,28 @@ model ImageBlob {
   ownerId   String
   data      Bytes    @db.ByteA
   mime      String   @default("image/webp")
+  name      String? // nom de fichier d'origine (pièces jointes)
   width     Int?
   height    Int?
   createdAt DateTime @default(now())
 
   @@index([ownerId])
+}
+
+
+// ========================
+// Messages « Contactez-nous » (support, demandes, partenariats)
+// ========================
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  userId    String?
+  email     String
+  name      String?
+  subject   String // PROBLEME | DEMANDE | PARTENARIAT | AUTRE
+  message   String   @db.Text
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled, createdAt])
 }

@@ -67,6 +67,13 @@ export type EnumGenderFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
 }
 
+export type EnumOrientationNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Orientation | Prisma.EnumOrientationFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel> | $Enums.Orientation | null
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -185,6 +192,16 @@ export type EnumGenderWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type EnumOrientationNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Orientation | Prisma.EnumOrientationFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOrientationNullableWithAggregatesFilter<$PrismaModel> | $Enums.Orientation | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel>
 }
 
 export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -834,6 +851,13 @@ export type NestedEnumGenderFilter<$PrismaModel = never> = {
   not?: Prisma.NestedEnumGenderFilter<$PrismaModel> | $Enums.Gender
 }
 
+export type NestedEnumOrientationNullableFilter<$PrismaModel = never> = {
+  equals?: $Enums.Orientation | Prisma.EnumOrientationFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel> | $Enums.Orientation | null
+}
+
 export type NestedFloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -956,6 +980,16 @@ export type NestedEnumGenderWithAggregatesFilter<$PrismaModel = never> = {
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumGenderFilter<$PrismaModel>
   _max?: Prisma.NestedEnumGenderFilter<$PrismaModel>
+}
+
+export type NestedEnumOrientationNullableWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.Orientation | Prisma.EnumOrientationFieldRefInput<$PrismaModel> | null
+  in?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  notIn?: $Enums.Orientation[] | Prisma.ListEnumOrientationFieldRefInput<$PrismaModel> | null
+  not?: Prisma.NestedEnumOrientationNullableWithAggregatesFilter<$PrismaModel> | $Enums.Orientation | null
+  _count?: Prisma.NestedIntNullableFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumOrientationNullableFilter<$PrismaModel>
 }
 
 export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {

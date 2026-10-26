@@ -20,6 +20,16 @@ export const Gender = {
 export type Gender = (typeof Gender)[keyof typeof Gender]
 
 
+export const Orientation = {
+  HETEROSEXUAL: 'HETEROSEXUAL',
+  HOMOSEXUAL: 'HOMOSEXUAL',
+  BISEXUAL: 'BISEXUAL',
+  OTHER: 'OTHER'
+} as const
+
+export type Orientation = (typeof Orientation)[keyof typeof Orientation]
+
+
 export const PrivacyLevel = {
   PUBLIC: 'PUBLIC',
   FRIENDS_OF_FRIENDS: 'FRIENDS_OF_FRIENDS',

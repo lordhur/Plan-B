@@ -121,7 +121,7 @@ export function CoverImageField({ value, onChange }: CoverImageFieldProps) {
           <img
             src={preview}
             alt="Aperçu de l’image de couverture"
-            className="sheen-auto h-44 w-full object-cover sm:h-52"
+            className="h-44 w-full object-cover sm:h-52"
             onError={() => {
               setError('Cette URL d’image ne se charge pas.')
               setPreview(value.startsWith('/') ? value : '')

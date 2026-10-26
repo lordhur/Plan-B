@@ -51,7 +51,27 @@ export default function GroupPage({ params }: { params: Promise<{ slug: string }
         <ArrowLeft className="h-4 w-4" aria-hidden /> Tous les groupes
       </Link>
 
-      <Card>
+      <Card className="overflow-hidden">
+        {/* Bannière de couverture */}
+        <div className="relative aspect-[3/1] w-full overflow-hidden [contain:paint]">
+          {g.coverImage ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={g.coverImage}
+              alt=""
+              className="ken-burns h-full w-full object-cover"
+            />
+          ) : (
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(120% 100% at 15% 10%, #8b5cf666, transparent 55%), radial-gradient(100% 120% at 85% 90%, #22d3ee44, transparent 55%), linear-gradient(135deg, #8b5cf62e, #0f172a14 60%, #8b5cf61f)',
+              }}
+            />
+          )}
+        </div>
         <CardHeader>
           <CardTitle className="flex flex-wrap items-center gap-2 text-xl">
             {g.name}

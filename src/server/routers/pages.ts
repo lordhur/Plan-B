@@ -39,6 +39,7 @@ export const pagesRouter = createTRPCRouter({
           description: true,
           category: true,
           avatarUrl: true,
+          coverUrl: true,
           city: true,
           isVerified: true,
           followerCount: true,
@@ -97,6 +98,12 @@ export const pagesRouter = createTRPCRouter({
         phone: z.string().trim().max(20).optional(),
         website: z.string().url().optional(),
         email: z.string().email().optional(),
+        coverUrl: z
+          .string()
+          .trim()
+          .max(2048)
+          .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), 'URL d’image invalide')
+          .optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -118,6 +125,7 @@ export const pagesRouter = createTRPCRouter({
           phone: input.phone,
           website: input.website,
           email: input.email,
+          coverUrl: input.coverUrl,
         },
         select: { id: true, slug: true, name: true },
       })

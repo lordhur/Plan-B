@@ -194,7 +194,17 @@ export const messagesRouter = createTRPCRouter({
 
   /** Envoyer un message privé. */
   send: protectedProcedure
-    .input(z.object({ conversationId: z.string(), content: z.string().trim().min(1).max(2000) }))
+    .input(
+      z
+        .object({
+          conversationId: z.string(),
+          content: z.string().trim().max(2000).default(''),
+          mediaUrl: z.string().trim().max(2048).startsWith('/api/img/').optional(),
+          mediaType: z.enum(['IMAGE', 'VIDEO', 'AUDIO', 'FILE']).optional(),
+          mediaName: z.string().trim().max(140).optional(),
+        })
+        .refine((v) => v.content.length > 0 || !!v.mediaUrl, 'Message vide'),
+    )
     .mutation(async ({ input, ctx }) => {
       const membership = await prisma.conversationMember.findUnique({
         where: { conversationId_userId: { conversationId: input.conversationId, userId: ctx.user.id } },
@@ -212,6 +222,9 @@ export const messagesRouter = createTRPCRouter({
           senderId: ctx.user.id,
           receiverId: others.length === 1 ? others[0] : null,
           content: input.content,
+          mediaUrl: input.mediaUrl,
+          mediaType: input.mediaType,
+          mediaName: input.mediaName,
         },
         include: { sender: { select: memberUserSelect } },
       })
@@ -235,7 +248,8 @@ export const messagesRouter = createTRPCRouter({
           },
         })
         if (pendingUnread === 1) {
-          await notify(otherId, 'MESSAGE_RECEIVED', `Nouveau message de ${ctx.user.firstName}`, input.content.slice(0, 120), {
+          const preview = input.content || (input.mediaType === 'IMAGE' ? '📷 Photo' : input.mediaType === 'VIDEO' ? '🎬 Vidéo' : input.mediaType === 'AUDIO' ? '🎵 Audio' : '📎 Pièce jointe')
+          await notify(otherId, 'MESSAGE_RECEIVED', `Nouveau message de ${ctx.user.firstName}`, preview.slice(0, 120), {
             link: `/messages/${input.conversationId}`,
           })
         }

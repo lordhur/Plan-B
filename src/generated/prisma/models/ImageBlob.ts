@@ -41,6 +41,7 @@ export type ImageBlobMinAggregateOutputType = {
   ownerId: string | null
   data: runtime.Bytes | null
   mime: string | null
+  name: string | null
   width: number | null
   height: number | null
   createdAt: Date | null
@@ -51,6 +52,7 @@ export type ImageBlobMaxAggregateOutputType = {
   ownerId: string | null
   data: runtime.Bytes | null
   mime: string | null
+  name: string | null
   width: number | null
   height: number | null
   createdAt: Date | null
@@ -61,6 +63,7 @@ export type ImageBlobCountAggregateOutputType = {
   ownerId: number
   data: number
   mime: number
+  name: number
   width: number
   height: number
   createdAt: number
@@ -83,6 +86,7 @@ export type ImageBlobMinAggregateInputType = {
   ownerId?: true
   data?: true
   mime?: true
+  name?: true
   width?: true
   height?: true
   createdAt?: true
@@ -93,6 +97,7 @@ export type ImageBlobMaxAggregateInputType = {
   ownerId?: true
   data?: true
   mime?: true
+  name?: true
   width?: true
   height?: true
   createdAt?: true
@@ -103,6 +108,7 @@ export type ImageBlobCountAggregateInputType = {
   ownerId?: true
   data?: true
   mime?: true
+  name?: true
   width?: true
   height?: true
   createdAt?: true
@@ -200,6 +206,7 @@ export type ImageBlobGroupByOutputType = {
   ownerId: string
   data: runtime.Bytes
   mime: string
+  name: string | null
   width: number | null
   height: number | null
   createdAt: Date
@@ -233,6 +240,7 @@ export type ImageBlobWhereInput = {
   ownerId?: Prisma.StringFilter<"ImageBlob"> | string
   data?: Prisma.BytesFilter<"ImageBlob"> | runtime.Bytes
   mime?: Prisma.StringFilter<"ImageBlob"> | string
+  name?: Prisma.StringNullableFilter<"ImageBlob"> | string | null
   width?: Prisma.IntNullableFilter<"ImageBlob"> | number | null
   height?: Prisma.IntNullableFilter<"ImageBlob"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ImageBlob"> | Date | string
@@ -243,6 +251,7 @@ export type ImageBlobOrderByWithRelationInput = {
   ownerId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   mime?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -256,6 +265,7 @@ export type ImageBlobWhereUniqueInput = Prisma.AtLeast<{
   ownerId?: Prisma.StringFilter<"ImageBlob"> | string
   data?: Prisma.BytesFilter<"ImageBlob"> | runtime.Bytes
   mime?: Prisma.StringFilter<"ImageBlob"> | string
+  name?: Prisma.StringNullableFilter<"ImageBlob"> | string | null
   width?: Prisma.IntNullableFilter<"ImageBlob"> | number | null
   height?: Prisma.IntNullableFilter<"ImageBlob"> | number | null
   createdAt?: Prisma.DateTimeFilter<"ImageBlob"> | Date | string
@@ -266,6 +276,7 @@ export type ImageBlobOrderByWithAggregationInput = {
   ownerId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   mime?: Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   width?: Prisma.SortOrderInput | Prisma.SortOrder
   height?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -284,6 +295,7 @@ export type ImageBlobScalarWhereWithAggregatesInput = {
   ownerId?: Prisma.StringWithAggregatesFilter<"ImageBlob"> | string
   data?: Prisma.BytesWithAggregatesFilter<"ImageBlob"> | runtime.Bytes
   mime?: Prisma.StringWithAggregatesFilter<"ImageBlob"> | string
+  name?: Prisma.StringNullableWithAggregatesFilter<"ImageBlob"> | string | null
   width?: Prisma.IntNullableWithAggregatesFilter<"ImageBlob"> | number | null
   height?: Prisma.IntNullableWithAggregatesFilter<"ImageBlob"> | number | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ImageBlob"> | Date | string
@@ -294,6 +306,7 @@ export type ImageBlobCreateInput = {
   ownerId: string
   data: runtime.Bytes
   mime?: string
+  name?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -304,6 +317,7 @@ export type ImageBlobUncheckedCreateInput = {
   ownerId: string
   data: runtime.Bytes
   mime?: string
+  name?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -314,6 +328,7 @@ export type ImageBlobUpdateInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.BytesFieldUpdateOperationsInput | runtime.Bytes
   mime?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -324,6 +339,7 @@ export type ImageBlobUncheckedUpdateInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.BytesFieldUpdateOperationsInput | runtime.Bytes
   mime?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -334,6 +350,7 @@ export type ImageBlobCreateManyInput = {
   ownerId: string
   data: runtime.Bytes
   mime?: string
+  name?: string | null
   width?: number | null
   height?: number | null
   createdAt?: Date | string
@@ -344,6 +361,7 @@ export type ImageBlobUpdateManyMutationInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.BytesFieldUpdateOperationsInput | runtime.Bytes
   mime?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -354,6 +372,7 @@ export type ImageBlobUncheckedUpdateManyInput = {
   ownerId?: Prisma.StringFieldUpdateOperationsInput | string
   data?: Prisma.BytesFieldUpdateOperationsInput | runtime.Bytes
   mime?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   width?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   height?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -364,6 +383,7 @@ export type ImageBlobCountOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   mime?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -379,6 +399,7 @@ export type ImageBlobMaxOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   mime?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -389,6 +410,7 @@ export type ImageBlobMinOrderByAggregateInput = {
   ownerId?: Prisma.SortOrder
   data?: Prisma.SortOrder
   mime?: Prisma.SortOrder
+  name?: Prisma.SortOrder
   width?: Prisma.SortOrder
   height?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -410,6 +432,7 @@ export type ImageBlobSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   ownerId?: boolean
   data?: boolean
   mime?: boolean
+  name?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -420,6 +443,7 @@ export type ImageBlobSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   ownerId?: boolean
   data?: boolean
   mime?: boolean
+  name?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -430,6 +454,7 @@ export type ImageBlobSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   ownerId?: boolean
   data?: boolean
   mime?: boolean
+  name?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
@@ -440,12 +465,13 @@ export type ImageBlobSelectScalar = {
   ownerId?: boolean
   data?: boolean
   mime?: boolean
+  name?: boolean
   width?: boolean
   height?: boolean
   createdAt?: boolean
 }
 
-export type ImageBlobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "data" | "mime" | "width" | "height" | "createdAt", ExtArgs["result"]["imageBlob"]>
+export type ImageBlobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "data" | "mime" | "name" | "width" | "height" | "createdAt", ExtArgs["result"]["imageBlob"]>
 
 export type $ImageBlobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ImageBlob"
@@ -455,6 +481,7 @@ export type $ImageBlobPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     ownerId: string
     data: runtime.Bytes
     mime: string
+    name: string | null
     width: number | null
     height: number | null
     createdAt: Date
@@ -885,6 +912,7 @@ export interface ImageBlobFieldRefs {
   readonly ownerId: Prisma.FieldRef<"ImageBlob", 'String'>
   readonly data: Prisma.FieldRef<"ImageBlob", 'Bytes'>
   readonly mime: Prisma.FieldRef<"ImageBlob", 'String'>
+  readonly name: Prisma.FieldRef<"ImageBlob", 'String'>
   readonly width: Prisma.FieldRef<"ImageBlob", 'Int'>
   readonly height: Prisma.FieldRef<"ImageBlob", 'Int'>
   readonly createdAt: Prisma.FieldRef<"ImageBlob", 'DateTime'>

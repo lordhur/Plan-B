@@ -1,6 +1,6 @@
 'use client'
 
-import { Compass, Home, MessageCircle, Plus, User, type LucideIcon } from 'lucide-react'
+import { CalendarDays, Compass, Home, Plus, Users, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -16,11 +16,11 @@ interface NavItem {
 }
 
 const ITEMS: NavItem[] = [
-  { href: '/', label: 'Accueil', icon: Home, exact: true },
-  { href: '/explore', label: 'Explorer', icon: Compass, exact: false },
+  { href: '/', label: 'Fil', icon: Home, exact: true },
+  { href: '/friends', label: 'Membres', icon: Users, exact: false },
   { href: '/events/create', label: 'Créer', icon: Plus, exact: false, accent: true },
-  { href: '/messages', label: 'Messages', icon: MessageCircle, exact: false },
-  { href: '/profile', label: 'Profil', icon: User, exact: false },
+  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays, exact: false },
+  { href: '/explore', label: 'Explorer', icon: Compass, exact: false },
 ]
 
 /** Barre de navigation mobile (bas d'écran, cibles ≥ 44 px). */

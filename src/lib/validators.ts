@@ -64,6 +64,8 @@ export const updateProfileSchema = z.object({
     .regex(/^\+?[0-9 .-]{8,16}$/, 'Numéro invalide')
     .optional()
     .or(z.literal('')),
+  gender: z.enum(['MALE', 'FEMALE', 'NON_BINARY', 'OTHER', 'PREFER_NOT_TO_SAY']).optional(),
+  orientation: z.enum(['HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER']).nullable().optional(),
   showAge: z.boolean().optional(),
   showLastName: z.boolean().optional(),
   privacyLevel: z.enum(['PUBLIC', 'FRIENDS_OF_FRIENDS', 'FRIENDS_ONLY', 'PRIVATE']).optional(),

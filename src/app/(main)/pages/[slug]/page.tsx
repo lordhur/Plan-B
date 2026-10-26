@@ -37,9 +37,31 @@ export default function PublicPagePage({ params }: { params: Promise<{ slug: str
         <ArrowLeft className="h-4 w-4" aria-hidden /> Toutes les pages
       </Link>
 
-      <Card>
+      <Card className="overflow-hidden">
+        {/* Bannière de couverture */}
+        <div className="relative aspect-[3/1] w-full overflow-hidden [contain:paint]">
+          {p.coverUrl ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={p.coverUrl}
+              alt=""
+              className="ken-burns h-full w-full object-cover"
+            />
+          ) : (
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(120% 100% at 15% 10%, #f9731666, transparent 55%), radial-gradient(100% 120% at 85% 90%, #8b5cf644, transparent 55%), linear-gradient(135deg, #f973162e, #0f172a14 60%, #8b5cf61f)',
+              }}
+            />
+          )}
+        </div>
         <CardContent className="flex flex-col items-center gap-4 p-6 text-center">
-          <Avatar src={p.avatarUrl} name={p.name} size="xl" />
+          <div className="-mt-16 rounded-full ring-4 ring-card">
+            <Avatar src={p.avatarUrl} name={p.name} size="xl" />
+          </div>
           <div>
             <h1 className="flex items-center justify-center gap-1.5 text-2xl font-extrabold tracking-tight">
               {p.name}

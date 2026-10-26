@@ -32,6 +32,7 @@ export type DirectMessageMinAggregateOutputType = {
   content: string | null
   mediaUrl: string | null
   mediaType: $Enums.MediaType | null
+  mediaName: string | null
   isRead: boolean | null
   createdAt: Date | null
   editedAt: Date | null
@@ -46,6 +47,7 @@ export type DirectMessageMaxAggregateOutputType = {
   content: string | null
   mediaUrl: string | null
   mediaType: $Enums.MediaType | null
+  mediaName: string | null
   isRead: boolean | null
   createdAt: Date | null
   editedAt: Date | null
@@ -60,6 +62,7 @@ export type DirectMessageCountAggregateOutputType = {
   content: number
   mediaUrl: number
   mediaType: number
+  mediaName: number
   isRead: number
   createdAt: number
   editedAt: number
@@ -76,6 +79,7 @@ export type DirectMessageMinAggregateInputType = {
   content?: true
   mediaUrl?: true
   mediaType?: true
+  mediaName?: true
   isRead?: true
   createdAt?: true
   editedAt?: true
@@ -90,6 +94,7 @@ export type DirectMessageMaxAggregateInputType = {
   content?: true
   mediaUrl?: true
   mediaType?: true
+  mediaName?: true
   isRead?: true
   createdAt?: true
   editedAt?: true
@@ -104,6 +109,7 @@ export type DirectMessageCountAggregateInputType = {
   content?: true
   mediaUrl?: true
   mediaType?: true
+  mediaName?: true
   isRead?: true
   createdAt?: true
   editedAt?: true
@@ -191,6 +197,7 @@ export type DirectMessageGroupByOutputType = {
   content: string
   mediaUrl: string | null
   mediaType: $Enums.MediaType | null
+  mediaName: string | null
   isRead: boolean
   createdAt: Date
   editedAt: Date | null
@@ -226,6 +233,7 @@ export type DirectMessageWhereInput = {
   content?: Prisma.StringFilter<"DirectMessage"> | string
   mediaUrl?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   mediaType?: Prisma.EnumMediaTypeNullableFilter<"DirectMessage"> | $Enums.MediaType | null
+  mediaName?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   isRead?: Prisma.BoolFilter<"DirectMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DirectMessage"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"DirectMessage"> | Date | string | null
@@ -243,6 +251,7 @@ export type DirectMessageOrderByWithRelationInput = {
   content?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaType?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaName?: Prisma.SortOrderInput | Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -263,6 +272,7 @@ export type DirectMessageWhereUniqueInput = Prisma.AtLeast<{
   content?: Prisma.StringFilter<"DirectMessage"> | string
   mediaUrl?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   mediaType?: Prisma.EnumMediaTypeNullableFilter<"DirectMessage"> | $Enums.MediaType | null
+  mediaName?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   isRead?: Prisma.BoolFilter<"DirectMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DirectMessage"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"DirectMessage"> | Date | string | null
@@ -280,6 +290,7 @@ export type DirectMessageOrderByWithAggregationInput = {
   content?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   mediaType?: Prisma.SortOrderInput | Prisma.SortOrder
+  mediaName?: Prisma.SortOrderInput | Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -300,6 +311,7 @@ export type DirectMessageScalarWhereWithAggregatesInput = {
   content?: Prisma.StringWithAggregatesFilter<"DirectMessage"> | string
   mediaUrl?: Prisma.StringNullableWithAggregatesFilter<"DirectMessage"> | string | null
   mediaType?: Prisma.EnumMediaTypeNullableWithAggregatesFilter<"DirectMessage"> | $Enums.MediaType | null
+  mediaName?: Prisma.StringNullableWithAggregatesFilter<"DirectMessage"> | string | null
   isRead?: Prisma.BoolWithAggregatesFilter<"DirectMessage"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"DirectMessage"> | Date | string
   editedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DirectMessage"> | Date | string | null
@@ -311,6 +323,7 @@ export type DirectMessageCreateInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -328,6 +341,7 @@ export type DirectMessageUncheckedCreateInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -339,6 +353,7 @@ export type DirectMessageUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -356,6 +371,7 @@ export type DirectMessageUncheckedUpdateInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -370,6 +386,7 @@ export type DirectMessageCreateManyInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -381,6 +398,7 @@ export type DirectMessageUpdateManyMutationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -395,6 +413,7 @@ export type DirectMessageUncheckedUpdateManyInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -419,6 +438,7 @@ export type DirectMessageCountOrderByAggregateInput = {
   content?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mediaType?: Prisma.SortOrder
+  mediaName?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
@@ -433,6 +453,7 @@ export type DirectMessageMaxOrderByAggregateInput = {
   content?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mediaType?: Prisma.SortOrder
+  mediaName?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
@@ -447,6 +468,7 @@ export type DirectMessageMinOrderByAggregateInput = {
   content?: Prisma.SortOrder
   mediaUrl?: Prisma.SortOrder
   mediaType?: Prisma.SortOrder
+  mediaName?: Prisma.SortOrder
   isRead?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
@@ -584,6 +606,7 @@ export type DirectMessageCreateWithoutSenderInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -599,6 +622,7 @@ export type DirectMessageUncheckedCreateWithoutSenderInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -620,6 +644,7 @@ export type DirectMessageCreateWithoutReceiverInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -635,6 +660,7 @@ export type DirectMessageUncheckedCreateWithoutReceiverInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -678,6 +704,7 @@ export type DirectMessageScalarWhereInput = {
   content?: Prisma.StringFilter<"DirectMessage"> | string
   mediaUrl?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   mediaType?: Prisma.EnumMediaTypeNullableFilter<"DirectMessage"> | $Enums.MediaType | null
+  mediaName?: Prisma.StringNullableFilter<"DirectMessage"> | string | null
   isRead?: Prisma.BoolFilter<"DirectMessage"> | boolean
   createdAt?: Prisma.DateTimeFilter<"DirectMessage"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"DirectMessage"> | Date | string | null
@@ -705,6 +732,7 @@ export type DirectMessageCreateWithoutConversationInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -720,6 +748,7 @@ export type DirectMessageUncheckedCreateWithoutConversationInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -759,6 +788,7 @@ export type DirectMessageCreateManySenderInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -772,6 +802,7 @@ export type DirectMessageCreateManyReceiverInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -783,6 +814,7 @@ export type DirectMessageUpdateWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -798,6 +830,7 @@ export type DirectMessageUncheckedUpdateWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -811,6 +844,7 @@ export type DirectMessageUncheckedUpdateManyWithoutSenderInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -822,6 +856,7 @@ export type DirectMessageUpdateWithoutReceiverInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -837,6 +872,7 @@ export type DirectMessageUncheckedUpdateWithoutReceiverInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -850,6 +886,7 @@ export type DirectMessageUncheckedUpdateManyWithoutReceiverInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -863,6 +900,7 @@ export type DirectMessageCreateManyConversationInput = {
   content: string
   mediaUrl?: string | null
   mediaType?: $Enums.MediaType | null
+  mediaName?: string | null
   isRead?: boolean
   createdAt?: Date | string
   editedAt?: Date | string | null
@@ -874,6 +912,7 @@ export type DirectMessageUpdateWithoutConversationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -889,6 +928,7 @@ export type DirectMessageUncheckedUpdateWithoutConversationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -902,6 +942,7 @@ export type DirectMessageUncheckedUpdateManyWithoutConversationInput = {
   content?: Prisma.StringFieldUpdateOperationsInput | string
   mediaUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   mediaType?: Prisma.NullableEnumMediaTypeFieldUpdateOperationsInput | $Enums.MediaType | null
+  mediaName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isRead?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -918,6 +959,7 @@ export type DirectMessageSelect<ExtArgs extends runtime.Types.Extensions.Interna
   content?: boolean
   mediaUrl?: boolean
   mediaType?: boolean
+  mediaName?: boolean
   isRead?: boolean
   createdAt?: boolean
   editedAt?: boolean
@@ -935,6 +977,7 @@ export type DirectMessageSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   content?: boolean
   mediaUrl?: boolean
   mediaType?: boolean
+  mediaName?: boolean
   isRead?: boolean
   createdAt?: boolean
   editedAt?: boolean
@@ -952,6 +995,7 @@ export type DirectMessageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   content?: boolean
   mediaUrl?: boolean
   mediaType?: boolean
+  mediaName?: boolean
   isRead?: boolean
   createdAt?: boolean
   editedAt?: boolean
@@ -969,13 +1013,14 @@ export type DirectMessageSelectScalar = {
   content?: boolean
   mediaUrl?: boolean
   mediaType?: boolean
+  mediaName?: boolean
   isRead?: boolean
   createdAt?: boolean
   editedAt?: boolean
   isDeleted?: boolean
 }
 
-export type DirectMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "senderId" | "receiverId" | "content" | "mediaUrl" | "mediaType" | "isRead" | "createdAt" | "editedAt" | "isDeleted", ExtArgs["result"]["directMessage"]>
+export type DirectMessageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "senderId" | "receiverId" | "content" | "mediaUrl" | "mediaType" | "mediaName" | "isRead" | "createdAt" | "editedAt" | "isDeleted", ExtArgs["result"]["directMessage"]>
 export type DirectMessageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   sender?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1007,6 +1052,7 @@ export type $DirectMessagePayload<ExtArgs extends runtime.Types.Extensions.Inter
     content: string
     mediaUrl: string | null
     mediaType: $Enums.MediaType | null
+    mediaName: string | null
     isRead: boolean
     createdAt: Date
     editedAt: Date | null
@@ -1444,6 +1490,7 @@ export interface DirectMessageFieldRefs {
   readonly content: Prisma.FieldRef<"DirectMessage", 'String'>
   readonly mediaUrl: Prisma.FieldRef<"DirectMessage", 'String'>
   readonly mediaType: Prisma.FieldRef<"DirectMessage", 'MediaType'>
+  readonly mediaName: Prisma.FieldRef<"DirectMessage", 'String'>
   readonly isRead: Prisma.FieldRef<"DirectMessage", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"DirectMessage", 'DateTime'>
   readonly editedAt: Prisma.FieldRef<"DirectMessage", 'DateTime'>

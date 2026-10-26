@@ -1,17 +1,13 @@
 'use client'
 
 import {
-  Bell,
   CalendarDays,
   Compass,
   Home,
-  MessageCircle,
   Store,
   UsersRound,
   Plus,
-  Settings,
   Trophy,
-  User,
   Users,
   type LucideIcon,
 } from 'lucide-react'
@@ -33,14 +29,10 @@ const NAV: NavEntry[] = [
   { href: '/', label: 'Fil d’actualité', icon: Home },
   { href: '/explore', label: 'Explorer', icon: Compass },
   { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays },
-  { href: '/leaderboard', label: 'Classements', icon: Trophy },
-  { href: '/friends', label: 'Amis', icon: Users },
+  { href: '/friends', label: 'Les Membres', icon: Users },
   { href: '/groups', label: 'Groupes', icon: UsersRound },
   { href: '/pages', label: 'Pages', icon: Store },
-  { href: '/messages', label: 'Messages', icon: MessageCircle, badge: true },
-  { href: '/notifications', label: 'Notifications', icon: Bell, badge: true },
-  { href: '/profile', label: 'Mon profil', icon: User },
-  { href: '/profile/settings', label: 'Paramètres', icon: Settings },
+  { href: '/leaderboard', label: 'Classements', icon: Trophy },
 ]
 
 /** Barre latérale desktop. */
@@ -82,12 +74,7 @@ export function Sidebar() {
                 >
                   <Icon className="h-5 w-5" aria-hidden />
                   {label}
-                  {badge && (unread?.count ?? 0) > 0 && (
-                    <span className="ml-auto rounded-full bg-danger-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                      {unread!.count}
-                    </span>
-                  )}
-                </Link>
+                        </Link>
               </li>
             )
           })}

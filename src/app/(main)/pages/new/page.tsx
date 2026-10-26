@@ -15,6 +15,7 @@ import { Select } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { toast } from '@/components/ui/toast'
+import { CoverImageField } from '@/components/events/CoverImageField'
 
 const schema = z.object({
   name: z.string().trim().min(3, 'Nom trop court').max(80),
@@ -25,6 +26,12 @@ const schema = z.object({
   phone: z.string().trim().max(20).optional(),
   website: z.string().url('URL invalide').optional().or(z.literal('')),
   email: z.string().email('Email invalide').optional().or(z.literal('')),
+  coverUrl: z
+    .string()
+    .trim()
+    .max(2048)
+    .refine((v) => v === '' || v.startsWith('/') || /^https?:\/\//i.test(v), 'URL d’image invalide')
+    .optional(),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -44,10 +51,12 @@ export default function NewPagePage() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { category: 'commerce' },
+    defaultValues: { category: 'commerce', coverUrl: '' },
   })
 
   if (loadingMe) return <LoadingSpinner className="py-20" />
@@ -80,6 +89,7 @@ export default function NewPagePage() {
                 ...values,
                 website: values.website || undefined,
                 email: values.email || undefined,
+                coverUrl: values.coverUrl || undefined,
               }),
             )}
           >
@@ -104,6 +114,10 @@ export default function NewPagePage() {
               <Label htmlFor="page-description">Description</Label>
               <Textarea id="page-description" rows={3} {...register('description')} placeholder="Présentez votre activité en quelques lignes…" />
             </div>
+            <CoverImageField
+              value={watch('coverUrl') ?? ''}
+              onChange={(url) => setValue('coverUrl', url, { shouldDirty: true })}
+            />
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="page-city">Ville</Label>

@@ -1,10 +1,19 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { Send } from 'lucide-react'
+import {
+  Download,
+  FileText,
+  Loader2,
+  Paperclip,
+  Send,
+  Smile,
+  X,
+} from 'lucide-react'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { EmojiPicker } from './EmojiPicker'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { formatRelative } from '@/lib/date'
@@ -23,6 +32,18 @@ interface ChatMessage {
   content: string
   createdAt: Date
   author: ChatUser
+  mediaUrl?: string | null
+  mediaType?: 'IMAGE' | 'VIDEO' | 'AUDIO' | 'FILE' | null
+  mediaName?: string | null
+}
+
+type MediaType = 'IMAGE' | 'VIDEO' | 'AUDIO' | 'FILE'
+
+interface PendingAttachment {
+  url: string
+  type: MediaType
+  name: string
+  previewUrl?: string
 }
 
 interface ChatThreadProps {
@@ -33,8 +54,63 @@ interface ChatThreadProps {
   className?: string
 }
 
+const MAX_ATTACHMENT = 4 * 1024 * 1024
+const ACCEPT = 'image/*,video/mp4,video/webm,video/quicktime,audio/*,application/pdf'
+
+/** Rendu d'une pièce jointe dans une bulle. */
+function AttachmentView({
+  type,
+  url,
+  name,
+  mine,
+}: {
+  type: MediaType
+  url: string
+  name?: string | null
+  mine: boolean
+}) {
+  if (type === 'IMAGE') {
+    return (
+      <a href={url} target="_blank" rel="noreferrer" className="block">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={url}
+          alt={name || 'Photo partagée'}
+          loading="lazy"
+          className="max-h-72 w-full rounded-xl object-cover"
+        />
+      </a>
+    )
+  }
+  if (type === 'VIDEO') {
+    return <video src={url} controls preload="metadata" className="max-h-72 w-full rounded-xl" />
+  }
+  if (type === 'AUDIO') {
+    return <audio src={url} controls preload="metadata" className="w-60 max-w-full" />
+  }
+  return (
+    <a
+      href={url}
+      download={name || undefined}
+      className={cn(
+        'flex items-center gap-2.5 rounded-xl px-3 py-2.5 no-underline',
+        mine ? 'bg-white/15 hover:bg-white/25' : 'bg-card hover:bg-bg-secondary',
+      )}
+    >
+      <FileText className="h-6 w-6 shrink-0" aria-hidden />
+      <span className="min-w-0">
+        <span className="block truncate text-sm font-semibold">{name || 'Fichier'}</span>
+        <span className="flex items-center gap-1 text-xs opacity-80">
+          <Download className="h-3 w-3" aria-hidden /> Télécharger
+        </span>
+      </span>
+    </a>
+  )
+}
+
 /**
  * Fil de discussion partagé (DM + chat d'événement).
+ * DM : émojis + pièces jointes (photos, vidéos, audio, PDF ≤ 4 Mo).
  * Temps réel pragmatique : polling react-query (3,5 s) — compatible
  * serverless ; à remplacer par WebSocket/Realtime à l'échelle.
  */
@@ -43,7 +119,12 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
   const [content, setContent] = useState('')
   const bottomRef = useRef<HTMLDivElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const fileRef = useRef<HTMLInputElement>(null)
   const [pinnedBottom, setPinnedBottom] = useState(true)
+  const [showEmoji, setShowEmoji] = useState(false)
+  const [attachment, setAttachment] = useState<PendingAttachment | null>(null)
+  const [uploading, setUploading] = useState(false)
 
   const dm = trpc.messages.messages.useQuery(
     { conversationId: id, limit: 80 },
@@ -70,6 +151,9 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           content: m.content,
           createdAt: m.createdAt,
           author: m.sender,
+          mediaUrl: m.mediaUrl,
+          mediaType: m.mediaType,
+          mediaName: m.mediaName,
         }))
       : (event.data ?? []).map((m) => ({
           id: m.id,
@@ -89,16 +173,75 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
     setPinnedBottom(el.scrollHeight - el.scrollTop - el.clientHeight < 80)
   }
 
+  /** Insère l'émoji à la position du curseur. */
+  const insertEmoji = (emoji: string) => {
+    const el = inputRef.current
+    if (!el) {
+      setContent((c) => c + emoji)
+      return
+    }
+    const start = el.selectionStart ?? content.length
+    const end = el.selectionEnd ?? content.length
+    const next = content.slice(0, start) + emoji + content.slice(end)
+    setContent(next)
+    requestAnimationFrame(() => {
+      el.focus()
+      el.setSelectionRange(start + emoji.length, start + emoji.length)
+    })
+  }
+
+  /** Téléverse une pièce jointe (photos compressées côté serveur). */
+  const uploadAttachment = async (file: File) => {
+    if (file.size > MAX_ATTACHMENT) {
+      toast.error('Fichier trop lourd', 'Limite : 4 Mo (vidéos = clips courts).')
+      return
+    }
+    setUploading(true)
+    const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
+    try {
+      const form = new FormData()
+      form.append('file', file)
+      const res = await fetch('/api/attachment', { method: 'POST', body: form })
+      const json = (await res.json()) as {
+        url?: string
+        type?: MediaType
+        name?: string
+        error?: string
+      }
+      if (!res.ok || !json.url || !json.type) {
+        throw new Error(json.error || 'Téléversement impossible')
+      }
+      setAttachment({ url: json.url, type: json.type, name: json.name ?? file.name, previewUrl })
+    } catch (e) {
+      if (previewUrl) URL.revokeObjectURL(previewUrl)
+      toast.error(e instanceof Error ? e.message : 'Téléversement impossible')
+    } finally {
+      setUploading(false)
+    }
+  }
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     const text = content.trim()
-    if (!text || sending) return
-    setContent('')
-    setPinnedBottom(true)
+    if ((!text && !attachment) || sending) return
     if (kind === 'dm') {
-      await sendDm.mutateAsync({ conversationId: id, content: text })
+      const media = attachment
+      setContent('')
+      setAttachment(null)
+      if (media?.previewUrl) URL.revokeObjectURL(media.previewUrl)
+      setPinnedBottom(true)
+      await sendDm.mutateAsync({
+        conversationId: id,
+        content: text,
+        mediaUrl: media?.url,
+        mediaType: media?.type,
+        mediaName: media?.name,
+      })
       await dm.refetch()
     } else {
+      if (!text) return
+      setContent('')
+      setPinnedBottom(true)
       await sendEvent.mutateAsync({ eventId: id, content: text })
       await event.refetch()
     }
@@ -132,6 +275,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           const mine = m.author.id === user?.id
           const showAuthor =
             !mine && (i === 0 || messages[i - 1]!.author.id !== m.author.id)
+          const hasMedia = !!m.mediaUrl && !!m.mediaType
           return (
             <div key={m.id} className={cn('flex items-end gap-2', mine && 'flex-row-reverse')}>
               {!mine ? (
@@ -147,12 +291,18 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                 )}
                 <div
                   className={cn(
-                    'rounded-2xl px-3.5 py-2 text-sm leading-relaxed',
+                    'rounded-2xl text-sm leading-relaxed',
+                    m.content ? 'px-3.5 py-2' : hasMedia ? 'p-1.5' : 'px-3.5 py-2',
                     mine
                       ? 'rounded-br-md bg-primary-600 text-white'
                       : 'rounded-bl-md bg-bg-secondary text-fg',
                   )}
                 >
+                  {hasMedia && (
+                    <div className={cn(m.content && 'mb-1.5')}>
+                      <AttachmentView type={m.mediaType!} url={m.mediaUrl!} name={m.mediaName} mine={mine} />
+                    </div>
+                  )}
                   {m.content}
                 </div>
                 <p className={cn('mt-0.5 px-1 text-[10px] text-fg-muted', mine && 'text-right')}>
@@ -165,28 +315,110 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         <div ref={bottomRef} />
       </div>
 
-      <form onSubmit={submit} className="sticky bottom-0 flex items-end gap-2 border-t border-border bg-bg py-3 safe-bottom">
-        <label htmlFor="chat-input" className="sr-only">
-          Votre message
-        </label>
-        <textarea
-          id="chat-input"
-          rows={1}
-          value={content}
-          maxLength={2000}
-          onChange={(e) => setContent(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-              e.preventDefault()
-              void submit(e)
-            }
-          }}
-          placeholder="Écrivez votre message…"
-          className="min-h-11 max-h-32 flex-1 resize-y rounded-2xl border border-border bg-bg-secondary px-4 py-2.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
-        />
-        <Button type="submit" size="icon" aria-label="Envoyer" disabled={!content.trim() || sending} className="h-11 w-11 shrink-0 rounded-full">
-          <Send className="h-4 w-4" aria-hidden />
-        </Button>
+      <form onSubmit={submit} className="sticky bottom-0 border-t border-border bg-bg py-3 safe-bottom">
+        {/* Aperçu de la pièce jointe en attente */}
+        {attachment && (
+          <div className="mb-2 flex items-center gap-3 rounded-2xl border border-border bg-bg-secondary p-2">
+            {attachment.type === 'IMAGE' && attachment.previewUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={attachment.previewUrl} alt="" className="h-14 w-14 rounded-xl object-cover" />
+            ) : (
+              <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-card">
+                <FileText className="h-6 w-6 text-fg-muted" aria-hidden />
+              </span>
+            )}
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold">{attachment.name}</span>
+              <span className="text-xs text-fg-muted">Prêt à envoyer</span>
+            </span>
+            <button
+              type="button"
+              onClick={() => {
+                if (attachment.previewUrl) URL.revokeObjectURL(attachment.previewUrl)
+                setAttachment(null)
+              }}
+              aria-label="Retirer la pièce jointe"
+              className="inline-flex h-9 w-9 items-center justify-center rounded-full text-fg-muted hover:bg-card hover:text-danger-500"
+            >
+              <X className="h-4 w-4" aria-hidden />
+            </button>
+          </div>
+        )}
+
+        <div className="relative flex items-end gap-1.5">
+          {kind === 'dm' && (
+            <>
+              {showEmoji && (
+                <EmojiPicker onPick={insertEmoji} onClose={() => setShowEmoji(false)} />
+              )}
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Ajouter un émoji"
+                aria-expanded={showEmoji}
+                onClick={() => setShowEmoji((s) => !s)}
+                className="h-11 w-11 shrink-0 rounded-full text-fg-muted hover:text-primary-600"
+              >
+                <Smile className="h-5 w-5" aria-hidden />
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                aria-label="Joindre une photo, vidéo ou fichier"
+                disabled={uploading || !!attachment}
+                onClick={() => fileRef.current?.click()}
+                className="h-11 w-11 shrink-0 rounded-full text-fg-muted hover:text-primary-600"
+              >
+                {uploading ? (
+                  <Loader2 className="h-5 w-5 animate-spin" aria-hidden />
+                ) : (
+                  <Paperclip className="h-5 w-5" aria-hidden />
+                )}
+              </Button>
+              <input
+                ref={fileRef}
+                type="file"
+                accept={ACCEPT}
+                className="sr-only-focusable h-1 w-1"
+                onChange={(e) => {
+                  const f = e.target.files?.[0]
+                  if (f) void uploadAttachment(f)
+                  e.target.value = ''
+                }}
+              />
+            </>
+          )}
+          <label htmlFor="chat-input" className="sr-only">
+            Votre message
+          </label>
+          <textarea
+            ref={inputRef}
+            id="chat-input"
+            rows={1}
+            value={content}
+            maxLength={2000}
+            onChange={(e) => setContent(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                void submit(e)
+              }
+            }}
+            placeholder="Écrivez votre message…"
+            className="min-h-11 max-h-32 flex-1 resize-y rounded-2xl border border-border bg-bg-secondary px-4 py-2.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+          />
+          <Button
+            type="submit"
+            size="icon"
+            aria-label="Envoyer"
+            disabled={(!content.trim() && !attachment) || sending}
+            className="h-11 w-11 shrink-0 rounded-full"
+          >
+            <Send className="h-4 w-4" aria-hidden />
+          </Button>
+        </div>
       </form>
     </div>
   )

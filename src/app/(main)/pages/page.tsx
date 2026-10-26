@@ -63,21 +63,46 @@ export default function PagesDirectoryPage() {
             <li key={page.id}>
               <Link
                 href={`/pages/${page.slug}`}
-                className="flex items-center gap-3 rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-card-hover"
+                className="sheen-hover lift-shadow group relative block overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card"
               >
-                <Avatar src={page.avatarUrl} name={page.name} size="lg" />
-                <span className="min-w-0 flex-1">
-                  <span className="flex items-center gap-1.5 font-semibold">
-                    <span className="truncate">{page.name}</span>
-                    {page.isVerified && <BadgeCheck className="h-4 w-4 shrink-0 text-primary-600" aria-label="Page vérifiée" />}
-                  </span>
-                  <span className="block truncate text-xs text-fg-muted">
-                    {CATEGORY_LABELS[page.category] ?? page.category}
-                    {page.city ? ` · ${page.city}` : ''} · {page.followerCount} abonné(s) · {page._count.events} plan(s)
-                  </span>
-                  {page.description && (
-                    <span className="mt-1 block truncate text-sm text-fg-muted">{page.description}</span>
+                {/* Bannière de couverture */}
+                <span className="relative block aspect-[3/1] w-full overflow-hidden [contain:paint]">
+                  {page.coverUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={page.coverUrl}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-[1.05]"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          'radial-gradient(120% 100% at 15% 10%, #f9731666, transparent 55%), radial-gradient(100% 120% at 85% 90%, #8b5cf644, transparent 55%), linear-gradient(135deg, #f973162e, #0f172a14 60%, #8b5cf61f)',
+                      }}
+                    />
                   )}
+                </span>
+                <span className="flex items-start gap-3 p-4">
+                  <span className="-mt-10 shrink-0 rounded-full ring-4 ring-card">
+                    <Avatar src={page.avatarUrl} name={page.name} size="lg" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-center gap-1.5 font-semibold">
+                      <span className="truncate">{page.name}</span>
+                      {page.isVerified && <BadgeCheck className="h-4 w-4 shrink-0 text-primary-600" aria-label="Page vérifiée" />}
+                    </span>
+                    <span className="block truncate text-xs text-fg-muted">
+                      {CATEGORY_LABELS[page.category] ?? page.category}
+                      {page.city ? ` · ${page.city}` : ''} · {page.followerCount} abonné(s) · {page._count.events} plan(s)
+                    </span>
+                    {page.description && (
+                      <span className="mt-1 block truncate text-sm text-fg-muted">{page.description}</span>
+                    )}
+                  </span>
                 </span>
               </Link>
             </li>
