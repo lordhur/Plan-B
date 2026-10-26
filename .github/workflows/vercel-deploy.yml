@@ -119,10 +119,10 @@ jobs:
           LIST=$(api "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
           id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
-            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and (.readyState=="BUILDING" or .readyState=="QUEUED"))] | first | .id // empty')
+            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and ((.readyState // .state)=="BUILDING" or (.readyState // .state)=="QUEUED"))] | first | .id // empty')
           fi
           if [ -z "$id" ]; then
-            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and .readyState=="READY")] | first | .id // empty')
+            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and (.readyState // .state)=="READY")] | first | .id // empty')
           fi
           if [ -z "$id" ]; then
             dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
