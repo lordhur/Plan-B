@@ -437,7 +437,8 @@ export const ModelName = {
   PushSubscription: 'PushSubscription',
   Advertisement: 'Advertisement',
   ImageBlob: 'ImageBlob',
-  ContactMessage: 'ContactMessage'
+  ContactMessage: 'ContactMessage',
+  IntroCard: 'IntroCard'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -453,7 +454,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3491,6 +3492,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    IntroCard: {
+      payload: Prisma.$IntroCardPayload<ExtArgs>
+      fields: Prisma.IntroCardFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.IntroCardFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.IntroCardFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        findFirst: {
+          args: Prisma.IntroCardFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.IntroCardFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        findMany: {
+          args: Prisma.IntroCardFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>[]
+        }
+        create: {
+          args: Prisma.IntroCardCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        createMany: {
+          args: Prisma.IntroCardCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.IntroCardCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>[]
+        }
+        delete: {
+          args: Prisma.IntroCardDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        update: {
+          args: Prisma.IntroCardUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        deleteMany: {
+          args: Prisma.IntroCardDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.IntroCardUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.IntroCardUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>[]
+        }
+        upsert: {
+          args: Prisma.IntroCardUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$IntroCardPayload>
+        }
+        aggregate: {
+          args: Prisma.IntroCardAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateIntroCard>
+        }
+        groupBy: {
+          args: Prisma.IntroCardGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntroCardGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.IntroCardCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.IntroCardCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -4156,6 +4231,20 @@ export const ContactMessageScalarFieldEnum = {
 } as const
 
 export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
+
+
+export const IntroCardScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  about: 'about',
+  lookingFor: 'lookingFor',
+  photoUrl: 'photoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntroCardScalarFieldEnum = (typeof IntroCardScalarFieldEnum)[keyof typeof IntroCardScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -4830,6 +4919,7 @@ export type GlobalOmitConfig = {
   advertisement?: Prisma.AdvertisementOmit
   imageBlob?: Prisma.ImageBlobOmit
   contactMessage?: Prisma.ContactMessageOmit
+  introCard?: Prisma.IntroCardOmit
 }
 
 /* Types for Logging */

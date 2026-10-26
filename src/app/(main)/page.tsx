@@ -1,6 +1,6 @@
 'use client'
 
-import { Camera, Compass, Loader2, MapPin, Sparkles, Video, X } from 'lucide-react'
+import { Camera, Compass, Loader2, MapPin, Sparkles, Video } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { trpc } from '@/lib/trpc'
@@ -9,21 +9,7 @@ import { EventCard } from '@/components/events/EventCard'
 import { EmptyState } from '@/components/common/EmptyState'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-
-/** Villes principales du Var (coordonnées connues) — recherche locale sans géoloc. */
-const VAR_CITIES = [
-  { name: 'Toulon', lat: 43.1242, lon: 5.928 },
-  { name: 'Hyères', lat: 43.1205, lon: 6.1167 },
-  { name: 'Fréjus', lat: 43.4332, lon: 6.737 },
-  { name: 'Draguignan', lat: 43.5376, lon: 6.4646 },
-  { name: 'Saint-Raphaël', lat: 43.4252, lon: 6.7684 },
-  { name: 'La Seyne-sur-Mer', lat: 43.1, lon: 5.8847 },
-  { name: 'La Garde', lat: 43.1386, lon: 6.0095 },
-  { name: 'Six-Fours-les-Plages', lat: 43.1009, lon: 5.819 },
-  { name: 'Brignoles', lat: 43.4061, lon: 6.0619 },
-  { name: 'Sainte-Maxime', lat: 43.3098, lon: 6.6401 },
-]
+import { FranceMap } from '@/components/map/FranceMap'
 
 /** FIL D'ACTUALITÉ — plans à venir, géolocalisés et classés par pertinence. */
 export default function FeedPage() {
@@ -98,42 +84,27 @@ export default function FeedPage() {
         )}
       </section>
 
-      {/* Villes du Var — recherche locale sans géolocalisation */}
-      <section aria-labelledby="feed-cities" className="rounded-2xl border border-border bg-card/60 p-4">
-        <h2 id="feed-cities" className="mb-2.5 flex items-center gap-2 text-sm font-bold text-fg-muted">
-          <MapPin className="h-4 w-4 text-primary-600" aria-hidden />
-          {cityFilter ? `Plans autour de ${cityFilter.name}` : 'Voir les plans autour d’une ville'}
-        </h2>
-        <div className="flex flex-wrap gap-1.5">
-          {VAR_CITIES.map((c) => {
-            const active = cityFilter?.name === c.name
-            return (
-              <button
-                key={c.name}
-                type="button"
-                aria-pressed={active}
-                onClick={() => setCityFilter(active ? null : c)}
-                className={cn(
-                  'rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
-                  active
-                    ? 'border-primary-600 bg-primary-600 text-white'
-                    : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
-                )}
-              >
-                {c.name}
-              </button>
+      {/* Carte de France — localisation manuelle sans géoloc obligatoire */}
+      <section aria-labelledby="feed-cities">
+        <FranceMap
+          selected={cityFilter?.name ?? null}
+          onSelect={(c) => setCityFilter((prev) => (prev?.name === c.name ? null : { name: c.name, lat: c.lat, lon: c.lon }))}
+          onReset={() => setCityFilter(null)}
+          onGps={() => {
+            if (!navigator.geolocation) return
+            setGeoState('loading')
+            navigator.geolocation.getCurrentPosition(
+              (pos) => {
+                setCoords({ lat: pos.coords.latitude, lon: pos.coords.longitude })
+                setCityFilter(null)
+                setGeoState('ok')
+              },
+              () => setGeoState('denied'),
+              { timeout: 8000, maximumAge: 300000 },
             )
-          })}
-          {cityFilter && (
-            <button
-              type="button"
-              onClick={() => setCityFilter(null)}
-              className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-semibold text-danger-500 transition-colors hover:border-danger-300"
-            >
-              <X className="h-3 w-3" aria-hidden /> Réinitialiser
-            </button>
-          )}
-        </div>
+          }}
+          gpsActive={geoState === 'ok' && !cityFilter}
+        />
       </section>
 
       {/* Pellicule des dernières photos/vidéos */}

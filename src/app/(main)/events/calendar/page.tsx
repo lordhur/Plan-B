@@ -12,7 +12,7 @@ import {
   startOfWeek,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { CalendarDays, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Activity, CalendarDays, ChevronLeft, ChevronRight, List } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { trpc } from '@/lib/trpc'
@@ -80,7 +80,8 @@ function useWeather(lat: number, lon: number) {
           if (hour === '08') day.matin = entry
           if (hour === '14') day.aprem = entry
           if (hour === '20') day.soir = entry
-          if (day.matin && day.aprem && day.soir) map.set(date, day as { matin: HourWeather; aprem: HourWeather; soir: HourWeather })
+          if (day.matin && day.aprem && day.soir)
+            map.set(date, day as { matin: HourWeather; aprem: HourWeather; soir: HourWeather })
         }
         setByDate(map)
       })
@@ -97,7 +98,13 @@ function useWeather(lat: number, lon: number) {
 }
 
 /** Bloc météo d'un jour : matin · après-midi · soir. */
-function DayWeather({ day, weather }: { day: string; weather: Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }> }) {
+function DayWeather({
+  day,
+  weather,
+}: {
+  day: string
+  weather: Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }>
+}) {
   const w = weather.get(day)
   if (!w) return null
   const slots: { label: string; value: HourWeather }[] = [
@@ -126,9 +133,95 @@ function DayWeather({ day, weather }: { day: string; weather: Map<string, { mati
   )
 }
 
-/** Calendrier des plans — chronologie par jour + météo matin/après-midi/soir. */
-export default function CalendarPage() {
+type EventRow = {
+  id: string
+  slug: string
+  title: string
+  startDate: Date
+  city: string
+  price: number | null
+  currentParticipants: number
+  maxParticipants: number | null
+  category: { slug: string; name: string; icon: string; color: string }
+  coverImage: string | null
+  organizer: { id: string; firstName: string; lastName: string; displayName: string | null } | null
+}
+
+/**
+ * Ligne d'événement : photo sur la moitié gauche, dégradé vers la couleur
+ * unie de la catégorie sur la moitié droite.
+ */
+function EventRowLink({ e }: { e: EventRow }) {
+  const org = e.organizer
+  const orgName = org ? org.displayName || `${org.firstName} ${org.lastName}` : 'PlanB'
+  const color = e.category.color
+
+  return (
+    <li>
+      <Link
+        href={`/events/${e.slug}`}
+        className="relative flex min-h-24 items-stretch overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
+      >
+        {/* Moitié gauche : image de couverture (ou teinte catégorie) */}
+        {e.coverImage ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={e.coverImage}
+            alt=""
+            loading="lazy"
+            className="absolute inset-y-0 left-0 h-full w-1/2 object-cover"
+          />
+        ) : (
+          <span
+            className="absolute inset-y-0 left-0 flex w-1/2 items-center justify-center text-3xl"
+            style={{ backgroundColor: `${color}33` }}
+            aria-hidden
+          >
+            {e.category.icon}
+          </span>
+        )}
+
+        {/* Dégradé : transparent sur l'image → couleur unie de la catégorie */}
+        <span
+          className="absolute inset-0"
+          aria-hidden
+          style={{
+            background: `linear-gradient(90deg, ${color}00 20%, ${color}CC 48%, ${color} 60%)`,
+          }}
+        />
+
+        {/* Heure, posée sur l'image */}
+        <span className="relative z-10 flex w-[30%] shrink-0 items-start justify-center pt-3">
+          <span className="rounded-lg bg-black/55 px-2 py-1 text-sm font-black tabular-nums text-white backdrop-blur-sm">
+            {format(e.startDate, 'HH:mm')}
+          </span>
+        </span>
+
+        {/* Contenu sur la couleur unie */}
+        <span className="relative z-10 flex w-[70%] flex-col justify-center gap-1 p-3 pl-1 text-white">
+          <span className="line-clamp-2 font-bold leading-tight drop-shadow-sm">{e.title}</span>
+          <span className="text-xs font-medium opacity-90">
+            {e.city} · par {orgName}
+          </span>
+          <span className="flex items-center gap-2 text-xs font-semibold">
+            <span className="rounded-full bg-white/20 px-2 py-0.5">
+              {e.currentParticipants}
+              {e.maxParticipants != null ? `/${e.maxParticipants}` : ''} inscrits
+            </span>
+            <span>{e.price != null && e.price > 0 ? `${e.price.toFixed(2)} €` : 'Gratuit'}</span>
+          </span>
+        </span>
+      </Link>
+    </li>
+  )
+}
+
+type SubTab = 'evenements' | 'calendrier'
+
+/** Page « Activité » — lignes d'événements + calendrier mensuel. */
+export default function ActivitePage() {
   const { user } = useCurrentUser()
+  const [sub, setSub] = useState<SubTab>('evenements')
   const [month, setMonth] = useState(() => new Date())
   const [selected, setSelected] = useState<Date | null>(() => new Date())
 
@@ -146,7 +239,6 @@ export default function CalendarPage() {
     [month],
   )
 
-  // Regroupement chronologique par jour
   const byDay = useMemo(() => {
     const map = new Map<string, NonNullable<typeof events.data>>()
     for (const e of events.data ?? []) {
@@ -164,11 +256,17 @@ export default function CalendarPage() {
   )
 
   const today = new Date()
+  const selectedEvents = selected ? byDay.get(format(selected, 'yyyy-MM-dd')) ?? [] : []
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-8 md:px-0">
       <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-extrabold tracking-tight">Calendrier des plans</h1>
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-extrabold tracking-tight">
+            <Activity className="h-6 w-6 text-primary-600" aria-hidden /> Activité
+          </h1>
+          <p className="text-sm text-fg-muted">Tout ce qui se passe près de chez vous.</p>
+        </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="icon" aria-label="Mois précédent" onClick={() => setMonth((m) => addMonths(m, -1))}>
             <ChevronLeft className="h-4 w-4" aria-hidden />
@@ -182,152 +280,147 @@ export default function CalendarPage() {
         </div>
       </header>
 
-      {/* Grille compacte du mois */}
-      {events.isLoading ? (
-        <LoadingSpinner label="Chargement du calendrier" />
-      ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-card">
-          <div className="grid grid-cols-7 border-b border-border bg-bg-secondary text-center text-[11px] font-semibold uppercase text-fg-muted">
-            {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((d) => (
-              <div key={d} className="py-2">
-                {d}
-              </div>
-            ))}
-          </div>
-          <div className="grid grid-cols-7">
-            {days.map((day) => {
-              const dayEvents = byDay.get(format(day, 'yyyy-MM-dd')) ?? []
-              const isSelected = selected ? isSameDay(day, selected) : false
+      {/* Sous-onglets en boutons */}
+      <nav className="flex flex-wrap gap-2" aria-label="Onglets Activité">
+        {[
+          { id: 'evenements' as const, label: 'Événements', icon: List },
+          { id: 'calendrier' as const, label: 'Calendrier', icon: CalendarDays },
+        ].map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            aria-current={sub === t.id ? 'true' : undefined}
+            onClick={() => setSub(t.id)}
+            className={cn(
+              'inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold shadow-sm transition-colors',
+              sub === t.id
+                ? 'border-primary-600 bg-primary-600 text-white'
+                : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
+            )}
+          >
+            <t.icon className="h-4 w-4" aria-hidden />
+            {t.label}
+          </button>
+        ))}
+      </nav>
+
+      {/* ---------- ÉVÉNEMENTS : toutes les lignes d'affilée ---------- */}
+      {sub === 'evenements' &&
+        (events.isLoading ? (
+          <LoadingSpinner label="Chargement des événements" />
+        ) : daysWithEvents.length === 0 ? (
+          <EmptyState
+            icon={CalendarDays}
+            title="Aucun plan ce mois-ci"
+            description="Changez de mois ou créez votre propre plan !"
+          />
+        ) : (
+          <div className="space-y-6">
+            {daysWithEvents.map(([dayKey, dayEvents]) => {
+              const first = dayEvents[0]
+              if (!first) return null
+              const date = first.startDate
+              const isToday = isSameDay(date, today)
               return (
-                <button
-                  key={day.toISOString()}
-                  onClick={() => {
-                    setSelected(day)
-                    document.getElementById(`day-${format(day, 'yyyy-MM-dd')}`)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                  }}
-                  aria-label={`${format(day, 'd MMMM', { locale: fr })}${dayEvents.length > 0 ? ` — ${dayEvents.length} plan(s)` : ''}`}
-                  aria-pressed={isSelected}
-                  className={cn(
-                    'flex min-h-16 flex-col items-center gap-1 border-b border-r border-border p-1.5 text-sm transition-colors last:border-r-0',
-                    !isSameMonth(day, month) && 'opacity-40',
-                    isSelected ? 'bg-primary-50 dark:bg-primary-950' : 'hover:bg-bg-secondary',
-                  )}
-                >
-                  <span
-                    className={cn(
-                      'flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold',
-                      isSameDay(day, today) && 'bg-primary-600 text-white',
-                    )}
-                  >
-                    {format(day, 'd')}
-                  </span>
-                  {dayEvents.length > 0 && (
-                    <span className="flex gap-0.5" aria-hidden>
-                      {dayEvents.slice(0, 3).map((e) => (
-                        <span key={e.id} className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: e.category.color }} />
-                      ))}
-                    </span>
-                  )}
-                </button>
+                <section key={dayKey} aria-label={`Plans du ${format(date, 'd MMMM', { locale: fr })}`}>
+                  <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+                    <h2 className="text-lg font-extrabold tracking-tight capitalize">
+                      {format(date, 'EEEE d', { locale: fr })}
+                      {isToday && (
+                        <span className="ml-2 rounded-full bg-primary-600 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-white">
+                          Aujourd’hui
+                        </span>
+                      )}
+                    </h2>
+                    <DayWeather day={dayKey} weather={weather} />
+                  </div>
+                  <ul className="space-y-2">
+                    {dayEvents.map((e) => (
+                      <EventRowLink key={e.id} e={e} />
+                    ))}
+                  </ul>
+                </section>
               )
             })}
           </div>
-        </div>
-      )}
+        ))}
 
-      {/* Chronologie par jour */}
-      {events.isLoading ? null : daysWithEvents.length === 0 ? (
-        <EmptyState
-          icon={CalendarDays}
-          title="Aucun plan ce mois-ci"
-          description="Changez de mois ou créez votre propre plan !"
-        />
-      ) : (
-        <div className="space-y-6">
-          {daysWithEvents.map(([dayKey, dayEvents]) => {
-            const first = dayEvents[0]
-            if (!first) return null
-            const date = first.startDate
-            const isToday = isSameDay(date, today)
-            return (
-              <section key={dayKey} id={`day-${dayKey}`} aria-label={`Plans du ${format(date, 'd MMMM', { locale: fr })}`}>
-                {/* En-tête du jour + météo à droite */}
-                <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                  <h2 className="text-lg font-extrabold tracking-tight capitalize">
-                    {format(date, 'EEEE d', { locale: fr })}
-                    {isToday && (
-                      <span className="ml-2 rounded-full bg-primary-600 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-white">
-                        Aujourd’hui
+      {/* ---------- CALENDRIER : grille mensuelle ---------- */}
+      {sub === 'calendrier' &&
+        (events.isLoading ? (
+          <LoadingSpinner label="Chargement du calendrier" />
+        ) : (
+          <>
+            <div className="overflow-hidden rounded-2xl border border-border bg-card">
+              <div className="grid grid-cols-7 border-b border-border bg-bg-secondary text-center text-[11px] font-semibold uppercase text-fg-muted">
+                {['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'].map((d) => (
+                  <div key={d} className="py-2">
+                    {d}
+                  </div>
+                ))}
+              </div>
+              <div className="grid grid-cols-7">
+                {days.map((day) => {
+                  const dayEvents = byDay.get(format(day, 'yyyy-MM-dd')) ?? []
+                  const isSelected = selected ? isSameDay(day, selected) : false
+                  return (
+                    <button
+                      key={day.toISOString()}
+                      onClick={() => setSelected(day)}
+                      aria-label={`${format(day, 'd MMMM', { locale: fr })}${dayEvents.length > 0 ? ` — ${dayEvents.length} plan(s)` : ''}`}
+                      aria-pressed={isSelected}
+                      className={cn(
+                        'flex min-h-16 flex-col items-center gap-1 border-b border-r border-border p-1.5 text-sm transition-colors last:border-r-0',
+                        !isSameMonth(day, month) && 'opacity-40',
+                        isSelected ? 'bg-primary-50 dark:bg-primary-950' : 'hover:bg-bg-secondary',
+                      )}
+                    >
+                      <span
+                        className={cn(
+                          'flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold',
+                          isSameDay(day, today) && 'bg-primary-600 text-white',
+                        )}
+                      >
+                        {format(day, 'd')}
                       </span>
-                    )}
-                  </h2>
-                  <DayWeather day={dayKey} weather={weather} />
-                </div>
-
-                {/* Lignes chronologiques : heure · titre · places · organisateur */}
-                <ul className="space-y-2">
-                  {dayEvents.map((e) => {
-                    const org = e.organizer
-                    const orgName = org ? org.displayName || `${org.firstName} ${org.lastName}` : 'PlanB'
-                    return (
-                      <li key={e.id}>
-                        <Link
-                          href={`/events/${e.slug}`}
-                          className="card-sheen flex items-center gap-3 rounded-xl border border-border bg-card p-2.5 transition-shadow hover:shadow-card-hover"
-                        >
-                          {/* Vignette : photo de couverture ou icône catégorie */}
-                          {e.coverImage ? (
-                            // eslint-disable-next-line @next/next/no-img-element
-                            <img
-                              src={e.coverImage}
-                              alt=""
-                              loading="lazy"
-                              className="h-14 w-14 shrink-0 rounded-lg object-cover"
-                            />
-                          ) : (
+                      {dayEvents.length > 0 && (
+                        <span className="flex gap-0.5" aria-hidden>
+                          {dayEvents.slice(0, 3).map((e) => (
                             <span
-                              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg text-xl"
-                              style={{ backgroundColor: `${e.category.color}22` }}
-                              aria-hidden
-                            >
-                              {e.category.icon}
-                            </span>
-                          )}
+                              key={e.id}
+                              className="h-1.5 w-1.5 rounded-full"
+                              style={{ backgroundColor: e.category.color }}
+                            />
+                          ))}
+                        </span>
+                      )}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
 
-                          <span className="shrink-0 font-bold tabular-nums text-fg-muted sm:w-12">
-                            {format(e.startDate, 'HH:mm')}
-                          </span>
-
-                          <span className="min-w-0 flex-1">
-                            <span className="block truncate font-semibold">
-                              <span
-                                className="mr-1.5 inline-block h-2 w-2 rounded-full align-middle"
-                                style={{ backgroundColor: e.category.color }}
-                                aria-hidden
-                              />
-                              {e.title}
-                              <span className="ml-1.5 text-xs font-normal text-fg-muted">— {e.city}</span>
-                            </span>
-                            <span className="block truncate text-xs text-fg-muted">
-                              Organisé par {orgName}
-                              {e.price != null && e.price > 0 ? ` · ${e.price.toFixed(2)} €` : ' · Gratuit'}
-                            </span>
-                          </span>
-
-                          <Badge variant="secondary" className="shrink-0">
-                            {e.currentParticipants}
-                            {e.maxParticipants != null ? `/${e.maxParticipants}` : ''} 👥
-                          </Badge>
-                        </Link>
-                      </li>
-                    )
-                  })}
+            <section aria-labelledby="day-events-title">
+              <h2 id="day-events-title" className="mb-3 flex flex-wrap items-center justify-between gap-2 font-semibold capitalize">
+                <span>{selected ? format(selected, 'EEEE d MMMM', { locale: fr }) : 'Sélectionnez un jour'}</span>
+                {selected && <DayWeather day={format(selected, 'yyyy-MM-dd')} weather={weather} />}
+              </h2>
+              {selectedEvents.length === 0 ? (
+                <EmptyState
+                  icon={CalendarDays}
+                  title="Aucun plan ce jour-là"
+                  description="Changez de date ou créez votre propre plan !"
+                />
+              ) : (
+                <ul className="space-y-2">
+                  {selectedEvents.map((e) => (
+                    <EventRowLink key={e.id} e={e} />
+                  ))}
                 </ul>
-              </section>
-            )
-          })}
-        </div>
-      )}
+              )}
+            </section>
+          </>
+        ))}
     </div>
   )
 }

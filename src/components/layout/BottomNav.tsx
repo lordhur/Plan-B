@@ -19,7 +19,7 @@ const LEFT_ITEMS: NavItem[] = [
 ]
 
 const RIGHT_ITEMS: NavItem[] = [
-  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays, exact: false },
+  { href: '/events/calendar', label: 'Activité', icon: CalendarDays, exact: false },
   { href: '/explore', label: 'Explorer', icon: Compass, exact: false },
 ]
 

@@ -28,7 +28,7 @@ interface NavEntry {
 const NAV: NavEntry[] = [
   { href: '/', label: 'Fil d’actualité', icon: Home },
   { href: '/explore', label: 'Explorer', icon: Compass },
-  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays },
+  { href: '/events/calendar', label: 'Activité', icon: CalendarDays },
   { href: '/friends', label: 'Les Membres', icon: Users },
   { href: '/groups', label: 'Groupes', icon: UsersRound },
   { href: '/pages', label: 'Pages', icon: Store },

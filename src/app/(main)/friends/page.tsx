@@ -3,7 +3,9 @@
 import {
   CalendarCheck2,
   CheckCircle2,
+  Flame,
   MapPin,
+  Megaphone,
   MessageCircle,
   Search,
   SlidersHorizontal,
@@ -31,13 +33,6 @@ import { FriendButton } from '@/components/friends/FriendButton'
 import { formatFullDate } from '@/lib/date'
 
 type Tab = 'amis' | 'recherche' | 'nouveau' | 'classement'
-
-const TABS: { id: Tab; label: string }[] = [
-  { id: 'amis', label: 'Se faire des amis' },
-  { id: 'recherche', label: 'Recherche' },
-  { id: 'nouveau', label: 'Nouveau' },
-  { id: 'classement', label: 'Classement' },
-]
 
 const GENDER_LABEL: Record<string, string> = { MALE: 'Homme', FEMALE: 'Femme', NON_BINARY: 'Autre', OTHER: 'Autre' }
 const ORIENTATION_LABEL: Record<string, string> = {
@@ -67,7 +62,7 @@ const DEFAULT_FILTERS: DirectoryFilters = {
   organizersOnly: false,
 }
 
-/** Panneau de filtres « type de personne / âge / sexe / genre » partagé par les onglets. */
+/** Panneau de filtres (onglet Recherche uniquement). */
 function FiltersPanel({
   value,
   onChange,
@@ -90,7 +85,6 @@ function FiltersPanel({
         <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden /> Filtres
       </div>
 
-      {/* Sexe / genre */}
       <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filtrer par genre">
         {[
           { id: '', label: 'Tous' },
@@ -110,7 +104,6 @@ function FiltersPanel({
         ))}
       </div>
 
-      {/* Orientation */}
       <div className="flex flex-wrap gap-1.5" role="group" aria-label="Filtrer par orientation">
         {[
           { id: '', label: 'Orientation : toutes' },
@@ -131,7 +124,6 @@ function FiltersPanel({
         ))}
       </div>
 
-      {/* Type de personne + âge + tri */}
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <label className="space-y-1 text-xs font-semibold text-fg-muted">
           Âge min
@@ -236,11 +228,7 @@ function MemberCard({
               <Badge variant="outline">{ORIENTATION_LABEL[m.orientation] ?? m.orientation}</Badge>
             )}
           </div>
-          {m.interests.length > 0 && (
-            <p className="mt-1 truncate text-xs text-fg-muted">
-              {m.interests.join(' · ')}
-            </p>
-          )}
+          {m.interests.length > 0 && <p className="mt-1 truncate text-xs text-fg-muted">{m.interests.join(' · ')}</p>}
           <div className="mt-1 flex flex-wrap items-center gap-2 text-xs">
             {m.averageRating > 0 && (
               <span className="inline-flex items-center gap-1 font-semibold text-amber-500">
@@ -277,17 +265,15 @@ function MemberCard({
   )
 }
 
-/** Liste annuaire partagée (onglets recherche / nouveau / suggestions). */
+/** Liste annuaire (onglet Recherche). */
 function DirectoryList({
   filters,
   query,
-  newThisMonth,
   emptyHint,
   onMessage,
 }: {
   filters: DirectoryFilters
   query?: string
-  newThisMonth?: boolean
   emptyHint: string
   onMessage: (userId: string) => void
 }) {
@@ -308,7 +294,7 @@ function DirectoryList({
     sort: filters.sort,
     verifiedOnly: filters.verifiedOnly,
     organizersOnly: filters.organizersOnly,
-    newThisMonth: newThisMonth ?? false,
+    newThisMonth: false,
     limit: 40,
   })
 
@@ -325,10 +311,249 @@ function DirectoryList({
   )
 }
 
-/** Page « Les Membres » — amis, annuaire filtrable, nouveaux et classement. */
+interface IntroCardItem {
+  id: string
+  title: string
+  about: string
+  lookingFor: string | null
+  photoUrl: string | null
+  createdAt: Date
+  user: {
+    id: string
+    firstName: string
+    lastName: string
+    displayName: string | null
+    avatarUrl: string | null
+    city: string | null
+    age: number | null
+    gender: string | null
+    averageRating: number
+    totalRatings: number
+  }
+}
+
+/** Fiche de présentation d'un membre. */
+function IntroCardView({
+  card,
+  onMessage,
+}: {
+  card: IntroCardItem
+  onMessage: (userId: string) => void
+}) {
+  const name = card.user.displayName || `${card.user.firstName} ${card.user.lastName}`
+  return (
+    <Card className="card-sheen overflow-hidden">
+      {card.photoUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={card.photoUrl} alt="" loading="lazy" className="h-32 w-full object-cover" />
+      )}
+      <CardContent className="space-y-2 p-4">
+        <div className="flex items-center gap-3">
+          <Link href={`/profile/${card.user.id}`}>
+            <Avatar src={card.user.avatarUrl} name={name} size="md" />
+          </Link>
+          <div className="min-w-0 flex-1">
+            <Link href={`/profile/${card.user.id}`} className="block truncate font-bold hover:underline">
+              {name}
+            </Link>
+            <p className="truncate text-xs text-fg-muted">
+              {card.user.age != null ? `${card.user.age} ans` : ''}
+              {card.user.age != null && card.user.city ? ' · ' : ''}
+              {card.user.city ?? ''}
+            </p>
+          </div>
+        </div>
+        <p className="font-bold text-primary-700 dark:text-primary-300">{card.title}</p>
+        <p className="line-clamp-4 whitespace-pre-wrap text-sm text-fg-muted">{card.about}</p>
+        {card.lookingFor && (
+          <p className="rounded-lg bg-bg-secondary px-3 py-1.5 text-xs font-semibold">
+            🔎 Recherche : {card.lookingFor}
+          </p>
+        )}
+        <div className="flex items-center gap-1.5 pt-1">
+          <Button
+            variant="outline"
+            size="sm"
+            className="flex-1"
+            onClick={() => onMessage(card.user.id)}
+          >
+            <MessageCircle className="h-4 w-4" aria-hidden /> Message
+          </Button>
+          <FriendButton userId={card.user.id} size="sm" />
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
+
+/** Podium / liste de classement. */
+function RankList({
+  rows,
+  unit,
+}: {
+  rows: { userId: string; count: number; user: { id: string; firstName: string; lastName: string; displayName: string | null; avatarUrl: string | null; city: string | null } }[]
+  unit: string
+}) {
+  if (rows.length === 0) {
+    return <p className="py-6 text-center text-sm text-fg-muted">Pas encore d’activité sur cette période.</p>
+  }
+  return (
+    <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
+      {rows.map((r, i) => (
+        <li key={r.userId} className="flex items-center gap-3 p-3">
+          <span
+            className={cn(
+              'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black',
+              i === 0
+                ? 'bg-amber-400/20 text-amber-600'
+                : i === 1
+                  ? 'bg-slate-300/30 text-slate-500'
+                  : i === 2
+                    ? 'bg-orange-400/20 text-orange-600'
+                    : 'bg-bg-secondary text-fg-muted',
+            )}
+          >
+            {i + 1}
+          </span>
+          <Link href={`/profile/${r.user.id}`} className="flex min-w-0 flex-1 items-center gap-3">
+            <Avatar
+              src={r.user.avatarUrl}
+              name={r.user.displayName || `${r.user.firstName} ${r.user.lastName}`}
+              size="sm"
+            />
+            <span className="min-w-0">
+              <span className="block truncate font-semibold">
+                {r.user.displayName || `${r.user.firstName} ${r.user.lastName}`}
+              </span>
+              <span className="block truncate text-xs text-fg-muted">{r.user.city || 'Membre PlanB'}</span>
+            </span>
+          </Link>
+          <span className="shrink-0 text-sm font-bold tabular-nums">
+            {r.count} {unit}
+          </span>
+        </li>
+      ))}
+    </ol>
+  )
+}
+
+type RankKind = 'actifs' | 'organisateurs' | 'categories'
+type RankPeriod = 'mois' | 'general'
+
+/** Onglet Classement — multiples classements par type de participation. */
+function RankingsTab() {
+  const [kind, setKind] = useState<RankKind>('actifs')
+  const [period, setPeriod] = useState<RankPeriod>('mois')
+  const rankings = trpc.leaderboard.rankings.useQuery({ limit: 10 })
+
+  if (rankings.isLoading) return <LoadingSpinner label="Chargement des classements" />
+  if (!rankings.data) return null
+
+  const rows =
+    kind === 'actifs'
+      ? period === 'mois'
+        ? rankings.data.activesMonth
+        : rankings.data.activesAll
+      : period === 'mois'
+        ? rankings.data.organizersMonth
+        : rankings.data.organizersAll
+
+  return (
+    <div className="space-y-4">
+      {/* Sélecteur de classement */}
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Type de classement">
+        {[
+          { id: 'actifs' as const, label: '🔥 Les plus actifs', icon: Flame },
+          { id: 'organisateurs' as const, label: '📣 Organisateurs', icon: Megaphone },
+          { id: 'categories' as const, label: '🎯 Par catégorie', icon: Trophy },
+        ].map((k) => (
+          <button
+            key={k.id}
+            type="button"
+            aria-pressed={kind === k.id}
+            onClick={() => setKind(k.id)}
+            className={cn(
+              'rounded-xl border px-3.5 py-2 text-sm font-bold transition-colors',
+              kind === k.id
+                ? 'border-primary-600 bg-primary-600 text-white shadow-sm'
+                : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
+            )}
+          >
+            {k.label}
+          </button>
+        ))}
+      </div>
+
+      {kind !== 'categories' && (
+        <>
+          {/* Période : mois / général */}
+          <div className="flex gap-2" role="group" aria-label="Période du classement">
+            {[
+              { id: 'mois' as const, label: 'Ce mois-ci' },
+              { id: 'general' as const, label: 'Général' },
+            ].map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                aria-pressed={period === p.id}
+                onClick={() => setPeriod(p.id)}
+                className={cn(
+                  'rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                  period === p.id
+                    ? 'border-primary-600 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+                    : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
+                )}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+          <RankList rows={rows} unit={kind === 'actifs' ? 'participations' : 'plans créés'} />
+          <p className="text-center text-xs text-fg-muted">
+            💡 Le classement se met à jour automatiquement selon vos participations réelles.
+          </p>
+        </>
+      )}
+
+      {kind === 'categories' && (
+        <div className="space-y-5">
+          <p className="text-sm text-fg-muted">
+            Les champions du mois dans chaque catégorie — du lever de coude 🍻 à la rando 🥾 !
+          </p>
+          {rankings.data.byCategory.length === 0 ? (
+            <EmptyState
+              icon={Trophy}
+              title="Pas encore de champions"
+              description="Participez à des plans pour décrocher la première place de votre catégorie !"
+            />
+          ) : (
+            rankings.data.byCategory.map((cat) => (
+              <section key={cat.slug} aria-label={`Classement ${cat.name}`}>
+                <h3 className="mb-2 flex items-center gap-2 font-bold">
+                  <span
+                    className="flex h-7 w-7 items-center justify-center rounded-lg text-sm"
+                    style={{ backgroundColor: `${cat.color}22` }}
+                    aria-hidden
+                  >
+                    {cat.icon}
+                  </span>
+                  {cat.name}
+                  <span className="text-xs font-semibold text-fg-muted">· ce mois-ci</span>
+                </h3>
+                <RankList rows={cat.top} unit="plans" />
+              </section>
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/** Page « Les Membres » — fiches de présentation, recherche, nouveaux, classements. */
 export default function FriendsPage() {
   const router = useRouter()
-  const { isAuthenticated, isLoading: loadingMe } = useCurrentUser()
+  const { user, isAuthenticated, isLoading: loadingMe } = useCurrentUser()
   const [tab, setTab] = useState<Tab>('amis')
   const [search, setSearch] = useState('')
   const [filters, setFilters] = useState<DirectoryFilters>(DEFAULT_FILTERS)
@@ -338,7 +563,13 @@ export default function FriendsPage() {
     enabled: isAuthenticated,
     refetchInterval: 30_000,
   })
-  const leaderboard = trpc.leaderboard.top.useQuery({ period: 'MONTHLY', limit: 10 })
+  const introCards = trpc.introCards.list.useQuery()
+  const myCard = trpc.introCards.me.useQuery(undefined, { enabled: isAuthenticated })
+  const newMembers = trpc.users.directory.useQuery({
+    newThisMonth: true,
+    sort: 'recent',
+    limit: 40,
+  })
 
   const startConversation = async (friendId: string) => {
     const res = await fetch('/api/trpc/messages.startWith?batch=1', {
@@ -354,39 +585,42 @@ export default function FriendsPage() {
 
   if (loadingMe) return <LoadingSpinner label="Chargement" />
 
+  const TABS: { id: Tab; label: string; icon: typeof Users }[] = [
+    { id: 'amis', label: 'Se faire des amis', icon: UserPlus },
+    { id: 'recherche', label: 'Recherche', icon: Search },
+    { id: 'nouveau', label: 'Nouveau', icon: Sparkles },
+    { id: 'classement', label: 'Classement', icon: Trophy },
+  ]
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 md:px-0">
       <header>
         <h1 className="text-2xl font-extrabold tracking-tight">Les Membres</h1>
-        <p className="text-sm text-fg-muted">
-          Trouvez des gens qui vous ressemblent, autour de vous.
-        </p>
+        <p className="text-sm text-fg-muted">Trouvez des gens qui vous ressemblent, autour de vous.</p>
       </header>
 
-      {/* Sous-onglets */}
-      <nav
-        className="scrollbar-none flex gap-1 overflow-x-auto rounded-2xl border border-border bg-card p-1"
-        aria-label="Onglets Les Membres"
-      >
-        {TABS.map((t) => (
+      {/* Sous-onglets en boutons */}
+      <nav className="flex flex-wrap gap-2" aria-label="Onglets Les Membres">
+        {TABS.map(({ id, label, icon: Icon }) => (
           <button
-            key={t.id}
+            key={id}
             type="button"
-            aria-current={tab === t.id ? 'true' : undefined}
-            onClick={() => setTab(t.id)}
+            aria-current={tab === id ? 'true' : undefined}
+            onClick={() => setTab(id)}
             className={cn(
-              'relative flex-1 whitespace-nowrap rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors',
-              tab === t.id
-                ? 'bg-primary-600 text-white shadow-sm'
-                : 'text-fg-muted hover:bg-bg-secondary hover:text-fg',
+              'inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold shadow-sm transition-colors',
+              tab === id
+                ? 'border-primary-600 bg-primary-600 text-white'
+                : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
             )}
           >
-            {t.label}
-            {t.id === 'amis' && (requests.data?.length ?? 0) > 0 && (
+            <Icon className="h-4 w-4" aria-hidden />
+            {label}
+            {id === 'amis' && (requests.data?.length ?? 0) > 0 && (
               <span
                 className={cn(
-                  'ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold',
-                  tab === t.id ? 'bg-white text-primary-700' : 'bg-danger-500 text-white',
+                  'inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-[10px] font-bold',
+                  tab === id ? 'bg-white text-primary-700' : 'bg-danger-500 text-white',
                 )}
               >
                 {requests.data!.length}
@@ -396,7 +630,7 @@ export default function FriendsPage() {
         ))}
       </nav>
 
-      {/* ---------- ONGLET : SE FAIRE DES AMIS ---------- */}
+      {/* ---------- SE FAIRE DES AMIS : fiches de présentation ---------- */}
       {tab === 'amis' && (
         <div className="space-y-6">
           {!isAuthenticated ? (
@@ -417,8 +651,7 @@ export default function FriendsPage() {
                   <UserPlus className="h-8 w-8 text-primary-600" aria-hidden />
                   <span className="min-w-0 flex-1">
                     <span className="block font-bold">
-                      {requests.data!.length} demande{requests.data!.length > 1 ? 's' : ''} d’ami
-                      en attente
+                      {requests.data!.length} demande{requests.data!.length > 1 ? 's' : ''} d’ami en attente
                     </span>
                     <span className="text-sm text-fg-muted">Acceptez ou refusez en un clic</span>
                   </span>
@@ -426,11 +659,56 @@ export default function FriendsPage() {
                 </Link>
               )}
 
+              {/* Ma fiche de présentation */}
+              <section aria-labelledby="my-card-heading">
+                <h2 id="my-card-heading" className="mb-3 text-lg font-bold">
+                  Ma fiche de présentation
+                </h2>
+                {myCard.isLoading ? (
+                  <LoadingSpinner label="Chargement de ma fiche" />
+                ) : myCard.data ? (
+                  <div className="card-sheen overflow-hidden rounded-2xl border-2 border-primary-200 bg-card dark:border-primary-900">
+                    {myCard.data.photoUrl && (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={myCard.data.photoUrl} alt="" className="h-36 w-full object-cover" />
+                    )}
+                    <div className="space-y-2 p-4">
+                      <p className="font-bold text-primary-700 dark:text-primary-300">{myCard.data.title}</p>
+                      <p className="whitespace-pre-wrap text-sm text-fg-muted">{myCard.data.about}</p>
+                      {myCard.data.lookingFor && (
+                        <p className="rounded-lg bg-bg-secondary px-3 py-1.5 text-xs font-semibold">
+                          🔎 Recherche : {myCard.data.lookingFor}
+                        </p>
+                      )}
+                      <div className="flex gap-2 pt-1">
+                        <Button asChild variant="outline" size="sm">
+                          <Link href="/friends/card">Modifier ma fiche</Link>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-2xl border-2 border-dashed border-primary-300 bg-primary-50/40 p-6 text-center dark:border-primary-800 dark:bg-primary-950/30">
+                    <Sparkles className="mx-auto h-8 w-8 text-primary-600" aria-hidden />
+                    <p className="mt-2 font-bold">Créez votre fiche de présentation</p>
+                    <p className="mx-auto mt-1 max-w-md text-sm text-fg-muted">
+                      C’est le meilleur moyen de vous faire des amis : présentez-vous en quelques
+                      lignes et dites ce que vous cherchez. Seuls les membres avec une fiche
+                      apparaissent ici.
+                    </p>
+                    <Button asChild className="mt-4">
+                      <Link href="/friends/card">
+                        <UserPlus className="h-4 w-4" aria-hidden /> Créer ma fiche
+                      </Link>
+                    </Button>
+                  </div>
+                )}
+              </section>
+
               {/* Mes amis */}
               <section aria-labelledby="amis-heading">
                 <h2 id="amis-heading" className="mb-3 text-lg font-bold">
-                  Mes amis
-                  {friends.data ? ` (${friends.data.length})` : ''}
+                  Mes amis{friends.data ? ` (${friends.data.length})` : ''}
                 </h2>
                 {friends.isLoading ? (
                   <LoadingSpinner label="Chargement des amis" />
@@ -438,16 +716,13 @@ export default function FriendsPage() {
                   <EmptyState
                     icon={Users}
                     title="Pas encore d’amis"
-                    description="Parcourez l’annuaire ci-dessous pour trouver vos premiers amis."
+                    description="Parcourez les fiches de présentation ci-dessous pour trouver vos premiers amis."
                   />
                 ) : (
                   <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
                     {friends.data.map(({ friend, since }) => (
                       <li key={friend.id} className="flex flex-wrap items-center gap-3 p-4">
-                        <Link
-                          href={`/profile/${friend.id}`}
-                          className="flex min-w-0 flex-1 items-center gap-3"
-                        >
+                        <Link href={`/profile/${friend.id}`} className="flex min-w-0 flex-1 items-center gap-3">
                           <Avatar
                             src={friend.avatarUrl}
                             name={`${friend.firstName} ${friend.lastName}`}
@@ -458,8 +733,7 @@ export default function FriendsPage() {
                               {friend.displayName || `${friend.firstName} ${friend.lastName}`}
                             </span>
                             <span className="block text-xs text-fg-muted">
-                              {friend.city ? `${friend.city} · ` : ''}Amis depuis{' '}
-                              {formatFullDate(since)}
+                              {friend.city ? `${friend.city} · ` : ''}Amis depuis {formatFullDate(since)}
                             </span>
                           </span>
                         </Link>
@@ -480,27 +754,35 @@ export default function FriendsPage() {
                 )}
               </section>
 
-              {/* Suggestions */}
-              <section aria-labelledby="suggestions-heading">
-                <h2 id="suggestions-heading" className="mb-3 text-lg font-bold">
-                  <Sparkles className="mr-1 inline h-4 w-4 text-primary-600" aria-hidden />
-                  Découvrez des membres
+              {/* Fiches des autres membres */}
+              <section aria-labelledby="cards-heading">
+                <h2 id="cards-heading" className="mb-3 text-lg font-bold">
+                  Ils se présentent 👋
                 </h2>
-                <FiltersPanel value={filters} onChange={setFilters} />
-                <div className="mt-4">
-                  <DirectoryList
-                    filters={filters}
-                    emptyHint="Élargissez vos filtres pour découvrir plus de membres."
-                    onMessage={startConversation}
+                {introCards.isLoading ? (
+                  <LoadingSpinner label="Chargement des fiches" />
+                ) : !introCards.data || introCards.data.length === 0 ? (
+                  <EmptyState
+                    icon={Sparkles}
+                    title="Aucune fiche pour le moment"
+                    description="Soyez le premier à créer votre fiche de présentation !"
                   />
-                </div>
+                ) : (
+                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                    {introCards.data
+                      .filter((c) => c.user.id !== user?.id)
+                      .map((c) => (
+                        <IntroCardView key={c.id} card={c} onMessage={startConversation} />
+                      ))}
+                  </div>
+                )}
               </section>
             </>
           )}
         </div>
       )}
 
-      {/* ---------- ONGLET : RECHERCHE ---------- */}
+      {/* ---------- RECHERCHE ---------- */}
       {tab === 'recherche' && (
         <div className="space-y-4">
           <div className="relative">
@@ -526,90 +808,32 @@ export default function FriendsPage() {
         </div>
       )}
 
-      {/* ---------- ONGLET : NOUVEAU ---------- */}
+      {/* ---------- NOUVEAU : derniers membres du mois, sans filtres ---------- */}
       {tab === 'nouveau' && (
         <div className="space-y-4">
           <p className="text-sm text-fg-muted">
-            🆕 Les membres qui ont rejoint PlanB ce mois-ci — soyez les premiers à leur souhaiter
-            la bienvenue !
+            🆕 Les membres qui ont rejoint PlanB ce mois-ci — souhaitez-leur la bienvenue !
           </p>
-          <FiltersPanel value={filters} onChange={setFilters} />
-          <DirectoryList
-            filters={filters}
-            newThisMonth
-            emptyHint="Aucun nouveau membre ce mois-ci pour ces filtres."
-            onMessage={startConversation}
-          />
-        </div>
-      )}
-
-      {/* ---------- ONGLET : CLASSEMENT ---------- */}
-      {tab === 'classement' && (
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm text-fg-muted">
-              🏆 Les membres les plus actifs du mois, toutes catégories confondues.
-            </p>
-            <Button asChild variant="outline" size="sm">
-              <Link href="/leaderboard">
-                <Trophy className="h-4 w-4" aria-hidden /> Classements par catégorie
-              </Link>
-            </Button>
-          </div>
-          {leaderboard.isLoading ? (
-            <LoadingSpinner label="Chargement du classement" />
-          ) : !leaderboard.data || leaderboard.data.length === 0 ? (
+          {newMembers.isLoading ? (
+            <LoadingSpinner label="Chargement des nouveaux membres" />
+          ) : !newMembers.data || newMembers.data.length === 0 ? (
             <EmptyState
-              icon={Trophy}
-              title="Pas encore d’activité"
-              description="Créez des plans et participez pour apparaître au classement !"
+              icon={Sparkles}
+              title="Aucun nouveau membre ce mois-ci"
+              description="Revenez bientôt ou invitez vos amis à rejoindre PlanB !"
             />
           ) : (
-            <ol className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-card">
-              {leaderboard.data.map((entry, i) => (
-                <li key={entry.user.id} className="flex items-center gap-3 p-3">
-                  <span
-                    className={cn(
-                      'flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-black',
-                      i === 0
-                        ? 'bg-amber-400/20 text-amber-600'
-                        : i === 1
-                          ? 'bg-slate-300/30 text-slate-500'
-                          : i === 2
-                            ? 'bg-orange-400/20 text-orange-600'
-                            : 'bg-bg-secondary text-fg-muted',
-                    )}
-                  >
-                    {i + 1}
-                  </span>
-                  <Link
-                    href={`/profile/${entry.user.id}`}
-                    className="flex min-w-0 flex-1 items-center gap-3"
-                  >
-                    <Avatar
-                      src={entry.user.avatarUrl}
-                      name={entry.user.displayName || `${entry.user.firstName} ${entry.user.lastName}`}
-                      size="sm"
-                    />
-                    <span className="min-w-0">
-                      <span className="block truncate font-semibold">
-                        {entry.user.displayName || `${entry.user.firstName} ${entry.user.lastName}`}
-                      </span>
-                      <span className="block text-xs text-fg-muted">
-                        {entry.user.city || 'Membre PlanB'}
-                        {entry.user.averageRating > 0 && ` · ⭐ ${entry.user.averageRating.toFixed(1)}`}
-                      </span>
-                    </span>
-                  </Link>
-                  <span className="shrink-0 font-bold tabular-nums">
-                    {Math.round(entry.score)} pts
-                  </span>
-                </li>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {newMembers.data.map((m) => (
+                <MemberCard key={m.id} m={m} onMessage={startConversation} />
               ))}
-            </ol>
+            </div>
           )}
         </div>
       )}
+
+      {/* ---------- CLASSEMENT ---------- */}
+      {tab === 'classement' && <RankingsTab />}
     </div>
   )
 }

@@ -115,6 +115,14 @@ body {
   touch-action: manipulation;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  max-width: 100vw;
+  overflow-x: clip; /* l'app tient toujours dans la largeur du téléphone */
+}
+
+img,
+video,
+svg {
+  max-width: 100%;
 }
 
 /* Barres de navigation : jamais de zoom au tap, jamais de callout iOS,
