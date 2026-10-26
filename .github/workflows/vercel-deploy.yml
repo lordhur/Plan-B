@@ -10,8 +10,9 @@
 #                  (DATABASE_URL, AUTH_SECRET, CRON_SECRET)
 #
 # Script idempotent : projet existant réutilisé, variables écrasées, liaison
-# GitHub conservée. Les échecs sont remontés en annotations GitHub
-# (::error::) pour rester lisibles via l'API sans télécharger les logs.
+# GitHub conservée. Toutes les requêtes API portent le teamId du compte
+# (indispensable sur les comptes récents où le projet vit dans l'équipe par
+# défaut). Les échecs remontent en annotations GitHub (::error::).
 name: Vercel Provision & Deploy
 
 on:
@@ -34,18 +35,19 @@ jobs:
       - name: Vérifier les secrets et le jeton Vercel
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
           if [ -z "${VERCEL_TOKEN:-}" ]; then
             echo "::error::Secret VERCEL_TOKEN absent — Settings → Secrets and variables → Actions"
             exit 1
           fi
-          USER_JSON=$(api https://api.vercel.com/v2/user)
+          USER_JSON=$(curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' https://api.vercel.com/v2/user)
           USERNAME=$(echo "$USER_JSON" | jq -r '.user.username // empty')
           if [ -z "$USERNAME" ]; then
             echo "::error::Jeton Vercel invalide ou expiré : $USER_JSON"
             exit 1
           fi
-          echo "::notice::Jeton Vercel OK — compte $USERNAME"
+          TEAM_ID=$(echo "$USER_JSON" | jq -r '.user.defaultTeamId // empty')
+          echo "TEAM_ID=$TEAM_ID" >> "$GITHUB_ENV"
+          echo "::notice::Jeton Vercel OK — compte $USERNAME (équipe : ${TEAM_ID:-personnelle})"
           if [ -z "${PLANB_ENV:-}" ]; then
             echo "::error::Secret PLANB_ENV absent — ajoutez-le avec 3 lignes : DATABASE_URL=… / AUTH_SECRET=… / CRON_SECRET=…"
             exit 1
@@ -57,7 +59,7 @@ jobs:
       - name: Créer le projet Vercel (idempotent)
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
           PROJECT=planb
           echo "PROJECT=$PROJECT" >> "$GITHUB_ENV"
           CREATE=$(api -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
@@ -73,7 +75,7 @@ jobs:
       - name: Injecter les variables d'environnement
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
           upsert_env() {
             key=$1; value=$2
             ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
@@ -91,12 +93,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
-          # ID numérique GitHub du dépôt (source fiable, indépendante de Vercel)
+          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
           REPO_ID=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lordhur/Plan-B | jq -r '.id // empty')
           if [ -z "$REPO_ID" ]; then echo "::error::ID numérique du dépôt GitHub introuvable"; exit 1; fi
           echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
-          # Liaison (pour les déploiements automatiques sur push) — idempotente
           PROJ=$(api "https://api.vercel.com/v9/projects/$PROJECT")
           ALREADY=$(echo "$PROJ" | jq -r '(.link.repo // .linkedRepository.repo // empty)')
           if [ -n "$ALREADY" ]; then
@@ -115,19 +115,15 @@ jobs:
       - name: Déployer et attendre (build 1/2)
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
           LIST=$(api "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
-          # 1) Déploiement production de CE commit (auto-déclenché par le push) ?
-          id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[] | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
-          # 2) Sinon : un build production déjà en cours ? (file d'attente Hobby)
+          id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
-            id=$(echo "$LIST" | jq -r '[.deployments[] | select(.target=="production" and (.readyState=="BUILDING" or .readyState=="QUEUED"))] | first | .id // empty')
+            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and (.readyState=="BUILDING" or .readyState=="QUEUED"))] | first | .id // empty')
           fi
-          # 3) Sinon : un build production déjà prêt ? (on réutilise)
           if [ -z "$id" ]; then
-            id=$(echo "$LIST" | jq -r '[.deployments[] | select(.target=="production" and .readyState=="READY")] | first | .id // empty')
+            id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and .readyState=="READY")] | first | .id // empty')
           fi
-          # 4) Sinon : on crée le déploiement
           if [ -z "$id" ]; then
             dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
             id=$(echo "$dep" | jq -r '.id // empty')
@@ -137,7 +133,11 @@ jobs:
           prev=""
           for i in $(seq 1 90); do
             D=$(api "https://api.vercel.com/v3/deployments/$id")
-            state=$(echo "$D" | jq -r '.readyState')
+            state=$(echo "$D" | jq -r '.readyState // empty')
+            if [ -z "$state" ]; then
+              echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
+              exit 1
+            fi
             if [ "$state" != "$prev" ]; then echo "état : $state"; prev=$state; fi
             case "$state" in
               READY)
@@ -158,7 +158,7 @@ jobs:
       - name: URL canonique + build final (2/2)
         run: |
           set -euo pipefail
-          api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
           ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
           for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null; done
           resp=$(jq -n --arg v "https://$LAST_URL" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
@@ -170,7 +170,11 @@ jobs:
           prev=""
           for i in $(seq 1 90); do
             D=$(api "https://api.vercel.com/v3/deployments/$id")
-            state=$(echo "$D" | jq -r '.readyState')
+            state=$(echo "$D" | jq -r '.readyState // empty')
+            if [ -z "$state" ]; then
+              echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
+              exit 1
+            fi
             if [ "$state" != "$prev" ]; then echo "état : $state"; prev=$state; fi
             case "$state" in
               READY)
