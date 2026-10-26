@@ -59,7 +59,7 @@ jobs:
       - name: Créer le projet Vercel (idempotent)
         run: |
           set -euo pipefail
-          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           PROJECT=planb
           echo "PROJECT=$PROJECT" >> "$GITHUB_ENV"
           CREATE=$(api -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
@@ -75,7 +75,7 @@ jobs:
       - name: Injecter les variables d'environnement
         run: |
           set -euo pipefail
-          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           upsert_env() {
             key=$1; value=$2
             ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
@@ -93,7 +93,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
-          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           REPO_ID=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lordhur/Plan-B | jq -r '.id // empty')
           if [ -z "$REPO_ID" ]; then echo "::error::ID numérique du dépôt GitHub introuvable"; exit 1; fi
           echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
@@ -115,7 +115,7 @@ jobs:
       - name: Déployer et attendre (build 1/2)
         run: |
           set -euo pipefail
-          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           LIST=$(api "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
           id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
@@ -158,7 +158,7 @@ jobs:
       - name: URL canonique + build final (2/2)
         run: |
           set -euo pipefail
-          api() { local u=$1; shift; if [ -n "${TEAM_ID:-}" ]; then case "$u" in *\?*) u="$u&teamId=$TEAM_ID";; *) u="$u?teamId=$TEAM_ID";; esac; fi; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$u" "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           ids=$(api "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
           for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null; done
           resp=$(jq -n --arg v "https://$LAST_URL" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
