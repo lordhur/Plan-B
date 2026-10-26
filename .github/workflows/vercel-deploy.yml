@@ -74,6 +74,12 @@ jobs:
             echo "::error::Création du projet refusée : $CREATE"
             exit 1
           fi
+          resp=$(apir -X PATCH "https://api.vercel.com/v9/projects/$PROJECT" -d '{"ssoProtection":null,"passwordProtection":null}')
+          if echo "$resp" | jq -e '.ssoProtection == null' >/dev/null 2>&1; then
+            echo "::notice::Protection SSO désactivée — site public"
+          else
+            echo "::warning::SSO peut-être encore active : $(echo "$resp" | head -c 200)"
+          fi
 
       - name: Injecter les variables d'environnement
         run: |
@@ -170,9 +176,13 @@ jobs:
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
+          canon=$LAST_URL
+          h=$(printf '%s' "$LAST_URL" | cut -d- -f2)
+          if printf '%s' "$h" | grep -qE '^[a-z0-9]{9}$'; then canon="$(printf '%s' "$LAST_URL" | cut -d- -f1)-$(printf '%s' "$LAST_URL" | cut -d- -f3-)"; fi
+          echo "URL canonique : https://$canon"
           ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
           for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null || true; done
-          resp=$(jq -n --arg v "https://$LAST_URL" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
+          resp=$(jq -n --arg v "https://$canon" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
           echo "$resp" | jq -e '.created' >/dev/null 2>&1 || { echo "::error::NEXT_PUBLIC_APP_URL refusée : $resp"; exit 1; }
           dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
           id=$(echo "$dep" | jq -r '.id // empty')
@@ -190,7 +200,7 @@ jobs:
             case "$state" in
               READY)
                 url=$(echo "$D" | jq -r '.alias[0] // .url')
-                echo "::notice::🎉 PlanB est en ligne : https://$url"
+                echo "::notice::🎉 PlanB est en ligne : https://$canon"
                 exit 0 ;;
               ERROR|CANCELED)
                 logs=$({ apir "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200; } || true)
