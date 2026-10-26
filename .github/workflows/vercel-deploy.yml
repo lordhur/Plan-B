@@ -133,7 +133,7 @@ jobs:
           prev=""
           for i in $(seq 1 90); do
             D=$(api "https://api.vercel.com/v3/deployments/$id")
-            state=$(echo "$D" | jq -r '.readyState // empty')
+            state=$(echo "$D" | jq -r '(.readyState // .state // empty)')
             if [ -z "$state" ]; then
               echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
               exit 1
@@ -170,7 +170,7 @@ jobs:
           prev=""
           for i in $(seq 1 90); do
             D=$(api "https://api.vercel.com/v3/deployments/$id")
-            state=$(echo "$D" | jq -r '.readyState // empty')
+            state=$(echo "$D" | jq -r '(.readyState // .state // empty)')
             if [ -z "$state" ]; then
               echo "::error::Réponse API inattendue pour $id : $(echo "$D" | head -c 300)"
               exit 1
