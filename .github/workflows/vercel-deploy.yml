@@ -26,7 +26,7 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     env:
       VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
       PLANB_ENV: ${{ secrets.PLANB_ENV }}
@@ -116,15 +116,32 @@ jobs:
         run: |
           set -euo pipefail
           api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
-          dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
-          id=$(echo "$dep" | jq -r '.id // empty')
-          if [ -z "$id" ]; then echo "::error::Déploiement refusé : $dep"; exit 1; fi
-          echo "Déploiement $id (branche $GITHUB_REF_NAME) en cours…"
-          for i in $(seq 1 80); do
-            state=$(api "https://api.vercel.com/v3/deployments/$id" | jq -r '.readyState')
+          LIST=$(api "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
+          # 1) Déploiement production de CE commit (auto-déclenché par le push) ?
+          id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[] | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
+          # 2) Sinon : un build production déjà en cours ? (file d'attente Hobby)
+          if [ -z "$id" ]; then
+            id=$(echo "$LIST" | jq -r '[.deployments[] | select(.target=="production" and (.readyState=="BUILDING" or .readyState=="QUEUED"))] | first | .id // empty')
+          fi
+          # 3) Sinon : un build production déjà prêt ? (on réutilise)
+          if [ -z "$id" ]; then
+            id=$(echo "$LIST" | jq -r '[.deployments[] | select(.target=="production" and .readyState=="READY")] | first | .id // empty')
+          fi
+          # 4) Sinon : on crée le déploiement
+          if [ -z "$id" ]; then
+            dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
+            id=$(echo "$dep" | jq -r '.id // empty')
+            if [ -z "$id" ]; then echo "::error::Déploiement refusé : $dep"; exit 1; fi
+          fi
+          echo "Suivi du déploiement $id…"
+          prev=""
+          for i in $(seq 1 90); do
+            D=$(api "https://api.vercel.com/v3/deployments/$id")
+            state=$(echo "$D" | jq -r '.readyState')
+            if [ "$state" != "$prev" ]; then echo "état : $state"; prev=$state; fi
             case "$state" in
               READY)
-                url=$(api "https://api.vercel.com/v3/deployments/$id" | jq -r '.alias[0] // .url')
+                url=$(echo "$D" | jq -r '.alias[0] // .url')
                 echo "LAST_URL=$url" >> "$GITHUB_ENV"
                 echo "::notice::Build 1/2 prêt : https://$url"
                 exit 0 ;;
@@ -135,7 +152,7 @@ jobs:
             esac
             sleep 10
           done
-          echo "::error::Délai dépassé pour le déploiement $id"
+          echo "::error::Délai dépassé (15 min) pour $id — dernier état : ${state:-inconnu}"
           exit 1
 
       - name: URL canonique + build final (2/2)
@@ -150,11 +167,14 @@ jobs:
           id=$(echo "$dep" | jq -r '.id // empty')
           if [ -z "$id" ]; then echo "::error::Déploiement final refusé : $dep"; exit 1; fi
           echo "Déploiement final $id en cours…"
-          for i in $(seq 1 80); do
-            state=$(api "https://api.vercel.com/v3/deployments/$id" | jq -r '.readyState')
+          prev=""
+          for i in $(seq 1 90); do
+            D=$(api "https://api.vercel.com/v3/deployments/$id")
+            state=$(echo "$D" | jq -r '.readyState')
+            if [ "$state" != "$prev" ]; then echo "état : $state"; prev=$state; fi
             case "$state" in
               READY)
-                url=$(api "https://api.vercel.com/v3/deployments/$id" | jq -r '.alias[0] // .url')
+                url=$(echo "$D" | jq -r '.alias[0] // .url')
                 echo "::notice::🎉 PlanB est en ligne : https://$url"
                 exit 0 ;;
               ERROR|CANCELED)
@@ -164,5 +184,5 @@ jobs:
             esac
             sleep 10
           done
-          echo "::error::Délai dépassé pour le déploiement final $id"
+          echo "::error::Délai dépassé (15 min) pour le déploiement final $id — dernier état : ${state:-inconnu}"
           exit 1
