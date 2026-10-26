@@ -38,7 +38,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 5,
+  minimumScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: 'cover',
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
@@ -48,6 +51,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
+      <head>
+        {/* Bloque le pinch-zoom sur iOS Safari (qui ignore user-scalable=no) */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var p=function(e){e.preventDefault()};document.addEventListener('gesturestart',p);document.addEventListener('gesturechange',p);document.addEventListener('gestureend',p);var t=null;document.addEventListener('touchend',function(e){var n=Date.now();if(t&&n-t<350){e.preventDefault()}t=n},{passive:false});document.addEventListener('wheel',function(e){if(e.ctrlKey){e.preventDefault()}},{passive:false})})();`,
+          }}
+        />
+      </head>
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCProvider>
