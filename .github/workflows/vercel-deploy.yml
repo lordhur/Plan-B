@@ -63,7 +63,7 @@ jobs:
           CREATE=$(api -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
           if echo "$CREATE" | jq -e '.id' >/dev/null 2>&1; then
             echo "Projet « $PROJECT » créé"
-          elif echo "$CREATE" | jq -r '.error.code // .error.message // empty' | grep -qi already; then
+          elif echo "$CREATE" | jq -r '[(.error.code // ""), (.error.message // "")] | join(" ")' | grep -qiE 'already|conflict'; then
             echo "Projet « $PROJECT » déjà présent"
           else
             echo "::error::Création du projet refusée : $CREATE"
