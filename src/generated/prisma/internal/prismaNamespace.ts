@@ -435,7 +435,8 @@ export const ModelName = {
   LeaderboardEntry: 'LeaderboardEntry',
   Notification: 'Notification',
   PushSubscription: 'PushSubscription',
-  Advertisement: 'Advertisement'
+  Advertisement: 'Advertisement',
+  ImageBlob: 'ImageBlob'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -451,7 +452,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3341,6 +3342,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ImageBlob: {
+      payload: Prisma.$ImageBlobPayload<ExtArgs>
+      fields: Prisma.ImageBlobFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ImageBlobFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ImageBlobFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        findFirst: {
+          args: Prisma.ImageBlobFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ImageBlobFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        findMany: {
+          args: Prisma.ImageBlobFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>[]
+        }
+        create: {
+          args: Prisma.ImageBlobCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        createMany: {
+          args: Prisma.ImageBlobCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ImageBlobCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>[]
+        }
+        delete: {
+          args: Prisma.ImageBlobDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        update: {
+          args: Prisma.ImageBlobUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        deleteMany: {
+          args: Prisma.ImageBlobDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ImageBlobUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ImageBlobUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>[]
+        }
+        upsert: {
+          args: Prisma.ImageBlobUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ImageBlobPayload>
+        }
+        aggregate: {
+          args: Prisma.ImageBlobAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateImageBlob>
+        }
+        groupBy: {
+          args: Prisma.ImageBlobGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageBlobGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ImageBlobCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ImageBlobCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3978,6 +4053,19 @@ export const AdvertisementScalarFieldEnum = {
 export type AdvertisementScalarFieldEnum = (typeof AdvertisementScalarFieldEnum)[keyof typeof AdvertisementScalarFieldEnum]
 
 
+export const ImageBlobScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  data: 'data',
+  mime: 'mime',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type ImageBlobScalarFieldEnum = (typeof ImageBlobScalarFieldEnum)[keyof typeof ImageBlobScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4430,6 +4518,20 @@ export type EnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListEnumNotificationTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationType[]'>
     
 
+
+/**
+ * Reference to a field of type 'Bytes'
+ */
+export type BytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes'>
+    
+
+
+/**
+ * Reference to a field of type 'Bytes[]'
+ */
+export type ListBytesFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Bytes[]'>
+    
+
 /**
  * Batch Payload for updateMany & deleteMany & createMany
  */
@@ -4620,6 +4722,7 @@ export type GlobalOmitConfig = {
   notification?: Prisma.NotificationOmit
   pushSubscription?: Prisma.PushSubscriptionOmit
   advertisement?: Prisma.AdvertisementOmit
+  imageBlob?: Prisma.ImageBlobOmit
 }
 
 /* Types for Logging */

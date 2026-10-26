@@ -11,11 +11,11 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-primary-600 text-white shadow-sm hover:bg-primary-700 active:scale-[0.98]',
+          'bg-gradient-to-r from-primary-600 via-primary-600 to-secondary-600 text-white shadow-sm transition-all hover:shadow-glow hover:brightness-110 active:scale-[0.98]',
         secondary:
           'bg-bg-secondary text-fg border border-border hover:bg-border/50 active:scale-[0.98]',
         accent:
-          'bg-accent-500 text-white shadow-sm hover:bg-accent-600 active:scale-[0.98]',
+          'bg-gradient-to-r from-accent-500 to-amber-500 text-white shadow-sm transition-all hover:shadow-glow-accent hover:brightness-110 active:scale-[0.98]',
         outline:
           'border border-primary-600 text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/40 active:scale-[0.98]',
         ghost: 'hover:bg-bg-secondary text-fg-muted hover:text-fg',

@@ -89,7 +89,8 @@ export const ModelName = {
   LeaderboardEntry: 'LeaderboardEntry',
   Notification: 'Notification',
   PushSubscription: 'PushSubscription',
-  Advertisement: 'Advertisement'
+  Advertisement: 'Advertisement',
+  ImageBlob: 'ImageBlob'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -704,6 +705,19 @@ export const AdvertisementScalarFieldEnum = {
 } as const
 
 export type AdvertisementScalarFieldEnum = (typeof AdvertisementScalarFieldEnum)[keyof typeof AdvertisementScalarFieldEnum]
+
+
+export const ImageBlobScalarFieldEnum = {
+  id: 'id',
+  ownerId: 'ownerId',
+  data: 'data',
+  mime: 'mime',
+  width: 'width',
+  height: 'height',
+  createdAt: 'createdAt'
+} as const
+
+export type ImageBlobScalarFieldEnum = (typeof ImageBlobScalarFieldEnum)[keyof typeof ImageBlobScalarFieldEnum]
 
 
 export const SortOrder = {

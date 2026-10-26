@@ -1003,3 +1003,20 @@ model Advertisement {
   endDate          DateTime
   createdAt        DateTime @default(now())
 }
+
+// ========================
+// Images téléversées (couvertures d'événements…)
+// Stockage binaire en base : zéro configuration externe, immuable et caché 1 an.
+// ========================
+
+model ImageBlob {
+  id        String   @id @default(cuid())
+  ownerId   String
+  data      Bytes    @db.ByteA
+  mime      String   @default("image/webp")
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+
+  @@index([ownerId])
+}

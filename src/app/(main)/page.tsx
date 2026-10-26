@@ -89,11 +89,12 @@ export default function FeedPage() {
           <FeedSkeletons />
         ) : data && data.near.length > 0 ? (
           <div className="grid gap-4 sm:grid-cols-1">
-            {data.near.map((item) => (
+            {data.near.map((item, i) => (
               <EventCard
                 key={item.event.id}
                 event={item.event as never}
                 distanceKm={item.distanceKm}
+                index={i}
                 myStatus={item.myStatus}
                 isOrganizer={item.isOrganizer}
               />
@@ -130,11 +131,12 @@ export default function FeedPage() {
             Pour vous
           </h2>
           <div className="grid gap-4">
-            {data.forYou.map((item) => (
+            {data.forYou.map((item, i) => (
               <EventCard
                 key={item.event.id}
                 event={item.event as never}
                 distanceKm={item.distanceKm}
+                index={i}
                 myStatus={item.myStatus}
                 isOrganizer={item.isOrganizer}
               />

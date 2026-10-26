@@ -89,7 +89,16 @@ export const createEventSchema = z
     categoryId: z.string().min(1, 'Catégorie requise'),
     description: z.string().trim().min(10, 'Description trop courte (10 caractères min.)').max(5000),
     shortDescription: z.string().trim().max(180).optional(),
-    coverImage: z.string().url().optional(),
+    coverImage: z
+      .string()
+      .trim()
+      .max(2048, 'URL d’image trop longue')
+      .refine(
+        (v) => v === '' || v.startsWith('/') || /^https?:\/\//i.test(v),
+        'L’image doit être une URL valide (https://…)',
+      )
+      .optional()
+      .transform((v) => (v === '' ? undefined : v)),
     tags: z.array(z.string().trim().min(1).max(30)).max(8).default([]),
     // Publier au nom d'une page (Phase 5)
     pageId: z.string().min(1).optional(),

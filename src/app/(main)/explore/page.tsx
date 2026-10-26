@@ -59,7 +59,7 @@ export default function ExplorePage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-extrabold tracking-tight">Explorer</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight"><span className="text-gradient">Explorer</span></h1>
           <p className="text-sm text-fg-muted">
             {data ? `${data.total} plan${data.total > 1 ? 's' : ''} à venir` : 'Chargement…'}
             {hasLocation && ' près de vous'}
@@ -124,11 +124,12 @@ export default function ExplorePage() {
         </div>
       ) : results.length > 0 ? (
         <div className="grid gap-4 lg:grid-cols-2">
-          {results.map((item) => (
+          {results.map((item, i) => (
             <EventCard
               key={item.event.id}
               event={item.event as never}
               distanceKm={item.distanceKm}
+              index={i}
               readOnly
             />
           ))}

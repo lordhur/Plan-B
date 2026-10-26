@@ -590,6 +590,8 @@ async function main() {
         categoryId: categories[e.category]!,
         description: e.description,
         shortDescription: e.description.split('.')[0]!.slice(0, 170),
+        // Visuel de démonstration déterministe (même seed = même photo)
+        coverImage: `https://picsum.photos/seed/planb-${e.slug}/1280/720`,
         startDate: e.startDate,
         endDate: e.endDate,
         locationName: e.locationName,
