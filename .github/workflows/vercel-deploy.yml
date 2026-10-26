@@ -87,21 +87,30 @@ jobs:
           done <<< "$PLANB_ENV"
 
       - name: Lier le dépôt GitHub
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -euo pipefail
           api() { curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "$@"; }
+          # ID numérique GitHub du dépôt (source fiable, indépendante de Vercel)
+          REPO_ID=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lordhur/Plan-B | jq -r '.id // empty')
+          if [ -z "$REPO_ID" ]; then echo "::error::ID numérique du dépôt GitHub introuvable"; exit 1; fi
+          echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
+          # Liaison (pour les déploiements automatiques sur push) — idempotente
           PROJ=$(api "https://api.vercel.com/v9/projects/$PROJECT")
-          REPO_ID=$(echo "$PROJ" | jq -r '.linkedRepository.repoId // empty')
-          if [ -z "$REPO_ID" ]; then
+          ALREADY=$(echo "$PROJ" | jq -r '(.link.repo // .linkedRepository.repo // empty)')
+          if [ -n "$ALREADY" ]; then
+            echo "Dépôt déjà lié ($ALREADY)"
+          else
             LINK=$(api -X POST "https://api.vercel.com/v9/projects/$PROJECT/link" -d '{"type":"github","repo":"lordhur/Plan-B"}')
-            REPO_ID=$(echo "$LINK" | jq -r '.linkedRepository.repoId // empty')
-            if [ -z "$REPO_ID" ]; then
-              echo "::error::Liaison GitHub impossible (l'app Vercel a-t-elle accès à lordhur/Plan-B ?) : $LINK"
+            NOW=$(echo "$LINK" | jq -r '(.link.repo // .linkedRepository.repo // empty)')
+            ERR=$(echo "$LINK" | jq -r '.error.message // empty')
+            if [ -z "$NOW" ] && [ -n "$ERR" ] && ! echo "$ERR" | grep -qi already; then
+              echo "::error::Liaison GitHub refusée : $ERR"
               exit 1
             fi
+            echo "Dépôt lordhur/Plan-B lié (repoId GitHub $REPO_ID)"
           fi
-          echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
-          echo "Dépôt lordhur/Plan-B lié (repoId $REPO_ID)"
 
       - name: Déployer et attendre (build 1/2)
         run: |
