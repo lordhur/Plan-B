@@ -96,7 +96,14 @@ jobs:
             echo "Variable $key définie"
           }
           while IFS='=' read -r k v; do
-            if [ -n "$k" ]; then upsert_env "$k" "$v"; fi
+            if [ -n "$k" ]; then
+              # Le pooler Supabase exige le tenant dans l'identifiant : role → role.<réf-projet>
+              if [ "$k" = "DATABASE_URL" ] && printf '%s' "$v" | grep -q 'pooler\.supabase\.com'; then
+                v=$(printf '%s' "$v" | sed -E 's|://([^:.@/]+):|://\1.kwnqvyjrynlgokdcqmwi:|')
+                echo "DATABASE_URL : identifiant pooler complété avec le tenant Supabase"
+              fi
+              upsert_env "$k" "$v"
+            fi
           done <<< "$PLANB_ENV"
 
       - name: Lier le dépôt GitHub
