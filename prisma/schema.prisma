@@ -51,6 +51,7 @@ model User {
   // Préférences
   interests          Interest[]
   favoriteCategories EventCategory[]
+  introCard          IntroCard?
 
   // Confidentialité
   privacyLevel        PrivacyLevel      @default(PUBLIC)
@@ -1047,4 +1048,19 @@ model ContactMessage {
   createdAt DateTime @default(now())
 
   @@index([handled, createdAt])
+}
+
+/// Fiche de présentation (« Se faire des amis ») — créée volontairement par le membre.
+model IntroCard {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title      String   @db.VarChar(80)
+  about      String   @db.Text
+  lookingFor String?  @db.VarChar(200)
+  photoUrl   String?  @db.Text
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([createdAt])
 }

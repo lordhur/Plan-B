@@ -6,6 +6,7 @@ import { contactRouter } from './contact'
 import { eventsRouter } from './events'
 import { groupsRouter } from './groups'
 import { friendsRouter } from './friends'
+import { introCardsRouter } from './introCards'
 import { leaderboardRouter } from './leaderboard'
 import { messagesRouter } from './messages'
 import { notificationsRouter } from './notifications'
@@ -35,6 +36,7 @@ export const appRouter = createTRPCRouter({
   pages: pagesRouter,
   groups: groupsRouter,
   contact: contactRouter,
+  introCards: introCardsRouter,
 })
 
 export type AppRouter = typeof appRouter

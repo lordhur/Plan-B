@@ -37,7 +37,7 @@ import {
 /** Navigation principale — bloc unique centré autour du fil d'actualité. */
 const NAV_LINKS = [
   { href: '/friends', label: 'Les Membres', icon: Users, centered: false },
-  { href: '/events/calendar', label: 'Calendrier', icon: CalendarDays, centered: false },
+  { href: '/events/calendar', label: 'Activité', icon: CalendarDays, centered: false },
   { href: '/', label: 'Fil d’actualité', icon: Home, centered: true },
   { href: '/groups', label: 'Groupes', icon: UsersRound, centered: false },
   { href: '/pages', label: 'Pages', icon: Store, centered: false },

@@ -33,6 +33,7 @@ import { JoinButton } from '@/components/events/JoinButton'
 import { ShareEventModal } from '@/components/events/ShareEventModal'
 import { CarpoolSection } from '@/components/events/CarpoolSection'
 import { TicketBanner } from '@/components/events/TicketBanner'
+import { AddToCalendar } from '@/components/events/AddToCalendar'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -225,6 +226,20 @@ export default function EventDetailPage() {
           <div className="flex items-center gap-3">
             <Ticket className="h-5 w-5 shrink-0 text-primary-600" aria-hidden />
             <p className="font-semibold">{formatPrice(event.price, event.isFree)}</p>
+          </div>
+          <div className="space-y-1.5 border-t border-border pt-3.5">
+            <p className="text-sm font-bold">📅 Ajouter à mon agenda</p>
+            <AddToCalendar
+              title={event.title}
+              description={`${event.description ?? ''}\n\nRetrouvez ce plan sur PlanB.`}
+              location={
+                event.isOnline
+                  ? 'En ligne'
+                  : [event.address, event.zipCode, event.city].filter(Boolean).join(', ')
+              }
+              start={event.startDate}
+              end={event.endDate ?? new Date(event.startDate.getTime() + 2 * 3600 * 1000)}
+            />
           </div>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-bg-secondary px-3 py-1.5 font-semibold">

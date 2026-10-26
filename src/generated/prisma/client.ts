@@ -246,3 +246,8 @@ export type ImageBlob = Prisma.ImageBlobModel
  * 
  */
 export type ContactMessage = Prisma.ContactMessageModel
+/**
+ * Model IntroCard
+ * Fiche de présentation (« Se faire des amis ») — créée volontairement par le membre.
+ */
+export type IntroCard = Prisma.IntroCardModel

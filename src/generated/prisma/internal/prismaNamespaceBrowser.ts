@@ -91,7 +91,8 @@ export const ModelName = {
   PushSubscription: 'PushSubscription',
   Advertisement: 'Advertisement',
   ImageBlob: 'ImageBlob',
-  ContactMessage: 'ContactMessage'
+  ContactMessage: 'ContactMessage',
+  IntroCard: 'IntroCard'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -736,6 +737,20 @@ export const ContactMessageScalarFieldEnum = {
 } as const
 
 export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
+
+
+export const IntroCardScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  title: 'title',
+  about: 'about',
+  lookingFor: 'lookingFor',
+  photoUrl: 'photoUrl',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type IntroCardScalarFieldEnum = (typeof IntroCardScalarFieldEnum)[keyof typeof IntroCardScalarFieldEnum]
 
 
 export const SortOrder = {
