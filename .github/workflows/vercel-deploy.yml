@@ -74,11 +74,11 @@ jobs:
             echo "::error::Création du projet refusée : $CREATE"
             exit 1
           fi
-          resp=$(apir -X PATCH "https://api.vercel.com/v9/projects/$PROJECT" -d '{"ssoProtection":null,"passwordProtection":null}')
-          if echo "$resp" | jq -e '.ssoProtection == null' >/dev/null 2>&1; then
-            echo "::notice::Protection SSO désactivée — site public"
+          resp=$(apir -X PATCH "https://api.vercel.com/v9/projects/$PROJECT" -d '{"ssoProtection":null,"passwordProtection":null,"framework":"nextjs"}')
+          if echo "$resp" | jq -e '.ssoProtection == null and .framework == "nextjs"' >/dev/null 2>&1; then
+            echo "::notice::Projet configuré : framework nextjs, protection SSO désactivée"
           else
-            echo "::warning::SSO peut-être encore active : $(echo "$resp" | head -c 200)"
+            echo "::warning::Config projet inattendue : $(echo "$resp" | jq -c '{framework,ssoProtection}' 2>/dev/null | head -c 200)"
           fi
 
       - name: Injecter les variables d'environnement
@@ -159,6 +159,8 @@ jobs:
                 url=$(echo "$D" | jq -r '.alias[0] // .url')
                 echo "LAST_URL=$url" >> "$GITHUB_ENV"
                 echo "::notice::Build 1/2 prêt : https://$url"
+                echo "::notice::Meta build : $(echo "$D" | jq -c '{sha:.meta.githubCommitSha,ref:.meta.githubCommitRef,fw:.meta.framework}' 2>/dev/null | head -c 300)"
+                echo "::notice::Fin logs : $(apir "https://api.vercel.com/v2/deployments/$id/events" | jq -rs '[.[]? | select(.type=="stdout" or .type=="stderr") | (.payload.text? // empty)] | .[-20:] | join("")' 2>/dev/null | tr -d '\r' | tail -c 1200)"
                 exit 0 ;;
               ERROR|CANCELED)
                 logs=$({ apir "https://api.vercel.com/v2/deployments/$id/events" | jq -r 'select(.type=="stdout" or .type=="stderr") | .payload.text? // empty' | tail -25 | tr '\n' ' ' | head -c 1200; } || true)
