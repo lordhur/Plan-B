@@ -40,7 +40,7 @@ jobs:
             echo "::error::Secret VERCEL_TOKEN absent — Settings → Secrets and variables → Actions"
             exit 1
           fi
-          USER_JSON=$(curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' https://api.vercel.com/v2/user)
+          USER_JSON=$(curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' https://api.vercel.com/v2/user)
           USERNAME=$(echo "$USER_JSON" | jq -r '.user.username // empty')
           if [ -z "$USERNAME" ]; then
             echo "::error::Jeton Vercel invalide ou expiré : $USER_JSON"
@@ -61,8 +61,8 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
-          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           PROJECT=planb
           echo "PROJECT=$PROJECT" >> "$GITHUB_ENV"
           CREATE=$(apir -X POST https://api.vercel.com/v11/projects -d '{"name":"planb","framework":"nextjs"}')
@@ -79,8 +79,8 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
-          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           upsert_env() {
             key=$1; value=$2
             ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r --arg k "$key" '.envs[]? | select(.key==$k) | .id')
@@ -99,8 +99,8 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
-          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           REPO_ID=$(curl -sS -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/lordhur/Plan-B | jq -r '.id // empty')
           if [ -z "$REPO_ID" ]; then echo "::error::ID numérique du dépôt GitHub introuvable"; exit 1; fi
           echo "REPO_ID=$REPO_ID" >> "$GITHUB_ENV"
@@ -123,8 +123,8 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
-          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           LIST=$(apir "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
           id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
@@ -168,8 +168,8 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
-          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
-          apir() { local out; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 5; out=$(apir "$@") && { printf '%s' "$out"; return 0; }; sleep 10; api "$@"; }
+          api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
+          apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
           for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null || true; done
           resp=$(jq -n --arg v "https://$LAST_URL" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
