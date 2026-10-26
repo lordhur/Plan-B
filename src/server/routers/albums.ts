@@ -121,4 +121,37 @@ export const albumsRouter = createTRPCRouter({
       await prisma.mediaIdentification.delete({ where: { id: identification.id } })
       return { ok: true as const }
     }),
+
+  /** Dernières photos/vidéos publiées sur les événements (fil d'actualité). */
+  recent: publicProcedure
+    .input(z.object({ limit: z.number().int().min(1).max(30).default(18) }).nullish())
+    .query(async ({ input }) => {
+      const media = await prisma.media.findMany({
+        where: { album: { event: { visibility: 'PUBLIC', status: { not: 'DRAFT' } } } },
+        orderBy: { createdAt: 'desc' },
+        take: input?.limit ?? 18,
+        select: {
+          id: true,
+          url: true,
+          thumbnailUrl: true,
+          type: true,
+          caption: true,
+          createdAt: true,
+          album: {
+            select: {
+              event: { select: { slug: true, title: true, city: true, startDate: true } },
+            },
+          },
+        },
+      })
+      return media.map((m) => ({
+        id: m.id,
+        url: m.url,
+        thumbnailUrl: m.thumbnailUrl ?? m.url,
+        type: m.type,
+        caption: m.caption,
+        createdAt: m.createdAt,
+        event: m.album.event,
+      }))
+    }),
 })

@@ -436,7 +436,8 @@ export const ModelName = {
   Notification: 'Notification',
   PushSubscription: 'PushSubscription',
   Advertisement: 'Advertisement',
-  ImageBlob: 'ImageBlob'
+  ImageBlob: 'ImageBlob',
+  ContactMessage: 'ContactMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -452,7 +453,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -3416,6 +3417,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ContactMessage: {
+      payload: Prisma.$ContactMessagePayload<ExtArgs>
+      fields: Prisma.ContactMessageFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ContactMessageFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ContactMessageFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findFirst: {
+          args: Prisma.ContactMessageFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ContactMessageFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        findMany: {
+          args: Prisma.ContactMessageFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        create: {
+          args: Prisma.ContactMessageCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        createMany: {
+          args: Prisma.ContactMessageCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ContactMessageCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        delete: {
+          args: Prisma.ContactMessageDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        update: {
+          args: Prisma.ContactMessageUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        deleteMany: {
+          args: Prisma.ContactMessageDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ContactMessageUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ContactMessageUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>[]
+        }
+        upsert: {
+          args: Prisma.ContactMessageUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ContactMessagePayload>
+        }
+        aggregate: {
+          args: Prisma.ContactMessageAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateContactMessage>
+        }
+        groupBy: {
+          args: Prisma.ContactMessageGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ContactMessageCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ContactMessageCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -3467,6 +3542,7 @@ export const UserScalarFieldEnum = {
   displayName: 'displayName',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
+  orientation: 'orientation',
   bio: 'bio',
   city: 'city',
   latitude: 'latitude',
@@ -4068,6 +4144,20 @@ export const ImageBlobScalarFieldEnum = {
 export type ImageBlobScalarFieldEnum = (typeof ImageBlobScalarFieldEnum)[keyof typeof ImageBlobScalarFieldEnum]
 
 
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  email: 'email',
+  name: 'name',
+  subject: 'subject',
+  message: 'message',
+  handled: 'handled',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -4168,6 +4258,20 @@ export type EnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMod
  * Reference to a field of type 'Gender[]'
  */
 export type ListEnumGenderFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Gender[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Orientation'
+ */
+export type EnumOrientationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Orientation'>
+    
+
+
+/**
+ * Reference to a field of type 'Orientation[]'
+ */
+export type ListEnumOrientationFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Orientation[]'>
     
 
 
@@ -4725,6 +4829,7 @@ export type GlobalOmitConfig = {
   pushSubscription?: Prisma.PushSubscriptionOmit
   advertisement?: Prisma.AdvertisementOmit
   imageBlob?: Prisma.ImageBlobOmit
+  contactMessage?: Prisma.ContactMessageOmit
 }
 
 /* Types for Logging */

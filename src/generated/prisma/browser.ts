@@ -217,3 +217,8 @@ export type Advertisement = Prisma.AdvertisementModel
  * 
  */
 export type ImageBlob = Prisma.ImageBlobModel
+/**
+ * Model ContactMessage
+ * 
+ */
+export type ContactMessage = Prisma.ContactMessageModel

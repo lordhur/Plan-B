@@ -132,6 +132,8 @@ export const eventsRouter = createTRPCRouter({
           currentParticipants: true,
           maxParticipants: true,
           category: { select: { slug: true, name: true, icon: true, color: true } },
+          coverImage: true,
+          organizer: { select: { id: true, firstName: true, lastName: true, displayName: true } },
         },
         orderBy: { startDate: 'asc' },
       }),

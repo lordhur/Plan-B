@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
@@ -22,6 +23,8 @@ const profileFormSchema = z.object({
   bio: z.string().trim().max(500),
   city: z.string().trim().max(80),
   phone: z.string().max(20),
+  gender: z.enum(['MALE', 'FEMALE', 'NON_BINARY', 'OTHER', 'PREFER_NOT_TO_SAY']).nullish(),
+  orientation: z.enum(['HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER']).nullish(),
   showAge: z.boolean(),
   showLastName: z.boolean(),
   latitude: z.number().nullable(),
@@ -56,6 +59,8 @@ export default function ProfileEditPage() {
         bio: me.bio ?? '',
         city: me.city ?? '',
         phone: me.phone ?? '',
+        gender: me.gender ?? null,
+        orientation: me.orientation ?? null,
         showAge: me.showAge,
         showLastName: me.showLastName,
         latitude: me.latitude ?? null,
@@ -112,7 +117,16 @@ export default function ProfileEditPage() {
       <h1 className="mb-1 text-2xl font-extrabold tracking-tight">Modifier mon profil</h1>
       <p className="mb-6 text-sm text-fg-muted">Ces infos aident les autres à vous connaître.</p>
 
-      <form onSubmit={handleSubmit((data) => update.mutate(data))} className="space-y-5">
+      <form
+        onSubmit={handleSubmit((data) =>
+          update.mutate({
+            ...data,
+            gender: data.gender ?? undefined,
+            orientation: data.orientation ?? undefined,
+          }),
+        )}
+        className="space-y-5"
+      >
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Informations</CardTitle>
@@ -129,6 +143,37 @@ export default function ProfileEditPage() {
             <div>
               <Label htmlFor="phone">Téléphone</Label>
               <Input id="phone" type="tel" placeholder="+33 6 12 34 56 78" {...register('phone')} />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="gender">Genre</Label>
+                <Select id="gender" {...register('gender')} defaultValue="">
+                  <option value="" disabled>
+                    Choisir…
+                  </option>
+                  <option value="MALE">Homme</option>
+                  <option value="FEMALE">Femme</option>
+                  <option value="NON_BINARY">Autre</option>
+                  <option value="PREFER_NOT_TO_SAY">Préfère ne pas le dire</option>
+                </Select>
+                <p className="mt-1 text-xs text-fg-muted">Visible sur votre profil public.</p>
+              </div>
+              <div>
+                <Label htmlFor="orientation">Orientation</Label>
+                <Select id="orientation" {...register('orientation')} defaultValue="">
+                  <option value="" disabled>
+                    Choisir…
+                  </option>
+                  <option value="HETEROSEXUAL">Hétérosexuel·le</option>
+                  <option value="HOMOSEXUAL">Homosexuel·le</option>
+                  <option value="BISEXUAL">Bisexuel·le</option>
+                  <option value="OTHER">Autre</option>
+                </Select>
+                <p className="mt-1 text-xs text-fg-muted">
+                  Aide à vous proposer des membres pertinents.
+                </p>
+              </div>
               <p className="mt-1 text-xs text-fg-muted">
                 Utilisé pour la vérification (badge Profil vérifié) et les alerts de dernière minute.
               </p>

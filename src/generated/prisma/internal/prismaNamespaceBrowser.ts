@@ -90,7 +90,8 @@ export const ModelName = {
   Notification: 'Notification',
   PushSubscription: 'PushSubscription',
   Advertisement: 'Advertisement',
-  ImageBlob: 'ImageBlob'
+  ImageBlob: 'ImageBlob',
+  ContactMessage: 'ContactMessage'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -121,6 +122,7 @@ export const UserScalarFieldEnum = {
   displayName: 'displayName',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
+  orientation: 'orientation',
   bio: 'bio',
   city: 'city',
   latitude: 'latitude',
@@ -720,6 +722,20 @@ export const ImageBlobScalarFieldEnum = {
 } as const
 
 export type ImageBlobScalarFieldEnum = (typeof ImageBlobScalarFieldEnum)[keyof typeof ImageBlobScalarFieldEnum]
+
+
+export const ContactMessageScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  email: 'email',
+  name: 'name',
+  subject: 'subject',
+  message: 'message',
+  handled: 'handled',
+  createdAt: 'createdAt'
+} as const
+
+export type ContactMessageScalarFieldEnum = (typeof ContactMessageScalarFieldEnum)[keyof typeof ContactMessageScalarFieldEnum]
 
 
 export const SortOrder = {

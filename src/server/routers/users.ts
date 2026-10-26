@@ -118,6 +118,120 @@ export const usersRouter = createTRPCRouter({
       return { ok: true }
     }),
 
+  /** Annuaire des membres (« Les Membres ») — filtres combinables. */
+  directory: publicProcedure
+    .input(
+      z.object({
+        q: z.string().trim().max(60).optional(),
+        gender: z.enum(['MALE', 'FEMALE', 'OTHER']).optional(),
+        orientation: z.enum(['HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER']).optional(),
+        minAge: z.number().int().min(15).max(120).optional(),
+        maxAge: z.number().int().min(15).max(120).optional(),
+        sort: z.enum(['recent', 'rating', 'active']).default('recent'),
+        newThisMonth: z.boolean().default(false),
+        verifiedOnly: z.boolean().default(false),
+        organizersOnly: z.boolean().default(false),
+        limit: z.number().int().min(1).max(60).default(40),
+      }),
+    )
+    .query(async ({ input }) => {
+      const now = new Date()
+      const where: Record<string, unknown> = {
+        privacyLevel: { not: 'PRIVATE' },
+        emailVerified: true,
+      }
+      if (input.q) {
+        where.OR = [
+          { firstName: { contains: input.q, mode: 'insensitive' } },
+          { lastName: { contains: input.q, mode: 'insensitive' } },
+          { displayName: { contains: input.q, mode: 'insensitive' } },
+          { city: { contains: input.q, mode: 'insensitive' } },
+          { bio: { contains: input.q, mode: 'insensitive' } },
+        ]
+      }
+      if (input.gender) {
+        where.gender = input.gender === 'OTHER' ? { in: ['NON_BINARY', 'OTHER'] } : input.gender
+      }
+      if (input.orientation) where.orientation = input.orientation
+      if (input.minAge || input.maxAge) {
+        const dob: Record<string, Date> = {}
+        // âge >= minAge ⇔ naissance <= aujourd'hui - minAge ans
+        if (input.minAge) {
+          dob.lte = new Date(now.getFullYear() - input.minAge, now.getMonth(), now.getDate())
+        }
+        // âge <= maxAge ⇔ naissance >= aujourd'hui - (maxAge + 1) ans + 1 jour
+        if (input.maxAge) {
+          dob.gte = new Date(now.getFullYear() - input.maxAge - 1, now.getMonth(), now.getDate() + 1)
+        }
+        where.dateOfBirth = dob
+      }
+      if (input.verifiedOnly) where.emailVerified = true
+      if (input.organizersOnly) where.eventsCreated = { gt: 0 }
+      if (input.newThisMonth) {
+        const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1)
+        where.createdAt = { gte: firstOfMonth }
+      }
+
+      const orderBy =
+        input.sort === 'rating'
+          ? [{ averageRating: 'desc' as const }, { totalRatings: 'desc' as const }]
+          : input.sort === 'active'
+            ? [{ eventsCreated: 'desc' as const }, { createdAt: 'desc' as const }]
+            : [{ createdAt: 'desc' as const }]
+
+      const users = await prisma.user.findMany({
+        where,
+        orderBy,
+        take: input.limit,
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          displayName: true,
+          avatarUrl: true,
+          city: true,
+          bio: true,
+          dateOfBirth: true,
+          showAge: true,
+          showLastName: true,
+          gender: true,
+          orientation: true,
+          averageRating: true,
+          totalRatings: true,
+          eventsCreated: true,
+          emailVerified: true,
+          createdAt: true,
+          interests: { select: { name: true }, take: 4 },
+        },
+      })
+
+      const ageOf = (dob: Date) => {
+        let age = now.getFullYear() - dob.getFullYear()
+        const m = now.getMonth() - dob.getMonth()
+        if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) age--
+        return age
+      }
+
+      return users.map((u) => ({
+        id: u.id,
+        firstName: u.firstName,
+        lastName: u.showLastName ? u.lastName : '',
+        displayName: u.displayName,
+        avatarUrl: u.avatarUrl,
+        city: u.city,
+        bio: u.bio,
+        age: u.showAge ? ageOf(u.dateOfBirth) : null,
+        gender: u.gender,
+        orientation: u.orientation,
+        averageRating: u.averageRating,
+        totalRatings: u.totalRatings,
+        eventsCreated: u.eventsCreated,
+        isVerified: u.emailVerified,
+        createdAt: u.createdAt,
+        interests: u.interests.map((i) => i.name),
+      }))
+    }),
+
   /** Avis reçus (page profil). */
   ratings: publicProcedure
     .input(z.object({ userId: z.string(), limit: z.number().int().min(1).max(50).default(20) }))
