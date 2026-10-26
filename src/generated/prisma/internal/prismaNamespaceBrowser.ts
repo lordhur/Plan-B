@@ -396,6 +396,7 @@ export const DirectMessageScalarFieldEnum = {
   content: 'content',
   mediaUrl: 'mediaUrl',
   mediaType: 'mediaType',
+  mediaName: 'mediaName',
   isRead: 'isRead',
   createdAt: 'createdAt',
   editedAt: 'editedAt',
@@ -712,6 +713,7 @@ export const ImageBlobScalarFieldEnum = {
   ownerId: 'ownerId',
   data: 'data',
   mime: 'mime',
+  name: 'name',
   width: 'width',
   height: 'height',
   createdAt: 'createdAt'

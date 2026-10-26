@@ -555,6 +555,7 @@ model DirectMessage {
   content        String       @db.Text
   mediaUrl       String?
   mediaType      MediaType?
+  mediaName      String? // nom de fichier affiché pour la pièce jointe
   isRead         Boolean      @default(false)
   createdAt      DateTime     @default(now())
   editedAt       DateTime?
@@ -1014,6 +1015,7 @@ model ImageBlob {
   ownerId   String
   data      Bytes    @db.ByteA
   mime      String   @default("image/webp")
+  name      String? // nom de fichier d'origine (pièces jointes)
   width     Int?
   height    Int?
   createdAt DateTime @default(now())

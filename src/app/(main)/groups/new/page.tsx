@@ -16,11 +16,18 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { toast } from '@/components/ui/toast'
+import { CoverImageField } from '@/components/events/CoverImageField'
 
 const schema = z.object({
   name: z.string().trim().min(3, 'Nom trop court').max(80),
   category: z.enum(['sport', 'nature', 'culture', 'food', 'jeux', 'voyage', 'parentalité', 'autre']),
   description: z.string().trim().max(2000).optional(),
+  coverImage: z
+    .string()
+    .trim()
+    .max(2048)
+    .refine((v) => v === '' || v.startsWith('/') || /^https?:\/\//i.test(v), 'URL d’image invalide')
+    .optional(),
   isPrivate: z.boolean(),
 })
 
@@ -46,7 +53,7 @@ export default function NewGroupPage() {
     formState: { errors },
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { category: 'sport', isPrivate: false },
+    defaultValues: { category: 'sport', isPrivate: false, coverImage: '' },
   })
   const isPrivate = watch('isPrivate')
 
@@ -71,7 +78,7 @@ export default function NewGroupPage() {
           <CardDescription>Forum de discussion inclus — vous en serez l’administrateur.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4" onSubmit={handleSubmit((values) => create.mutate(values))}>
+          <form className="space-y-4" onSubmit={handleSubmit((values) => create.mutate({ ...values, coverImage: values.coverImage || undefined }))}>
             <div>
               <Label htmlFor="group-name">Nom *</Label>
               <Input id="group-name" {...register('name')} placeholder="Ex. : Randonneurs du Var" />
@@ -94,6 +101,10 @@ export default function NewGroupPage() {
               <Label htmlFor="group-description">Description</Label>
               <Textarea id="group-description" rows={3} {...register('description')} placeholder="À qui s’adresse ce groupe ?" />
             </div>
+            <CoverImageField
+              value={watch('coverImage') ?? ''}
+              onChange={(url) => setValue('coverImage', url, { shouldDirty: true })}
+            />
             <div className="flex items-center justify-between gap-4 rounded-xl border border-border p-3.5">
               <Label htmlFor="group-private" className="cursor-pointer">
                 Groupe privé

@@ -209,63 +209,62 @@
   mix-blend-mode: overlay;
 }
 
-/* --- Carte inclinable 3D + reflet spéculaire suivant la souris --- */
+/* --- Cartes : élévation + reflet balayé au survol (100 % CSS, GPU) ---
+   Aucun suivi souris : une seule animation de transform par survol. */
 .tilt-card {
-  --mx: 0.5;
-  --my: 0.5;
-  --tilt-x: 0deg;
-  --tilt-y: 0deg;
-  --lift: 1;
-  transform: perspective(900px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y))
-    scale3d(var(--lift), var(--lift), 1);
-  transform-style: preserve-3d;
-  transition:
-    transform 0.45s cubic-bezier(0.2, 0.8, 0.25, 1),
-    box-shadow 0.45s ease;
+  transform: translateZ(0);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.25, 1);
+  will-change: transform;
 }
-.tilt-card[data-tilting='true'] {
-  --lift: 1.02;
-  transition: transform 0.1s linear, box-shadow 0.3s ease;
+.tilt-card:hover {
+  transform: scale3d(1.015, 1.015, 1);
   z-index: 5;
 }
-.tilt-sheen {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  z-index: 30;
-  background:
-    radial-gradient(
-      520px circle at calc(var(--mx) * 100%) calc(var(--my) * 100%),
-      rgb(255 255 255 / 0.18),
-      transparent 42%
-    );
-}
-.tilt-card[data-tilting='true'] .tilt-sheen { opacity: 1; }
 
-/* Balayage lumineux automatique (tactile / sans souris) sur les visuels */
-@keyframes sheen-sweep {
-  0%, 72% { transform: translateX(-130%) skewX(-18deg); }
-  100% { transform: translateX(240%) skewX(-18deg); }
+/* Reflet : une bande de lumière balaie toute la longueur de l'encart au survol */
+@keyframes sheen-sweep-once {
+  0% { opacity: 1; transform: translateX(-140%) skewX(-18deg); }
+  100% { opacity: 1; transform: translateX(280%) skewX(-18deg); }
 }
+.sheen-hover::after,
 .sheen-auto::after {
   content: '';
   position: absolute;
-  top: -20%;
-  bottom: -20%;
+  top: -30%;
+  bottom: -30%;
   left: 0;
-  width: 45%;
+  width: 38%;
   pointer-events: none;
+  opacity: 0;
+  z-index: 30;
   background: linear-gradient(
     90deg,
     transparent,
-    rgb(255 255 255 / 0.16),
+    rgb(255 255 255 / 0.22),
     transparent
   );
-  animation: sheen-sweep 7s ease-in-out infinite;
+  transform: translateX(-140%) skewX(-18deg);
 }
+.sheen-hover:hover::after,
+.sheen-auto:hover::after {
+  animation: sheen-sweep-once 0.9s ease-out;
+}
+
+/* Ombre d'élévation : calque pré-rendu, seule l'opacité est animée (zéro repaint) */
+.lift-shadow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    0 18px 45px -12px rgba(76, 29, 149, 0.28),
+    0 8px 20px rgba(0, 0, 0, 0.14);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  z-index: -1;
+}
+.lift-shadow:hover::before { opacity: 1; }
 
 /* --- Ken Burns : respiration lente des images de couverture --- */
 @keyframes ken-burns {
@@ -326,7 +325,6 @@
   transition: opacity 0.35s ease;
   pointer-events: none;
 }
-.tilt-card[data-tilting='true'] .glow-border::before,
 .glow-border:hover::before {
   opacity: 1;
 }
@@ -334,14 +332,17 @@
 /* Accessibilité : tout couper si l'utilisateur le demande */
 @media (prefers-reduced-motion: reduce) {
   .aurora-blob,
-  .ken-burns,
-  .sheen-auto::after {
+  .ken-burns {
     animation: none;
   }
   .tilt-card,
-  .tilt-card[data-tilting='true'] {
+  .tilt-card:hover {
     transform: none;
     transition: none;
   }
-  .tilt-sheen { display: none; }
+  .sheen-hover::after,
+  .sheen-auto::after {
+    display: none;
+  }
+  .lift-shadow::before { transition: none; }
 }

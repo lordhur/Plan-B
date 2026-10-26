@@ -96,6 +96,12 @@ export const groupsRouter = createTRPCRouter({
         description: z.string().trim().max(2000).optional(),
         category: z.enum(GROUP_CATEGORIES),
         isPrivate: z.boolean().default(false),
+        coverImage: z
+          .string()
+          .trim()
+          .max(2048)
+          .refine((v) => v.startsWith('/') || /^https?:\/\//i.test(v), 'URL d’image invalide')
+          .optional(),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -112,6 +118,7 @@ export const groupsRouter = createTRPCRouter({
           description: input.description,
           category: input.category,
           isPrivate: input.isPrivate,
+          coverImage: input.coverImage,
           memberCount: 1,
           members: { create: { userId: ctx.user.id, role: 'ADMIN' } },
         },

@@ -58,25 +58,49 @@ export default function GroupsDirectoryPage() {
       ) : !groups.data || groups.data.length === 0 ? (
         <EmptyState icon={Users} title="Aucun groupe trouvé" description="Créez le premier groupe de votre passion !" />
       ) : (
-        <ul className="space-y-3">
+        <ul className="grid gap-4 sm:grid-cols-2">
           {groups.data.map((group) => (
             <li key={group.id}>
               <Link
                 href={`/groups/${group.slug}`}
-                className="block rounded-2xl border border-border bg-card p-4 transition-shadow hover:shadow-card-hover"
+                className="sheen-hover lift-shadow group relative block overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card"
               >
-                <span className="flex items-center justify-between gap-3">
-                  <span className="min-w-0">
-                    <span className="block truncate font-semibold">{group.name}</span>
-                    <span className="block text-xs text-fg-muted">
-                      {CATEGORY_LABELS[group.category] ?? group.category} · {group.memberCount} membre(s)
+                {/* Visuel de couverture */}
+                <span className="relative block aspect-[21/9] w-full overflow-hidden [contain:paint]">
+                  {group.coverImage ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={group.coverImage}
+                      alt=""
+                      loading="lazy"
+                      className="h-full w-full object-cover transition-transform duration-500 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-[1.05]"
+                    />
+                  ) : (
+                    <span
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          'radial-gradient(120% 100% at 15% 10%, #8b5cf666, transparent 55%), radial-gradient(100% 120% at 85% 90%, #22d3ee44, transparent 55%), linear-gradient(135deg, #8b5cf62e, #0f172a14 60%, #8b5cf61f)',
+                      }}
+                    />
+                  )}
+                  <span aria-hidden className="absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-card via-card/55 to-transparent" />
+                  <span className="absolute bottom-2 left-3 right-3 flex items-end justify-between gap-2">
+                    <span className="min-w-0 truncate text-base font-bold">{group.name}</span>
+                    <span className="shrink-0 rounded-full bg-black/55 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-md">
+                      {group.memberCount} 👥
                     </span>
                   </span>
-                  <span className="shrink-0 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-950 dark:text-primary-300">
-                    {group.memberCount} 👥
-                  </span>
                 </span>
-                {group.description && <span className="mt-2 block text-sm text-fg-muted">{group.description}</span>}
+                <span className="block p-4 pt-2.5">
+                  <span className="block text-xs font-medium text-primary-600">
+                    {CATEGORY_LABELS[group.category] ?? group.category}
+                  </span>
+                  {group.description && (
+                    <span className="mt-1 line-clamp-2 block text-sm text-fg-muted">{group.description}</span>
+                  )}
+                </span>
               </Link>
             </li>
           ))}

@@ -85,9 +85,9 @@ export function EventCard({
       className="group animate-card-in rounded-3xl"
       style={{ '--i': Math.min(index, 12) } as React.CSSProperties}
     >
-      <article className="glow-border relative overflow-hidden rounded-3xl border border-border/60 bg-card/85 shadow-card backdrop-blur-xl transition-shadow group-hover:shadow-card-hover">
+      <article className="glow-border relative h-full overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card">
         {/* ---------- Visuel ---------- */}
-        <div className="relative aspect-[16/9] w-full overflow-hidden sm:aspect-[2/1]">
+        <div className="relative aspect-[16/9] w-full overflow-hidden [contain:paint] sm:aspect-[2/1]">
           {showImage ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -95,7 +95,7 @@ export function EventCard({
               alt=""
               loading="lazy"
               onError={() => setImgFailed(true)}
-              className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.07]"
+              className="h-full w-full object-cover transition-transform duration-500 ease-out will-change-transform [backface-visibility:hidden] group-hover:scale-[1.05]"
             />
           ) : (
             /* Repli : dégradé généré depuis la couleur de catégorie */
