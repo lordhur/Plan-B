@@ -30,6 +30,7 @@ import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { CoverImageField } from './CoverImageField'
 
 // z.output : types après application des défauts Zod (tags: string[], dates Date)
 type FormValues = z.output<typeof createEventSchema>
@@ -252,6 +253,11 @@ export function EventForm() {
                 />
                 {err('description')}
               </div>
+
+              <CoverImageField
+                value={values.coverImage ?? ''}
+                onChange={(url) => setValue('coverImage', url as never, { shouldDirty: true })}
+              />
 
               <div>
                 <Label htmlFor="tags-input">Tags (jusqu’à 8)</Label>

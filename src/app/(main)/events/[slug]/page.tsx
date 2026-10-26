@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { formatDuration, formatEventDate, formatRelative } from '@/lib/date'
@@ -45,6 +45,7 @@ export default function EventDetailPage() {
   const slug = params.slug
   const { user, isAuthenticated } = useCurrentUser()
 
+  const [coverFailed, setCoverFailed] = useState(false)
   const { data: event, isLoading, error } = trpc.events.bySlug.useQuery(
     { slug },
     { enabled: !!slug },
@@ -107,30 +108,78 @@ export default function EventDetailPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
-      {/* En-tête */}
-      <header>
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge
-            className="border-0"
-            style={{ backgroundColor: `${event.category.color}22`, color: event.category.color }}
-          >
-            {event.category.name}
-          </Badge>
-          {event.status === 'CANCELLED' && <Badge variant="danger">Annulé</Badge>}
-          {event.status === 'COMPLETED' && <Badge variant="outline">Terminé</Badge>}
-          {event.isSponsored && (
-            <Badge variant="outline" className="text-[10px]">
-              Sponsorisé
+      {/* En-tête — visuel plein largeur avec effet Ken Burns */}
+      {event.coverImage && !coverFailed ? (
+        <header className="relative -mx-4 overflow-hidden sm:mx-0 sm:rounded-3xl">
+          <div className="relative aspect-[16/10] w-full overflow-hidden sm:aspect-[21/9]">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={event.coverImage}
+              alt=""
+              onError={() => setCoverFailed(true)}
+              className="ken-burns h-full w-full object-cover"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"
+            />
+            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  className="border-0 font-bold text-white"
+                  style={{ backgroundColor: event.category.color }}
+                >
+                  {event.category.icon ? `${event.category.icon} ` : ''}
+                  {event.category.name}
+                </Badge>
+                {event.status === 'CANCELLED' && <Badge variant="danger">Annulé</Badge>}
+                {event.status === 'COMPLETED' && <Badge variant="outline">Terminé</Badge>}
+                {event.isSponsored && (
+                  <Badge className="border-0 bg-white/90 text-[10px] text-fg">Sponsorisé</Badge>
+                )}
+              </div>
+              <h1 className="mt-2 text-2xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
+                {event.title}
+              </h1>
+              <p className="mt-1 text-sm text-white/80">
+                Publié {formatRelative(event.createdAt)} · {event.viewCount} vues
+              </p>
+            </div>
+          </div>
+        </header>
+      ) : (
+        <header
+          className="relative overflow-hidden rounded-3xl border border-border/60 p-5"
+          style={{
+            background: `
+              radial-gradient(110% 130% at 12% 0%, ${event.category.color}44, transparent 55%),
+              radial-gradient(90% 120% at 90% 100%, #22d3ee33, transparent 55%)
+            `,
+          }}
+        >
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge
+              className="border-0"
+              style={{ backgroundColor: `${event.category.color}22`, color: event.category.color }}
+            >
+              {event.category.name}
             </Badge>
-          )}
-        </div>
-        <h1 className="mt-2 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
-          {event.title}
-        </h1>
-        <p className="mt-1 text-sm text-fg-muted">
-          Publié {formatRelative(event.createdAt)} · {event.viewCount} vues
-        </p>
-      </header>
+            {event.status === 'CANCELLED' && <Badge variant="danger">Annulé</Badge>}
+            {event.status === 'COMPLETED' && <Badge variant="outline">Terminé</Badge>}
+            {event.isSponsored && (
+              <Badge variant="outline" className="text-[10px]">
+                Sponsorisé
+              </Badge>
+            )}
+          </div>
+          <h1 className="mt-2 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
+            {event.title}
+          </h1>
+          <p className="mt-1 text-sm text-fg-muted">
+            Publié {formatRelative(event.createdAt)} · {event.viewCount} vues
+          </p>
+        </header>
+      )}
 
       {event.status === 'CANCELLED' && event.cancelReason && (
         <div className="rounded-xl border border-danger-500/40 bg-danger-50 p-4 text-sm dark:bg-danger-500/10">

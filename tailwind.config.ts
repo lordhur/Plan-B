@@ -88,8 +88,12 @@ const config: Config = {
       },
       boxShadow: {
         card: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
-        'card-hover': '0 10px 25px rgba(0,0,0,0.1)',
+        'card-hover':
+          '0 18px 45px -12px rgba(76, 29, 149, 0.25), 0 8px 20px rgba(0,0,0,0.12)',
         glow: '0 0 20px rgba(139, 92, 246, 0.3)',
+        'glow-lg':
+          '0 0 24px rgba(139, 92, 246, 0.45), 0 0 60px rgba(34, 211, 238, 0.18)',
+        'glow-accent': '0 0 22px rgba(249, 115, 22, 0.4)',
       },
       keyframes: {
         slideUp: {

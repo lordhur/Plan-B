@@ -236,3 +236,8 @@ export type PushSubscription = Prisma.PushSubscriptionModel
  * 
  */
 export type Advertisement = Prisma.AdvertisementModel
+/**
+ * Model ImageBlob
+ * 
+ */
+export type ImageBlob = Prisma.ImageBlobModel
