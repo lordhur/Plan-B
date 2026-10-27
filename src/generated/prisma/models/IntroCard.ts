@@ -31,6 +31,8 @@ export type IntroCardMinAggregateOutputType = {
   about: string | null
   lookingFor: string | null
   photoUrl: string | null
+  profession: string | null
+  education: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -42,6 +44,8 @@ export type IntroCardMaxAggregateOutputType = {
   about: string | null
   lookingFor: string | null
   photoUrl: string | null
+  profession: string | null
+  education: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -53,6 +57,10 @@ export type IntroCardCountAggregateOutputType = {
   about: number
   lookingFor: number
   photoUrl: number
+  photos: number
+  passions: number
+  profession: number
+  education: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -66,6 +74,8 @@ export type IntroCardMinAggregateInputType = {
   about?: true
   lookingFor?: true
   photoUrl?: true
+  profession?: true
+  education?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -77,6 +87,8 @@ export type IntroCardMaxAggregateInputType = {
   about?: true
   lookingFor?: true
   photoUrl?: true
+  profession?: true
+  education?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +100,10 @@ export type IntroCardCountAggregateInputType = {
   about?: true
   lookingFor?: true
   photoUrl?: true
+  photos?: true
+  passions?: true
+  profession?: true
+  education?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -172,6 +188,10 @@ export type IntroCardGroupByOutputType = {
   about: string
   lookingFor: string | null
   photoUrl: string | null
+  photos: string[]
+  passions: string[]
+  profession: string | null
+  education: string | null
   createdAt: Date
   updatedAt: Date
   _count: IntroCardCountAggregateOutputType | null
@@ -204,6 +224,10 @@ export type IntroCardWhereInput = {
   about?: Prisma.StringFilter<"IntroCard"> | string
   lookingFor?: Prisma.StringNullableFilter<"IntroCard"> | string | null
   photoUrl?: Prisma.StringNullableFilter<"IntroCard"> | string | null
+  photos?: Prisma.StringNullableListFilter<"IntroCard">
+  passions?: Prisma.StringNullableListFilter<"IntroCard">
+  profession?: Prisma.StringNullableFilter<"IntroCard"> | string | null
+  education?: Prisma.StringNullableFilter<"IntroCard"> | string | null
   createdAt?: Prisma.DateTimeFilter<"IntroCard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IntroCard"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -216,6 +240,10 @@ export type IntroCardOrderByWithRelationInput = {
   about?: Prisma.SortOrder
   lookingFor?: Prisma.SortOrderInput | Prisma.SortOrder
   photoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  photos?: Prisma.SortOrder
+  passions?: Prisma.SortOrder
+  profession?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
@@ -231,6 +259,10 @@ export type IntroCardWhereUniqueInput = Prisma.AtLeast<{
   about?: Prisma.StringFilter<"IntroCard"> | string
   lookingFor?: Prisma.StringNullableFilter<"IntroCard"> | string | null
   photoUrl?: Prisma.StringNullableFilter<"IntroCard"> | string | null
+  photos?: Prisma.StringNullableListFilter<"IntroCard">
+  passions?: Prisma.StringNullableListFilter<"IntroCard">
+  profession?: Prisma.StringNullableFilter<"IntroCard"> | string | null
+  education?: Prisma.StringNullableFilter<"IntroCard"> | string | null
   createdAt?: Prisma.DateTimeFilter<"IntroCard"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"IntroCard"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -243,6 +275,10 @@ export type IntroCardOrderByWithAggregationInput = {
   about?: Prisma.SortOrder
   lookingFor?: Prisma.SortOrderInput | Prisma.SortOrder
   photoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  photos?: Prisma.SortOrder
+  passions?: Prisma.SortOrder
+  profession?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.IntroCardCountOrderByAggregateInput
@@ -260,6 +296,10 @@ export type IntroCardScalarWhereWithAggregatesInput = {
   about?: Prisma.StringWithAggregatesFilter<"IntroCard"> | string
   lookingFor?: Prisma.StringNullableWithAggregatesFilter<"IntroCard"> | string | null
   photoUrl?: Prisma.StringNullableWithAggregatesFilter<"IntroCard"> | string | null
+  photos?: Prisma.StringNullableListFilter<"IntroCard">
+  passions?: Prisma.StringNullableListFilter<"IntroCard">
+  profession?: Prisma.StringNullableWithAggregatesFilter<"IntroCard"> | string | null
+  education?: Prisma.StringNullableWithAggregatesFilter<"IntroCard"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"IntroCard"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"IntroCard"> | Date | string
 }
@@ -270,6 +310,10 @@ export type IntroCardCreateInput = {
   about: string
   lookingFor?: string | null
   photoUrl?: string | null
+  photos?: Prisma.IntroCardCreatephotosInput | string[]
+  passions?: Prisma.IntroCardCreatepassionsInput | string[]
+  profession?: string | null
+  education?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutIntroCardInput
@@ -282,6 +326,10 @@ export type IntroCardUncheckedCreateInput = {
   about: string
   lookingFor?: string | null
   photoUrl?: string | null
+  photos?: Prisma.IntroCardCreatephotosInput | string[]
+  passions?: Prisma.IntroCardCreatepassionsInput | string[]
+  profession?: string | null
+  education?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -292,6 +340,10 @@ export type IntroCardUpdateInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutIntroCardNestedInput
@@ -304,6 +356,10 @@ export type IntroCardUncheckedUpdateInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -315,6 +371,10 @@ export type IntroCardCreateManyInput = {
   about: string
   lookingFor?: string | null
   photoUrl?: string | null
+  photos?: Prisma.IntroCardCreatephotosInput | string[]
+  passions?: Prisma.IntroCardCreatepassionsInput | string[]
+  profession?: string | null
+  education?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -325,6 +385,10 @@ export type IntroCardUpdateManyMutationInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -336,6 +400,10 @@ export type IntroCardUncheckedUpdateManyInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -352,6 +420,10 @@ export type IntroCardCountOrderByAggregateInput = {
   about?: Prisma.SortOrder
   lookingFor?: Prisma.SortOrder
   photoUrl?: Prisma.SortOrder
+  photos?: Prisma.SortOrder
+  passions?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -363,6 +435,8 @@ export type IntroCardMaxOrderByAggregateInput = {
   about?: Prisma.SortOrder
   lookingFor?: Prisma.SortOrder
   photoUrl?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -374,6 +448,8 @@ export type IntroCardMinOrderByAggregateInput = {
   about?: Prisma.SortOrder
   lookingFor?: Prisma.SortOrder
   photoUrl?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -410,12 +486,34 @@ export type IntroCardUncheckedUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.IntroCardUpdateToOneWithWhereWithoutUserInput, Prisma.IntroCardUpdateWithoutUserInput>, Prisma.IntroCardUncheckedUpdateWithoutUserInput>
 }
 
+export type IntroCardCreatephotosInput = {
+  set: string[]
+}
+
+export type IntroCardCreatepassionsInput = {
+  set: string[]
+}
+
+export type IntroCardUpdatephotosInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type IntroCardUpdatepassionsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type IntroCardCreateWithoutUserInput = {
   id?: string
   title: string
   about: string
   lookingFor?: string | null
   photoUrl?: string | null
+  photos?: Prisma.IntroCardCreatephotosInput | string[]
+  passions?: Prisma.IntroCardCreatepassionsInput | string[]
+  profession?: string | null
+  education?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -426,6 +524,10 @@ export type IntroCardUncheckedCreateWithoutUserInput = {
   about: string
   lookingFor?: string | null
   photoUrl?: string | null
+  photos?: Prisma.IntroCardCreatephotosInput | string[]
+  passions?: Prisma.IntroCardCreatepassionsInput | string[]
+  profession?: string | null
+  education?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -452,6 +554,10 @@ export type IntroCardUpdateWithoutUserInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -462,6 +568,10 @@ export type IntroCardUncheckedUpdateWithoutUserInput = {
   about?: Prisma.StringFieldUpdateOperationsInput | string
   lookingFor?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   photoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  photos?: Prisma.IntroCardUpdatephotosInput | string[]
+  passions?: Prisma.IntroCardUpdatepassionsInput | string[]
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -475,6 +585,10 @@ export type IntroCardSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   about?: boolean
   lookingFor?: boolean
   photoUrl?: boolean
+  photos?: boolean
+  passions?: boolean
+  profession?: boolean
+  education?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -487,6 +601,10 @@ export type IntroCardSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   about?: boolean
   lookingFor?: boolean
   photoUrl?: boolean
+  photos?: boolean
+  passions?: boolean
+  profession?: boolean
+  education?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -499,6 +617,10 @@ export type IntroCardSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   about?: boolean
   lookingFor?: boolean
   photoUrl?: boolean
+  photos?: boolean
+  passions?: boolean
+  profession?: boolean
+  education?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -511,11 +633,15 @@ export type IntroCardSelectScalar = {
   about?: boolean
   lookingFor?: boolean
   photoUrl?: boolean
+  photos?: boolean
+  passions?: boolean
+  profession?: boolean
+  education?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type IntroCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "about" | "lookingFor" | "photoUrl" | "createdAt" | "updatedAt", ExtArgs["result"]["introCard"]>
+export type IntroCardOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "title" | "about" | "lookingFor" | "photoUrl" | "photos" | "passions" | "profession" | "education" | "createdAt" | "updatedAt", ExtArgs["result"]["introCard"]>
 export type IntroCardInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -538,6 +664,10 @@ export type $IntroCardPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     about: string
     lookingFor: string | null
     photoUrl: string | null
+    photos: string[]
+    passions: string[]
+    profession: string | null
+    education: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["introCard"]>
@@ -970,6 +1100,10 @@ export interface IntroCardFieldRefs {
   readonly about: Prisma.FieldRef<"IntroCard", 'String'>
   readonly lookingFor: Prisma.FieldRef<"IntroCard", 'String'>
   readonly photoUrl: Prisma.FieldRef<"IntroCard", 'String'>
+  readonly photos: Prisma.FieldRef<"IntroCard", 'String[]'>
+  readonly passions: Prisma.FieldRef<"IntroCard", 'String[]'>
+  readonly profession: Prisma.FieldRef<"IntroCard", 'String'>
+  readonly education: Prisma.FieldRef<"IntroCard", 'String'>
   readonly createdAt: Prisma.FieldRef<"IntroCard", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"IntroCard", 'DateTime'>
 }

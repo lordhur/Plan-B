@@ -34,6 +34,7 @@ import { ShareEventModal } from '@/components/events/ShareEventModal'
 import { CarpoolSection } from '@/components/events/CarpoolSection'
 import { TicketBanner } from '@/components/events/TicketBanner'
 import { AddToCalendar } from '@/components/events/AddToCalendar'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -130,7 +131,7 @@ export default function EventDetailPage() {
                   className="border-0 font-bold text-white"
                   style={{ backgroundColor: event.category.color }}
                 >
-                  {event.category.icon ? `${event.category.icon} ` : ''}
+                  <CategoryIcon name={event.category.icon} className="mr-1 inline h-3.5 w-3.5 align-[-2px]" />
                   {event.category.name}
                 </Badge>
                 {event.status === 'CANCELLED' && <Badge variant="danger">Annulé</Badge>}
@@ -227,6 +228,27 @@ export default function EventDetailPage() {
             <Ticket className="h-5 w-5 shrink-0 text-primary-600" aria-hidden />
             <p className="font-semibold">{formatPrice(event.price, event.isFree)}</p>
           </div>
+          {event.hasMeetup && (
+            <div className="flex items-start gap-3 rounded-xl border border-primary-200 bg-primary-50/50 p-3 dark:border-primary-900 dark:bg-primary-950/30">
+              <MapPin className="mt-0.5 h-5 w-5 shrink-0 text-primary-600" aria-hidden />
+              <div>
+                <p className="font-semibold">Lieu de rendez-vous</p>
+                {event.canSeeMeetup && event.meetupAddress ? (
+                  <p className="text-sm font-medium">{event.meetupAddress}</p>
+                ) : event.meetupVisibility === 'SCHEDULED' && event.meetupRevealAt ? (
+                  <p className="text-sm text-fg-muted">
+                    🔒 Communiqué aux inscrits le{' '}
+                    {new Date(event.meetupRevealAt).toLocaleString('fr-FR', {
+                      dateStyle: 'long',
+                      timeStyle: 'short',
+                    })}
+                  </p>
+                ) : (
+                  <p className="text-sm text-fg-muted">🔒 Réservé aux inscrits</p>
+                )}
+              </div>
+            </div>
+          )}
           <div className="space-y-1.5 border-t border-border pt-3.5">
             <p className="text-sm font-bold">📅 Ajouter à mon agenda</p>
             <AddToCalendar

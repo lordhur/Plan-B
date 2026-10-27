@@ -5,7 +5,8 @@ import { ArrowLeft, Save, Sparkles, Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
+import * as React from 'react'
+import { useForm, type Resolver } from 'react-hook-form'
 import { z } from 'zod'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
@@ -15,7 +16,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { toast } from '@/components/ui/toast'
-import { CoverImageField } from '@/components/events/CoverImageField'
+import { MultiPhotoField } from '@/components/common/MultiPhotoField'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
 const schema = z.object({
@@ -23,6 +24,10 @@ const schema = z.object({
   about: z.string().trim().min(20, 'Décrivez-vous en 20 caractères minimum').max(2000),
   lookingFor: z.string().trim().max(200).optional().or(z.literal('')),
   photoUrl: z.string().trim().max(500).optional().or(z.literal('')),
+  photos: z.array(z.string().trim().max(500)).max(6).default([]),
+  passions: z.array(z.string().trim().min(1).max(40)).max(12).default([]),
+  profession: z.string().trim().max(120).optional().or(z.literal('')),
+  education: z.string().trim().max(1000).optional().or(z.literal('')),
 })
 
 type FormValues = z.infer<typeof schema>
@@ -43,8 +48,8 @@ export default function IntroCardPage() {
     reset,
     formState: { errors },
   } = useForm<FormValues>({
-    resolver: zodResolver(schema),
-    defaultValues: { title: '', about: '', lookingFor: '', photoUrl: '' },
+    resolver: zodResolver(schema) as unknown as Resolver<FormValues>,
+    defaultValues: { title: '', about: '', lookingFor: '', photoUrl: '', photos: [], passions: [], profession: '', education: '' },
   })
 
   useEffect(() => {
@@ -54,6 +59,10 @@ export default function IntroCardPage() {
         about: myCard.data.about,
         lookingFor: myCard.data.lookingFor ?? '',
         photoUrl: myCard.data.photoUrl ?? '',
+        photos: myCard.data.photos?.length ? myCard.data.photos : myCard.data.photoUrl ? [myCard.data.photoUrl] : [],
+        passions: myCard.data.passions ?? [],
+        profession: myCard.data.profession ?? '',
+        education: myCard.data.education ?? '',
       })
     }
   }, [myCard.data, reset])
@@ -88,7 +97,16 @@ export default function IntroCardPage() {
     )
   }
 
-  const photoUrl = watch('photoUrl')
+  const photos = watch('photos') ?? []
+  const passions = watch('passions') ?? []
+  const [passionInput, setPassionInput] = React.useState('')
+
+  const addPassion = () => {
+    const p = passionInput.trim()
+    if (!p || passions.length >= 12 || passions.includes(p)) return
+    setValue('passions', [...passions, p])
+    setPassionInput('')
+  }
 
   return (
     <div className="mx-auto max-w-xl space-y-5 px-4 py-8 md:px-0">
@@ -122,11 +140,15 @@ export default function IntroCardPage() {
                 title: values.title,
                 about: values.about,
                 lookingFor: values.lookingFor || undefined,
-                photoUrl: values.photoUrl || undefined,
+                photoUrl: values.photos[0] || undefined,
+                photos: values.photos,
+                passions: values.passions,
+                profession: values.profession || undefined,
+                education: values.education || undefined,
               }),
             )}
           >
-            <CoverImageField value={photoUrl ?? ''} onChange={(url) => setValue('photoUrl', url)} />
+            <MultiPhotoField value={photos} onChange={(next) => setValue('photos', next)} />
 
             <div>
               <Label htmlFor="card-title">Titre de la fiche *</Label>
@@ -158,6 +180,56 @@ export default function IntroCardPage() {
                 <p role="alert" className="mt-1 text-xs text-danger-500">
                   {errors.about.message}
                 </p>
+              )}
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="card-profession">Profession</Label>
+                <Input id="card-profession" maxLength={120} placeholder="Ex : Infirmière, développeur…" {...register('profession')} />
+              </div>
+              <div>
+                <Label htmlFor="card-education">Études / diplômes</Label>
+                <Input id="card-education" maxLength={200} placeholder="Ex : Fac de droit de Toulon" {...register('education')} />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="card-passion">Passions</Label>
+              <div className="flex gap-2">
+                <Input
+                  id="card-passion"
+                  value={passionInput}
+                  maxLength={40}
+                  placeholder="Ex : Rando, cuisine, cinéma…"
+                  onChange={(e) => setPassionInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault()
+                      addPassion()
+                    }
+                  }}
+                />
+                <Button type="button" variant="outline" onClick={addPassion} disabled={passions.length >= 12}>
+                  Ajouter
+                </Button>
+              </div>
+              {passions.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-1.5">
+                  {passions.map((p) => (
+                    <span key={p} className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2.5 py-1 text-xs font-semibold text-primary-700 dark:bg-primary-950 dark:text-primary-300">
+                      {p}
+                      <button
+                        type="button"
+                        aria-label={`Retirer ${p}`}
+                        onClick={() => setValue('passions', passions.filter((x) => x !== p))}
+                        className="text-danger-500"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
 

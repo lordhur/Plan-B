@@ -40,6 +40,8 @@ model User {
   gender      Gender
   orientation Orientation?
   bio         String?  @db.Text
+  profession        String?           @db.VarChar(120)
+  education         String?           @db.Text
   city        String?
   latitude    Float?
   longitude   Float?
@@ -294,6 +296,13 @@ enum FriendRequestStatus {
 // 5. ÉVÉNEMENTS
 // ========================
 
+/// Visibilité du lieu de rendez-vous exact, choisie par l'organisateur.
+enum MeetupVisibility {
+  EVERYONE // Visible par tout le monde
+  MEMBERS // Visible par les inscrits uniquement
+  SCHEDULED // Visible par les inscrits à partir d'une date/heure
+}
+
 model EventCategory {
   id     String @id @default(cuid())
   name   String @unique
@@ -319,6 +328,11 @@ model Event {
   title            String
   description      String  @db.Text
   shortDescription String?
+  // Lieu de rendez-vous exact (visibilité au choix de l'organisateur)
+  meetupAddress   String?          @db.Text
+  meetupVisibility MeetupVisibility @default(EVERYONE)
+  meetupRevealAt  DateTime?
+
   coverImage       String?
 
   // Catégorie
@@ -1059,6 +1073,10 @@ model IntroCard {
   about      String   @db.Text
   lookingFor String?  @db.VarChar(200)
   photoUrl   String?  @db.Text
+  photos     String[] @default([])
+  passions   String[] @default([])
+  profession String?  @db.VarChar(120)
+  education  String?  @db.Text
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 

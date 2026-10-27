@@ -30,6 +30,7 @@ import { Select } from '@/components/ui/select'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { FriendButton } from '@/components/friends/FriendButton'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { formatFullDate } from '@/lib/date'
 
 type Tab = 'amis' | 'recherche' | 'nouveau' | 'classement'
@@ -317,6 +318,10 @@ interface IntroCardItem {
   about: string
   lookingFor: string | null
   photoUrl: string | null
+  photos: string[]
+  passions: string[]
+  profession: string | null
+  education: string | null
   createdAt: Date
   user: {
     id: string
@@ -343,10 +348,23 @@ function IntroCardView({
   const name = card.user.displayName || `${card.user.firstName} ${card.user.lastName}`
   return (
     <Card className="card-sheen overflow-hidden">
-      {card.photoUrl && (
+      {card.photos.length > 0 ? (
+        <div className="flex h-32 w-full overflow-x-auto">
+          {card.photos.map((p, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={p}
+              src={p}
+              alt={`Photo ${i + 1} de la fiche`}
+              loading="lazy"
+              className="h-full w-1/2 shrink-0 object-cover"
+            />
+          ))}
+        </div>
+      ) : card.photoUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={card.photoUrl} alt="" loading="lazy" className="h-32 w-full object-cover" />
-      )}
+      ) : null}
       <CardContent className="space-y-2 p-4">
         <div className="flex items-center gap-3">
           <Link href={`/profile/${card.user.id}`}>
@@ -364,6 +382,25 @@ function IntroCardView({
           </div>
         </div>
         <p className="font-bold text-primary-700 dark:text-primary-300">{card.title}</p>
+        {(card.profession || card.education) && (
+          <p className="text-xs font-semibold text-fg-muted">
+            {card.profession}
+            {card.profession && card.education ? ' · ' : ''}
+            {card.education ? `🎓 ${card.education}` : ''}
+          </p>
+        )}
+        {card.passions.length > 0 && (
+          <div className="flex flex-wrap gap-1">
+            {card.passions.slice(0, 6).map((p) => (
+              <span
+                key={p}
+                className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="line-clamp-4 whitespace-pre-wrap text-sm text-fg-muted">{card.about}</p>
         {card.lookingFor && (
           <p className="rounded-lg bg-bg-secondary px-3 py-1.5 text-xs font-semibold">
@@ -531,11 +568,11 @@ function RankingsTab() {
               <section key={cat.slug} aria-label={`Classement ${cat.name}`}>
                 <h3 className="mb-2 flex items-center gap-2 font-bold">
                   <span
-                    className="flex h-7 w-7 items-center justify-center rounded-lg text-sm"
-                    style={{ backgroundColor: `${cat.color}22` }}
+                    className="flex h-7 w-7 items-center justify-center rounded-lg"
+                    style={{ backgroundColor: `${cat.color}22`, color: cat.color }}
                     aria-hidden
                   >
-                    {cat.icon}
+                    <CategoryIcon name={cat.icon} className="h-4 w-4" />
                   </span>
                   {cat.name}
                   <span className="text-xs font-semibold text-fg-muted">· ce mois-ci</span>
@@ -668,12 +705,40 @@ export default function FriendsPage() {
                   <LoadingSpinner label="Chargement de ma fiche" />
                 ) : myCard.data ? (
                   <div className="card-sheen overflow-hidden rounded-2xl border-2 border-primary-200 bg-card dark:border-primary-900">
-                    {myCard.data.photoUrl && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={myCard.data.photoUrl} alt="" className="h-36 w-full object-cover" />
+                    {myCard.data.photos.length > 0 ? (
+                      <div className="flex h-36 w-full overflow-x-auto">
+                        {myCard.data.photos.map((p) => (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img key={p} src={p} alt="" className="h-full w-1/2 shrink-0 object-cover" />
+                        ))}
+                      </div>
+                    ) : (
+                      myCard.data.photoUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={myCard.data.photoUrl} alt="" className="h-36 w-full object-cover" />
+                      )
                     )}
                     <div className="space-y-2 p-4">
                       <p className="font-bold text-primary-700 dark:text-primary-300">{myCard.data.title}</p>
+                      {(myCard.data.profession || myCard.data.education) && (
+                        <p className="text-xs font-semibold text-fg-muted">
+                          {myCard.data.profession}
+                          {myCard.data.profession && myCard.data.education ? ' · ' : ''}
+                          {myCard.data.education ? `🎓 ${myCard.data.education}` : ''}
+                        </p>
+                      )}
+                      {myCard.data.passions.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {myCard.data.passions.map((p) => (
+                            <span
+                              key={p}
+                              className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+                            >
+                              {p}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                       <p className="whitespace-pre-wrap text-sm text-fg-muted">{myCard.data.about}</p>
                       {myCard.data.lookingFor && (
                         <p className="rounded-lg bg-bg-secondary px-3 py-1.5 text-xs font-semibold">

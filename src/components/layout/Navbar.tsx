@@ -128,22 +128,11 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-lg">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-2 px-4">
-        {/* Gauche : logo */}
-        <Logo />
-
-        {/* Centre : tous les onglets regroupés et centrés */}
-        <nav
-          aria-label="Navigation principale"
-          className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-2xl border border-border bg-card/70 p-1 md:flex"
-        >
-          {NAV_LINKS.map((l) => (
-            <NavLink key={l.href} {...l} />
-          ))}
-        </nav>
-
-        {/* Droite : création + thème + profil */}
-        <div className="ml-auto flex items-center gap-1.5">
+      <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pb-1.5 pt-2 md:pb-2">
+        {/* Haut : logo centré (au-dessus du fil) + actions à droite */}
+        <div className="flex w-full items-center justify-between">
+          <Logo />
+          <div className="flex items-center gap-1.5">
           <CreateMenu
             trigger={
               <Button variant="accent" size="sm" className="hidden sm:inline-flex">
@@ -239,7 +228,18 @@ export function Navbar() {
               </Button>
             </div>
           )}
+          </div>
         </div>
+
+        {/* Bas : tous les onglets regroupés et centrés, sous le logo */}
+        <nav
+          aria-label="Navigation principale"
+          className="hidden items-center gap-0.5 rounded-2xl border border-border bg-card/70 p-1 md:flex"
+        >
+          {NAV_LINKS.map((l) => (
+            <NavLink key={l.href} {...l} />
+          ))}
+        </nav>
       </div>
     </header>
   )

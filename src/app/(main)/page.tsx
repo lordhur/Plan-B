@@ -66,7 +66,7 @@ export default function FeedPage() {
               <Link href="/register">Créer mon compte</Link>
             </Button>
             <Button asChild variant="secondary">
-              <Link href="/explore">Explorer les plans</Link>
+              <Link href="/events/calendar">Voir les plans</Link>
             </Button>
           </div>
         )}
@@ -183,7 +183,7 @@ export default function FeedPage() {
                   <Link href="/events/create">Créer un plan</Link>
                 </Button>
                 <Button asChild variant="secondary">
-                  <Link href="/explore">Explorer</Link>
+                  <Link href="/events/calendar">Voir l’activité</Link>
                 </Button>
               </div>
             }

@@ -3619,6 +3619,8 @@ export const UserScalarFieldEnum = {
   gender: 'gender',
   orientation: 'orientation',
   bio: 'bio',
+  profession: 'profession',
+  education: 'education',
   city: 'city',
   latitude: 'latitude',
   longitude: 'longitude',
@@ -3748,6 +3750,9 @@ export const EventScalarFieldEnum = {
   title: 'title',
   description: 'description',
   shortDescription: 'shortDescription',
+  meetupAddress: 'meetupAddress',
+  meetupVisibility: 'meetupVisibility',
+  meetupRevealAt: 'meetupRevealAt',
   coverImage: 'coverImage',
   categoryId: 'categoryId',
   tags: 'tags',
@@ -4240,6 +4245,10 @@ export const IntroCardScalarFieldEnum = {
   about: 'about',
   lookingFor: 'lookingFor',
   photoUrl: 'photoUrl',
+  photos: 'photos',
+  passions: 'passions',
+  profession: 'profession',
+  education: 'education',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -4473,6 +4482,20 @@ export type EnumFriendRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
  * Reference to a field of type 'FriendRequestStatus[]'
  */
 export type ListEnumFriendRequestStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'FriendRequestStatus[]'>
+    
+
+
+/**
+ * Reference to a field of type 'MeetupVisibility'
+ */
+export type EnumMeetupVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MeetupVisibility'>
+    
+
+
+/**
+ * Reference to a field of type 'MeetupVisibility[]'
+ */
+export type ListEnumMeetupVisibilityFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MeetupVisibility[]'>
     
 
 

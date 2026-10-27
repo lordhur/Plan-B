@@ -160,7 +160,7 @@ export default function MyProfilePage() {
             description="Rejoignez un plan ou créez le vôtre !"
             action={
               <Button asChild>
-                <Link href="/explore">Explorer les plans</Link>
+                <Link href="/events/calendar">Voir les plans</Link>
               </Button>
             }
             className="py-8"

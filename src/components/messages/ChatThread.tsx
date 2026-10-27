@@ -14,6 +14,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmojiPicker } from './EmojiPicker'
+import { uploadToStorage } from '@/lib/supabaseUpload'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { formatRelative } from '@/lib/date'
@@ -54,7 +55,8 @@ interface ChatThreadProps {
   className?: string
 }
 
-const MAX_ATTACHMENT = 4 * 1024 * 1024
+const MAX_ATTACHMENT = 50 * 1024 * 1024 // vidéos/audio/fichiers via Supabase Storage
+const MAX_INLINE_IMAGE = 3.5 * 1024 * 1024 // photos légères → compression serveur
 const ACCEPT = 'image/*,video/mp4,video/webm,video/quicktime,audio/*,application/pdf'
 
 /** Rendu d'une pièce jointe dans une bulle. */
@@ -190,15 +192,32 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
     })
   }
 
-  /** Téléverse une pièce jointe (photos compressées côté serveur). */
+  /**
+   * Téléverse une pièce jointe :
+   * - photos légères → /api/attachment (compression WebP côté serveur) ;
+   * - vidéos, audios et gros fichiers → Supabase Storage (jusqu'à 50 Mo).
+   */
   const uploadAttachment = async (file: File) => {
     if (file.size > MAX_ATTACHMENT) {
-      toast.error('Fichier trop lourd', 'Limite : 4 Mo (vidéos = clips courts).')
+      toast.error('Fichier trop lourd', 'Limite : 50 Mo.')
       return
     }
     setUploading(true)
     const previewUrl = file.type.startsWith('image/') ? URL.createObjectURL(file) : undefined
     try {
+      // Fichiers volumineux / non-image : stockage direct Supabase
+      if (!file.type.startsWith('image/') || file.size > MAX_INLINE_IMAGE) {
+        const url = await uploadToStorage(file, 'dm')
+        const type: MediaType = file.type.startsWith('video/')
+          ? 'VIDEO'
+          : file.type.startsWith('audio/')
+            ? 'AUDIO'
+            : file.type.startsWith('image/')
+              ? 'IMAGE'
+              : 'FILE'
+        setAttachment({ url, type, name: file.name, previewUrl })
+        return
+      }
       const form = new FormData()
       form.append('file', file)
       const res = await fetch('/api/attachment', { method: 'POST', body: form })

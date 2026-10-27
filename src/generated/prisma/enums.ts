@@ -81,6 +81,15 @@ export const FriendRequestStatus = {
 export type FriendRequestStatus = (typeof FriendRequestStatus)[keyof typeof FriendRequestStatus]
 
 
+export const MeetupVisibility = {
+  EVERYONE: 'EVERYONE',
+  MEMBERS: 'MEMBERS',
+  SCHEDULED: 'SCHEDULED'
+} as const
+
+export type MeetupVisibility = (typeof MeetupVisibility)[keyof typeof MeetupVisibility]
+
+
 export const RegistrationType = {
   OPEN: 'OPEN',
   APPROVAL_REQUIRED: 'APPROVAL_REQUIRED',

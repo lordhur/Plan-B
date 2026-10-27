@@ -2,6 +2,7 @@
 
 import { ArrowLeft, BadgeCheck, CalendarDays, Globe, Mail, MapPin, Phone } from 'lucide-react'
 import Link from 'next/link'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { use } from 'react'
 import { trpc } from '@/lib/trpc'
 import { Avatar } from '@/components/ui/avatar'
@@ -134,7 +135,7 @@ export default function PublicPagePage({ params }: { params: Promise<{ slug: str
                       style={{ backgroundColor: `${e.category.color}22` }}
                       aria-hidden
                     >
-                      {e.category.icon}
+                      <CategoryIcon name={e.category.icon} className="h-4 w-4" />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-semibold">{e.title}</span>

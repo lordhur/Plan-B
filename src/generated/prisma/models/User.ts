@@ -62,6 +62,8 @@ export type UserMinAggregateOutputType = {
   gender: $Enums.Gender | null
   orientation: $Enums.Orientation | null
   bio: string | null
+  profession: string | null
+  education: string | null
   city: string | null
   latitude: number | null
   longitude: number | null
@@ -99,6 +101,8 @@ export type UserMaxAggregateOutputType = {
   gender: $Enums.Gender | null
   orientation: $Enums.Orientation | null
   bio: string | null
+  profession: string | null
+  education: string | null
   city: string | null
   latitude: number | null
   longitude: number | null
@@ -136,6 +140,8 @@ export type UserCountAggregateOutputType = {
   gender: number
   orientation: number
   bio: number
+  profession: number
+  education: number
   city: number
   latitude: number
   longitude: number
@@ -197,6 +203,8 @@ export type UserMinAggregateInputType = {
   gender?: true
   orientation?: true
   bio?: true
+  profession?: true
+  education?: true
   city?: true
   latitude?: true
   longitude?: true
@@ -234,6 +242,8 @@ export type UserMaxAggregateInputType = {
   gender?: true
   orientation?: true
   bio?: true
+  profession?: true
+  education?: true
   city?: true
   latitude?: true
   longitude?: true
@@ -271,6 +281,8 @@ export type UserCountAggregateInputType = {
   gender?: true
   orientation?: true
   bio?: true
+  profession?: true
+  education?: true
   city?: true
   latitude?: true
   longitude?: true
@@ -395,6 +407,8 @@ export type UserGroupByOutputType = {
   gender: $Enums.Gender
   orientation: $Enums.Orientation | null
   bio: string | null
+  profession: string | null
+  education: string | null
   city: string | null
   latitude: number | null
   longitude: number | null
@@ -455,6 +469,8 @@ export type UserWhereInput = {
   gender?: Prisma.EnumGenderFilter<"User"> | $Enums.Gender
   orientation?: Prisma.EnumOrientationNullableFilter<"User"> | $Enums.Orientation | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
+  profession?: Prisma.StringNullableFilter<"User"> | string | null
+  education?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
@@ -528,6 +544,8 @@ export type UserOrderByWithRelationInput = {
   gender?: Prisma.SortOrder
   orientation?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  profession?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -604,6 +622,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   gender?: Prisma.EnumGenderFilter<"User"> | $Enums.Gender
   orientation?: Prisma.EnumOrientationNullableFilter<"User"> | $Enums.Orientation | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
+  profession?: Prisma.StringNullableFilter<"User"> | string | null
+  education?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
@@ -677,6 +697,8 @@ export type UserOrderByWithAggregationInput = {
   gender?: Prisma.SortOrder
   orientation?: Prisma.SortOrderInput | Prisma.SortOrder
   bio?: Prisma.SortOrderInput | Prisma.SortOrder
+  profession?: Prisma.SortOrderInput | Prisma.SortOrder
+  education?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -722,6 +744,8 @@ export type UserScalarWhereWithAggregatesInput = {
   gender?: Prisma.EnumGenderWithAggregatesFilter<"User"> | $Enums.Gender
   orientation?: Prisma.EnumOrientationNullableWithAggregatesFilter<"User"> | $Enums.Orientation | null
   bio?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  profession?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  education?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   latitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
@@ -759,6 +783,8 @@ export type UserCreateInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -832,6 +858,8 @@ export type UserUncheckedCreateInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -905,6 +933,8 @@ export type UserUpdateInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -978,6 +1008,8 @@ export type UserUncheckedUpdateInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1051,6 +1083,8 @@ export type UserCreateManyInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -1088,6 +1122,8 @@ export type UserUpdateManyMutationInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1125,6 +1161,8 @@ export type UserUncheckedUpdateManyInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -1162,6 +1200,8 @@ export type UserCountOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   orientation?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   city?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -1210,6 +1250,8 @@ export type UserMaxOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   orientation?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   city?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -1247,6 +1289,8 @@ export type UserMinOrderByAggregateInput = {
   gender?: Prisma.SortOrder
   orientation?: Prisma.SortOrder
   bio?: Prisma.SortOrder
+  profession?: Prisma.SortOrder
+  education?: Prisma.SortOrder
   city?: Prisma.SortOrder
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
@@ -1927,6 +1971,8 @@ export type UserCreateWithoutProfilePhotosInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -1999,6 +2045,8 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2087,6 +2135,8 @@ export type UserUpdateWithoutProfilePhotosInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2159,6 +2209,8 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2231,6 +2283,8 @@ export type UserCreateWithoutVerificationCodesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2303,6 +2357,8 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2391,6 +2447,8 @@ export type UserUpdateWithoutVerificationCodesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2463,6 +2521,8 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2535,6 +2595,8 @@ export type UserCreateWithoutInterestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2607,6 +2669,8 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2703,6 +2767,8 @@ export type UserScalarWhereInput = {
   gender?: Prisma.EnumGenderFilter<"User"> | $Enums.Gender
   orientation?: Prisma.EnumOrientationNullableFilter<"User"> | $Enums.Orientation | null
   bio?: Prisma.StringNullableFilter<"User"> | string | null
+  profession?: Prisma.StringNullableFilter<"User"> | string | null
+  education?: Prisma.StringNullableFilter<"User"> | string | null
   city?: Prisma.StringNullableFilter<"User"> | string | null
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
@@ -2740,6 +2806,8 @@ export type UserCreateWithoutBadgesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2812,6 +2880,8 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -2900,6 +2970,8 @@ export type UserUpdateWithoutBadgesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -2972,6 +3044,8 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3044,6 +3118,8 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3116,6 +3192,8 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3193,6 +3271,8 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3265,6 +3345,8 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3353,6 +3435,8 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3425,6 +3509,8 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3508,6 +3594,8 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3580,6 +3668,8 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -3652,6 +3742,8 @@ export type UserCreateWithoutFriendshipsAInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3724,6 +3816,8 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3801,6 +3895,8 @@ export type UserCreateWithoutFriendshipsBInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3873,6 +3969,8 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -3961,6 +4059,8 @@ export type UserUpdateWithoutFriendshipsAInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4033,6 +4133,8 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4116,6 +4218,8 @@ export type UserUpdateWithoutFriendshipsBInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4188,6 +4292,8 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4260,6 +4366,8 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4332,6 +4440,8 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4425,6 +4535,8 @@ export type UserCreateWithoutOrganizedEventsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4497,6 +4609,8 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4585,6 +4699,8 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4657,6 +4773,8 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4729,6 +4847,8 @@ export type UserCreateWithoutEventParticipationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4801,6 +4921,8 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -4889,6 +5011,8 @@ export type UserUpdateWithoutEventParticipationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -4961,6 +5085,8 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5033,6 +5159,8 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5105,6 +5233,8 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5193,6 +5323,8 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5265,6 +5397,8 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5337,6 +5471,8 @@ export type UserCreateWithoutEventInvitationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5409,6 +5545,8 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5497,6 +5635,8 @@ export type UserUpdateWithoutEventInvitationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5569,6 +5709,8 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5641,6 +5783,8 @@ export type UserCreateWithoutEventChatMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5713,6 +5857,8 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -5801,6 +5947,8 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5873,6 +6021,8 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -5945,6 +6095,8 @@ export type UserCreateWithoutConversationMembersInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6017,6 +6169,8 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6105,6 +6259,8 @@ export type UserUpdateWithoutConversationMembersInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6177,6 +6333,8 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6249,6 +6407,8 @@ export type UserCreateWithoutSentMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6321,6 +6481,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6398,6 +6560,8 @@ export type UserCreateWithoutReceivedMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6470,6 +6634,8 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6558,6 +6724,8 @@ export type UserUpdateWithoutSentMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6630,6 +6798,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6713,6 +6883,8 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6785,6 +6957,8 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -6857,6 +7031,8 @@ export type UserCreateWithoutUploadedMediaInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -6929,6 +7105,8 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7017,6 +7195,8 @@ export type UserUpdateWithoutUploadedMediaInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7089,6 +7269,8 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7161,6 +7343,8 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7233,6 +7417,8 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7321,6 +7507,8 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7393,6 +7581,8 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7465,6 +7655,8 @@ export type UserCreateWithoutRatingsGivenInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7537,6 +7729,8 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7614,6 +7808,8 @@ export type UserCreateWithoutRatingsReceivedInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7686,6 +7882,8 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -7774,6 +7972,8 @@ export type UserUpdateWithoutRatingsGivenInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7846,6 +8046,8 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -7929,6 +8131,8 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8001,6 +8205,8 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8073,6 +8279,8 @@ export type UserCreateWithoutReportsMadeInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8145,6 +8353,8 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8222,6 +8432,8 @@ export type UserCreateWithoutReportsReceivedInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8294,6 +8506,8 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8382,6 +8596,8 @@ export type UserUpdateWithoutReportsMadeInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8454,6 +8670,8 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8537,6 +8755,8 @@ export type UserUpdateWithoutReportsReceivedInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8609,6 +8829,8 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8681,6 +8903,8 @@ export type UserCreateWithoutOfferedRidesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8753,6 +8977,8 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -8841,6 +9067,8 @@ export type UserUpdateWithoutOfferedRidesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8913,6 +9141,8 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -8985,6 +9215,8 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9057,6 +9289,8 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9145,6 +9379,8 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9217,6 +9453,8 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9289,6 +9527,8 @@ export type UserCreateWithoutOwnedPagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9361,6 +9601,8 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9449,6 +9691,8 @@ export type UserUpdateWithoutOwnedPagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9521,6 +9765,8 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9593,6 +9839,8 @@ export type UserCreateWithoutPageFollowsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9665,6 +9913,8 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9753,6 +10003,8 @@ export type UserUpdateWithoutPageFollowsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9825,6 +10077,8 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -9897,6 +10151,8 @@ export type UserCreateWithoutGroupMembershipsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -9969,6 +10225,8 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10057,6 +10315,8 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10129,6 +10389,8 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10201,6 +10463,8 @@ export type UserCreateWithoutForumPostsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10273,6 +10537,8 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10361,6 +10627,8 @@ export type UserUpdateWithoutForumPostsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10433,6 +10701,8 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10505,6 +10775,8 @@ export type UserCreateWithoutForumRepliesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10577,6 +10849,8 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10665,6 +10939,8 @@ export type UserUpdateWithoutForumRepliesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10737,6 +11013,8 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -10809,6 +11087,8 @@ export type UserCreateWithoutRedeemedOffersInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10881,6 +11161,8 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -10969,6 +11251,8 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11041,6 +11325,8 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11113,6 +11399,8 @@ export type UserCreateWithoutSubscriptionInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11185,6 +11473,8 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11273,6 +11563,8 @@ export type UserUpdateWithoutSubscriptionInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11345,6 +11637,8 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11417,6 +11711,8 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11489,6 +11785,8 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11577,6 +11875,8 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11649,6 +11949,8 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11721,6 +12023,8 @@ export type UserCreateWithoutNotificationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11793,6 +12097,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -11881,6 +12187,8 @@ export type UserUpdateWithoutNotificationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -11953,6 +12261,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12025,6 +12335,8 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -12097,6 +12409,8 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -12185,6 +12499,8 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12257,6 +12573,8 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12329,6 +12647,8 @@ export type UserCreateWithoutIntroCardInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -12401,6 +12721,8 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   gender: $Enums.Gender
   orientation?: $Enums.Orientation | null
   bio?: string | null
+  profession?: string | null
+  education?: string | null
   city?: string | null
   latitude?: number | null
   longitude?: number | null
@@ -12489,6 +12811,8 @@ export type UserUpdateWithoutIntroCardInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12561,6 +12885,8 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12633,6 +12959,8 @@ export type UserUpdateWithoutInterestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12705,6 +13033,8 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12777,6 +13107,8 @@ export type UserUncheckedUpdateManyWithoutInterestsInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12814,6 +13146,8 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12886,6 +13220,8 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -12958,6 +13294,8 @@ export type UserUncheckedUpdateManyWithoutFavoriteCategoriesInput = {
   gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
   orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
   bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
@@ -13323,6 +13661,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   gender?: boolean
   orientation?: boolean
   bio?: boolean
+  profession?: boolean
+  education?: boolean
   city?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -13397,6 +13737,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   gender?: boolean
   orientation?: boolean
   bio?: boolean
+  profession?: boolean
+  education?: boolean
   city?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -13434,6 +13776,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   gender?: boolean
   orientation?: boolean
   bio?: boolean
+  profession?: boolean
+  education?: boolean
   city?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -13471,6 +13815,8 @@ export type UserSelectScalar = {
   gender?: boolean
   orientation?: boolean
   bio?: boolean
+  profession?: boolean
+  education?: boolean
   city?: boolean
   latitude?: boolean
   longitude?: boolean
@@ -13494,7 +13840,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "city" | "latitude" | "longitude" | "avatarUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
   interests?: boolean | Prisma.User$interestsArgs<ExtArgs>
@@ -13591,6 +13937,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     gender: $Enums.Gender
     orientation: $Enums.Orientation | null
     bio: string | null
+    profession: string | null
+    education: string | null
     city: string | null
     latitude: number | null
     longitude: number | null
@@ -14084,6 +14432,8 @@ export interface UserFieldRefs {
   readonly gender: Prisma.FieldRef<"User", 'Gender'>
   readonly orientation: Prisma.FieldRef<"User", 'Orientation'>
   readonly bio: Prisma.FieldRef<"User", 'String'>
+  readonly profession: Prisma.FieldRef<"User", 'String'>
+  readonly education: Prisma.FieldRef<"User", 'String'>
   readonly city: Prisma.FieldRef<"User", 'String'>
   readonly latitude: Prisma.FieldRef<"User", 'Float'>
   readonly longitude: Prisma.FieldRef<"User", 'Float'>

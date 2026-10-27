@@ -1,15 +1,18 @@
 'use client'
 
-import { Crosshair, X } from 'lucide-react'
+import { Crosshair, Minus, Plus, RotateCcw } from 'lucide-react'
+import { useCallback, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 /**
- * Carte de France métropolitaine simplifiée (contours en lat/lon projetés).
- * Les grandes villes sont des boutons cliquables : choisir une ville localise
- * le fil manuellement — la géolocalisation GPS reste disponible à côté.
+ * Carte de France zoomable : uniquement des petits boutons « nom de ville ».
+ * - zoom 1 : les grandes villes ;
+ * - zoom ≥ 1.8 : villes moyennes supplémentaires ;
+ * - zoom ≥ 2.8 : villes du Var / Côte d'Azur (jamais chevauchées grâce aux
+ *   décalages verticaux alternés).
+ * Choisir une ville localise le fil manuellement — la géoloc GPS reste possible.
  */
 
-// Boîte englobante + projection linéaire corrigée du cosinus de latitude
 const LON0 = -5.2
 const LON1 = 9.8
 const LAT0 = 41.0
@@ -48,34 +51,63 @@ export interface MapCity {
   name: string
   lat: number
   lon: number
-  /** Décalage du libellé (px SVG) pour éviter les collisions */
+  /** Niveau d'apparition : 1 = toujours, 2 = zoom ≥ 1.8, 3 = zoom ≥ 2.8 */
+  tier: 1 | 2 | 3
+  /** Décalage visuel du bouton (px) — évite tout chevauchement */
   dx?: number
   dy?: number
-  /** Alignement du texte du libellé */
-  anchor?: 'start' | 'end'
 }
 
-/** Grandes villes de France (clic = localisation manuelle du fil). */
 export const MAP_CITIES: MapCity[] = [
-  { name: 'Lille', lat: 50.63, lon: 3.06 },
-  { name: 'Paris', lat: 48.86, lon: 2.35, dx: 10, dy: -6 },
-  { name: 'Strasbourg', lat: 48.58, lon: 7.75 },
-  { name: 'Rennes', lat: 48.11, lon: -1.68 },
-  { name: 'Nantes', lat: 47.22, lon: -1.55, dy: 16 },
-  { name: 'Bordeaux', lat: 44.84, lon: -0.58 },
-  { name: 'Toulouse', lat: 43.6, lon: 1.44 },
-  { name: 'Montpellier', lat: 43.61, lon: 3.88, dy: 16 },
-  { name: 'Lyon', lat: 45.76, lon: 4.84 },
-  { name: 'Grenoble', lat: 45.19, lon: 5.72, dx: 10 },
-  { name: 'Avignon', lat: 43.95, lon: 4.81, anchor: 'end', dx: -10 },
-  { name: 'Marseille', lat: 43.3, lon: 5.37, anchor: 'end', dx: -10 },
-  { name: 'Toulon', lat: 43.12, lon: 5.93, dx: 8, dy: 14 },
-  { name: 'Fréjus', lat: 43.43, lon: 6.74, anchor: 'end', dx: -10 },
-  { name: 'Cannes', lat: 43.55, lon: 7.01, anchor: 'end', dx: -10 },
-  { name: 'Nice', lat: 43.7, lon: 7.26, dx: 8, dy: -6 },
+  // --- Niveau 1 : grandes villes, bien espacées ---
+  { name: 'Lille', lat: 50.63, lon: 3.06, tier: 1 },
+  { name: 'Paris', lat: 48.86, lon: 2.35, tier: 1 },
+  { name: 'Strasbourg', lat: 48.58, lon: 7.75, tier: 1 },
+  { name: 'Rennes', lat: 48.11, lon: -1.68, tier: 1 },
+  { name: 'Nantes', lat: 47.22, lon: -1.55, tier: 1 },
+  { name: 'Bordeaux', lat: 44.84, lon: -0.58, tier: 1 },
+  { name: 'Toulouse', lat: 43.6, lon: 1.44, tier: 1 },
+  { name: 'Lyon', lat: 45.76, lon: 4.84, tier: 1 },
+  { name: 'Marseille', lat: 43.3, lon: 5.37, tier: 1, dy: 24 },
+  // --- Niveau 2 : villes moyennes (zoom ≥ 1.8) ---
+  { name: 'Montpellier', lat: 43.61, lon: 3.88, tier: 2 },
+  { name: 'Grenoble', lat: 45.19, lon: 5.72, tier: 2 },
+  { name: 'Avignon', lat: 43.95, lon: 4.81, tier: 2 },
+  { name: 'Toulon', lat: 43.12, lon: 5.93, tier: 2, dy: -26 },
+  { name: 'Fréjus', lat: 43.43, lon: 6.74, tier: 2, dy: -26 },
+  { name: 'Cannes', lat: 43.55, lon: 7.01, tier: 2, dy: 26 },
+  { name: 'Nice', lat: 43.7, lon: 7.26, tier: 2, dy: -26 },
+  { name: 'Nîmes', lat: 43.84, lon: 4.36, tier: 2, dy: 24 },
+  { name: 'Perpignan', lat: 42.7, lon: 2.9, tier: 2 },
+  { name: 'Pau', lat: 43.3, lon: -0.37, tier: 2 },
+  { name: 'Limoges', lat: 45.83, lon: 1.26, tier: 2 },
+  { name: 'Clermont-Ferrand', lat: 45.78, lon: 3.08, tier: 2 },
+  { name: 'Dijon', lat: 47.32, lon: 5.04, tier: 2 },
+  { name: 'Annecy', lat: 45.9, lon: 6.13, tier: 2 },
+  { name: 'Tours', lat: 47.39, lon: 0.69, tier: 2 },
+  { name: 'Orléans', lat: 47.9, lon: 1.9, tier: 2 },
+  { name: 'Reims', lat: 49.26, lon: 4.03, tier: 2 },
+  { name: 'Metz', lat: 49.12, lon: 6.18, tier: 2 },
+  { name: 'Nancy', lat: 48.69, lon: 6.18, tier: 2, dy: 24 },
+  { name: 'Amiens', lat: 49.89, lon: 2.3, tier: 2 },
+  { name: 'Rouen', lat: 49.44, lon: 1.1, tier: 2 },
+  { name: 'Brest', lat: 48.39, lon: -4.49, tier: 2 },
+  { name: 'Angers', lat: 47.47, lon: -0.55, tier: 2 },
+  { name: 'Ajaccio', lat: 41.92, lon: 8.74, tier: 2 },
+  // --- Niveau 3 : Var & Côte d'Azur (zoom ≥ 2.8) ---
+  { name: 'Antibes', lat: 43.58, lon: 7.12, tier: 3, dy: -26 },
+  { name: 'Grasse', lat: 43.66, lon: 6.92, tier: 3, dy: -60 },
+  { name: 'Sainte-Maxime', lat: 43.31, lon: 6.64, tier: 3, dy: -26 },
+  { name: 'Saint-Raphaël', lat: 43.43, lon: 6.77, tier: 3, dy: 26 },
+  { name: 'Draguignan', lat: 43.54, lon: 6.46, tier: 3, dy: -56 },
+  { name: 'Hyères', lat: 43.12, lon: 6.13, tier: 3, dy: 26 },
+  { name: 'La Seyne-sur-Mer', lat: 43.1, lon: 5.88, tier: 3, dy: 26 },
+  { name: 'Brignoles', lat: 43.41, lon: 6.06, tier: 3, dy: -20 },
 ]
 
-/** Carte de France cliquable + position GPS + réinitialisation. */
+const ZOOMS = [1, 1.8, 2.8, 3.8]
+
+/** Carte de France : boutons villes cliquables, zoom et déplacement. */
 export function FranceMap({
   selected,
   onSelect,
@@ -89,6 +121,26 @@ export function FranceMap({
   onGps: () => void
   gpsActive: boolean
 }) {
+  const [zoom, setZoom] = useState(1)
+  const [pan, setPan] = useState({ x: 0, y: 0 })
+  const drag = useRef<{ startX: number; startY: number; panX: number; panY: number } | null>(null)
+  const [dragging, setDragging] = useState(false)
+
+  const maxPan = ((zoom - 1) * SIZE) / 2
+  const clamp = (v: number) => Math.max(-maxPan, Math.min(maxPan, v))
+
+  const zoomTo = useCallback((z: number) => {
+    setZoom(z)
+    setPan((p) => ({ x: Math.max(-((z - 1) * SIZE) / 2, Math.min(((z - 1) * SIZE) / 2, p.x)), y: Math.max(-((z - 1) * SIZE) / 2, Math.min(((z - 1) * SIZE) / 2, p.y)) }))
+  }, [])
+
+  const zoomIn = () => zoomTo(ZOOMS.find((z) => z > zoom + 0.01) ?? 3.8)
+  const zoomOut = () => zoomTo([...ZOOMS].reverse().find((z) => z < zoom - 0.01) ?? 1)
+
+  const visibleCities = MAP_CITIES.filter(
+    (c) => c.tier === 1 || (c.tier === 2 && zoom >= 1.75) || (c.tier === 3 && zoom >= 2.75),
+  )
+
   return (
     <div className="rounded-2xl border border-border bg-card/60 p-4">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
@@ -110,80 +162,136 @@ export function FranceMap({
           >
             <Crosshair className="h-3 w-3" aria-hidden /> Ma position GPS
           </button>
-          {selected && (
+          {(selected || zoom > 1) && (
             <button
               type="button"
-              onClick={onReset}
+              onClick={() => {
+                onReset()
+                zoomTo(1)
+              }}
               className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-semibold text-danger-500 transition-colors hover:border-danger-300"
             >
-              <X className="h-3 w-3" aria-hidden /> Réinitialiser
+              <RotateCcw className="h-3 w-3" aria-hidden /> Réinitialiser
             </button>
           )}
         </div>
       </div>
 
-      <div className="relative mx-auto aspect-square w-full max-w-sm select-none">
-        <svg
-          viewBox="0 0 520 520"
-          role="img"
-          aria-label="Carte de France avec les grandes villes cliquables"
-          className="h-full w-full"
+      <div
+        className={cn(
+          'relative mx-auto aspect-square w-full max-w-sm touch-none select-none overflow-hidden rounded-xl bg-primary-50/40 dark:bg-primary-950/20',
+          dragging ? 'cursor-grabbing' : 'cursor-grab',
+        )}
+        onPointerDown={(e) => {
+          if (zoom <= 1) return
+          drag.current = { startX: e.clientX, startY: e.clientY, panX: pan.x, panY: pan.y }
+          setDragging(true)
+          e.currentTarget.setPointerCapture(e.pointerId)
+        }}
+        onPointerMove={(e) => {
+          if (!drag.current) return
+          setPan({
+            x: clamp(drag.current.panX + (e.clientX - drag.current.startX)),
+            y: clamp(drag.current.panY + (e.clientY - drag.current.startY)),
+          })
+        }}
+        onPointerUp={() => {
+          drag.current = null
+          setDragging(false)
+        }}
+        onPointerCancel={() => {
+          drag.current = null
+          setDragging(false)
+        }}
+        onWheel={(e) => {
+          if (e.deltaY < 0) zoomIn()
+          else zoomOut()
+        }}
+      >
+        {/* Couche zoomable : contours + villes */}
+        <div
+          className="absolute inset-0 transition-transform duration-200"
+          style={{ transform: `translate(${pan.x}px, ${pan.y}px) scale(${zoom})` }}
         >
-          <path
-            d={toPath(OUTLINE)}
-            className="fill-primary-50 stroke-primary-300 dark:fill-primary-950/50 dark:stroke-primary-800"
-            strokeWidth="3"
-            strokeLinejoin="round"
-          />
-          <path
-            d={toPath(CORSICA)}
-            className="fill-primary-50 stroke-primary-300 dark:fill-primary-950/50 dark:stroke-primary-800"
-            strokeWidth="3"
-            strokeLinejoin="round"
-          />
-        </svg>
+          <svg
+            viewBox="0 0 520 520"
+            role="img"
+            aria-label="Carte de France avec les villes cliquables"
+            className="h-full w-full"
+          >
+            <path
+              d={toPath(OUTLINE)}
+              className="fill-primary-50 stroke-primary-300 dark:fill-primary-950/50 dark:stroke-primary-800"
+              strokeWidth="3"
+              strokeLinejoin="round"
+            />
+            <path
+              d={toPath(CORSICA)}
+              className="fill-primary-50 stroke-primary-300 dark:fill-primary-950/50 dark:stroke-primary-800"
+              strokeWidth="3"
+              strokeLinejoin="round"
+            />
+          </svg>
 
-        {/* Villes cliquables */}
-        {MAP_CITIES.map((c) => {
-          const active = selected === c.name
-          return (
-            <button
-              key={c.name}
-              type="button"
-              onClick={() => onSelect(c)}
-              aria-pressed={active}
-              aria-label={`Voir les plans autour de ${c.name}`}
-              className="absolute flex -translate-x-1/2 -translate-y-1/2 items-center"
-              style={{ left: `${(px(c.lon) / SIZE) * 100}%`, top: `${(py(c.lat) / SIZE) * 100}%` }}
-            >
-              <span
+          {visibleCities.map((c) => {
+            const active = selected === c.name
+            return (
+              <button
+                key={c.name}
+                type="button"
+                onClick={() => onSelect(c)}
+                aria-pressed={active}
+                aria-label={`Voir les plans autour de ${c.name}`}
                 className={cn(
-                  'block h-3 w-3 shrink-0 rounded-full border-2 border-white shadow transition-colors',
-                  active ? 'bg-primary-600' : 'bg-secondary-500 hover:bg-primary-500',
-                )}
-                aria-hidden
-              />
-              <span
-                className={cn(
-                  'pointer-events-none absolute whitespace-nowrap text-[9px] font-bold leading-none sm:text-[10px]',
-                  active ? 'text-primary-700 dark:text-primary-300' : 'text-fg-muted',
+                  'absolute whitespace-nowrap rounded-full border px-1.5 py-0.5 text-[9px] font-bold leading-none shadow-sm transition-colors',
+                  active
+                    ? 'border-primary-700 bg-primary-600 text-white'
+                    : 'border-primary-300 bg-card/95 text-fg hover:border-primary-500 hover:text-primary-700 dark:border-primary-800 dark:bg-card/90',
                 )}
                 style={{
-                  left: (c.dx ?? 8) >= 0 ? `${8 + (c.dx ?? 8)}px` : undefined,
-                  right: (c.dx ?? 8) < 0 ? `${8 - (c.dx ?? 8)}px` : undefined,
-                  top: c.dy ? `${c.dy - 4}px` : undefined,
-                  transform: c.dy ? undefined : 'translateY(-50%)',
+                  left: `${(px(c.lon) / SIZE) * 100}%`,
+                  top: `${(py(c.lat) / SIZE) * 100}%`,
+                  transform: `translate(-50%, -50%) translate(${c.dx ?? 0}px, ${c.dy ?? 0}px) scale(${1 / zoom})`,
                 }}
               >
                 {c.name}
-              </span>
-            </button>
-          )
-        })}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Contrôles de zoom */}
+        <div className="absolute right-2 top-2 flex flex-col gap-1">
+          <button
+            type="button"
+            onClick={zoomIn}
+            disabled={zoom >= 3.79}
+            aria-label="Zoomer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card/95 font-bold shadow-sm transition-colors hover:bg-bg-secondary disabled:opacity-40"
+          >
+            <Plus className="h-4 w-4" aria-hidden />
+          </button>
+          <button
+            type="button"
+            onClick={zoomOut}
+            disabled={zoom <= 1}
+            aria-label="Dézoomer"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card/95 font-bold shadow-sm transition-colors hover:bg-bg-secondary disabled:opacity-40"
+          >
+            <Minus className="h-4 w-4" aria-hidden />
+          </button>
+        </div>
+
+        {zoom > 1 && (
+          <p className="absolute bottom-1.5 left-1/2 -translate-x-1/2 rounded-full bg-black/55 px-2 py-0.5 text-[9px] font-semibold text-white">
+            Glissez pour déplacer · molette pour zoomer
+          </p>
+        )}
       </div>
 
-      <p className="mt-1 text-center text-[11px] text-fg-muted">
-        Astuce : une ville choisie affiche aussi les plans des communes voisines (25 km alentour).
+      <p className="mt-1.5 text-center text-[11px] text-fg-muted">
+        Zoomez pour découvrir plus de villes. Une ville choisie affiche aussi les plans des
+        communes voisines (25 km alentour).
       </p>
     </div>
   )

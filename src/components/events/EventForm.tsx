@@ -100,6 +100,9 @@ export function EventForm() {
       startDate: undefined as unknown as Date,
       endDate: null,
       locationName: '',
+      meetupAddress: '',
+      meetupVisibility: 'EVERYONE',
+      meetupRevealAt: null,
       address: '',
       city: '',
       latitude: 43.5377,
@@ -406,6 +409,38 @@ export function EventForm() {
                       📍 {Number(values.latitude).toFixed(4)}, {Number(values.longitude).toFixed(4)} — utilisez la
                       recherche pour géolocaliser précisément.
                     </p>
+                  </div>
+
+                  {/* Lieu de rendez-vous exact + visibilité */}
+                  <div className="space-y-3 rounded-xl border border-border bg-bg-secondary/50 p-4">
+                    <div>
+                      <Label htmlFor="meetupAddress">🎯 Lieu de rendez-vous exact (optionnel)</Label>
+                      <Input
+                        id="meetupAddress"
+                        placeholder="Ex : devant la fontaine, place de l’Église"
+                        {...register('meetupAddress')}
+                      />
+                      <p className="mt-1 text-xs text-fg-muted">
+                        Le point de rencontre précis, communiqué selon vos réglages ci-dessous.
+                      </p>
+                    </div>
+                    <div>
+                      <Label htmlFor="meetupVisibility">Qui peut voir le lieu de rendez-vous ?</Label>
+                      <Select id="meetupVisibility" {...register('meetupVisibility')}>
+                        <option value="EVERYONE">Tout le monde</option>
+                        <option value="MEMBERS">Les inscrits uniquement</option>
+                        <option value="SCHEDULED">Les inscrits, à partir d’une date précise</option>
+                      </Select>
+                    </div>
+                    {values.meetupVisibility === 'SCHEDULED' && (
+                      <div>
+                        <Label htmlFor="meetupRevealAt">Révéler le lieu exact le…</Label>
+                        <Input id="meetupRevealAt" type="datetime-local" {...register('meetupRevealAt')} />
+                        <p className="mt-1 text-xs text-fg-muted">
+                          Avant cette date, les inscrits voient seulement « communiqué bientôt ».
+                        </p>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
