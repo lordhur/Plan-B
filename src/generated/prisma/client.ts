@@ -52,6 +52,16 @@ export type User = Prisma.UserModel
  */
 export type ProfilePhoto = Prisma.ProfilePhotoModel
 /**
+ * Model PhotoAlbum
+ * * Albums photos personnels du profil.
+ */
+export type PhotoAlbum = Prisma.PhotoAlbumModel
+/**
+ * Model ConnectedAccount
+ * * Compte social connecté (Google / Facebook / Instagram).
+ */
+export type ConnectedAccount = Prisma.ConnectedAccountModel
+/**
  * Model VerificationCode
  * 
  */

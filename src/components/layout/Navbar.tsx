@@ -141,31 +141,31 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-lg">
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pb-1.5 pt-2 md:pb-2">
-        {/* Haut : bouton rond « + » à gauche · logo + Plan B au centre · actions à droite */}
+        {/* Haut : bouton rond « + » puis logo + Plan B à sa droite · actions à droite */}
         <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2">
-          <CreateMenu
-            trigger={
-              <Button
-                variant="accent"
-                size="icon"
-                className="rounded-full shadow-md"
-                aria-label={t('nav_create')}
-              >
-                <Plus className="h-5 w-5" aria-hidden />
-              </Button>
-            }
-          />
+          <div className="flex items-center gap-2.5">
+            <CreateMenu
+              trigger={
+                <Button
+                  variant="accent"
+                  size="icon"
+                  className="rounded-full shadow-md"
+                  aria-label={t('nav_create')}
+                >
+                  <Plus className="h-5 w-5" aria-hidden />
+                </Button>
+              }
+            />
 
-          <Link
-            href="/"
-            className="mx-auto flex items-center gap-2"
-            aria-label="PlanB — accueil"
-          >
-            <Logo withText={false} />
-            <span className="text-base font-black tracking-tight text-fg sm:text-xl">
-              Plan<span className="text-primary-600">B</span>
-            </span>
-          </Link>
+            <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
+              <Logo withText={false} />
+              <span className="text-base font-black tracking-tight text-fg sm:text-xl">
+                Plan<span className="text-primary-600">B</span>
+              </span>
+            </Link>
+          </div>
+
+          <span aria-hidden />
 
           <div className="flex items-center gap-1.5">
 

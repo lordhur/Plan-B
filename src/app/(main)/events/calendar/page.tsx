@@ -198,6 +198,7 @@ function EventRowLink({
   e: EventRow
   weather?: { icon: string; label: string } | null
 }) {
+  const { t: tl } = useLang()
   const color = e.category.color
 
   return (
@@ -249,8 +250,9 @@ function EventRowLink({
           <span className="truncate text-[13px] font-bold">{e.title}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2 text-[11px] font-semibold">
             {e.organizer && (
-              <span className="hidden max-w-24 truncate font-semibold opacity-90 md:inline">
-                {e.organizer.displayName || `${e.organizer.firstName} ${e.organizer.lastName.charAt(0)}.`}
+              <span className="flex max-w-32 items-center gap-1 truncate font-semibold opacity-90">
+                <span className="hidden sm:inline">{tl('by')}</span>
+                <span className="truncate">{e.organizer.displayName || `${e.organizer.firstName} ${e.organizer.lastName.charAt(0)}.`}</span>
               </span>
             )}
             <span className="hidden max-w-28 truncate sm:inline">{e.city}</span>
@@ -259,7 +261,7 @@ function EventRowLink({
               {e.maxParticipants != null ? `/${e.maxParticipants}` : ''}
             </span>
             <span className="hidden sm:inline">
-              {e.price != null && e.price > 0 ? `${e.price.toFixed(0)} €` : 'Gratuit'}
+              {e.price != null && e.price > 0 ? `${e.price.toFixed(0)} €` : tl('cal_free')}
             </span>
           </span>
         </span>
@@ -272,15 +274,16 @@ type SubTab = 'evenements' | 'calendrier' | 'archive'
 
 /** Sous-onglet Archive — toutes les activités passées (souvenirs photos/vidéos). */
 function ArchiveSection() {
+  const { t: tl } = useLang()
   const archive = trpc.events.archive.useQuery()
 
-  if (archive.isLoading) return <LoadingSpinner label="Chargement de l'archive" />
+  if (archive.isLoading) return <LoadingSpinner label={tl('cal_loading_arch')} />
   const events = archive.data ?? []
   if (events.length === 0) {
     return (
       <EmptyState
         icon={Archive}
-        title="Aucune activité passée"
+        title={tl('cal_none_archive')}
         description="Vos souvenirs s'accumuleront ici après vos premières sorties."
       />
     )
@@ -402,13 +405,13 @@ export default function ActivitePage() {
           <p className="text-sm text-fg-muted">Tout ce qui se passe près de chez vous.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" aria-label="Mois précédent" onClick={() => setMonth((m) => addMonths(m, -1))}>
+          <Button variant="outline" size="icon" aria-label={tl('cal_prev_month')} onClick={() => setMonth((m) => addMonths(m, -1))}>
             <ChevronLeft className="h-4 w-4" aria-hidden />
           </Button>
           <span aria-live="polite" className="min-w-40 text-center font-semibold capitalize">
             {format(month, 'MMMM yyyy', { locale: fr })}
           </span>
-          <Button variant="outline" size="icon" aria-label="Mois suivant" onClick={() => setMonth((m) => addMonths(m, 1))}>
+          <Button variant="outline" size="icon" aria-label={tl('cal_next_month')} onClick={() => setMonth((m) => addMonths(m, 1))}>
             <ChevronRight className="h-4 w-4" aria-hidden />
           </Button>
         </div>
@@ -442,11 +445,11 @@ export default function ActivitePage() {
       {/* ---------- ÉVÉNEMENTS : toutes les lignes d'affilée ---------- */}
       {sub === 'evenements' &&
         (events.isLoading ? (
-          <LoadingSpinner label="Chargement des événements" />
+          <LoadingSpinner label={tl('cal_loading')} />
         ) : daysWithEvents.length === 0 ? (
           <EmptyState
             icon={CalendarDays}
-            title="Aucun plan ce mois-ci"
+            title={tl('cal_none_month')}
             description="Changez de mois ou créez votre propre plan !"
           />
         ) : (
@@ -463,7 +466,7 @@ export default function ActivitePage() {
                       {format(date, 'EEEE d', { locale: fr })}
                       {isToday && (
                         <span className="ml-2 rounded-full bg-primary-600 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-white">
-                          Aujourd’hui
+                          {tl('cal_today')}
                         </span>
                       )}
                     </h2>
@@ -490,7 +493,7 @@ export default function ActivitePage() {
       {/* ---------- CALENDRIER : grille mensuelle ---------- */}
       {sub === 'calendrier' &&
         (events.isLoading ? (
-          <LoadingSpinner label="Chargement du calendrier" />
+          <LoadingSpinner label={tl('cal_loading_cal')} />
         ) : (
           <>
             <div className="overflow-hidden rounded-2xl border border-border bg-card">
@@ -550,7 +553,7 @@ export default function ActivitePage() {
               {selectedEvents.length === 0 ? (
                 <EmptyState
                   icon={CalendarDays}
-                  title="Aucun plan ce jour-là"
+                  title={tl('cal_none_day')}
                   description="Changez de date ou créez votre propre plan !"
                 />
               ) : (

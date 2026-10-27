@@ -12,6 +12,7 @@ import { leaderboardRouter } from './leaderboard'
 import { messagesRouter } from './messages'
 import { notificationsRouter } from './notifications'
 import { offersRouter } from './offers'
+import { oauthRouter } from './oauth'
 import { pagesRouter } from './pages'
 import { storiesRouter } from './stories'
 import { ratingsRouter } from './ratings'
@@ -24,6 +25,7 @@ import { createTRPCRouter } from '../trpc'
  */
 export const appRouter = createTRPCRouter({
   auth: authRouter,
+  oauth: oauthRouter,
   events: eventsRouter,
   users: usersRouter,
   notifications: notificationsRouter,

@@ -53,6 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   User: 'User',
   ProfilePhoto: 'ProfilePhoto',
+  PhotoAlbum: 'PhotoAlbum',
+  ConnectedAccount: 'ConnectedAccount',
   VerificationCode: 'VerificationCode',
   Interest: 'Interest',
   Badge: 'Badge',
@@ -164,10 +166,40 @@ export const ProfilePhotoScalarFieldEnum = {
   url: 'url',
   isPrimary: 'isPrimary',
   order: 'order',
+  source: 'source',
+  albumId: 'albumId',
   createdAt: 'createdAt'
 } as const
 
 export type ProfilePhotoScalarFieldEnum = (typeof ProfilePhotoScalarFieldEnum)[keyof typeof ProfilePhotoScalarFieldEnum]
+
+
+export const PhotoAlbumScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  coverUrl: 'coverUrl',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt'
+} as const
+
+export type PhotoAlbumScalarFieldEnum = (typeof PhotoAlbumScalarFieldEnum)[keyof typeof PhotoAlbumScalarFieldEnum]
+
+
+export const ConnectedAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  email: 'email',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  photosSyncedAt: 'photosSyncedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ConnectedAccountScalarFieldEnum = (typeof ConnectedAccountScalarFieldEnum)[keyof typeof ConnectedAccountScalarFieldEnum]
 
 
 export const VerificationCodeScalarFieldEnum = {

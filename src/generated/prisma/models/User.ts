@@ -501,6 +501,8 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profilePhotos?: Prisma.ProfilePhotoListRelationFilter
+  photoAlbums?: Prisma.PhotoAlbumListRelationFilter
+  connectedAccounts?: Prisma.ConnectedAccountListRelationFilter
   stories?: Prisma.StoryListRelationFilter
   blocksGiven?: Prisma.UserBlockListRelationFilter
   blocksReceived?: Prisma.UserBlockListRelationFilter
@@ -582,6 +584,8 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   profilePhotos?: Prisma.ProfilePhotoOrderByRelationAggregateInput
+  photoAlbums?: Prisma.PhotoAlbumOrderByRelationAggregateInput
+  connectedAccounts?: Prisma.ConnectedAccountOrderByRelationAggregateInput
   stories?: Prisma.StoryOrderByRelationAggregateInput
   blocksGiven?: Prisma.UserBlockOrderByRelationAggregateInput
   blocksReceived?: Prisma.UserBlockOrderByRelationAggregateInput
@@ -666,6 +670,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profilePhotos?: Prisma.ProfilePhotoListRelationFilter
+  photoAlbums?: Prisma.PhotoAlbumListRelationFilter
+  connectedAccounts?: Prisma.ConnectedAccountListRelationFilter
   stories?: Prisma.StoryListRelationFilter
   blocksGiven?: Prisma.UserBlockListRelationFilter
   blocksReceived?: Prisma.UserBlockListRelationFilter
@@ -835,6 +841,8 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -916,6 +924,8 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -997,6 +1007,8 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -1078,6 +1090,8 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -1470,6 +1484,34 @@ export type UserUpdateOneRequiredWithoutProfilePhotosNestedInput = {
   upsert?: Prisma.UserUpsertWithoutProfilePhotosInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutProfilePhotosInput, Prisma.UserUpdateWithoutProfilePhotosInput>, Prisma.UserUncheckedUpdateWithoutProfilePhotosInput>
+}
+
+export type UserCreateNestedOneWithoutPhotoAlbumsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhotoAlbumsInput, Prisma.UserUncheckedCreateWithoutPhotoAlbumsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhotoAlbumsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPhotoAlbumsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPhotoAlbumsInput, Prisma.UserUncheckedCreateWithoutPhotoAlbumsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPhotoAlbumsInput
+  upsert?: Prisma.UserUpsertWithoutPhotoAlbumsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPhotoAlbumsInput, Prisma.UserUpdateWithoutPhotoAlbumsInput>, Prisma.UserUncheckedUpdateWithoutPhotoAlbumsInput>
+}
+
+export type UserCreateNestedOneWithoutConnectedAccountsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConnectedAccountsInput, Prisma.UserUncheckedCreateWithoutConnectedAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConnectedAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutConnectedAccountsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutConnectedAccountsInput, Prisma.UserUncheckedCreateWithoutConnectedAccountsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutConnectedAccountsInput
+  upsert?: Prisma.UserUpsertWithoutConnectedAccountsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutConnectedAccountsInput, Prisma.UserUpdateWithoutConnectedAccountsInput>, Prisma.UserUncheckedUpdateWithoutConnectedAccountsInput>
 }
 
 export type UserCreateNestedOneWithoutVerificationCodesInput = {
@@ -2122,6 +2164,8 @@ export type UserCreateWithoutProfilePhotosInput = {
   lastActiveAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -2202,6 +2246,8 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   lastActiveAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -2298,6 +2344,8 @@ export type UserUpdateWithoutProfilePhotosInput = {
   lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -2378,6 +2426,696 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUncheckedUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUncheckedUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUncheckedUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUncheckedUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUncheckedUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUncheckedUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPhotoAlbumsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPhotoAlbumsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaUncheckedCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageUncheckedCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowUncheckedCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostUncheckedCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyUncheckedCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingUncheckedCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPhotoAlbumsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhotoAlbumsInput, Prisma.UserUncheckedCreateWithoutPhotoAlbumsInput>
+}
+
+export type UserUpsertWithoutPhotoAlbumsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPhotoAlbumsInput, Prisma.UserUncheckedUpdateWithoutPhotoAlbumsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPhotoAlbumsInput, Prisma.UserUncheckedCreateWithoutPhotoAlbumsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPhotoAlbumsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPhotoAlbumsInput, Prisma.UserUncheckedUpdateWithoutPhotoAlbumsInput>
+}
+
+export type UserUpdateWithoutPhotoAlbumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPhotoAlbumsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUncheckedUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUncheckedUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUncheckedUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUncheckedUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUncheckedUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUncheckedUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutConnectedAccountsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutConnectedAccountsInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaUncheckedCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageUncheckedCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowUncheckedCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostUncheckedCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyUncheckedCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingUncheckedCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutConnectedAccountsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutConnectedAccountsInput, Prisma.UserUncheckedCreateWithoutConnectedAccountsInput>
+}
+
+export type UserUpsertWithoutConnectedAccountsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutConnectedAccountsInput, Prisma.UserUncheckedUpdateWithoutConnectedAccountsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutConnectedAccountsInput, Prisma.UserUncheckedCreateWithoutConnectedAccountsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutConnectedAccountsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutConnectedAccountsInput, Prisma.UserUncheckedUpdateWithoutConnectedAccountsInput>
+}
+
+export type UserUpdateWithoutConnectedAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutConnectedAccountsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -2459,6 +3197,8 @@ export type UserCreateWithoutVerificationCodesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -2539,6 +3279,8 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -2635,6 +3377,8 @@ export type UserUpdateWithoutVerificationCodesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -2715,6 +3459,8 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -2795,6 +3541,8 @@ export type UserCreateWithoutInterestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -2875,6 +3623,8 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -3019,6 +3769,8 @@ export type UserCreateWithoutBadgesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -3099,6 +3851,8 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -3195,6 +3949,8 @@ export type UserUpdateWithoutBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -3275,6 +4031,8 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -3355,6 +4113,8 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -3435,6 +4195,8 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -3520,6 +4282,8 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -3600,6 +4364,8 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -3696,6 +4462,8 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -3776,6 +4544,8 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -3867,6 +4637,8 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -3947,6 +4719,8 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -4027,6 +4801,8 @@ export type UserCreateWithoutFriendshipsAInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -4107,6 +4883,8 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -4192,6 +4970,8 @@ export type UserCreateWithoutFriendshipsBInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -4272,6 +5052,8 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -4368,6 +5150,8 @@ export type UserUpdateWithoutFriendshipsAInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -4448,6 +5232,8 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -4539,6 +5325,8 @@ export type UserUpdateWithoutFriendshipsBInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -4619,6 +5407,8 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -4699,6 +5489,8 @@ export type UserCreateWithoutEventLikesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -4779,6 +5571,8 @@ export type UserUncheckedCreateWithoutEventLikesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -4875,6 +5669,8 @@ export type UserUpdateWithoutEventLikesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -4955,6 +5751,8 @@ export type UserUncheckedUpdateWithoutEventLikesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -5035,6 +5833,8 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -5115,6 +5915,8 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -5216,6 +6018,8 @@ export type UserCreateWithoutOrganizedEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -5296,6 +6100,8 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -5392,6 +6198,8 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -5472,6 +6280,8 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -5552,6 +6362,8 @@ export type UserCreateWithoutEventParticipationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -5632,6 +6444,8 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -5728,6 +6542,8 @@ export type UserUpdateWithoutEventParticipationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -5808,6 +6624,8 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -5888,6 +6706,8 @@ export type UserCreateWithoutStoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -5968,6 +6788,8 @@ export type UserUncheckedCreateWithoutStoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -6064,6 +6886,8 @@ export type UserUpdateWithoutStoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -6144,6 +6968,8 @@ export type UserUncheckedUpdateWithoutStoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -6224,6 +7050,8 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -6304,6 +7132,8 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -6400,6 +7230,8 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -6480,6 +7312,8 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -6560,6 +7394,8 @@ export type UserCreateWithoutEventInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -6640,6 +7476,8 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -6736,6 +7574,8 @@ export type UserUpdateWithoutEventInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -6816,6 +7656,8 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -6896,6 +7738,8 @@ export type UserCreateWithoutEventChatMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -6976,6 +7820,8 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -7072,6 +7918,8 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -7152,6 +8000,8 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -7232,6 +8082,8 @@ export type UserCreateWithoutConversationMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -7312,6 +8164,8 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -7408,6 +8262,8 @@ export type UserUpdateWithoutConversationMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -7488,6 +8344,8 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -7568,6 +8426,8 @@ export type UserCreateWithoutMessageHidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -7648,6 +8508,8 @@ export type UserUncheckedCreateWithoutMessageHidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -7744,6 +8606,8 @@ export type UserUpdateWithoutMessageHidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -7824,6 +8688,8 @@ export type UserUncheckedUpdateWithoutMessageHidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -7904,6 +8770,8 @@ export type UserCreateWithoutBlocksGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -7984,6 +8852,8 @@ export type UserUncheckedCreateWithoutBlocksGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -8069,6 +8939,8 @@ export type UserCreateWithoutBlocksReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -8149,6 +9021,8 @@ export type UserUncheckedCreateWithoutBlocksReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -8245,6 +9119,8 @@ export type UserUpdateWithoutBlocksGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -8325,6 +9201,8 @@ export type UserUncheckedUpdateWithoutBlocksGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -8416,6 +9294,8 @@ export type UserUpdateWithoutBlocksReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -8496,6 +9376,8 @@ export type UserUncheckedUpdateWithoutBlocksReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -8576,6 +9458,8 @@ export type UserCreateWithoutSentMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -8656,6 +9540,8 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -8741,6 +9627,8 @@ export type UserCreateWithoutReceivedMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -8821,6 +9709,8 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -8917,6 +9807,8 @@ export type UserUpdateWithoutSentMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -8997,6 +9889,8 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -9088,6 +9982,8 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -9168,6 +10064,8 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -9248,6 +10146,8 @@ export type UserCreateWithoutUploadedMediaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -9328,6 +10228,8 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -9424,6 +10326,8 @@ export type UserUpdateWithoutUploadedMediaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -9504,6 +10408,8 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -9584,6 +10490,8 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -9664,6 +10572,8 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -9760,6 +10670,8 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -9840,6 +10752,8 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -9920,6 +10834,8 @@ export type UserCreateWithoutRatingsGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -10000,6 +10916,8 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -10085,6 +11003,8 @@ export type UserCreateWithoutRatingsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -10165,6 +11085,8 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -10261,6 +11183,8 @@ export type UserUpdateWithoutRatingsGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -10341,6 +11265,8 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -10432,6 +11358,8 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -10512,6 +11440,8 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -10592,6 +11522,8 @@ export type UserCreateWithoutReportsMadeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -10672,6 +11604,8 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -10757,6 +11691,8 @@ export type UserCreateWithoutReportsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -10837,6 +11773,8 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -10933,6 +11871,8 @@ export type UserUpdateWithoutReportsMadeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -11013,6 +11953,8 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -11104,6 +12046,8 @@ export type UserUpdateWithoutReportsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -11184,6 +12128,8 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -11264,6 +12210,8 @@ export type UserCreateWithoutOfferedRidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -11344,6 +12292,8 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -11440,6 +12390,8 @@ export type UserUpdateWithoutOfferedRidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -11520,6 +12472,8 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -11600,6 +12554,8 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -11680,6 +12636,8 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -11776,6 +12734,8 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -11856,6 +12816,8 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -11936,6 +12898,8 @@ export type UserCreateWithoutOwnedPagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -12016,6 +12980,8 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -12112,6 +13078,8 @@ export type UserUpdateWithoutOwnedPagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -12192,6 +13160,8 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -12272,6 +13242,8 @@ export type UserCreateWithoutPageFollowsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -12352,6 +13324,8 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -12448,6 +13422,8 @@ export type UserUpdateWithoutPageFollowsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -12528,6 +13504,8 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -12608,6 +13586,8 @@ export type UserCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -12688,6 +13668,8 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -12784,6 +13766,8 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -12864,6 +13848,8 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -12944,6 +13930,8 @@ export type UserCreateWithoutForumPostsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -13024,6 +14012,8 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -13120,6 +14110,8 @@ export type UserUpdateWithoutForumPostsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -13200,6 +14192,8 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -13280,6 +14274,8 @@ export type UserCreateWithoutForumRepliesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -13360,6 +14356,8 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -13456,6 +14454,8 @@ export type UserUpdateWithoutForumRepliesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -13536,6 +14536,8 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -13616,6 +14618,8 @@ export type UserCreateWithoutRedeemedOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -13696,6 +14700,8 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -13792,6 +14798,8 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -13872,6 +14880,8 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -13952,6 +14962,8 @@ export type UserCreateWithoutSubscriptionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -14032,6 +15044,8 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -14128,6 +15142,8 @@ export type UserUpdateWithoutSubscriptionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -14208,6 +15224,8 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -14288,6 +15306,8 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -14368,6 +15388,8 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -14464,6 +15486,8 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -14544,6 +15568,8 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -14624,6 +15650,8 @@ export type UserCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -14704,6 +15732,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -14800,6 +15830,8 @@ export type UserUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -14880,6 +15912,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -14960,6 +15994,8 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -15040,6 +16076,8 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -15136,6 +16174,8 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -15216,6 +16256,8 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -15296,6 +16338,8 @@ export type UserCreateWithoutIntroCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
@@ -15376,6 +16420,8 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
@@ -15472,6 +16518,8 @@ export type UserUpdateWithoutIntroCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -15552,6 +16600,8 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -15632,6 +16682,8 @@ export type UserUpdateWithoutInterestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -15712,6 +16764,8 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -15832,6 +16886,8 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
@@ -15912,6 +16968,8 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
@@ -16000,6 +17058,8 @@ export type UserUncheckedUpdateManyWithoutFavoriteCategoriesInput = {
 
 export type UserCountOutputType = {
   profilePhotos: number
+  photoAlbums: number
+  connectedAccounts: number
   stories: number
   blocksGiven: number
   blocksReceived: number
@@ -16042,6 +17102,8 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | UserCountOutputTypeCountProfilePhotosArgs
+  photoAlbums?: boolean | UserCountOutputTypeCountPhotoAlbumsArgs
+  connectedAccounts?: boolean | UserCountOutputTypeCountConnectedAccountsArgs
   stories?: boolean | UserCountOutputTypeCountStoriesArgs
   blocksGiven?: boolean | UserCountOutputTypeCountBlocksGivenArgs
   blocksReceived?: boolean | UserCountOutputTypeCountBlocksReceivedArgs
@@ -16097,6 +17159,20 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type UserCountOutputTypeCountProfilePhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProfilePhotoWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPhotoAlbumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PhotoAlbumWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountConnectedAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ConnectedAccountWhereInput
 }
 
 /**
@@ -16405,6 +17481,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
+  photoAlbums?: boolean | Prisma.User$photoAlbumsArgs<ExtArgs>
+  connectedAccounts?: boolean | Prisma.User$connectedAccountsArgs<ExtArgs>
   stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
   blocksGiven?: boolean | Prisma.User$blocksGivenArgs<ExtArgs>
   blocksReceived?: boolean | Prisma.User$blocksReceivedArgs<ExtArgs>
@@ -16571,6 +17649,8 @@ export type UserSelectScalar = {
 export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "videoUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
+  photoAlbums?: boolean | Prisma.User$photoAlbumsArgs<ExtArgs>
+  connectedAccounts?: boolean | Prisma.User$connectedAccountsArgs<ExtArgs>
   stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
   blocksGiven?: boolean | Prisma.User$blocksGivenArgs<ExtArgs>
   blocksReceived?: boolean | Prisma.User$blocksReceivedArgs<ExtArgs>
@@ -16620,6 +17700,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     profilePhotos: Prisma.$ProfilePhotoPayload<ExtArgs>[]
+    photoAlbums: Prisma.$PhotoAlbumPayload<ExtArgs>[]
+    connectedAccounts: Prisma.$ConnectedAccountPayload<ExtArgs>[]
     stories: Prisma.$StoryPayload<ExtArgs>[]
     blocksGiven: Prisma.$UserBlockPayload<ExtArgs>[]
     blocksReceived: Prisma.$UserBlockPayload<ExtArgs>[]
@@ -17094,6 +18176,8 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   profilePhotos<T extends Prisma.User$profilePhotosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilePhotosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  photoAlbums<T extends Prisma.User$photoAlbumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$photoAlbumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PhotoAlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  connectedAccounts<T extends Prisma.User$connectedAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$connectedAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConnectedAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stories<T extends Prisma.User$storiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$storiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocksGiven<T extends Prisma.User$blocksGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blocksGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocksReceived<T extends Prisma.User$blocksReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blocksReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -17614,6 +18698,54 @@ export type User$profilePhotosArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.ProfilePhotoScalarFieldEnum | Prisma.ProfilePhotoScalarFieldEnum[]
+}
+
+/**
+ * User.photoAlbums
+ */
+export type User$photoAlbumsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PhotoAlbum
+   */
+  select?: Prisma.PhotoAlbumSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PhotoAlbum
+   */
+  omit?: Prisma.PhotoAlbumOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PhotoAlbumInclude<ExtArgs> | null
+  where?: Prisma.PhotoAlbumWhereInput
+  orderBy?: Prisma.PhotoAlbumOrderByWithRelationInput | Prisma.PhotoAlbumOrderByWithRelationInput[]
+  cursor?: Prisma.PhotoAlbumWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PhotoAlbumScalarFieldEnum | Prisma.PhotoAlbumScalarFieldEnum[]
+}
+
+/**
+ * User.connectedAccounts
+ */
+export type User$connectedAccountsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ConnectedAccount
+   */
+  select?: Prisma.ConnectedAccountSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ConnectedAccount
+   */
+  omit?: Prisma.ConnectedAccountOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ConnectedAccountInclude<ExtArgs> | null
+  where?: Prisma.ConnectedAccountWhereInput
+  orderBy?: Prisma.ConnectedAccountOrderByWithRelationInput | Prisma.ConnectedAccountOrderByWithRelationInput[]
+  cursor?: Prisma.ConnectedAccountWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ConnectedAccountScalarFieldEnum | Prisma.ConnectedAccountScalarFieldEnum[]
 }
 
 /**

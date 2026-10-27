@@ -14,12 +14,15 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SocialAuthButtons } from '@/components/auth/SocialAuthButtons'
+import { useLang } from '@/lib/i18n'
 import { Select } from '@/components/ui/select'
 
 const MIN_BIRTHDATE = new Date()
 MIN_BIRTHDATE.setFullYear(MIN_BIRTHDATE.getFullYear() - 18)
 
 function RegisterForm() {
+  const { t: tl } = useLang()
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
@@ -49,7 +52,7 @@ function RegisterForm() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary-600" aria-hidden /> Créer mon compte
+          <Sparkles className="h-5 w-5 text-primary-600" aria-hidden /> {tl('auth_create')}
         </CardTitle>
         <CardDescription>
           2 minutes chrono. Ensuite, à vous les plans près de chez vous.
@@ -63,25 +66,25 @@ function RegisterForm() {
         >
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="firstName">Prénom *</Label>
+              <Label htmlFor="firstName">{tl('auth_firstname')} *</Label>
               <Input id="firstName" autoComplete="given-name" aria-invalid={!!errors.firstName} {...register('firstName')} />
               {errors.firstName && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.firstName.message}</p>}
             </div>
             <div>
-              <Label htmlFor="lastName">Nom *</Label>
+              <Label htmlFor="lastName">{tl('auth_lastname')} *</Label>
               <Input id="lastName" autoComplete="family-name" aria-invalid={!!errors.lastName} {...register('lastName')} />
               {errors.lastName && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.lastName.message}</p>}
             </div>
           </div>
 
           <div>
-            <Label htmlFor="email">Email *</Label>
+            <Label htmlFor="email">{tl('auth_email')} *</Label>
             <Input id="email" type="email" autoComplete="email" placeholder="vous@exemple.fr" aria-invalid={!!errors.email} {...register('email')} />
             {errors.email && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.email.message}</p>}
           </div>
 
           <div>
-            <Label htmlFor="password">Mot de passe *</Label>
+            <Label htmlFor="password">{tl('auth_password')} *</Label>
             <Input id="password" type="password" autoComplete="new-password" aria-describedby="password-hint" aria-invalid={!!errors.password} {...register('password')} />
             <p id="password-hint" className="mt-1 text-xs text-fg-muted">
               8 caractères min., avec au moins une lettre et un chiffre.
@@ -91,7 +94,7 @@ function RegisterForm() {
 
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label htmlFor="dateOfBirth">Date de naissance *</Label>
+              <Label htmlFor="dateOfBirth">{tl('auth_birth')} *</Label>
               <Input
                 id="dateOfBirth"
                 type="date"
@@ -102,7 +105,7 @@ function RegisterForm() {
               {errors.dateOfBirth && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.dateOfBirth.message}</p>}
             </div>
             <div>
-              <Label htmlFor="gender">Genre</Label>
+              <Label htmlFor="gender">{tl('auth_gender')}</Label>
               <Select id="gender" {...register('gender')}>
                 {Object.entries(GENDER_LABELS).map(([value, label]) => (
                   <option key={value} value={value}>
@@ -134,6 +137,8 @@ function RegisterForm() {
             </Link>
           </p>
         </form>
+
+        <SocialAuthButtons label="register" />
       </CardContent>
     </Card>
   )
