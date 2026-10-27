@@ -31,7 +31,10 @@ export type ConversationMemberMinAggregateOutputType = {
   role: string | null
   joinedAt: Date | null
   lastReadAt: Date | null
+  deliveredAt: Date | null
   isMuted: boolean | null
+  mutedUntil: Date | null
+  hiddenAt: Date | null
 }
 
 export type ConversationMemberMaxAggregateOutputType = {
@@ -41,7 +44,10 @@ export type ConversationMemberMaxAggregateOutputType = {
   role: string | null
   joinedAt: Date | null
   lastReadAt: Date | null
+  deliveredAt: Date | null
   isMuted: boolean | null
+  mutedUntil: Date | null
+  hiddenAt: Date | null
 }
 
 export type ConversationMemberCountAggregateOutputType = {
@@ -51,7 +57,10 @@ export type ConversationMemberCountAggregateOutputType = {
   role: number
   joinedAt: number
   lastReadAt: number
+  deliveredAt: number
   isMuted: number
+  mutedUntil: number
+  hiddenAt: number
   _all: number
 }
 
@@ -63,7 +72,10 @@ export type ConversationMemberMinAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
+  deliveredAt?: true
   isMuted?: true
+  mutedUntil?: true
+  hiddenAt?: true
 }
 
 export type ConversationMemberMaxAggregateInputType = {
@@ -73,7 +85,10 @@ export type ConversationMemberMaxAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
+  deliveredAt?: true
   isMuted?: true
+  mutedUntil?: true
+  hiddenAt?: true
 }
 
 export type ConversationMemberCountAggregateInputType = {
@@ -83,7 +98,10 @@ export type ConversationMemberCountAggregateInputType = {
   role?: true
   joinedAt?: true
   lastReadAt?: true
+  deliveredAt?: true
   isMuted?: true
+  mutedUntil?: true
+  hiddenAt?: true
   _all?: true
 }
 
@@ -166,7 +184,10 @@ export type ConversationMemberGroupByOutputType = {
   role: string
   joinedAt: Date
   lastReadAt: Date
+  deliveredAt: Date | null
   isMuted: boolean
+  mutedUntil: Date | null
+  hiddenAt: Date | null
   _count: ConversationMemberCountAggregateOutputType | null
   _min: ConversationMemberMinAggregateOutputType | null
   _max: ConversationMemberMaxAggregateOutputType | null
@@ -197,7 +218,10 @@ export type ConversationMemberWhereInput = {
   role?: Prisma.StringFilter<"ConversationMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
+  deliveredAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
   isMuted?: Prisma.BoolFilter<"ConversationMember"> | boolean
+  mutedUntil?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
+  hiddenAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
@@ -209,7 +233,10 @@ export type ConversationMemberOrderByWithRelationInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isMuted?: Prisma.SortOrder
+  mutedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  hiddenAt?: Prisma.SortOrderInput | Prisma.SortOrder
   conversation?: Prisma.ConversationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
 }
@@ -225,7 +252,10 @@ export type ConversationMemberWhereUniqueInput = Prisma.AtLeast<{
   role?: Prisma.StringFilter<"ConversationMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
+  deliveredAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
   isMuted?: Prisma.BoolFilter<"ConversationMember"> | boolean
+  mutedUntil?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
+  hiddenAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
   conversation?: Prisma.XOR<Prisma.ConversationScalarRelationFilter, Prisma.ConversationWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "conversationId_userId">
@@ -237,7 +267,10 @@ export type ConversationMemberOrderByWithAggregationInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrderInput | Prisma.SortOrder
   isMuted?: Prisma.SortOrder
+  mutedUntil?: Prisma.SortOrderInput | Prisma.SortOrder
+  hiddenAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ConversationMemberCountOrderByAggregateInput
   _max?: Prisma.ConversationMemberMaxOrderByAggregateInput
   _min?: Prisma.ConversationMemberMinOrderByAggregateInput
@@ -253,7 +286,10 @@ export type ConversationMemberScalarWhereWithAggregatesInput = {
   role?: Prisma.StringWithAggregatesFilter<"ConversationMember"> | string
   joinedAt?: Prisma.DateTimeWithAggregatesFilter<"ConversationMember"> | Date | string
   lastReadAt?: Prisma.DateTimeWithAggregatesFilter<"ConversationMember"> | Date | string
+  deliveredAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ConversationMember"> | Date | string | null
   isMuted?: Prisma.BoolWithAggregatesFilter<"ConversationMember"> | boolean
+  mutedUntil?: Prisma.DateTimeNullableWithAggregatesFilter<"ConversationMember"> | Date | string | null
+  hiddenAt?: Prisma.DateTimeNullableWithAggregatesFilter<"ConversationMember"> | Date | string | null
 }
 
 export type ConversationMemberCreateInput = {
@@ -261,7 +297,10 @@ export type ConversationMemberCreateInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
   conversation: Prisma.ConversationCreateNestedOneWithoutMembersInput
   user: Prisma.UserCreateNestedOneWithoutConversationMembersInput
 }
@@ -273,7 +312,10 @@ export type ConversationMemberUncheckedCreateInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberUpdateInput = {
@@ -281,7 +323,10 @@ export type ConversationMemberUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutMembersNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutConversationMembersNestedInput
 }
@@ -293,7 +338,10 @@ export type ConversationMemberUncheckedUpdateInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberCreateManyInput = {
@@ -303,7 +351,10 @@ export type ConversationMemberCreateManyInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberUpdateManyMutationInput = {
@@ -311,7 +362,10 @@ export type ConversationMemberUpdateManyMutationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberUncheckedUpdateManyInput = {
@@ -321,7 +375,10 @@ export type ConversationMemberUncheckedUpdateManyInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberListRelationFilter = {
@@ -346,7 +403,10 @@ export type ConversationMemberCountOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   isMuted?: Prisma.SortOrder
+  mutedUntil?: Prisma.SortOrder
+  hiddenAt?: Prisma.SortOrder
 }
 
 export type ConversationMemberMaxOrderByAggregateInput = {
@@ -356,7 +416,10 @@ export type ConversationMemberMaxOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   isMuted?: Prisma.SortOrder
+  mutedUntil?: Prisma.SortOrder
+  hiddenAt?: Prisma.SortOrder
 }
 
 export type ConversationMemberMinOrderByAggregateInput = {
@@ -366,7 +429,10 @@ export type ConversationMemberMinOrderByAggregateInput = {
   role?: Prisma.SortOrder
   joinedAt?: Prisma.SortOrder
   lastReadAt?: Prisma.SortOrder
+  deliveredAt?: Prisma.SortOrder
   isMuted?: Prisma.SortOrder
+  mutedUntil?: Prisma.SortOrder
+  hiddenAt?: Prisma.SortOrder
 }
 
 export type ConversationMemberCreateNestedManyWithoutUserInput = {
@@ -458,7 +524,10 @@ export type ConversationMemberCreateWithoutUserInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
   conversation: Prisma.ConversationCreateNestedOneWithoutMembersInput
 }
 
@@ -468,7 +537,10 @@ export type ConversationMemberUncheckedCreateWithoutUserInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberCreateOrConnectWithoutUserInput = {
@@ -507,7 +579,10 @@ export type ConversationMemberScalarWhereInput = {
   role?: Prisma.StringFilter<"ConversationMember"> | string
   joinedAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
   lastReadAt?: Prisma.DateTimeFilter<"ConversationMember"> | Date | string
+  deliveredAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
   isMuted?: Prisma.BoolFilter<"ConversationMember"> | boolean
+  mutedUntil?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
+  hiddenAt?: Prisma.DateTimeNullableFilter<"ConversationMember"> | Date | string | null
 }
 
 export type ConversationMemberCreateWithoutConversationInput = {
@@ -515,7 +590,10 @@ export type ConversationMemberCreateWithoutConversationInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutConversationMembersInput
 }
 
@@ -525,7 +603,10 @@ export type ConversationMemberUncheckedCreateWithoutConversationInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberCreateOrConnectWithoutConversationInput = {
@@ -560,7 +641,10 @@ export type ConversationMemberCreateManyUserInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberUpdateWithoutUserInput = {
@@ -568,7 +652,10 @@ export type ConversationMemberUpdateWithoutUserInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   conversation?: Prisma.ConversationUpdateOneRequiredWithoutMembersNestedInput
 }
 
@@ -578,7 +665,10 @@ export type ConversationMemberUncheckedUpdateWithoutUserInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberUncheckedUpdateManyWithoutUserInput = {
@@ -587,7 +677,10 @@ export type ConversationMemberUncheckedUpdateManyWithoutUserInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberCreateManyConversationInput = {
@@ -596,7 +689,10 @@ export type ConversationMemberCreateManyConversationInput = {
   role?: string
   joinedAt?: Date | string
   lastReadAt?: Date | string
+  deliveredAt?: Date | string | null
   isMuted?: boolean
+  mutedUntil?: Date | string | null
+  hiddenAt?: Date | string | null
 }
 
 export type ConversationMemberUpdateWithoutConversationInput = {
@@ -604,7 +700,10 @@ export type ConversationMemberUpdateWithoutConversationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutConversationMembersNestedInput
 }
 
@@ -614,7 +713,10 @@ export type ConversationMemberUncheckedUpdateWithoutConversationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type ConversationMemberUncheckedUpdateManyWithoutConversationInput = {
@@ -623,7 +725,10 @@ export type ConversationMemberUncheckedUpdateManyWithoutConversationInput = {
   role?: Prisma.StringFieldUpdateOperationsInput | string
   joinedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   lastReadAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deliveredAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   isMuted?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  mutedUntil?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  hiddenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -635,7 +740,10 @@ export type ConversationMemberSelect<ExtArgs extends runtime.Types.Extensions.In
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
+  deliveredAt?: boolean
   isMuted?: boolean
+  mutedUntil?: boolean
+  hiddenAt?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationMember"]>
@@ -647,7 +755,10 @@ export type ConversationMemberSelectCreateManyAndReturn<ExtArgs extends runtime.
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
+  deliveredAt?: boolean
   isMuted?: boolean
+  mutedUntil?: boolean
+  hiddenAt?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationMember"]>
@@ -659,7 +770,10 @@ export type ConversationMemberSelectUpdateManyAndReturn<ExtArgs extends runtime.
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
+  deliveredAt?: boolean
   isMuted?: boolean
+  mutedUntil?: boolean
+  hiddenAt?: boolean
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["conversationMember"]>
@@ -671,10 +785,13 @@ export type ConversationMemberSelectScalar = {
   role?: boolean
   joinedAt?: boolean
   lastReadAt?: boolean
+  deliveredAt?: boolean
   isMuted?: boolean
+  mutedUntil?: boolean
+  hiddenAt?: boolean
 }
 
-export type ConversationMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "isMuted", ExtArgs["result"]["conversationMember"]>
+export type ConversationMemberOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "conversationId" | "userId" | "role" | "joinedAt" | "lastReadAt" | "deliveredAt" | "isMuted" | "mutedUntil" | "hiddenAt", ExtArgs["result"]["conversationMember"]>
 export type ConversationMemberInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   conversation?: boolean | Prisma.ConversationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -701,7 +818,10 @@ export type $ConversationMemberPayload<ExtArgs extends runtime.Types.Extensions.
     role: string
     joinedAt: Date
     lastReadAt: Date
+    deliveredAt: Date | null
     isMuted: boolean
+    mutedUntil: Date | null
+    hiddenAt: Date | null
   }, ExtArgs["result"]["conversationMember"]>
   composites: {}
 }
@@ -1133,7 +1253,10 @@ export interface ConversationMemberFieldRefs {
   readonly role: Prisma.FieldRef<"ConversationMember", 'String'>
   readonly joinedAt: Prisma.FieldRef<"ConversationMember", 'DateTime'>
   readonly lastReadAt: Prisma.FieldRef<"ConversationMember", 'DateTime'>
+  readonly deliveredAt: Prisma.FieldRef<"ConversationMember", 'DateTime'>
   readonly isMuted: Prisma.FieldRef<"ConversationMember", 'Boolean'>
+  readonly mutedUntil: Prisma.FieldRef<"ConversationMember", 'DateTime'>
+  readonly hiddenAt: Prisma.FieldRef<"ConversationMember", 'DateTime'>
 }
     
 

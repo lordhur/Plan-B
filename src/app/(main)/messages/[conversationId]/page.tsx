@@ -25,9 +25,12 @@ export default function ConversationPage({ params }: { params: Promise<{ convers
     return members.find((m) => m.id !== user?.id) ?? null
   }, [meta.data, user?.id])
 
+  const avatarUrl = meta.data?.avatarUrl ?? other?.avatarUrl ?? null
+  const title = meta.data?.name ?? (other ? `${other.firstName} ${other.lastName}` : 'Conversation')
+
   if (loadingMe) return <LoadingSpinner label="Chargement" />
 
-  const name = other ? `${other.firstName} ${other.lastName}` : 'Conversation'
+  const name = title
 
   return (
     <div className="mx-auto flex h-[calc(100dvh-8.5rem)] max-w-2xl flex-col px-4 md:h-[calc(100dvh-6rem)] md:px-0">
@@ -37,12 +40,16 @@ export default function ConversationPage({ params }: { params: Promise<{ convers
             <ArrowLeft className="h-5 w-5" aria-hidden />
           </Link>
         </Button>
-        {other && (
-          <Link href={`/profile/${other.id}`} className="flex items-center gap-3">
-            <Avatar src={other.avatarUrl} name={name} size="sm" />
+        <div className="flex items-center gap-3">
+          <Avatar src={avatarUrl} name={name} className="h-9 w-9" />
+          {other ? (
+            <Link href={`/u/${other.id}`} className="font-semibold hover:underline">
+              {name}
+            </Link>
+          ) : (
             <span className="font-semibold">{name}</span>
-          </Link>
-        )}
+          )}
+        </div>
       </header>
       <ChatThread kind="dm" id={conversationId} />
     </div>

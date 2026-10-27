@@ -5,8 +5,8 @@
  * La clé utilisée est la clé « anon » publique — conçue pour être exposée ;
  * les politiques RLS n'autorisent que l'insertion dans le bucket « media ».
  */
-const SUPABASE_URL = 'https://kwnqvyjrynlgokdcqmwi.supabase.co'
-const SUPABASE_ANON_KEY =
+export const SUPABASE_URL = 'https://kwnqvyjrynlgokdcqmwi.supabase.co'
+export const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt3bnF2eWpyeW5sZ29rZGNxbXdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTI5NTk1MDYsImV4cCI6MjEwODUzNTUwNn0.ZcKGzooP3rBgw0PoCc3cu1uFNpVZOBk7BPf-DHkB3S0'
 
 /** Limite côté bucket : 50 Mo. */

@@ -416,6 +416,8 @@ export const ModelName = {
   EventChatMessage: 'EventChatMessage',
   Conversation: 'Conversation',
   ConversationMember: 'ConversationMember',
+  MessageHide: 'MessageHide',
+  UserBlock: 'UserBlock',
   DirectMessage: 'DirectMessage',
   EventAlbum: 'EventAlbum',
   Media: 'Media',
@@ -456,7 +458,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "messageHide" | "userBlock" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1863,6 +1865,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ConversationMemberCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ConversationMemberCountAggregateOutputType> | number
+        }
+      }
+    }
+    MessageHide: {
+      payload: Prisma.$MessageHidePayload<ExtArgs>
+      fields: Prisma.MessageHideFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.MessageHideFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.MessageHideFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        findFirst: {
+          args: Prisma.MessageHideFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.MessageHideFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        findMany: {
+          args: Prisma.MessageHideFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>[]
+        }
+        create: {
+          args: Prisma.MessageHideCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        createMany: {
+          args: Prisma.MessageHideCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.MessageHideCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>[]
+        }
+        delete: {
+          args: Prisma.MessageHideDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        update: {
+          args: Prisma.MessageHideUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        deleteMany: {
+          args: Prisma.MessageHideDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.MessageHideUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.MessageHideUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>[]
+        }
+        upsert: {
+          args: Prisma.MessageHideUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$MessageHidePayload>
+        }
+        aggregate: {
+          args: Prisma.MessageHideAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateMessageHide>
+        }
+        groupBy: {
+          args: Prisma.MessageHideGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageHideGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.MessageHideCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.MessageHideCountAggregateOutputType> | number
+        }
+      }
+    }
+    UserBlock: {
+      payload: Prisma.$UserBlockPayload<ExtArgs>
+      fields: Prisma.UserBlockFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.UserBlockFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.UserBlockFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        findFirst: {
+          args: Prisma.UserBlockFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.UserBlockFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        findMany: {
+          args: Prisma.UserBlockFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>[]
+        }
+        create: {
+          args: Prisma.UserBlockCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        createMany: {
+          args: Prisma.UserBlockCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.UserBlockCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>[]
+        }
+        delete: {
+          args: Prisma.UserBlockDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        update: {
+          args: Prisma.UserBlockUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        deleteMany: {
+          args: Prisma.UserBlockDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.UserBlockUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.UserBlockUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>[]
+        }
+        upsert: {
+          args: Prisma.UserBlockUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$UserBlockPayload>
+        }
+        aggregate: {
+          args: Prisma.UserBlockAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateUserBlock>
+        }
+        groupBy: {
+          args: Prisma.UserBlockGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserBlockGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.UserBlockCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.UserBlockCountAggregateOutputType> | number
         }
       }
     }
@@ -4044,6 +4194,7 @@ export const ConversationScalarFieldEnum = {
   isGroup: 'isGroup',
   avatarUrl: 'avatarUrl',
   ephemeralHours: 'ephemeralHours',
+  theme: 'theme',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -4058,10 +4209,32 @@ export const ConversationMemberScalarFieldEnum = {
   role: 'role',
   joinedAt: 'joinedAt',
   lastReadAt: 'lastReadAt',
-  isMuted: 'isMuted'
+  deliveredAt: 'deliveredAt',
+  isMuted: 'isMuted',
+  mutedUntil: 'mutedUntil',
+  hiddenAt: 'hiddenAt'
 } as const
 
 export type ConversationMemberScalarFieldEnum = (typeof ConversationMemberScalarFieldEnum)[keyof typeof ConversationMemberScalarFieldEnum]
+
+
+export const MessageHideScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  userId: 'userId'
+} as const
+
+export type MessageHideScalarFieldEnum = (typeof MessageHideScalarFieldEnum)[keyof typeof MessageHideScalarFieldEnum]
+
+
+export const UserBlockScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserBlockScalarFieldEnum = (typeof UserBlockScalarFieldEnum)[keyof typeof UserBlockScalarFieldEnum]
 
 
 export const DirectMessageScalarFieldEnum = {
@@ -5108,6 +5281,8 @@ export type GlobalOmitConfig = {
   eventChatMessage?: Prisma.EventChatMessageOmit
   conversation?: Prisma.ConversationOmit
   conversationMember?: Prisma.ConversationMemberOmit
+  messageHide?: Prisma.MessageHideOmit
+  userBlock?: Prisma.UserBlockOmit
   directMessage?: Prisma.DirectMessageOmit
   eventAlbum?: Prisma.EventAlbumOmit
   media?: Prisma.MediaOmit

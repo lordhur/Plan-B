@@ -44,6 +44,20 @@ export const usersRouter = createTRPCRouter({
 
   /** Profil public d'un utilisateur. */
   byId: publicProcedure.input(z.object({ id: z.string() })).query(async ({ input, ctx }) => {
+    // Blocage : le profil disparaît dans les deux sens
+    if (ctx.user && ctx.user.id !== input.id) {
+      const blocked = await prisma.userBlock.count({
+        where: {
+          OR: [
+            { blockerId: ctx.user.id, blockedId: input.id },
+            { blockerId: input.id, blockedId: ctx.user.id },
+          ],
+        },
+      })
+      if (blocked > 0) {
+        throw new TRPCError({ code: 'NOT_FOUND', message: 'Profil introuvable' })
+      }
+    }
     const profile = await prisma.user.findUnique({
       where: { id: input.id },
       select: publicProfileSelect,
