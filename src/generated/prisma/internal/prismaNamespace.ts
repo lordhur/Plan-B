@@ -413,6 +413,7 @@ export const ModelName = {
   EventCollaborator: 'EventCollaborator',
   EventParticipation: 'EventParticipation',
   Story: 'Story',
+  SavedStory: 'SavedStory',
   WaitlistEntry: 'WaitlistEntry',
   EventInvitation: 'EventInvitation',
   EventChatMessage: 'EventChatMessage',
@@ -460,7 +461,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "photoAlbum" | "connectedAccount" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "messageHide" | "userBlock" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
+    modelProps: "user" | "profilePhoto" | "photoAlbum" | "connectedAccount" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "savedStory" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "messageHide" | "userBlock" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1645,6 +1646,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.StoryCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.StoryCountAggregateOutputType> | number
+        }
+      }
+    }
+    SavedStory: {
+      payload: Prisma.$SavedStoryPayload<ExtArgs>
+      fields: Prisma.SavedStoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SavedStoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SavedStoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        findFirst: {
+          args: Prisma.SavedStoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SavedStoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        findMany: {
+          args: Prisma.SavedStoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>[]
+        }
+        create: {
+          args: Prisma.SavedStoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        createMany: {
+          args: Prisma.SavedStoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SavedStoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>[]
+        }
+        delete: {
+          args: Prisma.SavedStoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        update: {
+          args: Prisma.SavedStoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.SavedStoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SavedStoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SavedStoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.SavedStoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SavedStoryPayload>
+        }
+        aggregate: {
+          args: Prisma.SavedStoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSavedStory>
+        }
+        groupBy: {
+          args: Prisma.SavedStoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedStoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SavedStoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SavedStoryCountAggregateOutputType> | number
         }
       }
     }
@@ -4329,6 +4404,17 @@ export const StoryScalarFieldEnum = {
 export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
 
 
+export const SavedStoryScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  storyId: 'storyId',
+  order: 'order',
+  createdAt: 'createdAt'
+} as const
+
+export type SavedStoryScalarFieldEnum = (typeof SavedStoryScalarFieldEnum)[keyof typeof SavedStoryScalarFieldEnum]
+
+
 export const WaitlistEntryScalarFieldEnum = {
   id: 'id',
   eventId: 'eventId',
@@ -5458,6 +5544,7 @@ export type GlobalOmitConfig = {
   eventCollaborator?: Prisma.EventCollaboratorOmit
   eventParticipation?: Prisma.EventParticipationOmit
   story?: Prisma.StoryOmit
+  savedStory?: Prisma.SavedStoryOmit
   waitlistEntry?: Prisma.WaitlistEntryOmit
   eventInvitation?: Prisma.EventInvitationOmit
   eventChatMessage?: Prisma.EventChatMessageOmit

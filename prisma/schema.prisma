@@ -53,6 +53,7 @@ model User {
   avatarUrl     String? // Photo principale
   videoUrl      String? // Vidéo de présentation
   stories       Story[]
+  savedStories SavedStory[]
   blocksGiven   UserBlock[]    @relation("UserBlockBlocker")
   blocksReceived UserBlock[]   @relation("UserBlockBlocked")
   messageHides  MessageHide[]
@@ -554,9 +555,24 @@ model Story {
   type      StoryType @default(PHOTO)
   caption   String?
   createdAt DateTime @default(now())
+  savedBy   SavedStory[]
 
   @@index([authorId])
   @@index([createdAt])
+}
+
+/** Story mémorisée par un lecteur — alimente son « album stories » de profil. */
+model SavedStory {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  storyId   String
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, storyId])
+  @@index([userId])
 }
 
 enum StoryType {

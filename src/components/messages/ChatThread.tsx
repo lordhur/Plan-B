@@ -92,32 +92,27 @@ const THEMES: Record<string, { label: string; bg?: string }> = {
   nuit: { label: 'Nuit', bg: 'linear-gradient(135deg,#312e81,#1e293b)' },
 }
 
-/** Lecteur audio avec vitesse x1 / x1,5 / x2 (spec messagerie vocale). */
+/** Lecteur audio : pastille de vitesse à droite — clic : x1 → x1,5 → x2 → x1 (spec). */
 function AudioPlayer({ url }: { url: string }) {
   const ref = useRef<HTMLAudioElement>(null)
   const [rate, setRate] = useState(1)
+  const cycle = () => {
+    const next = rate === 1 ? 1.5 : rate === 1.5 ? 2 : 1
+    setRate(next)
+    if (ref.current) ref.current.playbackRate = next
+  }
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      <audio ref={ref} src={url} controls className="h-9 max-w-full" />
-      <div className="flex gap-0.5" role="group" aria-label="Vitesse de lecture">
-        {[1, 1.5, 2].map((r) => (
-          <button
-            key={r}
-            type="button"
-            onClick={() => {
-              setRate(r)
-              if (ref.current) ref.current.playbackRate = r
-            }}
-            className={cn(
-              'rounded px-1.5 py-0.5 text-[11px] font-semibold',
-              rate === r ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground',
-            )}
-            aria-pressed={rate === r}
-          >
-            x{r}
-          </button>
-        ))}
-      </div>
+    <div className="flex items-center gap-2">
+      <audio ref={ref} src={url} controls className="h-9 min-w-0 max-w-[11rem]" />
+      <button
+        type="button"
+        onClick={cycle}
+        className="shrink-0 rounded-full bg-muted px-2 py-1 text-[11px] font-bold text-fg hover:bg-primary hover:text-primary-foreground"
+        aria-label={`Vitesse de lecture : x${rate} — cliquer pour changer`}
+        title="Vitesse de lecture"
+      >
+        x{rate === 1.5 ? '1,5' : rate}
+      </button>
     </div>
   )
 }
@@ -265,6 +260,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
   const [actionMsg, setActionMsg] = useState<ChatMessage | null>(null)
   const [reportText, setReportText] = useState('')
   const fileRef = useRef<HTMLInputElement>(null)
+  const areaRef = useRef<HTMLTextAreaElement>(null)
   const cameraRef = useRef<HTMLInputElement>(null)
   const scrollerRef = useRef<HTMLDivElement>(null)
   const recorderRef = useRef<MediaRecorder | null>(null)
@@ -404,6 +400,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         })
       }
       setInput('')
+      if (areaRef.current) areaRef.current.style.height = 'auto'
       setAttachment(null)
       setShowEmoji(false)
       setShowGif(false)
@@ -809,7 +806,13 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         </div>
       )}
 
-      <div ref={scrollerRef} className="flex-1 space-y-3 overflow-y-auto p-3" role="log" aria-live="polite">
+      <div
+        ref={scrollerRef}
+        className="flex-1 space-y-3 overflow-y-auto p-3"
+        role="log"
+        aria-live="polite"
+        style={theme.bg ? { backgroundImage: theme.bg } : undefined}
+      >
         {kind === 'event' && meta.isLoading && <LoadingSpinner label="Chargement du chat" />}
         {kind === 'dm' && dm.isLoading && <LoadingSpinner label="Chargement de la conversation" />}
         {kind === 'event' && dmData === undefined && meta.data && (
@@ -832,10 +835,9 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
               <div className={cn('max-w-[85%] min-w-0 sm:max-w-[70%]', mine && 'items-end text-right')}>
                 <div
                   className={cn(
-                    'rounded-2xl px-3 py-2 text-sm shadow-sm',
-                    mine ? 'rounded-br-sm bg-primary text-primary-foreground' : 'rounded-bl-sm bg-card border border-border',
+                    'rounded-2xl border border-border bg-card px-3 py-2 text-sm shadow-sm',
+                    mine ? 'rounded-br-sm' : 'rounded-bl-sm',
                   )}
-                  style={mine && theme.bg ? { background: theme.bg } : undefined}
                 >
                   {!mine && kind === 'event' && (
                     <p className="mb-0.5 text-xs font-semibold text-primary">
@@ -843,7 +845,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                     </p>
                   )}
                   {m.mediaUrl ? (
-                    <div className={cn(mine && '[&_a]:text-primary-foreground')}>
+                    <div>
                       <AttachmentView url={m.mediaUrl} type={m.mediaType} name={m.mediaName} />
                     </div>
                   ) : null}
@@ -853,7 +855,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                     </p>
                   )}
                   {dmData?.ephemeralHours && (
-                    <p className={cn('mt-1 flex items-center gap-1 text-[10px]', mine ? 'justify-end text-primary-foreground/80' : 'text-muted-foreground')}>
+                    <p className={cn('mt-1 flex items-center gap-1 text-[10px] text-muted-foreground', mine && 'justify-end')}>
                       <Loader2 className="h-2.5 w-2.5" aria-hidden /> disparaît dans{' '}
                       {dmData.ephemeralHours >= 720
                         ? '30 j'
@@ -976,6 +978,95 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           </p>
         )}
 
+        <input
+          ref={fileRef}
+          type="file"
+          accept={ACCEPT}
+          className="sr-only"
+          aria-hidden
+          tabIndex={-1}
+          onChange={(e) => {
+            const f = e.target.files?.[0]
+            if (f) void attach(f)
+            e.target.value = ''
+          }}
+        />
+        <input
+          ref={cameraRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="sr-only"
+          aria-hidden
+          tabIndex={-1}
+          onChange={(e) => {
+            const f = e.target.files?.[0]
+            if (f) void attach(f)
+            e.target.value = ''
+          }}
+        />
+
+        {/* Ligne d'icônes : GIF/sticker · photo · pièce jointe · vocal (spec) */}
+        <div className="mb-1 flex items-center gap-0.5">
+          <Button
+            type="button"
+            variant={showGif ? 'secondary' : 'ghost'}
+            size="icon"
+            className="h-9 w-9"
+            aria-label={t('msg_sticker')}
+            title={t('msg_sticker')}
+            aria-expanded={showGif}
+            onClick={() => { setShowGif((v) => !v); setShowEmoji(false) }}
+          >
+            <Sticker className="h-[18px] w-[18px]" aria-hidden />
+          </Button>
+          <Button
+            type="button"
+            variant={showEmoji ? 'secondary' : 'ghost'}
+            size="icon"
+            className="h-9 w-9"
+            aria-label="Insérer un emoji"
+            aria-expanded={showEmoji}
+            onClick={() => { setShowEmoji((v) => !v); setShowGif(false) }}
+          >
+            <Smile className="h-[18px] w-[18px]" aria-hidden />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            aria-label={t('msg_photo')}
+            title={t('msg_photo')}
+            onClick={() => cameraRef.current?.click()}
+          >
+            <Camera className="h-[18px] w-[18px]" aria-hidden />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            aria-label={t('msg_attach')}
+            title={t('msg_attach')}
+            onClick={() => fileRef.current?.click()}
+          >
+            <Paperclip className="h-[18px] w-[18px]" aria-hidden />
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="h-9 w-9"
+            aria-label={recording ? "Arrêter" : t('msg_voice')}
+            title={t('msg_voice')}
+            onClick={() => (recording ? stopRecording() : void startRecording())}
+          >
+            <Mic className={cn('h-[18px] w-[18px]', recording && 'text-danger-500')} aria-hidden />
+          </Button>
+        </div>
+
+        {/* Ligne de saisie : texte auto-agrandi + bouton envoyer (spec) */}
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -983,88 +1074,24 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           }}
           className="flex items-end gap-1.5"
         >
-          <input
-            ref={fileRef}
-            type="file"
-            accept={ACCEPT}
-            className="sr-only"
-            aria-hidden
-            tabIndex={-1}
-            onChange={(e) => {
-              const f = e.target.files?.[0]
-              if (f) void attach(f)
-              e.target.value = ''
-            }}
-          />
-          <input
-            ref={cameraRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            className="sr-only"
-            aria-hidden
-            tabIndex={-1}
-            onChange={(e) => {
-              const f = e.target.files?.[0]
-              if (f) void attach(f)
-              e.target.value = ''
-            }}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={t('msg_attach')}
-            title={t('msg_attach')}
-            onClick={() => fileRef.current?.click()}
-          >
-            <Paperclip className="h-5 w-5" aria-hidden />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={t('msg_photo')}
-            title={t('msg_photo')}
-            onClick={() => cameraRef.current?.click()}
-          >
-            <Camera className="h-5 w-5" aria-hidden />
-          </Button>
-          <Button
-            type="button"
-            variant={showEmoji ? 'secondary' : 'ghost'}
-            size="icon"
-            aria-label="Insérer un emoji"
-            aria-expanded={showEmoji}
-            onClick={() => { setShowEmoji((v) => !v); setShowGif(false) }}
-          >
-            <Smile className="h-5 w-5" aria-hidden />
-          </Button>
-          <Button
-            type="button"
-            variant={showGif ? 'secondary' : 'ghost'}
-            size="icon"
-            aria-label={t('msg_sticker')}
-            aria-expanded={showGif}
-            onClick={() => { setShowGif((v) => !v); setShowEmoji(false) }}
-          >
-            <Sticker className="h-5 w-5" aria-hidden />
-          </Button>
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon"
-            aria-label={recording ? "Arrêter" : t('msg_voice')}
-            title={t('msg_voice')}
-            onClick={() => (recording ? stopRecording() : void startRecording())}
-          >
-            <Mic className={cn('h-5 w-5', recording && 'text-danger-500')} aria-hidden />
-          </Button>
-          <input
+          <textarea
+            ref={areaRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            rows={1}
+            onChange={(e) => {
+              setInput(e.target.value)
+              const el = e.target
+              el.style.height = 'auto'
+              el.style.height = `${Math.min(el.scrollHeight, 140)}px`
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault()
+                void sendText(input, attachment ?? undefined)
+              }
+            }}
             placeholder={kind === 'event' ? t('msg_write_group') : t('msg_write')}
-            className="h-10 min-w-0 flex-1 rounded-xl border border-border bg-background px-3 py-2 text-sm outline-none"
+            className="max-h-36 min-h-10 min-w-0 flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm outline-none"
             aria-label="Message"
           />
           <Button
@@ -1072,7 +1099,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             disabled={sending || sending2 || (!input.trim() && !attachment)}
             aria-label="Envoyer le message"
           >
-            {sending ? (
+            {sending || sending2 ? (
               <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
             ) : (
               <Send className="h-4 w-4" aria-hidden />

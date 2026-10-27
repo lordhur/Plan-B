@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { AlbumsSection } from '@/components/profile/AlbumsSection'
+import { SavedStoriesSection } from '@/components/profile/SavedStoriesSection'
 import { FriendButton } from '@/components/friends/FriendButton'
 
 /** PROFIL PUBLIC d'un autre utilisateur. */
@@ -125,6 +126,9 @@ export default function PublicProfilePage() {
 
           {/* Albums photos personnels */}
           <AlbumsSection userId={profile.id} isMe={!!profile.isMe} />
+
+          {/* Album stories (mes stories mémorisées, dans mon ordre) */}
+          {profile.isMe && <SavedStoriesSection />}
 
           {/* Vidéo de présentation */}
           {profile.videoUrl && (
