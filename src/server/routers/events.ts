@@ -257,6 +257,8 @@ export const eventsRouter = createTRPCRouter({
         latitude: z.number().nullish(),
         longitude: z.number().nullish(),
         limit: z.number().int().min(1).max(50).default(30),
+        /** Rayon de recherche autour du point (km) — jauge du fil d'actualité. */
+        radiusKm: z.number().min(1).max(300).default(25),
       }),
     )
     .query(async ({ input, ctx }) => {
@@ -335,9 +337,10 @@ export const eventsRouter = createTRPCRouter({
       }
       const withLikes = scored.map((s) => ({ ...s, liked: likedIds.has(s.event.id) }))
 
-      // Sections du fil : "Près de vous" (≤ 25 km) puis "Pour vous"
-      const near = withLikes.filter((s) => s.distanceKm != null && s.distanceKm <= 25)
-      const forYou = withLikes.filter((s) => s.distanceKm == null || s.distanceKm > 25)
+      // Sections du fil : « Près de vous » (rayon choisi) puis « Pour vous »
+      const radius = input.radiusKm
+      const near = withLikes.filter((s) => s.distanceKm != null && s.distanceKm <= radius)
+      const forYou = withLikes.filter((s) => s.distanceKm == null || s.distanceKm > radius)
 
       return {
         near,

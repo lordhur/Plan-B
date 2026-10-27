@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { FranceMap } from '@/components/map/FranceMap'
 import { StoryRail } from '@/components/stories/StoryRail'
-import { useLocationFilter } from '@/lib/locationFilter'
+import { syncRadiusFromStorage, useLocationFilter } from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
 
 /** FIL D'ACTUALITÉ — plans à venir, géolocalisés et classés par pertinence. */
@@ -21,7 +21,12 @@ export default function FeedPage() {
   const { user, isLoading: userLoading, isAuthenticated } = useCurrentUser()
   const [coords, setCoords] = useState<{ lat: number; lon: number } | null>(null)
   const [geoState, setGeoState] = useState<'idle' | 'loading' | 'ok' | 'denied'>('idle')
-  const { filter, clear } = useLocationFilter()
+  const { filter, clear, radiusKm } = useLocationFilter()
+
+  // Rayon mémorisé (km) relu côté client — évite tout décalage d'hydratation
+  useEffect(() => {
+    syncRadiusFromStorage()
+  }, [])
 
   // Géolocalisation navigateur (avec repli sur la ville du profil)
   useEffect(() => {
@@ -58,7 +63,7 @@ export default function FeedPage() {
   )
 
   const feedQuery = trpc.events.feed.useQuery(
-    { latitude: feedLat, longitude: feedLon, limit: 30 },
+    { latitude: feedLat, longitude: feedLon, limit: 30, radiusKm },
     { enabled: !zoneBox },
   )
 
@@ -156,7 +161,7 @@ export default function FeedPage() {
           <span className="flex items-center gap-2">
             <MapPin className="h-4 w-4" aria-hidden />
             {t('feed_zone')} : {filter.name}
-            {filter.type === 'city' ? ' (25 km autour)' : ''}
+            {filter.type === 'city' ? ` (${radiusKm} km autour)` : ''}
           </span>
           <button
             type="button"
@@ -228,7 +233,9 @@ export default function FeedPage() {
                 ? `${t('feed_around')} ${filter.name}`
                 : t('feed_near_you')}
             {!filter && coords && (
-              <span className="text-sm font-medium text-fg-muted">· {t('feed_gps')}</span>
+              <span className="text-sm font-medium text-fg-muted">
+                · {t('feed_gps')} · {radiusKm} km
+              </span>
             )}
           </h2>
         </div>
