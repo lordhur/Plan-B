@@ -283,6 +283,14 @@ interface Commune {
   population: number
 }
 
+/** Pool « France entière » : les villes majeures, visibles dès la vue nationale. */
+const TOP_COMMUNES: Commune[] = TOP_CITIES.map(([nom, lat, lon, population]) => ({
+  nom,
+  lat,
+  lon,
+  population,
+}))
+
 /** Étiquette « contour » du nom de ville — légère et lisible. */
 function cityLabelIcon(name: string, selected: boolean, size: number): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
@@ -303,8 +311,15 @@ function labelSize(pop: number): number {
 }
 
 /** Villes affichées selon le zoom — les plus grandes d'abord, zoom = petites villes. */
-function citiesForZoom(cities: Commune[], zoom: number): Commune[] {
-  if (zoom < 9) return cities.filter((c) => c.population >= 30000)
+function citiesForZoom(cities: Commune[], zoom: number, deptMode: boolean): Commune[] {
+  if (deptMode) {
+    if (zoom < 10) return cities.filter((c) => c.population >= 20000)
+    if (zoom < 12) return cities.filter((c) => c.population >= 5000)
+    if (zoom < 14) return cities.filter((c) => c.population >= 1000)
+    return cities
+  }
+  if (zoom < 7) return cities.filter((c) => c.population >= 150000)
+  if (zoom < 9) return cities.filter((c) => c.population >= 40000)
   if (zoom < 11) return cities.filter((c) => c.population >= 10000)
   if (zoom < 13) return cities.filter((c) => c.population >= 3000)
   return cities
@@ -403,7 +418,9 @@ export function RegionsMapInner() {
     if (!map || !group) return
     try {
       group.clearLayers()
-      const zoomed = citiesForZoom(communes, map.getZoom())
+      const deptMode = level === 'cities' && communes.length > 0
+      const pool = deptMode ? communes : TOP_COMMUNES
+      const zoomed = citiesForZoom(pool, map.getZoom(), deptMode)
       const visible = declutter(zoomed, map)
       for (const c of visible) {
         const m = L.marker([c.lat, c.lon], {
@@ -418,7 +435,7 @@ export function RegionsMapInner() {
     } catch (err) {
       console.error('[FranceMap] villes', err)
     }
-  }, [communes, citySel])
+  }, [communes, citySel, level])
 
   // Rendu des couches selon le niveau — protégé : une erreur Leaflet ne casse pas la page
   useEffect(() => {
@@ -504,7 +521,7 @@ export function RegionsMapInner() {
                 if (dep === code) merged.set(nom.toLowerCase(), { nom, lat, lon, population: pop })
               }
               fetch(
-                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&format=geojson&limit=100`,
+                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&limit=100`,
               )
                 .then((r) => (r.ok ? r.json() : []))
                 .then((data: unknown) => {
@@ -538,7 +555,10 @@ export function RegionsMapInner() {
           filter: (f) => String(f.properties?.code ?? '') === deptSel.code,
           style: () => style(true),
         }).addTo(group)
-        // Couche villes : redessinée à chaque zoom/déplacement
+      }
+
+      // Couche villes : présente à tous les niveaux, redessinée à chaque zoom
+      {
         const cityGroup = L.layerGroup().addTo(group)
         cityLayerRef.current = cityGroup
       }
@@ -562,7 +582,7 @@ export function RegionsMapInner() {
   // (Re)dessin des villes dès qu'elles changent + à chaque zoom/déplacement
   useEffect(() => {
     const map = mapRef.current
-    if (level !== 'cities' || !map) return
+    if (!map || !geo.depts) return
     drawCities()
     const onChange = () => drawCities()
     map.on('zoomend', onChange)
@@ -571,7 +591,7 @@ export function RegionsMapInner() {
       map.off('zoomend', onChange)
       map.off('moveend', onChange)
     }
-  }, [level, drawCities, communes])
+  }, [level, drawCities, communes, geo])
 
   const goRegions = useCallback(() => {
     setLevel('regions')

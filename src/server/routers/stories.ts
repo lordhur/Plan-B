@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { prisma } from '../db'
 import { createTRPCRouter, protectedProcedure } from '../trpc'
@@ -128,4 +129,79 @@ export const storiesRouter = createTRPCRouter({
       await prisma.story.delete({ where: { id: story.id } })
       return { ok: true as const }
     }),
+  // ------------------------------------------------------------------
+  // Stories mémorisées — « album stories » du profil (spec)
+  // ------------------------------------------------------------------
+
+  /** Mémoriser une story vue (pour la retrouver dans mon album stories). */
+  saveStory: protectedProcedure
+    .input(z.object({ storyId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const story = await prisma.story.findUnique({ where: { id: input.storyId }, select: { id: true } })
+      if (!story) throw new TRPCError({ code: 'NOT_FOUND', message: 'Story introuvable' })
+      const last = await prisma.savedStory.findFirst({
+        where: { userId: ctx.user.id },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      })
+      await prisma.savedStory.upsert({
+        where: { userId_storyId: { userId: ctx.user.id, storyId: input.storyId } },
+        create: { userId: ctx.user.id, storyId: input.storyId, order: (last?.order ?? 0) + 1 },
+        update: {},
+      })
+      return { ok: true as const }
+    }),
+
+  /** Retirer une story de mon album. */
+  unsaveStory: protectedProcedure
+    .input(z.object({ storyId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      await prisma.savedStory.deleteMany({ where: { userId: ctx.user.id, storyId: input.storyId } })
+      return { ok: true as const }
+    }),
+
+  /** Mon album stories : les stories mémorisées, dans mon ordre. */
+  mySavedStories: protectedProcedure.query(async ({ ctx }) => {
+    const saved = await prisma.savedStory.findMany({
+      where: { userId: ctx.user.id },
+      orderBy: { order: 'asc' },
+      include: {
+        story: { include: { author: { select: { id: true, firstName: true, lastName: true, displayName: true, avatarUrl: true } } } },
+      },
+    })
+    return saved.map((s) => ({
+      id: s.id,
+      order: s.order,
+      story: {
+        id: s.story.id,
+        mediaUrl: s.story.mediaUrl,
+        type: s.story.type,
+        caption: s.story.caption,
+        createdAt: s.story.createdAt,
+        author: s.story.author,
+      },
+    }))
+  }),
+
+  /** Déplacer une story mémorisée dans l'album (haut/bas). */
+  reorderSavedStory: protectedProcedure
+    .input(z.object({ id: z.string(), direction: z.enum(['up', 'down']) }))
+    .mutation(async ({ input, ctx }) => {
+      const rows = await prisma.savedStory.findMany({
+        where: { userId: ctx.user.id },
+        orderBy: { order: 'asc' },
+        select: { id: true, order: true },
+      })
+      const i = rows.findIndex((r) => r.id === input.id)
+      const j = input.direction === 'up' ? i - 1 : i + 1
+      if (i < 0 || j < 0 || j >= rows.length) return { ok: true as const }
+      const a = rows[i]!
+      const b = rows[j]!
+      await prisma.$transaction([
+        prisma.savedStory.update({ where: { id: a.id }, data: { order: b.order } }),
+        prisma.savedStory.update({ where: { id: b.id }, data: { order: a.order } }),
+      ])
+      return { ok: true as const }
+    }),
+
 })

@@ -23,7 +23,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { cn } from '@/lib/utils'
-import { Logo } from '@/components/common/Logo'
+import { Logo, LogoMark } from '@/components/common/Logo'
 import { ThemeToggle } from './ThemeToggle'
 import { useLang } from '@/lib/i18n'
 import { Avatar } from '@/components/ui/avatar'
@@ -158,8 +158,8 @@ export function Navbar() {
             />
 
             <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
-              <Logo withText={false} />
-              <span className="text-base font-black tracking-tight text-fg sm:text-xl">
+              <LogoMark className="h-11 w-11 sm:h-12 sm:w-12" />
+              <span className="text-xl font-black tracking-tight text-fg sm:text-2xl">
                 Plan<span className="text-primary-600">B</span>
               </span>
             </Link>

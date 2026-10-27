@@ -122,6 +122,11 @@ export type EventParticipation = Prisma.EventParticipationModel
  */
 export type Story = Prisma.StoryModel
 /**
+ * Model SavedStory
+ * * Story mémorisée par un lecteur — alimente son « album stories » de profil.
+ */
+export type SavedStory = Prisma.SavedStoryModel
+/**
  * Model WaitlistEntry
  * 
  */

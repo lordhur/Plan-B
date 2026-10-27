@@ -191,6 +191,7 @@ export type StoryWhereInput = {
   caption?: Prisma.StringNullableFilter<"Story"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Story"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  savedBy?: Prisma.SavedStoryListRelationFilter
 }
 
 export type StoryOrderByWithRelationInput = {
@@ -201,6 +202,7 @@ export type StoryOrderByWithRelationInput = {
   caption?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
+  savedBy?: Prisma.SavedStoryOrderByRelationAggregateInput
 }
 
 export type StoryWhereUniqueInput = Prisma.AtLeast<{
@@ -214,6 +216,7 @@ export type StoryWhereUniqueInput = Prisma.AtLeast<{
   caption?: Prisma.StringNullableFilter<"Story"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Story"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  savedBy?: Prisma.SavedStoryListRelationFilter
 }, "id">
 
 export type StoryOrderByWithAggregationInput = {
@@ -247,6 +250,7 @@ export type StoryCreateInput = {
   caption?: string | null
   createdAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutStoriesInput
+  savedBy?: Prisma.SavedStoryCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUncheckedCreateInput = {
@@ -256,6 +260,7 @@ export type StoryUncheckedCreateInput = {
   type?: $Enums.StoryType
   caption?: string | null
   createdAt?: Date | string
+  savedBy?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUpdateInput = {
@@ -265,6 +270,7 @@ export type StoryUpdateInput = {
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutStoriesNestedInput
+  savedBy?: Prisma.SavedStoryUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateInput = {
@@ -274,6 +280,7 @@ export type StoryUncheckedUpdateInput = {
   type?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  savedBy?: Prisma.SavedStoryUncheckedUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryCreateManyInput = {
@@ -339,6 +346,11 @@ export type StoryMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
 }
 
+export type StoryScalarRelationFilter = {
+  is?: Prisma.StoryWhereInput
+  isNot?: Prisma.StoryWhereInput
+}
+
 export type StoryCreateNestedManyWithoutAuthorInput = {
   create?: Prisma.XOR<Prisma.StoryCreateWithoutAuthorInput, Prisma.StoryUncheckedCreateWithoutAuthorInput> | Prisma.StoryCreateWithoutAuthorInput[] | Prisma.StoryUncheckedCreateWithoutAuthorInput[]
   connectOrCreate?: Prisma.StoryCreateOrConnectWithoutAuthorInput | Prisma.StoryCreateOrConnectWithoutAuthorInput[]
@@ -385,12 +397,27 @@ export type EnumStoryTypeFieldUpdateOperationsInput = {
   set?: $Enums.StoryType
 }
 
+export type StoryCreateNestedOneWithoutSavedByInput = {
+  create?: Prisma.XOR<Prisma.StoryCreateWithoutSavedByInput, Prisma.StoryUncheckedCreateWithoutSavedByInput>
+  connectOrCreate?: Prisma.StoryCreateOrConnectWithoutSavedByInput
+  connect?: Prisma.StoryWhereUniqueInput
+}
+
+export type StoryUpdateOneRequiredWithoutSavedByNestedInput = {
+  create?: Prisma.XOR<Prisma.StoryCreateWithoutSavedByInput, Prisma.StoryUncheckedCreateWithoutSavedByInput>
+  connectOrCreate?: Prisma.StoryCreateOrConnectWithoutSavedByInput
+  upsert?: Prisma.StoryUpsertWithoutSavedByInput
+  connect?: Prisma.StoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.StoryUpdateToOneWithWhereWithoutSavedByInput, Prisma.StoryUpdateWithoutSavedByInput>, Prisma.StoryUncheckedUpdateWithoutSavedByInput>
+}
+
 export type StoryCreateWithoutAuthorInput = {
   id?: string
   mediaUrl: string
   type?: $Enums.StoryType
   caption?: string | null
   createdAt?: Date | string
+  savedBy?: Prisma.SavedStoryCreateNestedManyWithoutStoryInput
 }
 
 export type StoryUncheckedCreateWithoutAuthorInput = {
@@ -399,6 +426,7 @@ export type StoryUncheckedCreateWithoutAuthorInput = {
   type?: $Enums.StoryType
   caption?: string | null
   createdAt?: Date | string
+  savedBy?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutStoryInput
 }
 
 export type StoryCreateOrConnectWithoutAuthorInput = {
@@ -439,6 +467,58 @@ export type StoryScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Story"> | Date | string
 }
 
+export type StoryCreateWithoutSavedByInput = {
+  id?: string
+  mediaUrl: string
+  type?: $Enums.StoryType
+  caption?: string | null
+  createdAt?: Date | string
+  author: Prisma.UserCreateNestedOneWithoutStoriesInput
+}
+
+export type StoryUncheckedCreateWithoutSavedByInput = {
+  id?: string
+  authorId: string
+  mediaUrl: string
+  type?: $Enums.StoryType
+  caption?: string | null
+  createdAt?: Date | string
+}
+
+export type StoryCreateOrConnectWithoutSavedByInput = {
+  where: Prisma.StoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.StoryCreateWithoutSavedByInput, Prisma.StoryUncheckedCreateWithoutSavedByInput>
+}
+
+export type StoryUpsertWithoutSavedByInput = {
+  update: Prisma.XOR<Prisma.StoryUpdateWithoutSavedByInput, Prisma.StoryUncheckedUpdateWithoutSavedByInput>
+  create: Prisma.XOR<Prisma.StoryCreateWithoutSavedByInput, Prisma.StoryUncheckedCreateWithoutSavedByInput>
+  where?: Prisma.StoryWhereInput
+}
+
+export type StoryUpdateToOneWithWhereWithoutSavedByInput = {
+  where?: Prisma.StoryWhereInput
+  data: Prisma.XOR<Prisma.StoryUpdateWithoutSavedByInput, Prisma.StoryUncheckedUpdateWithoutSavedByInput>
+}
+
+export type StoryUpdateWithoutSavedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneRequiredWithoutStoriesNestedInput
+}
+
+export type StoryUncheckedUpdateWithoutSavedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  mediaUrl?: Prisma.StringFieldUpdateOperationsInput | string
+  type?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
+  caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type StoryCreateManyAuthorInput = {
   id?: string
   mediaUrl: string
@@ -453,6 +533,7 @@ export type StoryUpdateWithoutAuthorInput = {
   type?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  savedBy?: Prisma.SavedStoryUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateWithoutAuthorInput = {
@@ -461,6 +542,7 @@ export type StoryUncheckedUpdateWithoutAuthorInput = {
   type?: Prisma.EnumStoryTypeFieldUpdateOperationsInput | $Enums.StoryType
   caption?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  savedBy?: Prisma.SavedStoryUncheckedUpdateManyWithoutStoryNestedInput
 }
 
 export type StoryUncheckedUpdateManyWithoutAuthorInput = {
@@ -472,6 +554,35 @@ export type StoryUncheckedUpdateManyWithoutAuthorInput = {
 }
 
 
+/**
+ * Count Type StoryCountOutputType
+ */
+
+export type StoryCountOutputType = {
+  savedBy: number
+}
+
+export type StoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  savedBy?: boolean | StoryCountOutputTypeCountSavedByArgs
+}
+
+/**
+ * StoryCountOutputType without action
+ */
+export type StoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the StoryCountOutputType
+   */
+  select?: Prisma.StoryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * StoryCountOutputType without action
+ */
+export type StoryCountOutputTypeCountSavedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedStoryWhereInput
+}
+
 
 export type StorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -481,6 +592,8 @@ export type StorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   caption?: boolean
   createdAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  savedBy?: boolean | Prisma.Story$savedByArgs<ExtArgs>
+  _count?: boolean | Prisma.StoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["story"]>
 
 export type StorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -515,6 +628,8 @@ export type StorySelectScalar = {
 export type StoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "authorId" | "mediaUrl" | "type" | "caption" | "createdAt", ExtArgs["result"]["story"]>
 export type StoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  savedBy?: boolean | Prisma.Story$savedByArgs<ExtArgs>
+  _count?: boolean | Prisma.StoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type StoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -527,6 +642,7 @@ export type $StoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   name: "Story"
   objects: {
     author: Prisma.$UserPayload<ExtArgs>
+    savedBy: Prisma.$SavedStoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -930,6 +1046,7 @@ readonly fields: StoryFieldRefs;
 export interface Prisma__StoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  savedBy<T extends Prisma.Story$savedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Story$savedByArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedStoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1363,6 +1480,30 @@ export type StoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Limit how many Stories to delete.
    */
   limit?: number
+}
+
+/**
+ * Story.savedBy
+ */
+export type Story$savedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedStory
+   */
+  select?: Prisma.SavedStorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedStory
+   */
+  omit?: Prisma.SavedStoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedStoryInclude<ExtArgs> | null
+  where?: Prisma.SavedStoryWhereInput
+  orderBy?: Prisma.SavedStoryOrderByWithRelationInput | Prisma.SavedStoryOrderByWithRelationInput[]
+  cursor?: Prisma.SavedStoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedStoryScalarFieldEnum | Prisma.SavedStoryScalarFieldEnum[]
 }
 
 /**

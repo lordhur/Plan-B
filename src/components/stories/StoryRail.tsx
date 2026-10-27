@@ -1,6 +1,6 @@
 'use client'
 
-import { Plus, Trash2, X } from 'lucide-react'
+import { Bookmark, BookmarkCheck, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
 import * as React from 'react'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
@@ -33,11 +33,11 @@ type StoryGroup = {
   items: StoryItem[]
 }
 
-/** Barre de stories (24 h) — moi + mes amis, façon réseaux sociaux. */
+/** Barre de stories (24 h) — moi + mes amis, plusieurs stories par personne. */
 export function StoryRail() {
   const { isAuthenticated } = useCurrentUser()
   const stories = trpc.stories.feed.useQuery(undefined, { enabled: isAuthenticated })
-  const [viewing, setViewing] = React.useState<StoryGroup | null>(null)
+  const [viewFrom, setViewFrom] = React.useState<number | null>(null)
   const [creating, setCreating] = React.useState(false)
 
   if (!isAuthenticated) return null
@@ -59,15 +59,15 @@ export function StoryRail() {
         <span className="text-[10px] font-semibold text-fg-muted">Ma story</span>
       </button>
 
-      {groups.map((g) => {
+      {groups.map((g, gi) => {
         const name = g.author.displayName || `${g.author.firstName} ${g.author.lastName}`
         return (
           <button
             key={g.author.id}
             type="button"
-            onClick={() => setViewing(g)}
-            className="flex w-16 shrink-0 flex-col items-center gap-1"
-            aria-label={`Voir la story de ${name}`}
+            onClick={() => setViewFrom(gi)}
+            className="relative flex w-16 shrink-0 flex-col items-center gap-1"
+            aria-label={`Voir les ${g.items.length} story${g.items.length > 1 ? 's' : ''} de ${name}`}
           >
             <span className="rounded-full bg-gradient-to-tr from-primary-600 to-secondary-500 p-[2.5px]">
               <Avatar
@@ -76,6 +76,11 @@ export function StoryRail() {
                 className="h-[59px] w-[59px] border-2 border-card"
               />
             </span>
+            {g.items.length > 1 && (
+              <span className="absolute left-10 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary-600 px-1 text-[9px] font-bold text-white">
+                {g.items.length}
+              </span>
+            )}
             <span className="w-full truncate text-center text-[10px] font-semibold text-fg-muted">
               {g.isMe ? 'Ma story' : g.author.firstName}
             </span>
@@ -84,7 +89,13 @@ export function StoryRail() {
       })}
 
       {creating && <StoryCreateDialog onClose={() => setCreating(false)} />}
-      {viewing && <StoryViewer group={viewing} onClose={() => setViewing(null)} />}
+      {viewFrom !== null && groups.length > 0 && (
+        <StoryViewer
+          groups={groups}
+          startGroup={Math.min(viewFrom, groups.length - 1)}
+          onClose={() => setViewFrom(null)}
+        />
+      )}
     </section>
   )
 }
@@ -189,27 +200,81 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
           {uploading || create.isPending ? 'Publication…' : 'Publier ma story'}
         </Button>
         <p className="mt-2 text-center text-[11px] text-fg-muted">
-          Visible par vos amis pendant 24 h · max 50 Mo
+          Visible par vos amis pendant 24 h · max 50 Mo · publiez autant de stories que vous voulez
         </p>
       </div>
     </div>
   )
 }
 
-/** Visionneuse plein écran avec barre de progression et suppression. */
-function StoryViewer({ group, onClose }: { group: StoryGroup; onClose: () => void }) {
+/**
+ * Visionneuse plein écran — clic sur le média : story suivante de la personne,
+ * puis personne suivante (spec). Bouton « mémoriser » pour l'album stories.
+ */
+function StoryViewer({
+  groups,
+  startGroup,
+  onClose,
+}: {
+  groups: StoryGroup[]
+  startGroup: number
+  onClose: () => void
+}) {
+  const [gi, setGi] = React.useState(startGroup)
   const [idx, setIdx] = React.useState(0)
   const [progress, setProgress] = React.useState(0)
   const utils = trpc.useUtils()
+
+  const group = groups[gi]
+  const item = group?.items[idx]
+  const total = group?.items.length ?? 0
+  const name = group
+    ? group.author.displayName || `${group.author.firstName} ${group.author.lastName}`
+    : ''
+
   const remove = trpc.stories.remove.useMutation({
     onSuccess: () => {
       void utils.stories.feed.invalidate()
       onClose()
     },
   })
-  const item = group.items[idx]
-  const total = group.items.length
-  const name = group.author.displayName || `${group.author.firstName} ${group.author.lastName}`
+  const save = trpc.stories.saveStory.useMutation({
+    onSuccess: () => toast.success('Story mémorisée', 'Retrouvez-la dans votre album stories'),
+  })
+  const unsave = trpc.stories.unsaveStory.useMutation({
+    onSuccess: () => toast.success('Retirée de votre album stories'),
+  })
+  const savedList = trpc.stories.mySavedStories.useQuery(undefined, { refetchInterval: false })
+  const isSaved = !!item && (savedList.data ?? []).some((s) => s.story.id === item.id)
+
+  /** Story suivante : d'abord la personne, puis la personne suivante (spec). */
+  const next = React.useCallback(() => {
+    if (!group) return
+    if (idx + 1 < group.items.length) {
+      setIdx(idx + 1)
+      return
+    }
+    if (gi + 1 < groups.length) {
+      setGi(gi + 1)
+      setIdx(0)
+      return
+    }
+    onClose()
+  }, [group, idx, gi, groups.length, onClose])
+
+  const prev = React.useCallback(() => {
+    if (idx > 0) {
+      setIdx(idx - 1)
+      return
+    }
+    if (gi > 0) {
+      const prevGroup = groups[gi - 1]
+      if (prevGroup) {
+        setGi(gi - 1)
+        setIdx(Math.max(0, prevGroup.items.length - 1))
+      }
+    }
+  }, [idx, gi, groups])
 
   // Avancement automatique (photos 5 s ; vidéos pilotées par l'élément)
   React.useEffect(() => {
@@ -219,24 +284,22 @@ function StoryViewer({ group, onClose }: { group: StoryGroup; onClose: () => voi
     const t = setInterval(() => {
       const p = Math.min(100, ((Date.now() - started) / 5000) * 100)
       setProgress(p)
-      if (p >= 100) {
-        if (idx + 1 < total) setIdx(idx + 1)
-        else onClose()
-      }
+      if (p >= 100) next()
     }, 100)
     return () => clearInterval(t)
-  }, [idx, item, total, onClose])
+  }, [idx, gi, item, next])
 
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
-      if (e.key === 'ArrowRight' && idx + 1 < total) setIdx(idx + 1)
+      if (e.key === 'ArrowRight') next()
+      if (e.key === 'ArrowLeft') prev()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [idx, total, onClose])
+  }, [next, prev, onClose])
 
-  if (!item) return null
+  if (!group || !item) return null
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95" role="dialog" aria-modal="true" aria-label={`Story de ${name}`}>
@@ -246,7 +309,7 @@ function StoryViewer({ group, onClose }: { group: StoryGroup; onClose: () => voi
           {group.items.map((s, i) => (
             <span key={s.id} className="h-1 flex-1 overflow-hidden rounded-full bg-white/25">
               <span
-                className={cn('block h-full bg-white transition-all', i < idx && 'w-full', i === idx && '')}
+                className={cn('block h-full bg-white transition-all', i < idx && 'w-full')}
                 style={i === idx ? { width: `${progress}%` } : undefined}
               />
             </span>
@@ -255,12 +318,30 @@ function StoryViewer({ group, onClose }: { group: StoryGroup; onClose: () => voi
 
         {/* En-tête */}
         <div className="flex items-center gap-2 px-3 pb-2 text-white">
-          <Avatar src={group.author.avatarUrl} name={name} size="sm" />
+          <Avatar src={group.author.avatarUrl} name={name} className="h-8 w-8" />
           <span className="text-sm font-bold">{name}</span>
           <span className="text-xs text-white/70">
             {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true, locale: fr })}
           </span>
           <span className="ml-auto flex items-center gap-1">
+            {/* Mémoriser la story → album stories du profil */}
+            <button
+              type="button"
+              className="rounded-lg p-2 hover:bg-white/15"
+              aria-label={isSaved ? 'Retirer de mon album stories' : 'Mémoriser cette story'}
+              title={isSaved ? 'Retirer de mon album stories' : 'Mémoriser cette story'}
+              onClick={() =>
+                isSaved
+                  ? unsave.mutate({ storyId: item.id })
+                  : save.mutate({ storyId: item.id })
+              }
+            >
+              {isSaved ? (
+                <BookmarkCheck className="h-4 w-4 text-secondary-400" aria-hidden />
+              ) : (
+                <Bookmark className="h-4 w-4" aria-hidden />
+              )}
+            </button>
             {group.isMe && (
               <button
                 type="button"
@@ -277,39 +358,55 @@ function StoryViewer({ group, onClose }: { group: StoryGroup; onClose: () => voi
           </span>
         </div>
 
-        {/* Média */}
+        {/* Média — clic = story suivante (spec) */}
         <div className="relative flex flex-1 items-center justify-center overflow-hidden px-3 pb-3">
+          {/* Zones de navigation tactiles */}
+          <button
+            type="button"
+            className="absolute inset-y-0 left-0 z-10 w-1/3 cursor-w-resize"
+            aria-label="Story précédente"
+            onClick={prev}
+          />
+          <button
+            type="button"
+            className="absolute inset-y-0 right-0 z-10 w-2/3 cursor-e-resize"
+            aria-label="Story suivante"
+            onClick={next}
+          />
           {item.type === 'VIDEO' ? (
             // eslint-disable-next-line jsx-a11y/media-has-caption
             <video
               src={item.mediaUrl}
-              className="max-h-full max-w-full rounded-2xl"
+              className="pointer-events-none max-h-full max-w-full rounded-2xl"
               autoPlay
-              controls
-              onEnded={() => (idx + 1 < total ? setIdx(idx + 1) : onClose())}
+              onEnded={next}
             />
           ) : (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={item.mediaUrl} alt={item.caption ?? `Story de ${name}`} className="max-h-full max-w-full rounded-2xl object-contain" />
+            <img
+              src={item.mediaUrl}
+              alt={item.caption ?? `Story de ${name}`}
+              className="pointer-events-none max-h-full max-w-full rounded-2xl object-contain"
+            />
           )}
           {item.caption && (
-            <p className="absolute inset-x-6 bottom-6 rounded-xl bg-black/60 p-3 text-center text-sm font-semibold text-white backdrop-blur">
+            <p className="pointer-events-none absolute inset-x-6 bottom-6 rounded-xl bg-black/60 p-3 text-center text-sm font-semibold text-white backdrop-blur">
               {item.caption}
             </p>
           )}
+          {/* Indicateurs de navigation */}
+          <span className="pointer-events-none absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/35 text-white">
+            <ChevronLeft className="h-5 w-5" aria-hidden />
+          </span>
+          <span className="pointer-events-none absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-black/35 text-white">
+            <ChevronRight className="h-5 w-5" aria-hidden />
+          </span>
         </div>
 
-        {/* Navigation */}
-        {total > 1 && (
-          <div className="flex justify-between px-4 pb-4">
-            <Button variant="secondary" size="sm" disabled={idx === 0} onClick={() => setIdx(idx - 1)}>
-              Précédent
-            </Button>
-            <Button variant="secondary" size="sm" disabled={idx + 1 >= total} onClick={() => setIdx(idx + 1)}>
-              Suivant
-            </Button>
-          </div>
-        )}
+        <p className="pb-4 text-center text-[11px] text-white/60">
+          Touchez à droite pour la story suivante · {idx + 1}/{total} de {name}
+          {gi + 1 < groups.length && ' · puis personne suivante'}
+        </p>
       </div>
     </div>
   )

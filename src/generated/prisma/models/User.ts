@@ -504,6 +504,7 @@ export type UserWhereInput = {
   photoAlbums?: Prisma.PhotoAlbumListRelationFilter
   connectedAccounts?: Prisma.ConnectedAccountListRelationFilter
   stories?: Prisma.StoryListRelationFilter
+  savedStories?: Prisma.SavedStoryListRelationFilter
   blocksGiven?: Prisma.UserBlockListRelationFilter
   blocksReceived?: Prisma.UserBlockListRelationFilter
   messageHides?: Prisma.MessageHideListRelationFilter
@@ -587,6 +588,7 @@ export type UserOrderByWithRelationInput = {
   photoAlbums?: Prisma.PhotoAlbumOrderByRelationAggregateInput
   connectedAccounts?: Prisma.ConnectedAccountOrderByRelationAggregateInput
   stories?: Prisma.StoryOrderByRelationAggregateInput
+  savedStories?: Prisma.SavedStoryOrderByRelationAggregateInput
   blocksGiven?: Prisma.UserBlockOrderByRelationAggregateInput
   blocksReceived?: Prisma.UserBlockOrderByRelationAggregateInput
   messageHides?: Prisma.MessageHideOrderByRelationAggregateInput
@@ -673,6 +675,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   photoAlbums?: Prisma.PhotoAlbumListRelationFilter
   connectedAccounts?: Prisma.ConnectedAccountListRelationFilter
   stories?: Prisma.StoryListRelationFilter
+  savedStories?: Prisma.SavedStoryListRelationFilter
   blocksGiven?: Prisma.UserBlockListRelationFilter
   blocksReceived?: Prisma.UserBlockListRelationFilter
   messageHides?: Prisma.MessageHideListRelationFilter
@@ -844,6 +847,7 @@ export type UserCreateInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -927,6 +931,7 @@ export type UserUncheckedCreateInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -1010,6 +1015,7 @@ export type UserUpdateInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -1093,6 +1099,7 @@ export type UserUncheckedUpdateInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -1732,6 +1739,20 @@ export type UserUpdateOneRequiredWithoutStoriesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStoriesInput, Prisma.UserUpdateWithoutStoriesInput>, Prisma.UserUncheckedUpdateWithoutStoriesInput>
 }
 
+export type UserCreateNestedOneWithoutSavedStoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedStoriesInput, Prisma.UserUncheckedCreateWithoutSavedStoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedStoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSavedStoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSavedStoriesInput, Prisma.UserUncheckedCreateWithoutSavedStoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSavedStoriesInput
+  upsert?: Prisma.UserUpsertWithoutSavedStoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSavedStoriesInput, Prisma.UserUpdateWithoutSavedStoriesInput>, Prisma.UserUncheckedUpdateWithoutSavedStoriesInput>
+}
+
 export type UserCreateNestedOneWithoutWaitlistEntriesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutWaitlistEntriesInput, Prisma.UserUncheckedCreateWithoutWaitlistEntriesInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutWaitlistEntriesInput
@@ -2167,6 +2188,7 @@ export type UserCreateWithoutProfilePhotosInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -2249,6 +2271,7 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -2347,6 +2370,7 @@ export type UserUpdateWithoutProfilePhotosInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -2429,6 +2453,7 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -2511,6 +2536,7 @@ export type UserCreateWithoutPhotoAlbumsInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -2593,6 +2619,7 @@ export type UserUncheckedCreateWithoutPhotoAlbumsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -2691,6 +2718,7 @@ export type UserUpdateWithoutPhotoAlbumsInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -2773,6 +2801,7 @@ export type UserUncheckedUpdateWithoutPhotoAlbumsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -2855,6 +2884,7 @@ export type UserCreateWithoutConnectedAccountsInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -2937,6 +2967,7 @@ export type UserUncheckedCreateWithoutConnectedAccountsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -3035,6 +3066,7 @@ export type UserUpdateWithoutConnectedAccountsInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -3117,6 +3149,7 @@ export type UserUncheckedUpdateWithoutConnectedAccountsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -3200,6 +3233,7 @@ export type UserCreateWithoutVerificationCodesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -3282,6 +3316,7 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -3380,6 +3415,7 @@ export type UserUpdateWithoutVerificationCodesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -3462,6 +3498,7 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -3544,6 +3581,7 @@ export type UserCreateWithoutInterestsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -3626,6 +3664,7 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -3772,6 +3811,7 @@ export type UserCreateWithoutBadgesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -3854,6 +3894,7 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -3952,6 +3993,7 @@ export type UserUpdateWithoutBadgesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -4034,6 +4076,7 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -4116,6 +4159,7 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -4198,6 +4242,7 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -4285,6 +4330,7 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -4367,6 +4413,7 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -4465,6 +4512,7 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -4547,6 +4595,7 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -4640,6 +4689,7 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -4722,6 +4772,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -4804,6 +4855,7 @@ export type UserCreateWithoutFriendshipsAInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -4886,6 +4938,7 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -4973,6 +5026,7 @@ export type UserCreateWithoutFriendshipsBInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -5055,6 +5109,7 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -5153,6 +5208,7 @@ export type UserUpdateWithoutFriendshipsAInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -5235,6 +5291,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -5328,6 +5385,7 @@ export type UserUpdateWithoutFriendshipsBInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -5410,6 +5468,7 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -5492,6 +5551,7 @@ export type UserCreateWithoutEventLikesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -5574,6 +5634,7 @@ export type UserUncheckedCreateWithoutEventLikesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -5672,6 +5733,7 @@ export type UserUpdateWithoutEventLikesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -5754,6 +5816,7 @@ export type UserUncheckedUpdateWithoutEventLikesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -5836,6 +5899,7 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -5918,6 +5982,7 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -6021,6 +6086,7 @@ export type UserCreateWithoutOrganizedEventsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -6103,6 +6169,7 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -6201,6 +6268,7 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -6283,6 +6351,7 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -6365,6 +6434,7 @@ export type UserCreateWithoutEventParticipationsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -6447,6 +6517,7 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -6545,6 +6616,7 @@ export type UserUpdateWithoutEventParticipationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -6627,6 +6699,7 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -6708,6 +6781,7 @@ export type UserCreateWithoutStoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -6790,6 +6864,7 @@ export type UserUncheckedCreateWithoutStoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -6888,6 +6963,7 @@ export type UserUpdateWithoutStoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -6970,6 +7046,355 @@ export type UserUncheckedUpdateWithoutStoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
+  blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUncheckedUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUncheckedUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUncheckedUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUncheckedUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUncheckedUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUncheckedUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutSavedStoriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutSavedStoriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
+  blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
+  messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaUncheckedCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageUncheckedCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowUncheckedCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostUncheckedCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyUncheckedCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingUncheckedCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutSavedStoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedStoriesInput, Prisma.UserUncheckedCreateWithoutSavedStoriesInput>
+}
+
+export type UserUpsertWithoutSavedStoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSavedStoriesInput, Prisma.UserUncheckedUpdateWithoutSavedStoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSavedStoriesInput, Prisma.UserUncheckedCreateWithoutSavedStoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSavedStoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSavedStoriesInput, Prisma.UserUncheckedUpdateWithoutSavedStoriesInput>
+}
+
+export type UserUpdateWithoutSavedStoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
+  blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
+  messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSavedStoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
+  connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -7053,6 +7478,7 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -7135,6 +7561,7 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -7233,6 +7660,7 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -7315,6 +7743,7 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -7397,6 +7826,7 @@ export type UserCreateWithoutEventInvitationsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -7479,6 +7909,7 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -7577,6 +8008,7 @@ export type UserUpdateWithoutEventInvitationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -7659,6 +8091,7 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -7741,6 +8174,7 @@ export type UserCreateWithoutEventChatMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -7823,6 +8257,7 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -7921,6 +8356,7 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -8003,6 +8439,7 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -8085,6 +8522,7 @@ export type UserCreateWithoutConversationMembersInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -8167,6 +8605,7 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -8265,6 +8704,7 @@ export type UserUpdateWithoutConversationMembersInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -8347,6 +8787,7 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -8429,6 +8870,7 @@ export type UserCreateWithoutMessageHidesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
@@ -8511,6 +8953,7 @@ export type UserUncheckedCreateWithoutMessageHidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
@@ -8609,6 +9052,7 @@ export type UserUpdateWithoutMessageHidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
@@ -8691,6 +9135,7 @@ export type UserUncheckedUpdateWithoutMessageHidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
@@ -8773,6 +9218,7 @@ export type UserCreateWithoutBlocksGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
@@ -8855,6 +9301,7 @@ export type UserUncheckedCreateWithoutBlocksGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
@@ -8942,6 +9389,7 @@ export type UserCreateWithoutBlocksReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
@@ -9024,6 +9472,7 @@ export type UserUncheckedCreateWithoutBlocksReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
@@ -9122,6 +9571,7 @@ export type UserUpdateWithoutBlocksGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
@@ -9204,6 +9654,7 @@ export type UserUncheckedUpdateWithoutBlocksGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
@@ -9297,6 +9748,7 @@ export type UserUpdateWithoutBlocksReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
@@ -9379,6 +9831,7 @@ export type UserUncheckedUpdateWithoutBlocksReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
@@ -9461,6 +9914,7 @@ export type UserCreateWithoutSentMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -9543,6 +9997,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -9630,6 +10085,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -9712,6 +10168,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -9810,6 +10267,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -9892,6 +10350,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -9985,6 +10444,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -10067,6 +10527,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -10149,6 +10610,7 @@ export type UserCreateWithoutUploadedMediaInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -10231,6 +10693,7 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -10329,6 +10792,7 @@ export type UserUpdateWithoutUploadedMediaInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -10411,6 +10875,7 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -10493,6 +10958,7 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -10575,6 +11041,7 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -10673,6 +11140,7 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -10755,6 +11223,7 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -10837,6 +11306,7 @@ export type UserCreateWithoutRatingsGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -10919,6 +11389,7 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -11006,6 +11477,7 @@ export type UserCreateWithoutRatingsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -11088,6 +11560,7 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -11186,6 +11659,7 @@ export type UserUpdateWithoutRatingsGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -11268,6 +11742,7 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -11361,6 +11836,7 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -11443,6 +11919,7 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -11525,6 +12002,7 @@ export type UserCreateWithoutReportsMadeInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -11607,6 +12085,7 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -11694,6 +12173,7 @@ export type UserCreateWithoutReportsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -11776,6 +12256,7 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -11874,6 +12355,7 @@ export type UserUpdateWithoutReportsMadeInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -11956,6 +12438,7 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -12049,6 +12532,7 @@ export type UserUpdateWithoutReportsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -12131,6 +12615,7 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -12213,6 +12698,7 @@ export type UserCreateWithoutOfferedRidesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -12295,6 +12781,7 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -12393,6 +12880,7 @@ export type UserUpdateWithoutOfferedRidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -12475,6 +12963,7 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -12557,6 +13046,7 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -12639,6 +13129,7 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -12737,6 +13228,7 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -12819,6 +13311,7 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -12901,6 +13394,7 @@ export type UserCreateWithoutOwnedPagesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -12983,6 +13477,7 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -13081,6 +13576,7 @@ export type UserUpdateWithoutOwnedPagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -13163,6 +13659,7 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -13245,6 +13742,7 @@ export type UserCreateWithoutPageFollowsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -13327,6 +13825,7 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -13425,6 +13924,7 @@ export type UserUpdateWithoutPageFollowsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -13507,6 +14007,7 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -13589,6 +14090,7 @@ export type UserCreateWithoutGroupMembershipsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -13671,6 +14173,7 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -13769,6 +14272,7 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -13851,6 +14355,7 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -13933,6 +14438,7 @@ export type UserCreateWithoutForumPostsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -14015,6 +14521,7 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -14113,6 +14620,7 @@ export type UserUpdateWithoutForumPostsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -14195,6 +14703,7 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -14277,6 +14786,7 @@ export type UserCreateWithoutForumRepliesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -14359,6 +14869,7 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -14457,6 +14968,7 @@ export type UserUpdateWithoutForumRepliesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -14539,6 +15051,7 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -14621,6 +15134,7 @@ export type UserCreateWithoutRedeemedOffersInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -14703,6 +15217,7 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -14801,6 +15316,7 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -14883,6 +15399,7 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -14965,6 +15482,7 @@ export type UserCreateWithoutSubscriptionInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -15047,6 +15565,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -15145,6 +15664,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -15227,6 +15747,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -15309,6 +15830,7 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -15391,6 +15913,7 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -15489,6 +16012,7 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -15571,6 +16095,7 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -15653,6 +16178,7 @@ export type UserCreateWithoutNotificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -15735,6 +16261,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -15833,6 +16360,7 @@ export type UserUpdateWithoutNotificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -15915,6 +16443,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -15997,6 +16526,7 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -16079,6 +16609,7 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -16177,6 +16708,7 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -16259,6 +16791,7 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -16341,6 +16874,7 @@ export type UserCreateWithoutIntroCardInput = {
   photoAlbums?: Prisma.PhotoAlbumCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideCreateNestedManyWithoutUserInput
@@ -16423,6 +16957,7 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedCreateNestedManyWithoutUserInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedCreateNestedManyWithoutUserInput
   stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
+  savedStories?: Prisma.SavedStoryUncheckedCreateNestedManyWithoutUserInput
   blocksGiven?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockerInput
   blocksReceived?: Prisma.UserBlockUncheckedCreateNestedManyWithoutBlockedInput
   messageHides?: Prisma.MessageHideUncheckedCreateNestedManyWithoutUserInput
@@ -16521,6 +17056,7 @@ export type UserUpdateWithoutIntroCardInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -16603,6 +17139,7 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -16685,6 +17222,7 @@ export type UserUpdateWithoutInterestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -16767,6 +17305,7 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -16889,6 +17428,7 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUpdateManyWithoutUserNestedInput
@@ -16971,6 +17511,7 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   photoAlbums?: Prisma.PhotoAlbumUncheckedUpdateManyWithoutUserNestedInput
   connectedAccounts?: Prisma.ConnectedAccountUncheckedUpdateManyWithoutUserNestedInput
   stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  savedStories?: Prisma.SavedStoryUncheckedUpdateManyWithoutUserNestedInput
   blocksGiven?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockerNestedInput
   blocksReceived?: Prisma.UserBlockUncheckedUpdateManyWithoutBlockedNestedInput
   messageHides?: Prisma.MessageHideUncheckedUpdateManyWithoutUserNestedInput
@@ -17061,6 +17602,7 @@ export type UserCountOutputType = {
   photoAlbums: number
   connectedAccounts: number
   stories: number
+  savedStories: number
   blocksGiven: number
   blocksReceived: number
   messageHides: number
@@ -17105,6 +17647,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   photoAlbums?: boolean | UserCountOutputTypeCountPhotoAlbumsArgs
   connectedAccounts?: boolean | UserCountOutputTypeCountConnectedAccountsArgs
   stories?: boolean | UserCountOutputTypeCountStoriesArgs
+  savedStories?: boolean | UserCountOutputTypeCountSavedStoriesArgs
   blocksGiven?: boolean | UserCountOutputTypeCountBlocksGivenArgs
   blocksReceived?: boolean | UserCountOutputTypeCountBlocksReceivedArgs
   messageHides?: boolean | UserCountOutputTypeCountMessageHidesArgs
@@ -17180,6 +17723,13 @@ export type UserCountOutputTypeCountConnectedAccountsArgs<ExtArgs extends runtim
  */
 export type UserCountOutputTypeCountStoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.StoryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSavedStoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SavedStoryWhereInput
 }
 
 /**
@@ -17484,6 +18034,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   photoAlbums?: boolean | Prisma.User$photoAlbumsArgs<ExtArgs>
   connectedAccounts?: boolean | Prisma.User$connectedAccountsArgs<ExtArgs>
   stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
+  savedStories?: boolean | Prisma.User$savedStoriesArgs<ExtArgs>
   blocksGiven?: boolean | Prisma.User$blocksGivenArgs<ExtArgs>
   blocksReceived?: boolean | Prisma.User$blocksReceivedArgs<ExtArgs>
   messageHides?: boolean | Prisma.User$messageHidesArgs<ExtArgs>
@@ -17652,6 +18203,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   photoAlbums?: boolean | Prisma.User$photoAlbumsArgs<ExtArgs>
   connectedAccounts?: boolean | Prisma.User$connectedAccountsArgs<ExtArgs>
   stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
+  savedStories?: boolean | Prisma.User$savedStoriesArgs<ExtArgs>
   blocksGiven?: boolean | Prisma.User$blocksGivenArgs<ExtArgs>
   blocksReceived?: boolean | Prisma.User$blocksReceivedArgs<ExtArgs>
   messageHides?: boolean | Prisma.User$messageHidesArgs<ExtArgs>
@@ -17703,6 +18255,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     photoAlbums: Prisma.$PhotoAlbumPayload<ExtArgs>[]
     connectedAccounts: Prisma.$ConnectedAccountPayload<ExtArgs>[]
     stories: Prisma.$StoryPayload<ExtArgs>[]
+    savedStories: Prisma.$SavedStoryPayload<ExtArgs>[]
     blocksGiven: Prisma.$UserBlockPayload<ExtArgs>[]
     blocksReceived: Prisma.$UserBlockPayload<ExtArgs>[]
     messageHides: Prisma.$MessageHidePayload<ExtArgs>[]
@@ -18179,6 +18732,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   photoAlbums<T extends Prisma.User$photoAlbumsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$photoAlbumsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PhotoAlbumPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   connectedAccounts<T extends Prisma.User$connectedAccountsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$connectedAccountsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ConnectedAccountPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   stories<T extends Prisma.User$storiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$storiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  savedStories<T extends Prisma.User$savedStoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$savedStoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SavedStoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocksGiven<T extends Prisma.User$blocksGivenArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blocksGivenArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   blocksReceived<T extends Prisma.User$blocksReceivedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$blocksReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBlockPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   messageHides<T extends Prisma.User$messageHidesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$messageHidesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$MessageHidePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -18770,6 +19324,30 @@ export type User$storiesArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
   take?: number
   skip?: number
   distinct?: Prisma.StoryScalarFieldEnum | Prisma.StoryScalarFieldEnum[]
+}
+
+/**
+ * User.savedStories
+ */
+export type User$savedStoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SavedStory
+   */
+  select?: Prisma.SavedStorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SavedStory
+   */
+  omit?: Prisma.SavedStoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SavedStoryInclude<ExtArgs> | null
+  where?: Prisma.SavedStoryWhereInput
+  orderBy?: Prisma.SavedStoryOrderByWithRelationInput | Prisma.SavedStoryOrderByWithRelationInput[]
+  cursor?: Prisma.SavedStoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SavedStoryScalarFieldEnum | Prisma.SavedStoryScalarFieldEnum[]
 }
 
 /**
