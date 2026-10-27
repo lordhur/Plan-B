@@ -3,10 +3,9 @@
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { ArrowLeft, Check, Crosshair, Loader2, RotateCcw } from 'lucide-react'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import { Button } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
 import { useLocationFilter, type BBox } from '@/lib/locationFilter'
 
 /** GeoJSON officiels simplifiés (chargés dans le navigateur). */
@@ -17,6 +16,12 @@ const DEPTS_URL =
 
 /** 13 régions métropolitaines. */
 const METRO_REGIONS = new Set(['84', '27', '53', '24', '94', '44', '11', '76', '32', '28', '75', '52', '93'])
+
+/** Cadre de la France entière (vue initiale). */
+const FRANCE_BOUNDS: L.LatLngBoundsExpression = [
+  [41.1, -5.4],
+  [51.3, 9.8],
+]
 
 /** Département → code région (table officielle). */
 const DEPT_TO_REGION: Record<string, string> = {
@@ -36,14 +41,8 @@ const DEPT_TO_REGION: Record<string, string> = {
 
 type Level = 'regions' | 'depts' | 'cities'
 
-interface Selection {
-  level: Level
-  code: string
-  name: string
-  bounds?: L.LatLngBounds
-  lat?: number
-  lon?: number
-}
+/** Cadre géographique simple (pas d'objet Leaflet dans l'état React). */
+type Box = { south: number; west: number; north: number; east: number }
 
 interface Commune {
   nom: string
@@ -53,36 +52,50 @@ interface Commune {
 
 /** Étiquette « contour » du nom de ville — légère et lisible. */
 function cityLabelIcon(name: string, selected: boolean): L.DivIcon {
+  const safe = String(name).replace(/</g, '&lt;')
   return L.divIcon({
     className: 'city-outline-label',
-    html: `<span class="${selected ? 'sel' : ''}">${name}</span>`,
+    html: `<span class="${selected ? 'sel' : ''}">${safe}</span>`,
     iconSize: [0, 0],
   })
 }
 
-/** Recentre la carte quand la sélection change. */
-function FitBounds({ bounds }: { bounds: L.LatLngBounds | null }) {
+/** Recentre la carte quand le cadre change. */
+function FitBox({ box }: { box: Box | null }) {
   const map = useMap()
+  const key = box ? `${box.south},${box.west},${box.north},${box.east}` : ''
   useEffect(() => {
-    if (bounds) map.fitBounds(bounds, { padding: [16, 16], maxZoom: 11 })
-  }, [bounds, map])
+    if (!box) return
+    try {
+      map.fitBounds(
+        L.latLngBounds([box.south, box.west], [box.north, box.east]),
+        { padding: [16, 16], maxZoom: 11 },
+      )
+    } catch {
+      /* cadre invalide : on ignore */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, map])
   return null
 }
 
 /** Carte régions → départements → villes avec bouton Valider. */
 export function RegionsMapInner() {
   const mapRef = useRef<L.Map | null>(null)
+  const layersRef = useRef<L.LayerGroup | null>(null)
   const [level, setLevel] = useState<Level>('regions')
-  const [selection, setSelection] = useState<Selection | null>(null)
   const [regionSel, setRegionSel] = useState<{ code: string; name: string } | null>(null)
   const [deptSel, setDeptSel] = useState<{ code: string; name: string } | null>(null)
-  const [geo, setGeo] = useState<{ regions: GeoJSON.FeatureCollection | null; depts: GeoJSON.FeatureCollection | null }>({ regions: null, depts: null })
+  const [citySel, setCitySel] = useState<Commune | null>(null)
+  const [box, setBox] = useState<Box | null>(null)
+  const [geo, setGeo] = useState<{
+    regions: GeoJSON.FeatureCollection | null
+    depts: GeoJSON.FeatureCollection | null
+  }>({ regions: null, depts: null })
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [communes, setCommunes] = useState<Commune[]>([])
-  const [citySel, setCitySel] = useState<Commune | null>(null)
-  const [bounds, setBounds] = useState<L.LatLngBounds | null>(null)
-  const layersRef = useRef<L.LayerGroup | null>(null)
+  const [mapError, setMapError] = useState<string | null>(null)
 
   const { setFilter, clear } = useLocationFilter()
 
@@ -95,11 +108,8 @@ export function RegionsMapInner() {
     ])
       .then(([regions, depts]) => {
         if (cancelled) return
-        if (!regions || !depts) {
-          setError(true)
-        } else {
-          setGeo({ regions, depts })
-        }
+        if (!regions || !depts) setError(true)
+        else setGeo({ regions, depts })
         setLoading(false)
       })
       .catch(() => {
@@ -113,119 +123,145 @@ export function RegionsMapInner() {
     }
   }, [])
 
-  // Rendu des couches selon le niveau
+  // Rendu des couches selon le niveau — protégé : une erreur Leaflet ne casse pas la page
   useEffect(() => {
     const map = mapRef.current
     if (!map || !geo.regions || !geo.depts) return
-    if (layersRef.current) {
-      layersRef.current.remove()
-      layersRef.current = null
-    }
-    const group = L.layerGroup().addTo(map)
-    layersRef.current = group
-
-    const style = (active: boolean): L.PathOptions => ({
-      color: '#7c3aed',
-      weight: active ? 2.5 : 1.2,
-      fillColor: '#8b5cf6',
-      fillOpacity: active ? 0.35 : 0.12,
-    })
-
-    if (level === 'regions') {
-      L.geoJSON(geo.regions, {
-        filter: (f) => METRO_REGIONS.has(String(f.properties?.code ?? '')),
-        style: () => style(false),
-        onEachFeature: (feature, layer) => {
-          const code = String(feature.properties?.code ?? '')
-          const name = String(feature.properties?.nom ?? '')
-          layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
-          layer.on('click', () => {
-            const l = layer as L.Path & { getBounds: () => L.LatLngBounds }
-            const b = (layer as unknown as { getBounds: () => L.LatLngBounds }).getBounds()
-            setRegionSel({ code, name })
-            setSelection({ level: 'depts', code, name, bounds: b })
-            setLevel('depts')
-            setBounds(b)
-          })
-          layer.on('mouseover', function (this: L.Path) {
-            this.setStyle({ fillOpacity: 0.3 })
-          })
-          layer.on('mouseout', function (this: L.Path) {
-            this.setStyle(style(false))
-          })
-        },
-      }).addTo(group)
-    } else if (level === 'depts' && regionSel) {
-      L.geoJSON(geo.depts, {
-        filter: (f) => DEPT_TO_REGION[String(f.properties?.code ?? '')] === regionSel.code,
-        style: () => style(false),
-        onEachFeature: (feature, layer) => {
-          const code = String(feature.properties?.code ?? '')
-          const name = String(feature.properties?.nom ?? '')
-          layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
-          layer.on('click', () => {
-            const b = (layer as unknown as { getBounds: () => L.LatLngBounds }).getBounds()
-            setDeptSel({ code, name })
-            setSelection({ level: 'cities', code, name, bounds: b })
-            setLevel('cities')
-            setBounds(b)
-            setCitySel(null)
-            // Villes du département (API officielle, triées par population)
-            setCommunes([])
-            fetch(
-              `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&boost=population&limit=18`,
-            )
-              .then((r) => (r.ok ? r.json() : []))
-              .then((data: Commune[]) => setCommunes(data.filter((c) => c.centre)))
-              .catch(() => setCommunes([]))
-          })
-          layer.on('mouseover', function (this: L.Path) {
-            this.setStyle({ fillOpacity: 0.3 })
-          })
-          layer.on('mouseout', function (this: L.Path) {
-            this.setStyle(style(false))
-          })
-        },
-      }).addTo(group)
-    } else if (level === 'cities' && deptSel) {
-      // Fond : le département sélectionné
-      L.geoJSON(geo.depts, {
-        filter: (f) => String(f.properties?.code ?? '') === deptSel.code,
-        style: () => style(true),
-      }).addTo(group)
-      // Villes : étiquettes contour cliquables
-      for (const c of communes) {
-        const m = L.marker([c.centre.lat, c.centre.lon], {
-          icon: cityLabelIcon(c.nom, citySel?.nom === c.nom),
-          keyboard: true,
-          title: c.nom,
-          alt: c.nom,
-        })
-        m.on('click', () => {
-          setCitySel(c)
-          setSelection({ level: 'cities', code: deptSel.code, name: c.nom, lat: c.centre.lat, lon: c.centre.lon })
-        })
-        m.addTo(group)
+    try {
+      if (layersRef.current) {
+        layersRef.current.remove()
+        layersRef.current = null
       }
+      const group = L.layerGroup().addTo(map)
+      layersRef.current = group
+
+      const style = (active: boolean): L.PathOptions => ({
+        color: '#7c3aed',
+        weight: active ? 2.5 : 1.2,
+        fillColor: '#8b5cf6',
+        fillOpacity: active ? 0.35 : 0.12,
+      })
+
+      const boxOf = (layer: unknown): Box | null => {
+        try {
+          const b = (layer as { getBounds?: () => L.LatLngBounds }).getBounds?.()
+          if (!b) return null
+          return {
+            south: b.getSouth(),
+            west: b.getWest(),
+            north: b.getNorth(),
+            east: b.getEast(),
+          }
+        } catch {
+          return null
+        }
+      }
+
+      if (level === 'regions') {
+        L.geoJSON(geo.regions, {
+          filter: (f) => METRO_REGIONS.has(String(f.properties?.code ?? '')),
+          style: () => style(false),
+          onEachFeature: (feature, layer) => {
+            const code = String(feature.properties?.code ?? '')
+            const name = String(feature.properties?.nom ?? '')
+            layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            layer.on('click', () => {
+              setRegionSel({ code, name })
+              setDeptSel(null)
+              setCitySel(null)
+              setLevel('depts')
+              setBox(boxOf(layer))
+            })
+          },
+        }).addTo(group)
+      } else if (level === 'depts' && regionSel) {
+        L.geoJSON(geo.depts, {
+          filter: (f) => DEPT_TO_REGION[String(f.properties?.code ?? '')] === regionSel.code,
+          style: () => style(false),
+          onEachFeature: (feature, layer) => {
+            const code = String(feature.properties?.code ?? '')
+            const name = String(feature.properties?.nom ?? '')
+            layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            layer.on('click', () => {
+              setDeptSel({ code, name })
+              setCitySel(null)
+              setLevel('cities')
+              setBox(boxOf(layer))
+              setCommunes([])
+              // Villes du département (API officielle, triées par population)
+              fetch(
+                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&boost=population&limit=18`,
+              )
+                .then((r) => (r.ok ? r.json() : []))
+                .then((data: unknown) => {
+                  if (!Array.isArray(data)) {
+                    setCommunes([])
+                    return
+                  }
+                  setCommunes(
+                    data.filter(
+                      (c): c is Commune =>
+                        !!c &&
+                        typeof (c as Commune).nom === 'string' &&
+                        typeof (c as Commune).centre?.lat === 'number' &&
+                        typeof (c as Commune).centre?.lon === 'number',
+                    ),
+                  )
+                })
+                .catch(() => setCommunes([]))
+            })
+          },
+        }).addTo(group)
+      } else if (level === 'cities' && deptSel) {
+        // Fond : le département sélectionné
+        L.geoJSON(geo.depts, {
+          filter: (f) => String(f.properties?.code ?? '') === deptSel.code,
+          style: () => style(true),
+        }).addTo(group)
+        // Villes : étiquettes contour cliquables (coordonnées validées)
+        for (const c of communes) {
+          if (typeof c.centre?.lat !== 'number' || typeof c.centre?.lon !== 'number') continue
+          const m = L.marker([c.centre.lat, c.centre.lon], {
+            icon: cityLabelIcon(c.nom, citySel?.nom === c.nom),
+            keyboard: true,
+            title: c.nom,
+            alt: c.nom,
+          })
+          m.on('click', () => {
+            setCitySel(c)
+          })
+          m.addTo(group)
+        }
+      }
+      setMapError(null)
+    } catch (err) {
+      console.error('[FranceMap]', err)
+      setMapError('La carte a rencontré un problème. Réessayez.')
     }
 
     return () => {
-      group.remove()
+      try {
+        layersRef.current?.remove()
+        layersRef.current = null
+      } catch {
+        /* déjà retiré */
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [geo, level, regionSel, deptSel, communes, citySel])
 
   const goRegions = useCallback(() => {
     setLevel('regions')
-    setSelection(null)
     setRegionSel(null)
     setDeptSel(null)
     setCitySel(null)
-    setBounds(null)
-    mapRef.current?.fitBounds(
-      L.latLngBounds(L.latLng(41.2, -5.1), L.latLng(51.2, 9.6)),
-      { padding: [8, 8] },
-    )
+    setBox(null)
+    try {
+      mapRef.current?.fitBounds(L.latLngBounds(FRANCE_BOUNDS as [number, number][]), {
+        padding: [8, 8],
+      })
+    } catch {
+      /* carte pas prête */
+    }
   }, [])
 
   const goDepts = useCallback(() => {
@@ -233,23 +269,28 @@ export function RegionsMapInner() {
     setLevel('depts')
     setDeptSel(null)
     setCitySel(null)
-    setSelection({ level: 'depts', code: regionSel.code, name: regionSel.name })
+    setCommunes([])
   }, [regionSel])
 
   const validate = () => {
-    if (!selection) return
-    if (selection.level === 'cities' && selection.lat != null && selection.lon != null) {
-      setFilter({ type: 'city', name: selection.name, lat: selection.lat, lon: selection.lon })
-    } else if (selection.bounds) {
-      const b = selection.bounds
-      const bbox: BBox = {
-        minLat: b.getSouth(),
-        maxLat: b.getNorth(),
-        minLon: b.getWest(),
-        maxLon: b.getEast(),
-      }
-      setFilter({ type: selection.level === 'depts' ? 'dept' : 'region', name: selection.name, bbox })
+    if (level === 'cities' && citySel) {
+      setFilter({
+        type: 'city',
+        name: citySel.nom,
+        lat: citySel.centre.lat,
+        lon: citySel.centre.lon,
+      })
+      return
     }
+    if (!box) return
+    const bbox: BBox = {
+      minLat: box.south,
+      maxLat: box.north,
+      minLon: box.west,
+      maxLon: box.east,
+    }
+    if (level === 'depts' && regionSel) setFilter({ type: 'region', name: regionSel.name, bbox })
+    else if (level === 'cities' && deptSel) setFilter({ type: 'dept', name: deptSel.name, bbox })
   }
 
   const useGps = () => {
@@ -274,8 +315,7 @@ export function RegionsMapInner() {
         ? `${regionSel?.name} — choisissez un département`
         : `${deptSel?.name} — choisissez une ville`
 
-  const canValidate =
-    selection != null && (selection.level !== 'cities' ? !!selection.bounds : citySel != null)
+  const canValidate = level === 'cities' ? !!citySel : !!box
 
   return (
     <div className="rounded-2xl border border-border bg-card/60 p-4">
@@ -284,7 +324,7 @@ export function RegionsMapInner() {
           <Crosshair className="h-4 w-4 text-primary-600" aria-hidden />
           {title}
         </h2>
-        <div className="flex gap-1.5">
+        <div className="flex flex-wrap gap-1.5">
           {level !== 'regions' && (
             <Button variant="outline" size="sm" onClick={level === 'cities' ? goDepts : goRegions}>
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
@@ -311,7 +351,7 @@ export function RegionsMapInner() {
         </div>
       </div>
 
-      <div className="relative h-80 overflow-hidden rounded-xl border border-border">
+      <div className="relative h-80 overflow-hidden rounded-xl border border-border sm:h-96">
         {loading && (
           <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-bg/70">
             <Loader2 className="h-7 w-7 animate-spin text-primary-600" aria-label="Chargement de la carte" />
@@ -329,8 +369,7 @@ export function RegionsMapInner() {
           </div>
         ) : (
           <MapContainer
-            center={[46.6, 2.4]}
-            zoom={6}
+            bounds={FRANCE_BOUNDS}
             scrollWheelZoom
             className="h-full w-full"
             ref={(m) => {
@@ -341,12 +380,17 @@ export function RegionsMapInner() {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <FitBounds bounds={bounds} />
+            <FitBox box={box} />
           </MapContainer>
+        )}
+        {mapError && (
+          <div className="absolute inset-x-2 bottom-2 z-[1000] rounded-lg bg-danger-500/90 px-3 py-2 text-center text-xs font-semibold text-white">
+            {mapError}
+          </div>
         )}
       </div>
 
-      <p className={cn('mt-1.5 text-center text-[11px] text-fg-muted')}>
+      <p className="mt-1.5 text-center text-[11px] text-fg-muted">
         Cliquez une région → ses départements → ses villes, puis <strong>Valider</strong> pour
         afficher les plans et membres de la zone.
       </p>
