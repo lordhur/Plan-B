@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, useMap } from 'react-leaflet'
 import { Button } from '@/components/ui/button'
 import { useLocationFilter, type BBox } from '@/lib/locationFilter'
+import { useLang } from '@/lib/i18n'
 
 /** GeoJSON officiels simplifiés (chargés dans le navigateur). */
 const REGIONS_URL =
@@ -81,6 +82,7 @@ function FitBox({ box }: { box: Box | null }) {
 
 /** Carte régions → départements → villes avec bouton Valider. */
 export function RegionsMapInner() {
+  const { t } = useLang()
   const mapRef = useRef<L.Map | null>(null)
   const layersRef = useRef<L.LayerGroup | null>(null)
   const [level, setLevel] = useState<Level>('regions')
@@ -310,10 +312,10 @@ export function RegionsMapInner() {
 
   const title =
     level === 'regions'
-      ? 'Choisissez une région'
+      ? t('map_pick_region')
       : level === 'depts'
-        ? `${regionSel?.name} — choisissez un département`
-        : `${deptSel?.name} — choisissez une ville`
+        ? `${regionSel?.name} — ${t('map_pick_dept')}`
+        : `${deptSel?.name} — ${t('map_pick_city')}`
 
   const canValidate = level === 'cities' ? !!citySel : !!box
 
@@ -328,14 +330,14 @@ export function RegionsMapInner() {
           {level !== 'regions' && (
             <Button variant="outline" size="sm" onClick={level === 'cities' ? goDepts : goRegions}>
               <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
-              {level === 'cities' ? 'Départements' : 'Régions'}
+              {level === 'cities' ? t('map_depts') : t('map_regions')}
             </Button>
           )}
           <Button variant="outline" size="sm" onClick={useGps}>
             <Crosshair className="h-3.5 w-3.5" aria-hidden /> GPS
           </Button>
           <Button size="sm" disabled={!canValidate} onClick={validate}>
-            <Check className="h-3.5 w-3.5" aria-hidden /> Valider
+            <Check className="h-3.5 w-3.5" aria-hidden /> {t('map_validate')}
           </Button>
           <Button
             variant="ghost"
@@ -390,10 +392,7 @@ export function RegionsMapInner() {
         )}
       </div>
 
-      <p className="mt-1.5 text-center text-[11px] text-fg-muted">
-        Cliquez une région → ses départements → ses villes, puis <strong>Valider</strong> pour
-        afficher les plans et membres de la zone.
-      </p>
+      <p className="mt-1.5 text-center text-[11px] text-fg-muted">{t('map_hint')}</p>
     </div>
   )
 }

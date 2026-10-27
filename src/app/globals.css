@@ -376,27 +376,39 @@ nav * {
   .lift-shadow::before { transition: none; }
 }
 
-/* Carte v3 : étiquettes « contour » des villes (légères, lisibles sur la carte) */
+/* Carte v3 : étiquettes « contour » des villes — lisibles ET cliquables */
 .city-outline-label {
   background: transparent !important;
   border: none !important;
+  overflow: visible !important;
 }
 .city-outline-label span {
   display: inline-block;
   transform: translate(-50%, -50%);
-  font-size: 11px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   color: #fff;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.45);
   text-shadow:
     -1px -1px 0 #0f172a, 1px -1px 0 #0f172a,
     -1px 1px 0 #0f172a, 1px 1px 0 #0f172a,
-    0 0 6px rgba(15, 23, 42, 0.85);
-  pointer-events: none;
+    0 2px 6px rgba(15, 23, 42, 0.9);
+  pointer-events: auto;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.city-outline-label span:hover {
+  background: rgba(124, 58, 237, 0.75);
 }
 .city-outline-label span.sel {
-  color: #a5f3fc;
-  font-size: 12px;
+  color: #fff;
+  font-size: 15px;
+  background: #7c3aed;
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.6);
 }
 .region-tooltip {
   background: rgba(15, 23, 42, 0.85);
@@ -418,4 +430,17 @@ nav * {
 }
 @media (prefers-reduced-motion: reduce) {
   .weather-anim { animation: none; }
+}
+
+/* Fluidité : rendu différé des cartes hors écran (moins de travail au scroll) */
+.animate-card-in {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 400px;
+}
+.event-row-perf {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 52px;
+}
+img, video {
+  background-color: rgba(100, 116, 139, 0.08);
 }

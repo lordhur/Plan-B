@@ -20,6 +20,7 @@ import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { JoinButton } from './JoinButton'
 import { LikeButton } from './LikeButton'
 import { AccessibilityBadges } from '@/components/common/AccessibilityBadges'
+import { useLang } from '@/lib/i18n'
 
 export interface EventCardData {
   id: string
@@ -63,6 +64,8 @@ interface EventCardProps {
   likes?: number
   /** L'utilisateur connecté a liké ce plan. */
   liked?: boolean
+  /** Position de l'utilisateur dans la liste d'attente (null = pas en attente). */
+  waitlistPosition?: number | null
 }
 
 /** Carte d'événement — visuel pleine largeur, inclinaison 3D et reflet au survol. */
@@ -75,7 +78,9 @@ function EventCardBase({
   index = 0,
   likes = 0,
   liked = false,
+  waitlistPosition = null,
 }: EventCardProps) {
+  const { t } = useLang()
   const [imgFailed, setImgFailed] = React.useState(false)
   const showImage = !!event.coverImage && !imgFailed
 
@@ -93,7 +98,7 @@ function EventCardBase({
       className="group animate-card-in rounded-3xl"
       style={{ '--i': Math.min(index, 12) } as React.CSSProperties}
     >
-      <article className="glow-border relative h-full overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card">
+      <article className="glow-border relative flex h-full flex-col overflow-hidden rounded-3xl border border-border/60 bg-card shadow-card">
         {/* ---------- Visuel ---------- */}
         <div className="relative aspect-[16/9] w-full overflow-hidden [contain:paint] sm:aspect-[2/1]">
           {showImage ? (
@@ -154,7 +159,7 @@ function EventCardBase({
                 isFull ? 'bg-danger-500/90 text-white' : 'bg-black/55 text-white'
               }`}
             >
-              {isFull ? 'Complet' : `${spots} ${event.maxParticipants != null ? 'places' : 'participants'}`}
+              {isFull ? t('card_full') : `${spots} ${event.maxParticipants != null ? t('card_places') : t('card_participants')}`}
             </span>
           </div>
 
@@ -176,7 +181,7 @@ function EventCardBase({
         </div>
 
         {/* ---------- Contenu ---------- */}
-        <div className="p-5 pt-3.5">
+        <div className="flex flex-1 flex-col p-5 pt-3.5">
           <h3 className="text-base font-bold leading-snug tracking-tight">
             <Link
               href={`/events/${event.slug}`}
@@ -191,7 +196,7 @@ function EventCardBase({
             <div className="flex items-center gap-2">
               <MapPin className="h-4 w-4 shrink-0" aria-hidden />
               <dd className="truncate">
-                {event.isOnline ? 'En ligne' : `${event.locationName}, ${event.city}`}
+                {event.isOnline ? t('card_online') : `${event.locationName}, ${event.city}`}
                 {distanceKm != null && !event.isOnline && (
                   <span className="ml-1.5 font-medium text-primary-500">· {fmtDist(distanceKm)}</span>
                 )}
@@ -232,7 +237,7 @@ function EventCardBase({
           </div>
 
           {!readOnly && (
-            <div className="relative z-10 mt-4 flex gap-2">
+            <div className="relative z-10 mt-auto flex gap-2 pt-4">
               <JoinButton
                 eventId={event.id}
                 eventSlug={event.slug}
@@ -240,11 +245,12 @@ function EventCardBase({
                 isFull={isFull}
                 myStatus={myStatus}
                 isOrganizer={isOrganizer}
+                waitlistPosition={waitlistPosition}
                 className="flex-1"
               />
               <Link
                 href={`/events/${event.slug}`}
-                aria-label={`Voir les détails de ${event.title}`}
+                aria-label={`${t('card_details')} — ${event.title}`}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-border text-fg-muted transition-colors hover:border-primary-500/50 hover:bg-primary-50 hover:text-primary-600 dark:hover:bg-primary-950/40"
               >
                 <Eye className="h-4 w-4" aria-hidden />

@@ -68,6 +68,7 @@ export type UserMinAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  videoUrl: string | null
   privacyLevel: $Enums.PrivacyLevel | null
   allowMessagesFrom: $Enums.MessagePermission | null
   allowFriendRequests: boolean | null
@@ -107,6 +108,7 @@ export type UserMaxAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  videoUrl: string | null
   privacyLevel: $Enums.PrivacyLevel | null
   allowMessagesFrom: $Enums.MessagePermission | null
   allowFriendRequests: boolean | null
@@ -146,6 +148,7 @@ export type UserCountAggregateOutputType = {
   latitude: number
   longitude: number
   avatarUrl: number
+  videoUrl: number
   privacyLevel: number
   allowMessagesFrom: number
   allowFriendRequests: number
@@ -209,6 +212,7 @@ export type UserMinAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  videoUrl?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -248,6 +252,7 @@ export type UserMaxAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  videoUrl?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -287,6 +292,7 @@ export type UserCountAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  videoUrl?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -413,6 +419,7 @@ export type UserGroupByOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  videoUrl: string | null
   privacyLevel: $Enums.PrivacyLevel
   allowMessagesFrom: $Enums.MessagePermission
   allowFriendRequests: boolean
@@ -475,6 +482,7 @@ export type UserWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -493,6 +501,7 @@ export type UserWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profilePhotos?: Prisma.ProfilePhotoListRelationFilter
+  stories?: Prisma.StoryListRelationFilter
   interests?: Prisma.InterestListRelationFilter
   favoriteCategories?: Prisma.EventCategoryListRelationFilter
   introCard?: Prisma.XOR<Prisma.IntroCardNullableScalarRelationFilter, Prisma.IntroCardWhereInput> | null
@@ -551,6 +560,7 @@ export type UserOrderByWithRelationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -569,6 +579,7 @@ export type UserOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   profilePhotos?: Prisma.ProfilePhotoOrderByRelationAggregateInput
+  stories?: Prisma.StoryOrderByRelationAggregateInput
   interests?: Prisma.InterestOrderByRelationAggregateInput
   favoriteCategories?: Prisma.EventCategoryOrderByRelationAggregateInput
   introCard?: Prisma.IntroCardOrderByWithRelationInput
@@ -630,6 +641,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -648,6 +660,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   profilePhotos?: Prisma.ProfilePhotoListRelationFilter
+  stories?: Prisma.StoryListRelationFilter
   interests?: Prisma.InterestListRelationFilter
   favoriteCategories?: Prisma.EventCategoryListRelationFilter
   introCard?: Prisma.XOR<Prisma.IntroCardNullableScalarRelationFilter, Prisma.IntroCardWhereInput> | null
@@ -706,6 +719,7 @@ export type UserOrderByWithAggregationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -753,6 +767,7 @@ export type UserScalarWhereWithAggregatesInput = {
   latitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  videoUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelWithAggregatesFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionWithAggregatesFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -792,6 +807,7 @@ export type UserCreateInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -810,6 +826,7 @@ export type UserCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -868,6 +885,7 @@ export type UserUncheckedCreateInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -886,6 +904,7 @@ export type UserUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -944,6 +963,7 @@ export type UserUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -962,6 +982,7 @@ export type UserUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -1020,6 +1041,7 @@ export type UserUncheckedUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1038,6 +1060,7 @@ export type UserUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -1096,6 +1119,7 @@ export type UserCreateManyInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -1135,6 +1159,7 @@ export type UserUpdateManyMutationInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1174,6 +1199,7 @@ export type UserUncheckedUpdateManyInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1213,6 +1239,7 @@ export type UserCountOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1263,6 +1290,7 @@ export type UserMaxOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1302,6 +1330,7 @@ export type UserMinOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  videoUrl?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1624,6 +1653,20 @@ export type UserUpdateOneRequiredWithoutEventParticipationsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutEventParticipationsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEventParticipationsInput, Prisma.UserUpdateWithoutEventParticipationsInput>, Prisma.UserUncheckedUpdateWithoutEventParticipationsInput>
+}
+
+export type UserCreateNestedOneWithoutStoriesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStoriesInput, Prisma.UserUncheckedCreateWithoutStoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutStoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutStoriesInput, Prisma.UserUncheckedCreateWithoutStoriesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutStoriesInput
+  upsert?: Prisma.UserUpsertWithoutStoriesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutStoriesInput, Prisma.UserUpdateWithoutStoriesInput>, Prisma.UserUncheckedUpdateWithoutStoriesInput>
 }
 
 export type UserCreateNestedOneWithoutWaitlistEntriesInput = {
@@ -1998,6 +2041,7 @@ export type UserCreateWithoutProfilePhotosInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2015,6 +2059,7 @@ export type UserCreateWithoutProfilePhotosInput = {
   lastActiveAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -2073,6 +2118,7 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2090,6 +2136,7 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   lastActiveAt?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -2164,6 +2211,7 @@ export type UserUpdateWithoutProfilePhotosInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2181,6 +2229,7 @@ export type UserUpdateWithoutProfilePhotosInput = {
   lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -2239,6 +2288,7 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2256,6 +2306,7 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -2314,6 +2365,7 @@ export type UserCreateWithoutVerificationCodesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2332,6 +2384,7 @@ export type UserCreateWithoutVerificationCodesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -2389,6 +2442,7 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2407,6 +2461,7 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -2480,6 +2535,7 @@ export type UserUpdateWithoutVerificationCodesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2498,6 +2554,7 @@ export type UserUpdateWithoutVerificationCodesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -2555,6 +2612,7 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2573,6 +2631,7 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -2630,6 +2689,7 @@ export type UserCreateWithoutInterestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2648,6 +2708,7 @@ export type UserCreateWithoutInterestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
   eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
@@ -2705,6 +2766,7 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2723,6 +2785,7 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
   eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
@@ -2804,6 +2867,7 @@ export type UserScalarWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -2843,6 +2907,7 @@ export type UserCreateWithoutBadgesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2861,6 +2926,7 @@ export type UserCreateWithoutBadgesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -2918,6 +2984,7 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2936,6 +3003,7 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -3009,6 +3077,7 @@ export type UserUpdateWithoutBadgesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3027,6 +3096,7 @@ export type UserUpdateWithoutBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -3084,6 +3154,7 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3102,6 +3173,7 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -3159,6 +3231,7 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3177,6 +3250,7 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -3234,6 +3308,7 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3252,6 +3327,7 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -3314,6 +3390,7 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3332,6 +3409,7 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -3389,6 +3467,7 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3407,6 +3486,7 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -3480,6 +3560,7 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3498,6 +3579,7 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -3555,6 +3637,7 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3573,6 +3656,7 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -3641,6 +3725,7 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3659,6 +3744,7 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -3716,6 +3802,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3734,6 +3821,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -3791,6 +3879,7 @@ export type UserCreateWithoutFriendshipsAInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3809,6 +3898,7 @@ export type UserCreateWithoutFriendshipsAInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -3866,6 +3956,7 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3884,6 +3975,7 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -3946,6 +4038,7 @@ export type UserCreateWithoutFriendshipsBInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3964,6 +4057,7 @@ export type UserCreateWithoutFriendshipsBInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -4021,6 +4115,7 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4039,6 +4134,7 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -4112,6 +4208,7 @@ export type UserUpdateWithoutFriendshipsAInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4130,6 +4227,7 @@ export type UserUpdateWithoutFriendshipsAInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -4187,6 +4285,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4205,6 +4304,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -4273,6 +4373,7 @@ export type UserUpdateWithoutFriendshipsBInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4291,6 +4392,7 @@ export type UserUpdateWithoutFriendshipsBInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -4348,6 +4450,7 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4366,6 +4469,7 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -4423,6 +4527,7 @@ export type UserCreateWithoutEventLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4441,6 +4546,7 @@ export type UserCreateWithoutEventLikesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -4498,6 +4604,7 @@ export type UserUncheckedCreateWithoutEventLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4516,6 +4623,7 @@ export type UserUncheckedCreateWithoutEventLikesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -4589,6 +4697,7 @@ export type UserUpdateWithoutEventLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4607,6 +4716,7 @@ export type UserUpdateWithoutEventLikesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -4664,6 +4774,7 @@ export type UserUncheckedUpdateWithoutEventLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4682,6 +4793,7 @@ export type UserUncheckedUpdateWithoutEventLikesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -4739,6 +4851,7 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4757,6 +4870,7 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
   eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
@@ -4814,6 +4928,7 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4832,6 +4947,7 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
   eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
@@ -4910,6 +5026,7 @@ export type UserCreateWithoutOrganizedEventsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4928,6 +5045,7 @@ export type UserCreateWithoutOrganizedEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -4985,6 +5103,7 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5003,6 +5122,7 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -5076,6 +5196,7 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5094,6 +5215,7 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -5151,6 +5273,7 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5169,6 +5292,7 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -5226,6 +5350,7 @@ export type UserCreateWithoutEventParticipationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5244,6 +5369,7 @@ export type UserCreateWithoutEventParticipationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -5301,6 +5427,7 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5319,6 +5446,7 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -5392,6 +5520,7 @@ export type UserUpdateWithoutEventParticipationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5410,6 +5539,7 @@ export type UserUpdateWithoutEventParticipationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -5467,6 +5597,331 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
+  interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUncheckedUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUncheckedUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUncheckedUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUncheckedUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUncheckedUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUncheckedUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutStoriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutStoriesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  videoUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaUncheckedCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageUncheckedCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowUncheckedCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostUncheckedCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyUncheckedCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingUncheckedCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutStoriesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutStoriesInput, Prisma.UserUncheckedCreateWithoutStoriesInput>
+}
+
+export type UserUpsertWithoutStoriesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutStoriesInput, Prisma.UserUncheckedUpdateWithoutStoriesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutStoriesInput, Prisma.UserUncheckedCreateWithoutStoriesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutStoriesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutStoriesInput, Prisma.UserUncheckedUpdateWithoutStoriesInput>
+}
+
+export type UserUpdateWithoutStoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutStoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5495,6 +5950,7 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
   friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
   eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
   sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
@@ -5542,6 +5998,7 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5560,6 +6017,7 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -5617,6 +6075,7 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5635,6 +6094,7 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -5708,6 +6168,7 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5726,6 +6187,7 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -5783,6 +6245,7 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5801,6 +6264,7 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -5858,6 +6322,7 @@ export type UserCreateWithoutEventInvitationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5876,6 +6341,7 @@ export type UserCreateWithoutEventInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -5933,6 +6399,7 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5951,6 +6418,7 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -6024,6 +6492,7 @@ export type UserUpdateWithoutEventInvitationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6042,6 +6511,7 @@ export type UserUpdateWithoutEventInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -6099,6 +6569,7 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6117,6 +6588,7 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -6174,6 +6646,7 @@ export type UserCreateWithoutEventChatMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6192,6 +6665,7 @@ export type UserCreateWithoutEventChatMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -6249,6 +6723,7 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6267,6 +6742,7 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -6340,6 +6816,7 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6358,6 +6835,7 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -6415,6 +6893,7 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6433,6 +6912,7 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -6490,6 +6970,7 @@ export type UserCreateWithoutConversationMembersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6508,6 +6989,7 @@ export type UserCreateWithoutConversationMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -6565,6 +7047,7 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6583,6 +7066,7 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -6656,6 +7140,7 @@ export type UserUpdateWithoutConversationMembersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6674,6 +7159,7 @@ export type UserUpdateWithoutConversationMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -6731,6 +7217,7 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6749,6 +7236,7 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -6806,6 +7294,7 @@ export type UserCreateWithoutSentMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6824,6 +7313,7 @@ export type UserCreateWithoutSentMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -6881,6 +7371,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6899,6 +7390,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -6961,6 +7453,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6979,6 +7472,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -7036,6 +7530,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7054,6 +7549,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -7127,6 +7623,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7145,6 +7642,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -7202,6 +7700,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7220,6 +7719,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -7288,6 +7788,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7306,6 +7807,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -7363,6 +7865,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7381,6 +7884,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -7438,6 +7942,7 @@ export type UserCreateWithoutUploadedMediaInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7456,6 +7961,7 @@ export type UserCreateWithoutUploadedMediaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -7513,6 +8019,7 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7531,6 +8038,7 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -7604,6 +8112,7 @@ export type UserUpdateWithoutUploadedMediaInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7622,6 +8131,7 @@ export type UserUpdateWithoutUploadedMediaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -7679,6 +8189,7 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7697,6 +8208,7 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -7754,6 +8266,7 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7772,6 +8285,7 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -7829,6 +8343,7 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7847,6 +8362,7 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -7920,6 +8436,7 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7938,6 +8455,7 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -7995,6 +8513,7 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8013,6 +8532,7 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -8070,6 +8590,7 @@ export type UserCreateWithoutRatingsGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8088,6 +8609,7 @@ export type UserCreateWithoutRatingsGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -8145,6 +8667,7 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8163,6 +8686,7 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -8225,6 +8749,7 @@ export type UserCreateWithoutRatingsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8243,6 +8768,7 @@ export type UserCreateWithoutRatingsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -8300,6 +8826,7 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8318,6 +8845,7 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -8391,6 +8919,7 @@ export type UserUpdateWithoutRatingsGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8409,6 +8938,7 @@ export type UserUpdateWithoutRatingsGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -8466,6 +8996,7 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8484,6 +9015,7 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -8552,6 +9084,7 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8570,6 +9103,7 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -8627,6 +9161,7 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8645,6 +9180,7 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -8702,6 +9238,7 @@ export type UserCreateWithoutReportsMadeInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8720,6 +9257,7 @@ export type UserCreateWithoutReportsMadeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -8777,6 +9315,7 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8795,6 +9334,7 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -8857,6 +9397,7 @@ export type UserCreateWithoutReportsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8875,6 +9416,7 @@ export type UserCreateWithoutReportsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -8932,6 +9474,7 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8950,6 +9493,7 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -9023,6 +9567,7 @@ export type UserUpdateWithoutReportsMadeInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9041,6 +9586,7 @@ export type UserUpdateWithoutReportsMadeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -9098,6 +9644,7 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9116,6 +9663,7 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -9184,6 +9732,7 @@ export type UserUpdateWithoutReportsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9202,6 +9751,7 @@ export type UserUpdateWithoutReportsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -9259,6 +9809,7 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9277,6 +9828,7 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -9334,6 +9886,7 @@ export type UserCreateWithoutOfferedRidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9352,6 +9905,7 @@ export type UserCreateWithoutOfferedRidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -9409,6 +9963,7 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9427,6 +9982,7 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -9500,6 +10056,7 @@ export type UserUpdateWithoutOfferedRidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9518,6 +10075,7 @@ export type UserUpdateWithoutOfferedRidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -9575,6 +10133,7 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9593,6 +10152,7 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -9650,6 +10210,7 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9668,6 +10229,7 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -9725,6 +10287,7 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9743,6 +10306,7 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -9816,6 +10380,7 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9834,6 +10399,7 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -9891,6 +10457,7 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9909,6 +10476,7 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -9966,6 +10534,7 @@ export type UserCreateWithoutOwnedPagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9984,6 +10553,7 @@ export type UserCreateWithoutOwnedPagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -10041,6 +10611,7 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10059,6 +10630,7 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -10132,6 +10704,7 @@ export type UserUpdateWithoutOwnedPagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10150,6 +10723,7 @@ export type UserUpdateWithoutOwnedPagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -10207,6 +10781,7 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10225,6 +10800,7 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -10282,6 +10858,7 @@ export type UserCreateWithoutPageFollowsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10300,6 +10877,7 @@ export type UserCreateWithoutPageFollowsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -10357,6 +10935,7 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10375,6 +10954,7 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -10448,6 +11028,7 @@ export type UserUpdateWithoutPageFollowsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10466,6 +11047,7 @@ export type UserUpdateWithoutPageFollowsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -10523,6 +11105,7 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10541,6 +11124,7 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -10598,6 +11182,7 @@ export type UserCreateWithoutGroupMembershipsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10616,6 +11201,7 @@ export type UserCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -10673,6 +11259,7 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10691,6 +11278,7 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -10764,6 +11352,7 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10782,6 +11371,7 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -10839,6 +11429,7 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10857,6 +11448,7 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -10914,6 +11506,7 @@ export type UserCreateWithoutForumPostsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10932,6 +11525,7 @@ export type UserCreateWithoutForumPostsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -10989,6 +11583,7 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11007,6 +11602,7 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -11080,6 +11676,7 @@ export type UserUpdateWithoutForumPostsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11098,6 +11695,7 @@ export type UserUpdateWithoutForumPostsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -11155,6 +11753,7 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11173,6 +11772,7 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -11230,6 +11830,7 @@ export type UserCreateWithoutForumRepliesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11248,6 +11849,7 @@ export type UserCreateWithoutForumRepliesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -11305,6 +11907,7 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11323,6 +11926,7 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -11396,6 +12000,7 @@ export type UserUpdateWithoutForumRepliesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11414,6 +12019,7 @@ export type UserUpdateWithoutForumRepliesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -11471,6 +12077,7 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11489,6 +12096,7 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -11546,6 +12154,7 @@ export type UserCreateWithoutRedeemedOffersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11564,6 +12173,7 @@ export type UserCreateWithoutRedeemedOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -11621,6 +12231,7 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11639,6 +12250,7 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -11712,6 +12324,7 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11730,6 +12343,7 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -11787,6 +12401,7 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11805,6 +12420,7 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -11862,6 +12478,7 @@ export type UserCreateWithoutSubscriptionInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11880,6 +12497,7 @@ export type UserCreateWithoutSubscriptionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -11937,6 +12555,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11955,6 +12574,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -12028,6 +12648,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12046,6 +12667,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -12103,6 +12725,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12121,6 +12744,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -12178,6 +12802,7 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12196,6 +12821,7 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -12253,6 +12879,7 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12271,6 +12898,7 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -12344,6 +12972,7 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12362,6 +12991,7 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -12419,6 +13049,7 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12437,6 +13068,7 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -12494,6 +13126,7 @@ export type UserCreateWithoutNotificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12512,6 +13145,7 @@ export type UserCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -12569,6 +13203,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12587,6 +13222,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -12660,6 +13296,7 @@ export type UserUpdateWithoutNotificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12678,6 +13315,7 @@ export type UserUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -12735,6 +13373,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12753,6 +13392,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -12810,6 +13450,7 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12828,6 +13469,7 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
@@ -12885,6 +13527,7 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12903,6 +13546,7 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
@@ -12976,6 +13620,7 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12994,6 +13639,7 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
@@ -13051,6 +13697,7 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13069,6 +13716,7 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
@@ -13126,6 +13774,7 @@ export type UserCreateWithoutIntroCardInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13144,6 +13793,7 @@ export type UserCreateWithoutIntroCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
@@ -13201,6 +13851,7 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  videoUrl?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13219,6 +13870,7 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  stories?: Prisma.StoryUncheckedCreateNestedManyWithoutAuthorInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
@@ -13292,6 +13944,7 @@ export type UserUpdateWithoutIntroCardInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13310,6 +13963,7 @@ export type UserUpdateWithoutIntroCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
@@ -13367,6 +14021,7 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13385,6 +14040,7 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -13442,6 +14098,7 @@ export type UserUpdateWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13460,6 +14117,7 @@ export type UserUpdateWithoutInterestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
   eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
@@ -13517,6 +14175,7 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13535,6 +14194,7 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
   eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -13592,6 +14252,7 @@ export type UserUncheckedUpdateManyWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13631,6 +14292,7 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13649,6 +14311,7 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
   eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
@@ -13706,6 +14369,7 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13724,6 +14388,7 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  stories?: Prisma.StoryUncheckedUpdateManyWithoutAuthorNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
   eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
@@ -13781,6 +14446,7 @@ export type UserUncheckedUpdateManyWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13807,6 +14473,7 @@ export type UserUncheckedUpdateManyWithoutFavoriteCategoriesInput = {
 
 export type UserCountOutputType = {
   profilePhotos: number
+  stories: number
   interests: number
   favoriteCategories: number
   eventLikes: number
@@ -13845,6 +14512,7 @@ export type UserCountOutputType = {
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | UserCountOutputTypeCountProfilePhotosArgs
+  stories?: boolean | UserCountOutputTypeCountStoriesArgs
   interests?: boolean | UserCountOutputTypeCountInterestsArgs
   favoriteCategories?: boolean | UserCountOutputTypeCountFavoriteCategoriesArgs
   eventLikes?: boolean | UserCountOutputTypeCountEventLikesArgs
@@ -13896,6 +14564,13 @@ export type UserCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensi
  */
 export type UserCountOutputTypeCountProfilePhotosArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.ProfilePhotoWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountStoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.StoryWhereInput
 }
 
 /**
@@ -14157,6 +14832,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  videoUrl?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -14175,6 +14851,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   createdAt?: boolean
   updatedAt?: boolean
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
+  stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
   interests?: boolean | Prisma.User$interestsArgs<ExtArgs>
   favoriteCategories?: boolean | Prisma.User$favoriteCategoriesArgs<ExtArgs>
   introCard?: boolean | Prisma.User$introCardArgs<ExtArgs>
@@ -14234,6 +14911,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  videoUrl?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -14273,6 +14951,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  videoUrl?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -14312,6 +14991,7 @@ export type UserSelectScalar = {
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  videoUrl?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -14331,9 +15011,10 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "videoUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
+  stories?: boolean | Prisma.User$storiesArgs<ExtArgs>
   interests?: boolean | Prisma.User$interestsArgs<ExtArgs>
   favoriteCategories?: boolean | Prisma.User$favoriteCategoriesArgs<ExtArgs>
   introCard?: boolean | Prisma.User$introCardArgs<ExtArgs>
@@ -14379,6 +15060,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
   name: "User"
   objects: {
     profilePhotos: Prisma.$ProfilePhotoPayload<ExtArgs>[]
+    stories: Prisma.$StoryPayload<ExtArgs>[]
     interests: Prisma.$InterestPayload<ExtArgs>[]
     favoriteCategories: Prisma.$EventCategoryPayload<ExtArgs>[]
     introCard: Prisma.$IntroCardPayload<ExtArgs> | null
@@ -14436,6 +15118,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     latitude: number | null
     longitude: number | null
     avatarUrl: string | null
+    videoUrl: string | null
     privacyLevel: $Enums.PrivacyLevel
     allowMessagesFrom: $Enums.MessagePermission
     allowFriendRequests: boolean
@@ -14848,6 +15531,7 @@ readonly fields: UserFieldRefs;
 export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   profilePhotos<T extends Prisma.User$profilePhotosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$profilePhotosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProfilePhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  stories<T extends Prisma.User$storiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$storiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$StoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   interests<T extends Prisma.User$interestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   favoriteCategories<T extends Prisma.User$favoriteCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoriteCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   introCard<T extends Prisma.User$introCardArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$introCardArgs<ExtArgs>>): Prisma.Prisma__IntroCardClient<runtime.Types.Result.GetResult<Prisma.$IntroCardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -14932,6 +15616,7 @@ export interface UserFieldRefs {
   readonly latitude: Prisma.FieldRef<"User", 'Float'>
   readonly longitude: Prisma.FieldRef<"User", 'Float'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly videoUrl: Prisma.FieldRef<"User", 'String'>
   readonly privacyLevel: Prisma.FieldRef<"User", 'PrivacyLevel'>
   readonly allowMessagesFrom: Prisma.FieldRef<"User", 'MessagePermission'>
   readonly allowFriendRequests: Prisma.FieldRef<"User", 'Boolean'>
@@ -15363,6 +16048,30 @@ export type User$profilePhotosArgs<ExtArgs extends runtime.Types.Extensions.Inte
   take?: number
   skip?: number
   distinct?: Prisma.ProfilePhotoScalarFieldEnum | Prisma.ProfilePhotoScalarFieldEnum[]
+}
+
+/**
+ * User.stories
+ */
+export type User$storiesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Story
+   */
+  select?: Prisma.StorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Story
+   */
+  omit?: Prisma.StoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.StoryInclude<ExtArgs> | null
+  where?: Prisma.StoryWhereInput
+  orderBy?: Prisma.StoryOrderByWithRelationInput | Prisma.StoryOrderByWithRelationInput[]
+  cursor?: Prisma.StoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.StoryScalarFieldEnum | Prisma.StoryScalarFieldEnum[]
 }
 
 /**

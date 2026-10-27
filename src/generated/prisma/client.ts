@@ -107,6 +107,11 @@ export type EventCollaborator = Prisma.EventCollaboratorModel
  */
 export type EventParticipation = Prisma.EventParticipationModel
 /**
+ * Model Story
+ * 
+ */
+export type Story = Prisma.StoryModel
+/**
  * Model WaitlistEntry
  * 
  */

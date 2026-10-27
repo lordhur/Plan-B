@@ -11,6 +11,7 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { FranceMap } from '@/components/map/FranceMap'
+import { StoryRail } from '@/components/stories/StoryRail'
 import { useLocationFilter } from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
 
@@ -92,6 +93,7 @@ export default function FeedPage() {
         event: e.event,
         distanceKm: null as number | null,
         myStatus: e.myStatus,
+        myWaitlistPosition: e.myWaitlistPosition,
         isOrganizer: e.isOrganizer,
         liked: e.liked,
         likes: (e.event as { _count?: { likes?: number } })._count?.likes ?? 0,
@@ -101,6 +103,7 @@ export default function FeedPage() {
       event: { id: string; _count?: { likes?: number } }
       distanceKm: number | null
       myStatus: string | null
+      myWaitlistPosition: number | null
       isOrganizer: boolean
       liked: boolean
     }>
@@ -138,6 +141,9 @@ export default function FeedPage() {
           </div>
         )}
       </section>
+
+      {/* Stories (24 h) — moi + mes amis */}
+      <StoryRail />
 
       {/* Carte régions → départements → villes + bouton Valider */}
       <section aria-labelledby="feed-map">
@@ -240,6 +246,7 @@ export default function FeedPage() {
                 isOrganizer={item.isOrganizer}
                 liked={item.liked}
                 likes={(item.event as { _count?: { likes?: number } })._count?.likes ?? 0}
+                waitlistPosition={item.myWaitlistPosition}
               />
             ))}
           </div>
@@ -284,6 +291,7 @@ export default function FeedPage() {
                 isOrganizer={item.isOrganizer}
                 liked={item.liked}
                 likes={(item.event as { _count?: { likes?: number } })._count?.likes ?? 0}
+                waitlistPosition={item.myWaitlistPosition}
               />
             ))}
           </div>

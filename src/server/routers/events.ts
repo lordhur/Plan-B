@@ -188,8 +188,9 @@ export const eventsRouter = createTRPCRouter({
       })
       let likedIds = new Set<string>()
       let myStatuses = new Map<string, string>()
+      let myWaitlist = new Map<string, number>()
       if (ctx.user) {
-        const [likes, parts] = await Promise.all([
+        const [likes, parts, wl] = await Promise.all([
           prisma.eventLike.findMany({
             where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
             select: { eventId: true },
@@ -198,14 +199,20 @@ export const eventsRouter = createTRPCRouter({
             where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
             select: { eventId: true, status: true },
           }),
+          prisma.waitlistEntry.findMany({
+            where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
+            select: { eventId: true, position: true },
+          }),
         ])
         likedIds = new Set(likes.map((l) => l.eventId))
         myStatuses = new Map(parts.map((p) => [p.eventId, p.status]))
+        myWaitlist = new Map(wl.map((w) => [w.eventId, w.position]))
       }
       return events.map((event) => ({
         event,
         liked: likedIds.has(event.id),
         myStatus: myStatuses.get(event.id) ?? null,
+        myWaitlistPosition: myWaitlist.get(event.id) ?? null,
         isOrganizer: ctx.user?.id === event.organizerId,
       }))
     }),
@@ -269,7 +276,7 @@ export const eventsRouter = createTRPCRouter({
       const lat = input.latitude ?? user?.latitude ?? null
       const lon = input.longitude ?? user?.longitude ?? null
 
-      const [upcoming, myParticipations] = await Promise.all([
+      const [upcoming, myParticipations, myWaitlistEntries] = await Promise.all([
         prisma.event.findMany({
           where: {
             status: 'UPCOMING',
@@ -286,9 +293,16 @@ export const eventsRouter = createTRPCRouter({
               select: { eventId: true, status: true },
             })
           : Promise.resolve([]),
+        user
+          ? prisma.waitlistEntry.findMany({
+              where: { userId: user.id ?? '' },
+              select: { eventId: true, position: true },
+            })
+          : Promise.resolve([]),
       ])
 
       const participationMap = new Map(myParticipations.map((p) => [p.eventId, p.status]))
+      const waitlistMap = new Map(myWaitlistEntries.map((w) => [w.eventId, w.position]))
 
       const scored = upcoming
         .map((event) => ({
@@ -304,6 +318,7 @@ export const eventsRouter = createTRPCRouter({
               ? haversineKm(lat, lon, event.latitude, event.longitude)
               : null,
           myStatus: participationMap.get(event.id) ?? null,
+          myWaitlistPosition: waitlistMap.get(event.id) ?? null,
           isOrganizer: user ? event.organizerId === user.id : false,
         }))
         .sort((a, b) => b.score - a.score)

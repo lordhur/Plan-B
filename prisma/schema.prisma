@@ -49,6 +49,8 @@ model User {
   // Photos de profil (une ou plusieurs)
   profilePhotos ProfilePhoto[]
   avatarUrl     String? // Photo principale
+  videoUrl      String? // Vidéo de présentation
+  stories       Story[]
 
   // Préférences
   interests          Interest[]
@@ -501,6 +503,24 @@ enum ParticipationStatus {
   CANCELLED // Annulé par le participant
   ATTENDED // A participé (confirmé après l'event)
   NO_SHOW // Ne s'est pas présenté
+}
+
+model Story {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  mediaUrl  String
+  type      StoryType @default(PHOTO)
+  caption   String?
+  createdAt DateTime @default(now())
+
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+enum StoryType {
+  PHOTO
+  VIDEO
 }
 
 model WaitlistEntry {

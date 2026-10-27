@@ -288,11 +288,36 @@ export const messagesRouter = createTRPCRouter({
 
   /** Poster dans le chat d'un événement. */
   sendEventMessage: protectedProcedure
-    .input(z.object({ eventId: z.string(), content: z.string().trim().min(1).max(2000) }))
+    .input(
+      z.object({
+        eventId: z.string(),
+        content: z.string().trim().max(2000),
+        mediaUrl: z
+          .string()
+          .url()
+          .refine(
+            (v) =>
+              v.startsWith('/api/img/') ||
+              v.startsWith('https://kwnqvyjrynlgokdcqmwi.supabase.co/storage/'),
+            'mediaUrl doit pointer vers /api/img/ ou le stockage PlanB',
+          )
+          .optional(),
+        mediaType: z.enum(['IMAGE', 'VIDEO', 'AUDIO', 'FILE']).optional(),
+      }),
+    )
     .mutation(async ({ input, ctx }) => {
       await assertEventChatAccess(ctx.user.id, input.eventId)
+      if (!input.content && !input.mediaUrl) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Message vide' })
+      }
       return prisma.eventChatMessage.create({
-        data: { eventId: input.eventId, userId: ctx.user.id, content: input.content },
+        data: {
+          eventId: input.eventId,
+          userId: ctx.user.id,
+          content: input.content,
+          mediaUrl: input.mediaUrl,
+          mediaType: input.mediaType,
+        },
         include: { user: { select: memberUserSelect } },
       })
     }),

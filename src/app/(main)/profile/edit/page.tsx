@@ -17,6 +17,7 @@ import { Select } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { ProfileMediaSection } from '@/components/profile/ProfileMediaSection'
 
 const profileFormSchema = z.object({
   displayName: z.string().trim().max(60),
@@ -292,6 +293,11 @@ export default function ProfileEditPage() {
           </Button>
         </div>
       </form>
+
+      {/* Photos, vidéo et catégories favorites (mutations dédiées) */}
+      <div className="mt-6">
+        <ProfileMediaSection />
+      </div>
     </div>
   )
 }

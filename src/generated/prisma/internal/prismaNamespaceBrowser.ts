@@ -64,6 +64,7 @@ export const ModelName = {
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
   EventParticipation: 'EventParticipation',
+  Story: 'Story',
   WaitlistEntry: 'WaitlistEntry',
   EventInvitation: 'EventInvitation',
   EventChatMessage: 'EventChatMessage',
@@ -132,6 +133,7 @@ export const UserScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   avatarUrl: 'avatarUrl',
+  videoUrl: 'videoUrl',
   privacyLevel: 'privacyLevel',
   allowMessagesFrom: 'allowMessagesFrom',
   allowFriendRequests: 'allowFriendRequests',
@@ -341,6 +343,18 @@ export const EventParticipationScalarFieldEnum = {
 } as const
 
 export type EventParticipationScalarFieldEnum = (typeof EventParticipationScalarFieldEnum)[keyof typeof EventParticipationScalarFieldEnum]
+
+
+export const StoryScalarFieldEnum = {
+  id: 'id',
+  authorId: 'authorId',
+  mediaUrl: 'mediaUrl',
+  type: 'type',
+  caption: 'caption',
+  createdAt: 'createdAt'
+} as const
+
+export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
 
 
 export const WaitlistEntryScalarFieldEnum = {

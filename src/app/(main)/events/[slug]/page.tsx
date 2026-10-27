@@ -31,6 +31,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EventMap } from '@/components/events/EventMap'
 import { JoinButton } from '@/components/events/JoinButton'
 import { LikeButton } from '@/components/events/LikeButton'
+import { useTranslate } from '@/lib/translate'
 import { ShareEventModal } from '@/components/events/ShareEventModal'
 import { CarpoolSection } from '@/components/events/CarpoolSection'
 import { TicketBanner } from '@/components/events/TicketBanner'
@@ -53,6 +54,10 @@ export default function EventDetailPage() {
     { slug },
     { enabled: !!slug },
   )
+
+  // Traduction automatique FR→EN (si la langue du site est l'anglais)
+  const titleT = useTranslate(event?.title ?? null)
+  const descriptionT = useTranslate(event?.description ?? null)
 
   const mapEvents = useMemo(
     () =>
@@ -142,7 +147,7 @@ export default function EventDetailPage() {
                 )}
               </div>
               <h1 className="mt-2 text-2xl font-extrabold leading-tight tracking-tight text-white drop-shadow-lg sm:text-4xl">
-                {event.title}
+                {titleT || event.title}
               </h1>
               <p className="mt-1 text-sm text-white/80">
                 Publié {formatRelative(event.createdAt)} · {event.viewCount} vues
@@ -176,7 +181,7 @@ export default function EventDetailPage() {
             )}
           </div>
           <h1 className="mt-2 text-2xl font-extrabold leading-tight tracking-tight sm:text-3xl">
-            {event.title}
+            {titleT || event.title}
           </h1>
           <p className="mt-1 text-sm text-fg-muted">
             Publié {formatRelative(event.createdAt)} · {event.viewCount} vues
@@ -308,7 +313,9 @@ export default function EventDetailPage() {
           <CardTitle className="text-base">À propos de ce plan</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">{event.description}</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed text-fg-muted">
+            {descriptionT || event.description}
+          </p>
           {event.tags.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-1.5">
               {event.tags.map((tag) => (
