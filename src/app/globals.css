@@ -376,12 +376,12 @@ nav * {
   .lift-shadow::before { transition: none; }
 }
 
-/* Carte v4 : noms de villes en TEXTE CONTOUR (pas de pastille pleine) + point */
+/* Carte : noms de villes en TEXTE CONTOUR (pas de pastille pleine) + point.
+   Aucun transform sur la racine : Leaflet y écrit le positionnement du point. */
 .city-outline-label {
   background: transparent !important;
   border: none !important;
   overflow: visible !important;
-  transform: translate(-50%, -50%);
   width: max-content;
 }
 /* Carte vierge : le fond HORS France est transparent (le fond animé de la page
@@ -421,6 +421,10 @@ nav * {
 .area-label .area-name.region {
   text-transform: uppercase;
   color: #4c1d95;
+}
+.area-label .area-name,
+.city-outline-label .city-name {
+  rotate: 0deg;
 }
 .area-label .area-name.dept {
   font-weight: 700;
@@ -477,21 +481,23 @@ nav * {
     animation-duration: 0.01ms;
   }
 }
-/* Étiquette décalable (anti-chevauchement) */
+/* Étiquette de ville / village : pastille pile sur la coordonnée, nom à droite.
+   (Le transform du conteneur est écrit par Leaflet → le décalage est porté par
+   l'élément interne, en inline-style, voir cityLabelIcon.) */
 .city-outline-label .city-shift {
   display: inline-flex;
   align-items: center;
   white-space: nowrap;
 }
 .city-outline-label .city-dot {
-  display: inline-block;
+  display: block;
   width: 7px;
   height: 7px;
+  flex: 0 0 auto;
   margin-right: 4px;
   border-radius: 9999px;
   background: #7c3aed;
   box-shadow: 0 0 0 1.5px #fff, 0 1px 3px rgba(15, 23, 42, 0.6);
-  vertical-align: middle;
 }
 .city-outline-label .city-name {
   display: inline-block;

@@ -286,7 +286,6 @@ type XY = { x: number; y: number }
 type AreaFrame = {
   ring: XY[]
   pole: XY
-  angleDeg: number
   toXY: (lat: number, lng: number) => XY
   toLatLng: (p: XY) => L.LatLng
 }
@@ -418,56 +417,6 @@ function poleOfInaccessibility(ring: XY[], precision = 0.0004): XY {
   return best
 }
 
-/**
- * Axe principal de la zone (analyse en composantes principales) : renvoie
- * l'angle en degrés (entre −90° et 90°) et l'élongation de la forme.
- */
-function principalAxis(ring: XY[]): { angleDeg: number; elongation: number } {
-  const n = ring.length
-  if (n < 3) return { angleDeg: 0, elongation: 1 }
-  let mx = 0
-  let my = 0
-  for (const p of ring) {
-    mx += p.x
-    my += p.y
-  }
-  mx /= n
-  my /= n
-  let cxx = 0
-  let cyy = 0
-  let cxy = 0
-  for (const p of ring) {
-    const dx = p.x - mx
-    const dy = p.y - my
-    cxx += dx * dx
-    cyy += dy * dy
-    cxy += dx * dy
-  }
-  const theta = 0.5 * Math.atan2(2 * cxy, cxx - cyy)
-  // Élongation : étendue le long de l'axe / étendue perpendiculaire.
-  const cos = Math.cos(theta)
-  const sin = Math.sin(theta)
-  let minA = Infinity
-  let maxA = -Infinity
-  let minB = Infinity
-  let maxB = -Infinity
-  for (const p of ring) {
-    const dx = p.x - mx
-    const dy = p.y - my
-    const a = dx * cos + dy * sin
-    const b = -dx * sin + dy * cos
-    if (a < minA) minA = a
-    if (a > maxA) maxA = a
-    if (b < minB) minB = b
-    if (b > maxB) maxB = b
-  }
-  const elongation = (maxA - minA) / Math.max(1e-9, maxB - minB)
-  let angleDeg = (theta * 180) / Math.PI
-  while (angleDeg > 90) angleDeg -= 180
-  while (angleDeg < -90) angleDeg += 180
-  return { angleDeg, elongation }
-}
-
 /** Réduit le nombre de sommets (le pôle reste quasi identique) pour rester fluide. */
 function decimate(ring: XY[], maxPoints = 420): XY[] {
   if (ring.length <= maxPoints) return ring
@@ -512,17 +461,15 @@ function areaFrame(layer: L.Layer): AreaFrame | null {
 
     const ring = decimate(outer.map((ll) => toXY(ll.lat, ll.lng)))
     const pole = poleOfInaccessibility(ring)
-    const { angleDeg, elongation } = principalAxis(ring)
-    // Rotation seulement pour les zones nettement allongées, plafonnée pour rester lisible.
-    const rotated = elongation >= 1.45 ? Math.max(-25, Math.min(25, angleDeg)) : 0
 
-    return { ring, pole, angleDeg: rotated, toXY, toLatLng }
+    // Noms toujours HORIZONTAUX (spec : pas de nom en diagonale).
+    return { ring, pole, toXY, toLatLng }
   } catch {
     return null
   }
 }
 
-/** Nom de région / de département — orienté sur l'axe de la zone (jamais cliquable). */
+/** Nom de région / de département — toujours horizontal (jamais cliquable). */
 function areaLabelIcon(
   name: string,
   kind: 'region' | 'dept',
@@ -530,15 +477,13 @@ function areaLabelIcon(
   maxWidth: number,
   dx = 0,
   dy = 0,
-  angleDeg = 0,
 ): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
-  const rotate = angleDeg ? ` rotate(${angleDeg}deg)` : ''
   return L.divIcon({
     className: 'area-label',
     html:
       `<span class="area-name ${kind}" style="font-size:${fontSize}px;max-width:${maxWidth}px;` +
-      `transform:translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))${rotate}">${safe}</span>`,
+      `transform:translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))">${safe}</span>`,
     iconSize: undefined,
     iconAnchor: [0, 0],
   })
@@ -582,14 +527,9 @@ function createLabelPlacer(map: L.Map) {
     const w = Math.min(maxWidth, Math.max(22, rawW))
     const lines = Math.max(1, Math.ceil(rawW / maxWidth))
     const h = lines * fontSize * 1.18 + 2
-    // Un nom sur plusieurs lignes n'est jamais incliné (lisibilité) : l'axe de la
-    // zone ne sert qu'aux noms tenant sur une ligne.
-    const angle = lines > 1 ? 0 : frame.angleDeg
-    const rad = (angle * Math.PI) / 180
-    const ac = Math.abs(Math.cos(rad))
-    const as = Math.abs(Math.sin(rad))
-    const bw = w * ac + h * as
-    const bh = w * as + h * ac
+    // Noms toujours droits (spec) : la boîte occupée est simplement celle du texte.
+    const bw = w
+    const bh = h
 
     const offsets: [number, number][] = [
       [0, 0],
@@ -620,7 +560,7 @@ function createLabelPlacer(map: L.Map) {
       )
       if (!hit) {
         placed.push(r)
-        return { dx, dy, angleDeg: angle }
+        return { dx, dy }
       }
     }
     return null
@@ -659,7 +599,7 @@ function placeAreaLabels(group: L.LayerGroup, map: L.Map, items: AreaLabelItem[]
       const pos = place(frame, name, fontSize, maxWidth)
       if (!pos) continue
       L.marker(frame.toLatLng(frame.pole), {
-        icon: areaLabelIcon(name, kind, fontSize, maxWidth, pos.dx, pos.dy, pos.angleDeg),
+        icon: areaLabelIcon(name, kind, fontSize, maxWidth, pos.dx, pos.dy),
         interactive: false,
         keyboard: false,
         zIndexOffset: -200,
@@ -681,13 +621,22 @@ interface Commune {
   population: number
 }
 
-/** Étiquette « contour » du nom de ville — décalable (dx/dy) en cas de chevauchement. */
-function cityLabelIcon(name: string, selected: boolean, size: number, dx = 0, dy = 0): L.DivIcon {
+/** Rayon de la pastille (voir .city-dot dans globals.css) : centre le point sur la ville. */
+const CITY_DOT_R = 3.5
+
+/**
+ * Étiquette de ville / village — ancrée EXACTEMENT sur son point géographique :
+ * la pastille est centrée sur la coordonnée, le nom s'écrit à sa droite.
+ */
+function cityLabelIcon(name: string, selected: boolean, size: number): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
-  const shift = dx || dy ? `transform:translate(${dx}px,${dy}px)` : ''
   return L.divIcon({
     className: 'city-outline-label',
-    html: `<span class="city-shift" style="${shift}"><span class="city-dot" aria-hidden="true"></span><span class="city-name${selected ? ' sel' : ''}" style="font-size:${size}px">${safe}</span></span>`,
+    html:
+      `<span class="city-shift" style="transform:translate(${-CITY_DOT_R}px,-50%)">` +
+      `<span class="city-dot" aria-hidden="true"></span>` +
+      `<span class="city-name${selected ? ' sel' : ''}" style="font-size:${size}px">${safe}</span>` +
+      `</span>`,
     iconSize: undefined,
     iconAnchor: [0, 0],
   })
@@ -706,29 +655,22 @@ function labelSize(pop: number): number {
 const LABEL_GAP = 5
 
 /**
- * Placement des libellés (spec) :
- *  - écart minimal de 5 px entre deux noms ;
- *  - en cas de chevauchement, l'étiquette est DÉCALÉE (quelques pixels autour du
- *    point) au lieu d'être masquée → les villes ET les villages restent visibles ;
- *  - les plus grandes villes choisissent leur place en premier.
+ * Placement des villes et villages (spec) :
+ *  - chaque nom reste EXACTEMENT sur son point géographique (aucun décalage) ;
+ *  - les plus peuplées sont placées d'abord ;
+ *  - un nom qui n'a pas la place (moins de 5 px avec un autre) est simplement
+ *    masqué : il apparaît dès qu'on zoome et que l'espace se libère.
  */
-export type PlacedLabel = { commune: Commune; dx: number; dy: number }
+export type PlacedLabel = { commune: Commune }
 
 function placeLabels(cities: Commune[], map: L.Map, pinned?: Commune | null): PlacedLabel[] {
-  const bounds = map.getBounds().pad(0.12)
+  const bounds = map.getBounds().pad(0.08)
   const candidates = cities.filter((c) => bounds.contains([c.lat, c.lon]))
+  // Ordre de priorité : les villes les plus habitées d'abord (spec).
   candidates.sort((a, b) => b.population - a.population)
 
   const placed: { x: number; y: number; w: number; h: number }[] = []
   const out: PlacedLabel[] = []
-
-  /** Rectangle occupé par une étiquette décalée de (dx, dy) autour du point p. */
-  const rectAt = (p: L.Point, w: number, h: number, dx: number, dy: number) => ({
-    x: p.x + dx - w / 2,
-    y: p.y + dy - h / 2,
-    w,
-    h,
-  })
 
   const collides = (r: { x: number; y: number; w: number; h: number }) =>
     placed.some(
@@ -745,43 +687,16 @@ function placeLabels(cities: Commune[], map: L.Map, pinned?: Commune | null): Pl
     const h = size + 3
     // Pastille 7 px + 4 px d'écart + nom (voir globals.css)
     const w = Math.max(14, c.nom.length * size * 0.58) + 13
-    // Positions essayées, de la plus proche à la plus éloignée : on ne « saute »
-    // que de quelques pixels pour que le nom reste attaché à sa ville.
-    const offsets: [number, number][] = [
-      [0, 0],
-      [0, -h - LABEL_GAP],
-      [0, h + LABEL_GAP],
-      [w / 2 + LABEL_GAP, -h / 2],
-      [-(w / 2 + LABEL_GAP), -h / 2],
-      [w / 2 + LABEL_GAP, h / 2],
-      [-(w / 2 + LABEL_GAP), h / 2],
-      [0, -2 * (h + LABEL_GAP)],
-      [0, 2 * (h + LABEL_GAP)],
-      [w + LABEL_GAP, 0],
-      [-(w + LABEL_GAP), 0],
-      [w / 2 + LABEL_GAP, -h - LABEL_GAP],
-      [-(w / 2 + LABEL_GAP), -h - LABEL_GAP],
-      [w / 2 + LABEL_GAP, h + LABEL_GAP],
-      [-(w / 2 + LABEL_GAP), h + LABEL_GAP],
-      [0, 3 * (h + LABEL_GAP)],
-      [0, -3 * (h + LABEL_GAP)],
-    ]
-    let best: { dx: number; dy: number } | null = null
-    for (const [dx, dy] of offsets) {
-      if (!collides(rectAt(p, w, h, dx, dy))) {
-        best = { dx, dy }
-        break
-      }
-    }
-    if (best) {
-      placed.push(rectAt(p, w, h, best.dx, best.dy))
-      out.push({ commune: c, dx: best.dx, dy: best.dy })
-    }
+    // Boîte réelle de l'étiquette : pastille centrée sur le point, nom vers la droite.
+    const rect = { x: p.x - CITY_DOT_R, y: p.y - h / 2, w, h }
+    if (collides(rect)) continue
+    placed.push(rect)
+    out.push({ commune: c })
   }
 
   // La ville sélectionnée reste toujours visible, même si elle chevauche.
   if (pinned && !out.some((l) => l.commune.nom === pinned.nom)) {
-    out.push({ commune: pinned, dx: 0, dy: 0 })
+    out.push({ commune: pinned })
   }
   return out
 }
@@ -893,9 +808,9 @@ export function RegionsMapInner() {
       group.clearLayers()
       if (level !== 'cities' || communes.length === 0) return
       const visible = placeLabels(communes, map, citySel)
-      for (const { commune: c, dx, dy } of visible) {
+      for (const { commune: c } of visible) {
         const m = L.marker([c.lat, c.lon], {
-          icon: cityLabelIcon(c.nom, citySel?.nom === c.nom, labelSize(c.population), dx, dy),
+          icon: cityLabelIcon(c.nom, citySel?.nom === c.nom, labelSize(c.population)),
           keyboard: true,
           title: c.nom,
           alt: c.nom,
