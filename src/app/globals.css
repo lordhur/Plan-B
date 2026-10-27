@@ -432,69 +432,134 @@ nav * {
 }
 
 /* ------------------------------------------------------------------
-   Animation de sélection : région → département → ville (spec)
-   Anneaux qui se propagent depuis le point cliqué + étiquette du nom.
+   Retour de sélection sur la carte (région → département → ville)
+   Version sobre : un halo qui s'ouvre une seule fois depuis le point
+   cliqué, une entrée en fondu des nouvelles zones, et une légende
+   discrète en bas de la carte.
    ------------------------------------------------------------------ */
-@keyframes map-select-ring {
-  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; }
-  70% { opacity: 0.35; }
+
+/* Halo : anneau fin qui s'ouvre et s'efface (aucune répétition, aucun rebond). */
+@keyframes map-halo {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.55; }
+  55% { opacity: 0.28; }
   100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
 }
-@keyframes map-select-chip {
-  0% { transform: translate(-50%, 6px) scale(0.82); opacity: 0; }
-  55% { transform: translate(-50%, 0) scale(1.06); opacity: 1; }
-  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+@keyframes map-halo-core {
+  0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0.75; }
+  100% { transform: translate(-50%, -50%) scale(2.2); opacity: 0; }
 }
-@keyframes map-select-dot {
-  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-}
-.map-select-ring {
+.map-halo {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 96px;
-  height: 96px;
+  width: 128px;
+  height: 128px;
   border-radius: 9999px;
-  border: 2.5px solid currentColor;
-  transform: translate(-50%, -50%);
-  animation: map-select-ring 0.95s ease-out forwards;
+  border: 1.5px solid currentColor;
+  opacity: 0;
+  animation: map-halo 0.72s cubic-bezier(0.16, 0.84, 0.44, 1) forwards;
+  will-change: transform, opacity;
 }
-.map-select-ring-2 { animation-delay: 0.18s; }
-.map-select-dot {
+/* Nappe lumineuse très douce à l'intérieur de l'anneau */
+.map-halo::after {
+  content: '';
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 12px;
-  height: 12px;
+  inset: 0;
   border-radius: 9999px;
+  background: radial-gradient(circle, currentColor 0%, transparent 66%);
+  opacity: 0.14;
+}
+/* Point d'impact : petite pastille qui s'efface aussitôt */
+.map-halo-core {
+  width: 20px;
+  height: 20px;
+  border: none;
   background: currentColor;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
-  animation: map-select-dot 0.4s cubic-bezier(0.22, 1.4, 0.4, 1) both;
+  animation: map-halo-core 0.42s ease-out forwards;
 }
-.map-select-chip {
+.map-halo-core::after {
+  display: none;
+}
+
+/* Couleur et taille par niveau : plus serré pour une ville (précision du clic) */
+.map-halo.region { color: #8b5cf6; }
+.map-halo.dept { color: #3b82f6; }
+.map-halo.city { color: #10b981; }
+.map-halo.position { color: #0ea5e9; }
+.map-halo.city, .map-halo.position { width: 88px; height: 88px; }
+.map-halo-core.city, .map-halo-core.position { width: 16px; height: 16px; }
+
+/* Légende : pastille de verre en bas de la carte */
+@keyframes map-caption-life {
+  0% { transform: translate(-50%, 12px); opacity: 0; }
+  12% { transform: translate(-50%, 0); opacity: 1; }
+  84% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, 0); opacity: 0; }
+}
+.map-caption {
   position: absolute;
-  left: 0;
-  top: 16px;
-  max-width: 190px;
-  padding: 0.3rem 0.65rem;
+  left: 50%;
+  bottom: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  max-width: calc(100% - 20px);
+  padding: 0.34rem 0.72rem;
   border-radius: 9999px;
-  background: currentColor;
-  color: #fff;
-  font-size: 11px;
-  font-weight: 800;
-  line-height: 1.15;
-  text-align: center;
+  background: rgba(15, 23, 42, 0.86);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #f8fafc;
+  font-size: 11.5px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.01em;
   white-space: nowrap;
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.32);
+  animation: map-caption-life 2.2s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+}
+.map-caption-dot {
+  width: 6px;
+  height: 6px;
+  flex: 0 0 auto;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 0 2.5px rgba(255, 255, 255, 0.18);
+}
+.map-caption-kind {
+  color: rgba(248, 250, 252, 0.72);
+  font-weight: 600;
+}
+.map-caption-sep {
+  color: rgba(248, 250, 252, 0.35);
+}
+.map-caption-name {
+  max-width: 12rem;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.28);
-  animation: map-select-chip 0.5s cubic-bezier(0.22, 1.4, 0.4, 1) both;
 }
-/* Couleur selon le niveau sélectionné */
-.map-select-ring.region, .map-select-dot.region, .map-select-chip.region { color: #7c3aed; }
-.map-select-ring.dept, .map-select-dot.dept, .map-select-chip.dept { color: #2563eb; }
-.map-select-ring.city, .map-select-dot.city, .map-select-chip.city { color: #059669; }
+/* Seul le point prend la couleur du niveau : le texte reste blanc */
+.map-caption .map-caption-dot { background: #e2e8f0; }
+.map-caption.region .map-caption-dot { background: #c4b5fd; }
+.map-caption.dept .map-caption-dot { background: #93c5fd; }
+.map-caption.city .map-caption-dot { background: #6ee7b7; }
+.map-caption.position .map-caption-dot { background: #7dd3fc; }
+
+/* Entrée en fondu décalé des zones du nouveau niveau */
+@keyframes map-shape-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.map-shape-in {
+  animation: map-shape-in 0.4s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-halo,
+  .map-halo-core,
+  .map-caption,
+  .map-shape-in {
+    animation-duration: 0.01ms;
+  }
+}
 
 /* Cercle du rayon de recherche (jauge km) */
 .radius-circle {
@@ -549,15 +614,6 @@ nav * {
   outline: 2px solid #7c3aed;
   outline-offset: 4px;
   border-radius: 9999px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .map-select-ring,
-  .map-select-ring-2,
-  .map-select-chip,
-  .map-select-dot {
-    animation-duration: 0.01ms;
-  }
 }
 
 /* Animation de confirmation après « Valider » */
@@ -641,6 +697,14 @@ nav * {
     0 0 3px #fff, 0 1px 4px rgba(15, 23, 42, 0.35);
   pointer-events: auto;
   cursor: pointer;
+}
+/* Ville sélectionnée : point marqué d'un anneau doux (persistant, sans clignotement) */
+.city-outline-label.is-selected .city-dot {
+  box-shadow:
+    0 0 0 2px #fff,
+    0 0 0 5px rgba(124, 58, 237, 0.32),
+    0 1px 3px rgba(15, 23, 42, 0.5);
+  transform: scale(1.1);
 }
 .city-outline-label .city-name.sel {
   color: #7c3aed;

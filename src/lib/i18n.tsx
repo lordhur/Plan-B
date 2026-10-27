@@ -65,6 +65,10 @@ const dict: Record<Lang, Record<string, string>> = {
     map_validate: 'Valider',
     map_validated_btn: 'Validé !',
     map_my_position: 'Ma position',
+    map_kind_region: 'Région',
+    map_kind_dept: 'Département',
+    map_kind_city: 'Ville / village',
+    map_kind_position: 'Ma position',
     map_radius: 'Rayon autour de moi',
     map_radius_unit: 'kilomètres',
     map_radius_hint:
@@ -302,6 +306,10 @@ const dict: Record<Lang, Record<string, string>> = {
     map_validate: 'Confirm',
     map_validated_btn: 'Confirmed!',
     map_my_position: 'My location',
+    map_kind_region: 'Region',
+    map_kind_dept: 'Department',
+    map_kind_city: 'City / village',
+    map_kind_position: 'My location',
     map_radius: 'Radius around me',
     map_radius_unit: 'kilometres',
     map_radius_hint:

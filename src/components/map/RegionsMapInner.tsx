@@ -615,6 +615,8 @@ function placeAreaLabels(group: L.LayerGroup, map: L.Map, items: AreaLabelItem[]
   }
 }
 
+type SelectKind = 'region' | 'dept' | 'city' | 'position'
+
 type Level = 'regions' | 'depts' | 'cities'
 
 /** Cadre géographique simple (pas d'objet Leaflet dans l'état React). */
@@ -637,7 +639,7 @@ const CITY_DOT_R = 3.5
 function cityLabelIcon(name: string, selected: boolean, size: number): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
   return L.divIcon({
-    className: 'city-outline-label',
+    className: selected ? 'city-outline-label is-selected' : 'city-outline-label',
     html:
       `<span class="city-shift" style="transform:translate(${-CITY_DOT_R}px,-50%)">` +
       `<span class="city-dot" aria-hidden="true"></span>` +
@@ -717,6 +719,9 @@ function FitBox({ box }: { box: Box | null }) {
       map.fitBounds(L.latLngBounds([box.south, box.west], [box.north, box.east]), {
         padding: [12, 12],
         maxZoom: 12,
+        // Zoom animé : la transition suit le clic au lieu de « sauter ».
+        animate: true,
+        duration: 0.65,
       })
     } catch {
       /* cadre invalide : on ignore */
@@ -748,34 +753,37 @@ export function RegionsMapInner() {
   const [communes, setCommunes] = useState<Commune[]>([])
   const [mapError, setMapError] = useState<string | null>(null)
   const [mapReady, setMapReady] = useState(false)
-  // Animation jouée à chaque sélection (région → département → ville)
-  const [selectFx, setSelectFx] = useState<{
+  // Retour visuel de sélection : halo discret au point cliqué + légende en bas.
+  const [selection, setSelection] = useState<{
+    id: number
     x: number
     y: number
     label: string
-    kind: 'region' | 'dept' | 'city'
+    kind: SelectKind
   } | null>(null)
   const selectTimer = useRef<number | null>(null)
+  const selectSeq = useRef(0)
   const radiusLayerRef = useRef<L.LayerGroup | null>(null)
 
-  const fireSelectFx = useCallback(
-    (label: string, kind: 'region' | 'dept' | 'city', point?: L.Point) => {
-      const map = mapRef.current
-      const size = map?.getSize()
-      const raw = point ?? (size ? L.point(size.x / 2, size.y / 2) : null)
-      if (!raw || !size) return
-      // On garde l'effet (anneaux + étiquette du nom) dans le cadre, même si l'on
-      // clique tout au bord de la carte.
-      const chipW = Math.min(190, label.length * 6.2 + 30)
-      const halfX = Math.max(48, chipW / 2)
-      const x = Math.min(Math.max(raw.x, halfX), Math.max(halfX, size.x - halfX))
-      const y = Math.min(Math.max(raw.y, 34), Math.max(34, size.y - 10))
-      setSelectFx({ x, y, label, kind })
-      if (selectTimer.current) window.clearTimeout(selectTimer.current)
-      selectTimer.current = window.setTimeout(() => setSelectFx(null), 1500)
-    },
-    [],
-  )
+  /**
+   * Nouveau retour de sélection (région → département → ville) :
+   * un halo doux qui s'élargit une seule fois depuis le point cliqué, puis la
+   * légende « Région · Occitanie » qui apparaît en bas de la carte.
+   */
+  const fireSelectFx = useCallback((label: string, kind: SelectKind, point?: L.Point) => {
+    const map = mapRef.current
+    const size = map?.getSize()
+    const raw = point ?? (size ? L.point(size.x / 2, size.y / 2) : null)
+    if (!raw || !size) return
+    // Le halo reste dans le cadre, même si l'on clique tout au bord.
+    const x = Math.min(Math.max(raw.x, 14), Math.max(14, size.x - 14))
+    const y = Math.min(Math.max(raw.y, 14), Math.max(14, size.y - 14))
+    selectSeq.current += 1
+    setSelection({ id: selectSeq.current, x, y, label, kind })
+    if (selectTimer.current) window.clearTimeout(selectTimer.current)
+    selectTimer.current = window.setTimeout(() => setSelection(null), 2350)
+  }, [])
+
   // Animation de confirmation après « Valider » (spec)
   const [celebrate, setCelebrate] = useState<string | null>(null)
   const celebrateTimer = useRef<number | null>(null)
@@ -933,8 +941,20 @@ export function RegionsMapInner() {
       const areaLabels = L.layerGroup().addTo(group)
       const areaItems: AreaLabelItem[] = []
 
+      /** Apparition en fondu décalé : les zones du nouveau niveau arrivent en cascade. */
+      const fadeInShapes = (shapes: L.GeoJSON) => {
+        let i = 0
+        shapes.eachLayer((l) => {
+          const el = (l as L.Path).getElement?.() as SVGElement | null
+          if (!el) return
+          el.classList.add('map-shape-in')
+          el.style.animationDelay = `${Math.min(i * 16, 240)}ms`
+          i += 1
+        })
+      }
+
       if (level === 'regions') {
-        L.geoJSON(sortedFeatures(geo.regions, (code) => METRO_REGIONS.has(code)), {
+        const regionShapes = L.geoJSON(sortedFeatures(geo.regions, (code) => METRO_REGIONS.has(code)), {
           style: () => style(false),
           onEachFeature: (feature, layer) => {
             const code = String(feature.properties?.code ?? '')
@@ -954,8 +974,9 @@ export function RegionsMapInner() {
             })
           },
         }).addTo(group)
+        fadeInShapes(regionShapes)
       } else if (level === 'depts' && regionSel) {
-        L.geoJSON(sortedFeatures(geo.depts, (code) => DEPT_TO_REGION[code] === regionSel.code), {
+        const deptShapes = L.geoJSON(sortedFeatures(geo.depts, (code) => DEPT_TO_REGION[code] === regionSel.code), {
           style: () => style(false),
           onEachFeature: (feature, layer) => {
             const code = String(feature.properties?.code ?? '')
@@ -1017,12 +1038,14 @@ export function RegionsMapInner() {
             })
           },
         }).addTo(group)
+        fadeInShapes(deptShapes)
       } else if (level === 'cities' && deptSel) {
         // Fond : le département sélectionné
-        L.geoJSON(geo.depts, {
+        const deptBg = L.geoJSON(geo.depts, {
           filter: (f) => String(f.properties?.code ?? '') === deptSel.code,
           style: () => style(true),
         }).addTo(group)
+        fadeInShapes(deptBg)
       }
 
       // Couche villes : présente à tous les niveaux, redessinée à chaque zoom
@@ -1174,7 +1197,7 @@ export function RegionsMapInner() {
         const lat = pos.coords.latitude
         const lon = pos.coords.longitude
         setFilter({ type: 'city', name: t('map_my_position'), lat, lon })
-        fireSelectFx(t('map_my_position'), 'city')
+        fireSelectFx(t('map_my_position'), 'position')
         // On recentre la carte sur la position et on montre le rayon choisi.
         try {
           mapRef.current?.flyTo([lat, lon], Math.max(mapRef.current.getZoom(), 9), {
@@ -1284,18 +1307,40 @@ export function RegionsMapInner() {
           </div>
         )}
 
-        {/* Animation de sélection : région / département / ville (spec) */}
-        {selectFx && (
+        {/* Retour de sélection : halo doux au point cliqué + légende en bas (spec) */}
+        {selection && (
           <div
-            className="pointer-events-none absolute z-[1080]"
-            style={{ left: selectFx.x, top: selectFx.y }}
+            key={selection.id}
+            className="pointer-events-none absolute inset-0 z-[1080] overflow-hidden"
             role="status"
             aria-live="polite"
           >
-            <span className={cn('map-select-ring', selectFx.kind)} aria-hidden />
-            <span className={cn('map-select-ring map-select-ring-2', selectFx.kind)} aria-hidden />
-            <span className={cn('map-select-dot', selectFx.kind)} aria-hidden />
-            <span className={cn('map-select-chip', selectFx.kind)}>{selectFx.label}</span>
+            <span
+              className={cn('map-halo', selection.kind)}
+              style={{ left: selection.x, top: selection.y }}
+              aria-hidden
+            />
+            <span
+              className={cn('map-halo map-halo-core', selection.kind)}
+              style={{ left: selection.x, top: selection.y }}
+              aria-hidden
+            />
+            <span className={cn('map-caption', selection.kind)}>
+              <span className="map-caption-dot" aria-hidden />
+              <span className="map-caption-kind">
+                {selection.kind === 'region'
+                  ? t('map_kind_region')
+                  : selection.kind === 'dept'
+                    ? t('map_kind_dept')
+                    : selection.kind === 'position'
+                      ? t('map_kind_position')
+                      : t('map_kind_city')}
+              </span>
+              <span className="map-caption-sep" aria-hidden>
+                ·
+              </span>
+              <span className="map-caption-name">{selection.label}</span>
+            </span>
           </div>
         )}
 
