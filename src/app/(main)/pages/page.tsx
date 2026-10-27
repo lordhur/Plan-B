@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { GeoFilterBar, useGeoQuery } from '@/components/geo/GeoFilterBar'
+import { useLang } from '@/lib/i18n'
 
 const CATEGORY_LABELS: Record<string, string> = {
   commerce: 'Commerce',
@@ -22,8 +24,11 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 /** Annuaire des pages organisateurs & commerces (spec Phase 5 §5.1). */
 export default function PagesDirectoryPage() {
+  const { t } = useLang()
   const [search, setSearch] = useState('')
-  const pages = trpc.pages.list.useQuery(search ? { search } : undefined)
+  // Même jauge de kilomètres que la carte / le fil : ville + rayon partagés.
+  const geo = useGeoQuery()
+  const pages = trpc.pages.list.useQuery({ ...(search ? { search } : {}), ...geo })
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-8 md:px-0">
@@ -53,10 +58,20 @@ export default function PagesDirectoryPage() {
         />
       </div>
 
+      <GeoFilterBar
+        resultLabel={
+          pages.data ? t('geo_count_pages').replace('{n}', String(pages.data.length)) : undefined
+        }
+      />
+
       {pages.isLoading ? (
         <LoadingSpinner label="Chargement des pages" />
       ) : !pages.data || pages.data.length === 0 ? (
-        <EmptyState icon={Store} title="Aucune page trouvée" description="Créez la page de votre commerce ou association !" />
+        <EmptyState
+          icon={Store}
+          title="Aucune page trouvée"
+          description="Élargissez le rayon, changez de ville ou créez la page de votre commerce !"
+        />
       ) : (
         <ul className="space-y-3">
           {pages.data.map((page) => (
@@ -97,7 +112,9 @@ export default function PagesDirectoryPage() {
                     </span>
                     <span className="block truncate text-xs text-fg-muted">
                       {CATEGORY_LABELS[page.category] ?? page.category}
-                      {page.city ? ` · ${page.city}` : ''} · {page.followerCount} abonné(s) · {page._count.events} plan(s)
+                      {page.city ? ` · ${page.city}` : ''}
+                      {page.distanceKm != null ? ` · à ${Math.round(page.distanceKm)} km` : ''} ·{' '}
+                      {page.followerCount} abonné(s) · {page._count.events} plan(s)
                     </span>
                     {page.description && (
                       <span className="mt-1 block truncate text-sm text-fg-muted">{page.description}</span>

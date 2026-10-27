@@ -1,6 +1,8 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+import { cityCoords } from '@/lib/frenchCities'
 import { prisma } from '../db'
+import { distanceTo, geoWhere, resolveGeo, withinGeo } from '../geo'
 import { notify } from '../notifications'
 import { createTRPCRouter, publicProcedure, protectedProcedure, verifiedProcedure } from '../trpc'
 
@@ -25,11 +27,25 @@ const authorSelect = {
 
 /** Groupes d'intérêt + forum (spec Phase 5 §5.2). */
 export const groupsRouter = createTRPCRouter({
-  /** Annuaire des groupes publics (+ recherche). */
+  /** Annuaire des groupes publics (+ recherche + filtre géographique). */
   list: publicProcedure
-    .input(z.object({ search: z.string().trim().max(60).optional() }).nullish())
-    .query(async ({ input }) =>
-      prisma.interestGroup.findMany({
+    .input(
+      z
+        .object({
+          search: z.string().trim().max(60).optional(),
+          lat: z.number().optional(),
+          lon: z.number().optional(),
+          radiusKm: z.number().min(1).max(300).optional(),
+          minLat: z.number().optional(),
+          maxLat: z.number().optional(),
+          minLon: z.number().optional(),
+          maxLon: z.number().optional(),
+        })
+        .nullish(),
+    )
+    .query(async ({ input }) => {
+      const geo = resolveGeo(input ?? {})
+      const rows = await prisma.interestGroup.findMany({
         where: {
           isPrivate: false,
           ...(input?.search
@@ -40,6 +56,7 @@ export const groupsRouter = createTRPCRouter({
                 ],
               }
             : {}),
+          ...geoWhere(geo),
         },
         select: {
           id: true,
@@ -49,11 +66,25 @@ export const groupsRouter = createTRPCRouter({
           category: true,
           coverImage: true,
           memberCount: true,
+          city: true,
+          latitude: true,
+          longitude: true,
         },
         orderBy: [{ memberCount: 'desc' }, { name: 'asc' }],
-        take: 60,
-      }),
-    ),
+        take: 120,
+      })
+      // La jauge doit être respectée exactement : filtre par distance réelle.
+      return rows
+        .filter((g) => withinGeo(geo, g.latitude, g.longitude))
+        .map((g) => ({ ...g, distanceKm: distanceTo(geo, g.latitude, g.longitude) }))
+        .sort((a, b) => {
+          if (geo.center) {
+            return (a.distanceKm ?? 1e9) - (b.distanceKm ?? 1e9)
+          }
+          return b.memberCount - a.memberCount || a.name.localeCompare(b.name)
+        })
+        .slice(0, 60)
+    }),
 
   /** Détail d'un groupe : infos + mon rôle + derniers sujets. */
   bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(async ({ input, ctx }) => {
@@ -95,6 +126,7 @@ export const groupsRouter = createTRPCRouter({
         name: z.string().trim().min(3).max(80),
         description: z.string().trim().max(2000).optional(),
         category: z.enum(GROUP_CATEGORIES),
+        city: z.string().trim().max(80).optional(),
         isPrivate: z.boolean().default(false),
         coverImage: z
           .string()
@@ -117,6 +149,12 @@ export const groupsRouter = createTRPCRouter({
           slug,
           description: input.description,
           category: input.category,
+          city: input.city,
+          ...(() => {
+            // Géocodage local (aucun appel réseau) pour que la jauge s'applique.
+            const c = cityCoords(input.city)
+            return c ? { latitude: c.lat, longitude: c.lon } : {}
+          })(),
           isPrivate: input.isPrivate,
           coverImage: input.coverImage,
           memberCount: 1,

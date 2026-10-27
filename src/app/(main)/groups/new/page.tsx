@@ -17,10 +17,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { toast } from '@/components/ui/toast'
 import { CoverImageField } from '@/components/events/CoverImageField'
+import { CityDatalist } from '@/components/geo/CityDatalist'
 
 const schema = z.object({
   name: z.string().trim().min(3, 'Nom trop court').max(80),
   category: z.enum(['sport', 'nature', 'culture', 'food', 'jeux', 'voyage', 'parentalité', 'autre']),
+  city: z.string().trim().max(80).optional(),
   description: z.string().trim().max(2000).optional(),
   coverImage: z
     .string()
@@ -96,6 +98,20 @@ export default function NewGroupPage() {
                 <option value="parentalité">Parentalité</option>
                 <option value="autre">Autre</option>
               </Select>
+            </div>
+            <div>
+              <Label htmlFor="group-city">Ville</Label>
+              <Input
+                id="group-city"
+                {...register('city')}
+                list="group-city-options"
+                autoComplete="address-level2"
+                placeholder="Ex. : Draguignan"
+              />
+              <CityDatalist id="group-city-options" />
+              <p className="mt-1 text-xs text-fg-muted">
+                Sert au filtre par rayon (km) dans l’annuaire des groupes.
+              </p>
             </div>
             <div>
               <Label htmlFor="group-description">Description</Label>

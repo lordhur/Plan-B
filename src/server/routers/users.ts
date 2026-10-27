@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import { setInterestsSchema, updateProfileSchema } from '@/lib/validators'
 import { prisma } from '../db'
+import { distanceTo, geoWhere, resolveGeo, withinGeo } from '../geo'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 /** Sous-ensemble public d'un profil (respecte les réglages de confidentialité). */
@@ -226,6 +227,9 @@ export const usersRouter = createTRPCRouter({
         maxLat: z.number().optional(),
         minLon: z.number().optional(),
         maxLon: z.number().optional(),
+        lat: z.number().optional(),
+        lon: z.number().optional(),
+        radiusKm: z.number().min(1).max(300).optional(),
         limit: z.number().int().min(1).max(60).default(40),
       }),
     )
@@ -260,15 +264,10 @@ export const usersRouter = createTRPCRouter({
         }
         where.dateOfBirth = dob
       }
-      if (
-        input.minLat != null &&
-        input.maxLat != null &&
-        input.minLon != null &&
-        input.maxLon != null
-      ) {
-        where.latitude = { gte: input.minLat, lte: input.maxLat }
-        where.longitude = { gte: input.minLon, lte: input.maxLon }
-      }
+      // Zone (région/département) ou rayon autour de la ville / position GPS :
+      // même jauge de kilomètres que la carte et le fil d'actualité.
+      const geo = resolveGeo(input)
+      Object.assign(where, geoWhere(geo))
       if (input.verifiedOnly) where.emailVerified = true
       if (input.organizersOnly) where.eventsCreated = { gt: 0 }
       if (input.newThisMonth) {
@@ -286,7 +285,8 @@ export const usersRouter = createTRPCRouter({
       const users = await prisma.user.findMany({
         where,
         orderBy,
-        take: input.limit,
+        // Avec un rayon, on sur-échantillonne puis on affine par distance exacte.
+        take: geo.center || geo.box ? 200 : input.limit,
         select: {
           id: true,
           firstName: true,
@@ -294,6 +294,8 @@ export const usersRouter = createTRPCRouter({
           displayName: true,
           avatarUrl: true,
           city: true,
+          latitude: true,
+          longitude: true,
           bio: true,
           dateOfBirth: true,
           showAge: true,
@@ -316,13 +318,26 @@ export const usersRouter = createTRPCRouter({
         return age
       }
 
-      return users.map((u) => ({
+      const filtered = users.filter((u) => withinGeo(geo, u.latitude, u.longitude))
+
+      if (geo.center) {
+        filtered.sort((a, b) => {
+          const da = distanceTo(geo, a.latitude, a.longitude) ?? Number.MAX_SAFE_INTEGER
+          const db = distanceTo(geo, b.latitude, b.longitude) ?? Number.MAX_SAFE_INTEGER
+          return da - db
+        })
+      }
+
+      return filtered.slice(0, input.limit).map((u) => ({
         id: u.id,
         firstName: u.firstName,
         lastName: u.showLastName ? u.lastName : '',
         displayName: u.displayName,
         avatarUrl: u.avatarUrl,
         city: u.city,
+        latitude: u.latitude,
+        longitude: u.longitude,
+        distanceKm: distanceTo(geo, u.latitude, u.longitude),
         bio: u.bio,
         age: u.showAge ? ageOf(u.dateOfBirth) : null,
         gender: u.gender,

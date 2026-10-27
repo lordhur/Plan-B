@@ -12,7 +12,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { FranceMap } from '@/components/map/FranceMap'
 import { StoryRail } from '@/components/stories/StoryRail'
-import { syncRadiusFromStorage, useLocationFilter } from '@/lib/locationFilter'
+import { syncGeoFromStorage, useLocationFilter } from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
 
 /** FIL D'ACTUALITÉ — plans à venir, géolocalisés et classés par pertinence. */
@@ -25,7 +25,7 @@ export default function FeedPage() {
 
   // Rayon mémorisé (km) relu côté client — évite tout décalage d'hydratation
   useEffect(() => {
-    syncRadiusFromStorage()
+    syncGeoFromStorage()
   }, [])
 
   // Géolocalisation navigateur (avec repli sur la ville du profil)
@@ -260,7 +260,11 @@ export default function FeedPage() {
         ) : (
           <EmptyState
             icon={MapPin}
-            title={zoneBox ? `${t('feed_empty_zone')} ${zoneBox.name}` : t('feed_empty_near')}
+            title={
+              zoneBox
+                ? `${t('feed_empty_zone')} ${zoneBox.name}`
+                : t('feed_empty_near').replace('{km}', String(radiusKm))
+            }
             description={
               geoState === 'denied' && !filter
                 ? t('feed_empty_desc_denied')

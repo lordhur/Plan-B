@@ -34,7 +34,7 @@ import { FriendButton } from '@/components/friends/FriendButton'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { formatFullDate } from '@/lib/date'
 import { IntroCardView, type IntroCardItem } from '@/components/friends/IntroCardView'
-import { useLocationFilter } from '@/lib/locationFilter'
+import { GeoFilterBar, useGeoQuery } from '@/components/geo/GeoFilterBar'
 import { useLang } from '@/lib/i18n'
 
 type Tab = 'amis' | 'recherche' | 'nouveau' | 'classement'
@@ -206,6 +206,7 @@ function MemberCard({
     eventsCreated: number
     isVerified: boolean
     interests: string[]
+    distanceKm?: number | null
   }
   onMessage: (userId: string) => void
 }) {
@@ -226,6 +227,11 @@ function MemberCard({
             {m.city && (
               <span className="inline-flex items-center gap-1">
                 <MapPin className="h-3 w-3" aria-hidden /> {m.city}
+              </span>
+            )}
+            {m.distanceKm != null && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-primary-50 px-2 py-0.5 font-semibold text-primary-700 dark:bg-primary-500/15 dark:text-primary-300">
+                {m.distanceKm < 1 ? '< 1 km' : `à ${Math.round(m.distanceKm)} km`}
               </span>
             )}
             {m.gender && <Badge variant="secondary">{GENDER_LABEL[m.gender] ?? m.gender}</Badge>}
@@ -271,28 +277,6 @@ function MemberCard({
 }
 
 /** Liste annuaire (onglet Recherche). */
-/** Bannière de la zone géographique validée sur la carte du fil. */
-function ZoneBanner() {
-  const { filter, clear } = useLocationFilter()
-  if (!filter) return null
-  return (
-    <div className="flex items-center justify-between rounded-xl border border-primary-500/40 bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/10 dark:text-primary-300">
-      <span className="flex items-center gap-2">
-        <MapPin className="h-4 w-4" aria-hidden />
-        Membres filtrés : {filter.name}
-      </span>
-      <button
-        type="button"
-        onClick={clear}
-        className="ml-3 rounded-lg p-1 hover:bg-primary-500/20"
-        aria-label="Retirer le filtre géographique"
-      >
-        <X className="h-4 w-4" aria-hidden />
-      </button>
-    </div>
-  )
-}
-
 function DirectoryList({
   filters,
   query,
@@ -304,12 +288,8 @@ function DirectoryList({
   emptyHint: string
   onMessage: (userId: string) => void
 }) {
-  // Zone validée sur la carte du fil : filtre géographique partagé
-  const zoneFilter = useLocationFilter((s) => s.filter)
-  const zoneBox =
-    zoneFilter && (zoneFilter.type === 'region' || zoneFilter.type === 'dept')
-      ? zoneFilter.bbox
-      : null
+  // Jauge de kilomètres partagée avec la carte et le fil d'actualité.
+  const geo = useGeoQuery()
   const directory = trpc.users.directory.useQuery({
     q: query && query.trim().length >= 2 ? query.trim() : undefined,
     gender:
@@ -328,10 +308,7 @@ function DirectoryList({
     verifiedOnly: filters.verifiedOnly,
     organizersOnly: filters.organizersOnly,
     newThisMonth: false,
-    minLat: zoneBox?.minLat,
-    maxLat: zoneBox?.maxLat,
-    minLon: zoneBox?.minLon,
-    maxLon: zoneBox?.maxLon,
+    ...geo,
     limit: 40,
   })
 
@@ -785,12 +762,12 @@ export default function FriendsPage() {
               aria-label="Rechercher un membre"
             />
           </div>
-          <ZoneBanner />
+          <GeoFilterBar />
           <FiltersPanel value={filters} onChange={setFilters} />
           <DirectoryList
             filters={filters}
             query={search}
-            emptyHint="Essayez d’autres mots-clés ou élargissez les filtres."
+            emptyHint="Essayez d’autres mots-clés, changez de ville ou élargissez le rayon."
             onMessage={startConversation}
           />
         </div>

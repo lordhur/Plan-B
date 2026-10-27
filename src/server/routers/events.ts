@@ -4,6 +4,7 @@ import { ageFromBirthDate, haversineKm, slugify } from '@/lib/utils'
 import { createEventSchema, eventFiltersSchema } from '@/lib/validators'
 import { computeFeedScore } from '@/lib/feed'
 import { prisma } from '../db'
+import { distanceTo, geoWhere, resolveGeo, withinGeo } from '../geo'
 import { notify } from '../notifications'
 import { promoteFromWaitlist } from '../waitlist'
 import { notifyPageFollowers } from './pages'
@@ -222,14 +223,28 @@ export const eventsRouter = createTRPCRouter({
     prisma.eventCategory.findMany({ orderBy: { name: 'asc' } }),
   ),
 
-  /** Événements d'un intervalle de dates (vue calendrier). */
+  /** Événements d'un intervalle de dates (vue calendrier), filtrés par la jauge km. */
   inRange: publicProcedure
-    .input(z.object({ from: z.coerce.date(), to: z.coerce.date() }))
-    .query(async ({ input }) =>
-      prisma.event.findMany({
+    .input(
+      z.object({
+        from: z.coerce.date(),
+        to: z.coerce.date(),
+        lat: z.number().optional(),
+        lon: z.number().optional(),
+        radiusKm: z.number().min(1).max(300).optional(),
+        minLat: z.number().optional(),
+        maxLat: z.number().optional(),
+        minLon: z.number().optional(),
+        maxLon: z.number().optional(),
+      }),
+    )
+    .query(async ({ input }) => {
+      const geo = resolveGeo(input)
+      const rows = await prisma.event.findMany({
         where: {
           status: { in: ['UPCOMING', 'ONGOING'] },
           startDate: { gte: input.from, lte: input.to },
+          ...geoWhere(geo),
         },
         select: {
           id: true,
@@ -238,6 +253,8 @@ export const eventsRouter = createTRPCRouter({
           startDate: true,
           endDate: true,
           city: true,
+          latitude: true,
+          longitude: true,
           price: true,
           currentParticipants: true,
           maxParticipants: true,
@@ -247,8 +264,11 @@ export const eventsRouter = createTRPCRouter({
           _count: { select: { likes: true } },
         },
         orderBy: { startDate: 'asc' },
-      }),
-    ),
+      })
+      return rows
+        .filter((e) => withinGeo(geo, e.latitude, e.longitude))
+        .map((e) => ({ ...e, distanceKm: distanceTo(geo, e.latitude, e.longitude) }))
+    }),
 
   /** Fil d'actualité : plans à venir, classés par l'algorithme de pertinence. */
   feed: publicProcedure
