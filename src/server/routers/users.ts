@@ -133,6 +133,10 @@ export const usersRouter = createTRPCRouter({
         newThisMonth: z.boolean().default(false),
         verifiedOnly: z.boolean().default(false),
         organizersOnly: z.boolean().default(false),
+        minLat: z.number().optional(),
+        maxLat: z.number().optional(),
+        minLon: z.number().optional(),
+        maxLon: z.number().optional(),
         limit: z.number().int().min(1).max(60).default(40),
       }),
     )
@@ -166,6 +170,15 @@ export const usersRouter = createTRPCRouter({
           dob.gte = new Date(now.getFullYear() - input.maxAge - 1, now.getMonth(), now.getDate() + 1)
         }
         where.dateOfBirth = dob
+      }
+      if (
+        input.minLat != null &&
+        input.maxLat != null &&
+        input.minLon != null &&
+        input.maxLon != null
+      ) {
+        where.latitude = { gte: input.minLat, lte: input.maxLat }
+        where.longitude = { gte: input.minLon, lte: input.maxLon }
       }
       if (input.verifiedOnly) where.emailVerified = true
       if (input.organizersOnly) where.eventsCreated = { gt: 0 }

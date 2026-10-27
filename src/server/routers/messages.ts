@@ -199,7 +199,17 @@ export const messagesRouter = createTRPCRouter({
         .object({
           conversationId: z.string(),
           content: z.string().trim().max(2000).default(''),
-          mediaUrl: z.string().trim().max(2048).startsWith('/api/img/').optional(),
+          mediaUrl: z
+            .string()
+            .trim()
+            .max(2048)
+            .refine(
+              (v) =>
+                v.startsWith('/api/img/') ||
+                v.startsWith('https://kwnqvyjrynlgokdcqmwi.supabase.co/storage/'),
+              'URL de média invalide',
+            )
+            .optional(),
           mediaType: z.enum(['IMAGE', 'VIDEO', 'AUDIO', 'FILE']).optional(),
           mediaName: z.string().trim().max(140).optional(),
         })

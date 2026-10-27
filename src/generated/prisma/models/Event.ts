@@ -638,6 +638,7 @@ export type EventWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   organizer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  likes?: Prisma.EventLikeListRelationFilter
   category?: Prisma.XOR<Prisma.EventCategoryScalarRelationFilter, Prisma.EventCategoryWhereInput>
   collaborators?: Prisma.EventCollaboratorListRelationFilter
   sponsor?: Prisma.XOR<Prisma.PartnerNullableScalarRelationFilter, Prisma.PartnerWhereInput> | null
@@ -705,6 +706,7 @@ export type EventOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   organizer?: Prisma.UserOrderByWithRelationInput
   page?: Prisma.PageOrderByWithRelationInput
+  likes?: Prisma.EventLikeOrderByRelationAggregateInput
   category?: Prisma.EventCategoryOrderByWithRelationInput
   collaborators?: Prisma.EventCollaboratorOrderByRelationAggregateInput
   sponsor?: Prisma.PartnerOrderByWithRelationInput
@@ -775,6 +777,7 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
   organizer?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   page?: Prisma.XOR<Prisma.PageNullableScalarRelationFilter, Prisma.PageWhereInput> | null
+  likes?: Prisma.EventLikeListRelationFilter
   category?: Prisma.XOR<Prisma.EventCategoryScalarRelationFilter, Prisma.EventCategoryWhereInput>
   collaborators?: Prisma.EventCollaboratorListRelationFilter
   sponsor?: Prisma.XOR<Prisma.PartnerNullableScalarRelationFilter, Prisma.PartnerWhereInput> | null
@@ -958,6 +961,7 @@ export type EventCreateInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -1023,6 +1027,7 @@ export type EventUncheckedCreateInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -1084,6 +1089,7 @@ export type EventUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -1149,6 +1155,7 @@ export type EventUncheckedUpdateInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -1330,6 +1337,11 @@ export type EventListRelationFilter = {
 
 export type EventOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type EventScalarRelationFilter = {
+  is?: Prisma.EventWhereInput
+  isNot?: Prisma.EventWhereInput
 }
 
 export type StringNullableListFilter<$PrismaModel = never> = {
@@ -1534,11 +1546,6 @@ export type EventSumOrderByAggregateInput = {
   viewCount?: Prisma.SortOrder
 }
 
-export type EventScalarRelationFilter = {
-  is?: Prisma.EventWhereInput
-  isNot?: Prisma.EventWhereInput
-}
-
 export type EventCreateNestedManyWithoutOrganizerInput = {
   create?: Prisma.XOR<Prisma.EventCreateWithoutOrganizerInput, Prisma.EventUncheckedCreateWithoutOrganizerInput> | Prisma.EventCreateWithoutOrganizerInput[] | Prisma.EventUncheckedCreateWithoutOrganizerInput[]
   connectOrCreate?: Prisma.EventCreateOrConnectWithoutOrganizerInput | Prisma.EventCreateOrConnectWithoutOrganizerInput[]
@@ -1579,6 +1586,20 @@ export type EventUncheckedUpdateManyWithoutOrganizerNestedInput = {
   update?: Prisma.EventUpdateWithWhereUniqueWithoutOrganizerInput | Prisma.EventUpdateWithWhereUniqueWithoutOrganizerInput[]
   updateMany?: Prisma.EventUpdateManyWithWhereWithoutOrganizerInput | Prisma.EventUpdateManyWithWhereWithoutOrganizerInput[]
   deleteMany?: Prisma.EventScalarWhereInput | Prisma.EventScalarWhereInput[]
+}
+
+export type EventCreateNestedOneWithoutLikesInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutLikesInput, Prisma.EventUncheckedCreateWithoutLikesInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutLikesInput
+  connect?: Prisma.EventWhereUniqueInput
+}
+
+export type EventUpdateOneRequiredWithoutLikesNestedInput = {
+  create?: Prisma.XOR<Prisma.EventCreateWithoutLikesInput, Prisma.EventUncheckedCreateWithoutLikesInput>
+  connectOrCreate?: Prisma.EventCreateOrConnectWithoutLikesInput
+  upsert?: Prisma.EventUpsertWithoutLikesInput
+  connect?: Prisma.EventWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EventUpdateToOneWithWhereWithoutLikesInput, Prisma.EventUpdateWithoutLikesInput>, Prisma.EventUncheckedUpdateWithoutLikesInput>
 }
 
 export type EventCreateNestedManyWithoutCategoryInput = {
@@ -1893,6 +1914,7 @@ export type EventCreateWithoutOrganizerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -1957,6 +1979,7 @@ export type EventUncheckedCreateWithoutOrganizerInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -2051,6 +2074,274 @@ export type EventScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Event"> | Date | string
 }
 
+export type EventCreateWithoutLikesInput = {
+  id?: string
+  slug: string
+  shareToken?: string
+  title: string
+  description: string
+  shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
+  coverImage?: string | null
+  tags?: Prisma.EventCreatetagsInput | string[]
+  startDate: Date | string
+  endDate?: Date | string | null
+  timezone?: string
+  locationName: string
+  address: string
+  city: string
+  zipCode?: string | null
+  latitude: number
+  longitude: number
+  isOnline?: boolean
+  onlineLink?: string | null
+  maxParticipants?: number | null
+  minParticipants?: number | null
+  currentParticipants?: number
+  registrationType?: $Enums.RegistrationType
+  minAge?: number | null
+  maxAge?: number | null
+  genderRestriction?: $Enums.GenderRestriction
+  minRating?: number | null
+  wheelchairAccessible?: boolean
+  hearingAccessible?: boolean
+  visuallyAccessible?: boolean
+  accessibilityNotes?: string | null
+  visibility?: $Enums.EventVisibility
+  isCollaborative?: boolean
+  isFree?: boolean
+  price?: number | null
+  currency?: string
+  stripePriceId?: string | null
+  platformFeePercent?: number
+  isSponsored?: boolean
+  status?: $Enums.EventStatus
+  cancelReason?: string | null
+  lastLocationUpdate?: Date | string | null
+  lastUpdate?: string | null
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
+  page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
+  collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
+  sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
+  participations?: Prisma.EventParticipationCreateNestedManyWithoutEventInput
+  waitlist?: Prisma.WaitlistEntryCreateNestedManyWithoutEventInput
+  invitations?: Prisma.EventInvitationCreateNestedManyWithoutEventInput
+  chatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutEventInput
+  album?: Prisma.EventAlbumCreateNestedOneWithoutEventInput
+  carpoolOffers?: Prisma.CarpoolOfferCreateNestedManyWithoutEventInput
+}
+
+export type EventUncheckedCreateWithoutLikesInput = {
+  id?: string
+  slug: string
+  shareToken?: string
+  organizerId: string
+  pageId?: string | null
+  title: string
+  description: string
+  shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
+  coverImage?: string | null
+  categoryId: string
+  tags?: Prisma.EventCreatetagsInput | string[]
+  startDate: Date | string
+  endDate?: Date | string | null
+  timezone?: string
+  locationName: string
+  address: string
+  city: string
+  zipCode?: string | null
+  latitude: number
+  longitude: number
+  isOnline?: boolean
+  onlineLink?: string | null
+  maxParticipants?: number | null
+  minParticipants?: number | null
+  currentParticipants?: number
+  registrationType?: $Enums.RegistrationType
+  minAge?: number | null
+  maxAge?: number | null
+  genderRestriction?: $Enums.GenderRestriction
+  minRating?: number | null
+  wheelchairAccessible?: boolean
+  hearingAccessible?: boolean
+  visuallyAccessible?: boolean
+  accessibilityNotes?: string | null
+  visibility?: $Enums.EventVisibility
+  isCollaborative?: boolean
+  isFree?: boolean
+  price?: number | null
+  currency?: string
+  stripePriceId?: string | null
+  platformFeePercent?: number
+  isSponsored?: boolean
+  sponsorId?: string | null
+  status?: $Enums.EventStatus
+  cancelReason?: string | null
+  lastLocationUpdate?: Date | string | null
+  lastUpdate?: string | null
+  viewCount?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
+  participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
+  waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
+  invitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutEventInput
+  chatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutEventInput
+  album?: Prisma.EventAlbumUncheckedCreateNestedOneWithoutEventInput
+  carpoolOffers?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutEventInput
+}
+
+export type EventCreateOrConnectWithoutLikesInput = {
+  where: Prisma.EventWhereUniqueInput
+  create: Prisma.XOR<Prisma.EventCreateWithoutLikesInput, Prisma.EventUncheckedCreateWithoutLikesInput>
+}
+
+export type EventUpsertWithoutLikesInput = {
+  update: Prisma.XOR<Prisma.EventUpdateWithoutLikesInput, Prisma.EventUncheckedUpdateWithoutLikesInput>
+  create: Prisma.XOR<Prisma.EventCreateWithoutLikesInput, Prisma.EventUncheckedCreateWithoutLikesInput>
+  where?: Prisma.EventWhereInput
+}
+
+export type EventUpdateToOneWithWhereWithoutLikesInput = {
+  where?: Prisma.EventWhereInput
+  data: Prisma.XOR<Prisma.EventUpdateWithoutLikesInput, Prisma.EventUncheckedUpdateWithoutLikesInput>
+}
+
+export type EventUpdateWithoutLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tags?: Prisma.EventUpdatetagsInput | string[]
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locationName?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onlineLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentParticipants?: Prisma.IntFieldUpdateOperationsInput | number
+  registrationType?: Prisma.EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+  minAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  genderRestriction?: Prisma.EnumGenderRestrictionFieldUpdateOperationsInput | $Enums.GenderRestriction
+  minRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  wheelchairAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hearingAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visuallyAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accessibilityNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  isCollaborative?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformFeePercent?: Prisma.FloatFieldUpdateOperationsInput | number
+  isSponsored?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLocationUpdate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
+  page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
+  collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
+  sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
+  participations?: Prisma.EventParticipationUpdateManyWithoutEventNestedInput
+  waitlist?: Prisma.WaitlistEntryUpdateManyWithoutEventNestedInput
+  invitations?: Prisma.EventInvitationUpdateManyWithoutEventNestedInput
+  chatMessages?: Prisma.EventChatMessageUpdateManyWithoutEventNestedInput
+  album?: Prisma.EventAlbumUpdateOneWithoutEventNestedInput
+  carpoolOffers?: Prisma.CarpoolOfferUpdateManyWithoutEventNestedInput
+}
+
+export type EventUncheckedUpdateWithoutLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.StringFieldUpdateOperationsInput | string
+  organizerId?: Prisma.StringFieldUpdateOperationsInput | string
+  pageId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.EventUpdatetagsInput | string[]
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  endDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  locationName?: Prisma.StringFieldUpdateOperationsInput | string
+  address?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.StringFieldUpdateOperationsInput | string
+  zipCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  longitude?: Prisma.FloatFieldUpdateOperationsInput | number
+  isOnline?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  onlineLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  maxParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  minParticipants?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  currentParticipants?: Prisma.IntFieldUpdateOperationsInput | number
+  registrationType?: Prisma.EnumRegistrationTypeFieldUpdateOperationsInput | $Enums.RegistrationType
+  minAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  maxAge?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  genderRestriction?: Prisma.EnumGenderRestrictionFieldUpdateOperationsInput | $Enums.GenderRestriction
+  minRating?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  wheelchairAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  hearingAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  visuallyAccessible?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  accessibilityNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visibility?: Prisma.EnumEventVisibilityFieldUpdateOperationsInput | $Enums.EventVisibility
+  isCollaborative?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  price?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  stripePriceId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  platformFeePercent?: Prisma.FloatFieldUpdateOperationsInput | number
+  isSponsored?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  sponsorId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumEventStatusFieldUpdateOperationsInput | $Enums.EventStatus
+  cancelReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastLocationUpdate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  lastUpdate?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  viewCount?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
+  participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
+  waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
+  invitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutEventNestedInput
+  chatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutEventNestedInput
+  album?: Prisma.EventAlbumUncheckedUpdateOneWithoutEventNestedInput
+  carpoolOffers?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutEventNestedInput
+}
+
 export type EventCreateWithoutCategoryInput = {
   id?: string
   slug: string
@@ -2103,6 +2394,7 @@ export type EventCreateWithoutCategoryInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
   participations?: Prisma.EventParticipationCreateNestedManyWithoutEventInput
@@ -2166,6 +2458,7 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -2253,6 +2546,7 @@ export type EventCreateWithoutCollaboratorsInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
   participations?: Prisma.EventParticipationCreateNestedManyWithoutEventInput
@@ -2317,6 +2611,7 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
   invitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutEventInput
@@ -2393,6 +2688,7 @@ export type EventUpdateWithoutCollaboratorsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
   participations?: Prisma.EventParticipationUpdateManyWithoutEventNestedInput
@@ -2457,6 +2753,7 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
   invitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutEventNestedInput
@@ -2517,6 +2814,7 @@ export type EventCreateWithoutParticipationsInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -2581,6 +2879,7 @@ export type EventUncheckedCreateWithoutParticipationsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
   invitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutEventInput
@@ -2657,6 +2956,7 @@ export type EventUpdateWithoutParticipationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -2721,6 +3021,7 @@ export type EventUncheckedUpdateWithoutParticipationsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
   invitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutEventNestedInput
@@ -2781,6 +3082,7 @@ export type EventCreateWithoutWaitlistInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -2845,6 +3147,7 @@ export type EventUncheckedCreateWithoutWaitlistInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   invitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutEventInput
@@ -2921,6 +3224,7 @@ export type EventUpdateWithoutWaitlistInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -2985,6 +3289,7 @@ export type EventUncheckedUpdateWithoutWaitlistInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   invitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutEventNestedInput
@@ -3045,6 +3350,7 @@ export type EventCreateWithoutInvitationsInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -3109,6 +3415,7 @@ export type EventUncheckedCreateWithoutInvitationsInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -3185,6 +3492,7 @@ export type EventUpdateWithoutInvitationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -3249,6 +3557,7 @@ export type EventUncheckedUpdateWithoutInvitationsInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -3309,6 +3618,7 @@ export type EventCreateWithoutChatMessagesInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -3373,6 +3683,7 @@ export type EventUncheckedCreateWithoutChatMessagesInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -3449,6 +3760,7 @@ export type EventUpdateWithoutChatMessagesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -3513,6 +3825,7 @@ export type EventUncheckedUpdateWithoutChatMessagesInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -3573,6 +3886,7 @@ export type EventCreateWithoutAlbumInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -3637,6 +3951,7 @@ export type EventUncheckedCreateWithoutAlbumInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -3713,6 +4028,7 @@ export type EventUpdateWithoutAlbumInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -3777,6 +4093,7 @@ export type EventUncheckedUpdateWithoutAlbumInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -3837,6 +4154,7 @@ export type EventCreateWithoutCarpoolOffersInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -3901,6 +4219,7 @@ export type EventUncheckedCreateWithoutCarpoolOffersInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -3977,6 +4296,7 @@ export type EventUpdateWithoutCarpoolOffersInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -4041,6 +4361,7 @@ export type EventUncheckedUpdateWithoutCarpoolOffersInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -4100,6 +4421,7 @@ export type EventCreateWithoutPageInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   sponsor?: Prisma.PartnerCreateNestedOneWithoutSponsoredEventsInput
@@ -4164,6 +4486,7 @@ export type EventUncheckedCreateWithoutPageInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -4251,6 +4574,7 @@ export type EventCreateWithoutSponsorInput = {
   updatedAt?: Date | string
   organizer: Prisma.UserCreateNestedOneWithoutOrganizedEventsInput
   page?: Prisma.PageCreateNestedOneWithoutEventsInput
+  likes?: Prisma.EventLikeCreateNestedManyWithoutEventInput
   category: Prisma.EventCategoryCreateNestedOneWithoutEventsInput
   collaborators?: Prisma.EventCollaboratorCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationCreateNestedManyWithoutEventInput
@@ -4314,6 +4638,7 @@ export type EventUncheckedCreateWithoutSponsorInput = {
   viewCount?: number
   createdAt?: Date | string
   updatedAt?: Date | string
+  likes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutEventInput
   collaborators?: Prisma.EventCollaboratorUncheckedCreateNestedManyWithoutEventInput
   participations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutEventInput
   waitlist?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutEventInput
@@ -4455,6 +4780,7 @@ export type EventUpdateWithoutOrganizerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -4519,6 +4845,7 @@ export type EventUncheckedUpdateWithoutOrganizerInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -4690,6 +5017,7 @@ export type EventUpdateWithoutCategoryInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
   participations?: Prisma.EventParticipationUpdateManyWithoutEventNestedInput
@@ -4753,6 +5081,7 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -4923,6 +5252,7 @@ export type EventUpdateWithoutPageInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   sponsor?: Prisma.PartnerUpdateOneWithoutSponsoredEventsNestedInput
@@ -4987,6 +5317,7 @@ export type EventUncheckedUpdateWithoutPageInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -5158,6 +5489,7 @@ export type EventUpdateWithoutSponsorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   organizer?: Prisma.UserUpdateOneRequiredWithoutOrganizedEventsNestedInput
   page?: Prisma.PageUpdateOneWithoutEventsNestedInput
+  likes?: Prisma.EventLikeUpdateManyWithoutEventNestedInput
   category?: Prisma.EventCategoryUpdateOneRequiredWithoutEventsNestedInput
   collaborators?: Prisma.EventCollaboratorUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUpdateManyWithoutEventNestedInput
@@ -5221,6 +5553,7 @@ export type EventUncheckedUpdateWithoutSponsorInput = {
   viewCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  likes?: Prisma.EventLikeUncheckedUpdateManyWithoutEventNestedInput
   collaborators?: Prisma.EventCollaboratorUncheckedUpdateManyWithoutEventNestedInput
   participations?: Prisma.EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   waitlist?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutEventNestedInput
@@ -5291,6 +5624,7 @@ export type EventUncheckedUpdateManyWithoutSponsorInput = {
  */
 
 export type EventCountOutputType = {
+  likes: number
   collaborators: number
   participations: number
   waitlist: number
@@ -5300,6 +5634,7 @@ export type EventCountOutputType = {
 }
 
 export type EventCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  likes?: boolean | EventCountOutputTypeCountLikesArgs
   collaborators?: boolean | EventCountOutputTypeCountCollaboratorsArgs
   participations?: boolean | EventCountOutputTypeCountParticipationsArgs
   waitlist?: boolean | EventCountOutputTypeCountWaitlistArgs
@@ -5316,6 +5651,13 @@ export type EventCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extens
    * Select specific fields to fetch from the EventCountOutputType
    */
   select?: Prisma.EventCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * EventCountOutputType without action
+ */
+export type EventCountOutputTypeCountLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventLikeWhereInput
 }
 
 /**
@@ -5417,6 +5759,7 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   updatedAt?: boolean
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   page?: boolean | Prisma.Event$pageArgs<ExtArgs>
+  likes?: boolean | Prisma.Event$likesArgs<ExtArgs>
   category?: boolean | Prisma.EventCategoryDefaultArgs<ExtArgs>
   collaborators?: boolean | Prisma.Event$collaboratorsArgs<ExtArgs>
   sponsor?: boolean | Prisma.Event$sponsorArgs<ExtArgs>
@@ -5609,6 +5952,7 @@ export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   page?: boolean | Prisma.Event$pageArgs<ExtArgs>
+  likes?: boolean | Prisma.Event$likesArgs<ExtArgs>
   category?: boolean | Prisma.EventCategoryDefaultArgs<ExtArgs>
   collaborators?: boolean | Prisma.Event$collaboratorsArgs<ExtArgs>
   sponsor?: boolean | Prisma.Event$sponsorArgs<ExtArgs>
@@ -5638,6 +5982,7 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   objects: {
     organizer: Prisma.$UserPayload<ExtArgs>
     page: Prisma.$PagePayload<ExtArgs> | null
+    likes: Prisma.$EventLikePayload<ExtArgs>[]
     category: Prisma.$EventCategoryPayload<ExtArgs>
     collaborators: Prisma.$EventCollaboratorPayload<ExtArgs>[]
     sponsor: Prisma.$PartnerPayload<ExtArgs> | null
@@ -6098,6 +6443,7 @@ export interface Prisma__EventClient<T, Null = never, ExtArgs extends runtime.Ty
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organizer<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   page<T extends Prisma.Event$pageArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$pageArgs<ExtArgs>>): Prisma.Prisma__PageClient<runtime.Types.Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  likes<T extends Prisma.Event$likesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$likesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   category<T extends Prisma.EventCategoryDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EventCategoryDefaultArgs<ExtArgs>>): Prisma.Prisma__EventCategoryClient<runtime.Types.Result.GetResult<Prisma.$EventCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   collaborators<T extends Prisma.Event$collaboratorsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$collaboratorsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCollaboratorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sponsor<T extends Prisma.Event$sponsorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Event$sponsorArgs<ExtArgs>>): Prisma.Prisma__PartnerClient<runtime.Types.Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -6606,6 +6952,30 @@ export type Event$pageArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs
    */
   include?: Prisma.PageInclude<ExtArgs> | null
   where?: Prisma.PageWhereInput
+}
+
+/**
+ * Event.likes
+ */
+export type Event$likesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventLike
+   */
+  select?: Prisma.EventLikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventLike
+   */
+  omit?: Prisma.EventLikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventLikeInclude<ExtArgs> | null
+  where?: Prisma.EventLikeWhereInput
+  orderBy?: Prisma.EventLikeOrderByWithRelationInput | Prisma.EventLikeOrderByWithRelationInput[]
+  cursor?: Prisma.EventLikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventLikeScalarFieldEnum | Prisma.EventLikeScalarFieldEnum[]
 }
 
 /**

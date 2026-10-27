@@ -14,6 +14,7 @@ import {
   Trophy,
   UserPlus,
   Users,
+  X,
 } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -32,6 +33,9 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { FriendButton } from '@/components/friends/FriendButton'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { formatFullDate } from '@/lib/date'
+import { IntroCardView, type IntroCardItem } from '@/components/friends/IntroCardView'
+import { useLocationFilter } from '@/lib/locationFilter'
+import { useLang } from '@/lib/i18n'
 
 type Tab = 'amis' | 'recherche' | 'nouveau' | 'classement'
 
@@ -267,6 +271,28 @@ function MemberCard({
 }
 
 /** Liste annuaire (onglet Recherche). */
+/** Bannière de la zone géographique validée sur la carte du fil. */
+function ZoneBanner() {
+  const { filter, clear } = useLocationFilter()
+  if (!filter) return null
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-primary-500/40 bg-primary-50 px-4 py-2 text-sm font-semibold text-primary-700 dark:bg-primary-500/10 dark:text-primary-300">
+      <span className="flex items-center gap-2">
+        <MapPin className="h-4 w-4" aria-hidden />
+        Membres filtrés : {filter.name}
+      </span>
+      <button
+        type="button"
+        onClick={clear}
+        className="ml-3 rounded-lg p-1 hover:bg-primary-500/20"
+        aria-label="Retirer le filtre géographique"
+      >
+        <X className="h-4 w-4" aria-hidden />
+      </button>
+    </div>
+  )
+}
+
 function DirectoryList({
   filters,
   query,
@@ -278,6 +304,12 @@ function DirectoryList({
   emptyHint: string
   onMessage: (userId: string) => void
 }) {
+  // Zone validée sur la carte du fil : filtre géographique partagé
+  const zoneFilter = useLocationFilter((s) => s.filter)
+  const zoneBox =
+    zoneFilter && (zoneFilter.type === 'region' || zoneFilter.type === 'dept')
+      ? zoneFilter.bbox
+      : null
   const directory = trpc.users.directory.useQuery({
     q: query && query.trim().length >= 2 ? query.trim() : undefined,
     gender:
@@ -296,6 +328,10 @@ function DirectoryList({
     verifiedOnly: filters.verifiedOnly,
     organizersOnly: filters.organizersOnly,
     newThisMonth: false,
+    minLat: zoneBox?.minLat,
+    maxLat: zoneBox?.maxLat,
+    minLon: zoneBox?.minLon,
+    maxLon: zoneBox?.maxLon,
     limit: 40,
   })
 
@@ -309,117 +345,6 @@ function DirectoryList({
         <MemberCard key={m.id} m={m} onMessage={onMessage} />
       ))}
     </div>
-  )
-}
-
-interface IntroCardItem {
-  id: string
-  title: string
-  about: string
-  lookingFor: string | null
-  photoUrl: string | null
-  photos: string[]
-  passions: string[]
-  profession: string | null
-  education: string | null
-  createdAt: Date
-  user: {
-    id: string
-    firstName: string
-    lastName: string
-    displayName: string | null
-    avatarUrl: string | null
-    city: string | null
-    age: number | null
-    gender: string | null
-    averageRating: number
-    totalRatings: number
-  }
-}
-
-/** Fiche de présentation d'un membre. */
-function IntroCardView({
-  card,
-  onMessage,
-}: {
-  card: IntroCardItem
-  onMessage: (userId: string) => void
-}) {
-  const name = card.user.displayName || `${card.user.firstName} ${card.user.lastName}`
-  return (
-    <Card className="card-sheen overflow-hidden">
-      {card.photos.length > 0 ? (
-        <div className="flex h-32 w-full overflow-x-auto">
-          {card.photos.map((p, i) => (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              key={p}
-              src={p}
-              alt={`Photo ${i + 1} de la fiche`}
-              loading="lazy"
-              className="h-full w-1/2 shrink-0 object-cover"
-            />
-          ))}
-        </div>
-      ) : card.photoUrl ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img src={card.photoUrl} alt="" loading="lazy" className="h-32 w-full object-cover" />
-      ) : null}
-      <CardContent className="space-y-2 p-4">
-        <div className="flex items-center gap-3">
-          <Link href={`/profile/${card.user.id}`}>
-            <Avatar src={card.user.avatarUrl} name={name} size="md" />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <Link href={`/profile/${card.user.id}`} className="block truncate font-bold hover:underline">
-              {name}
-            </Link>
-            <p className="truncate text-xs text-fg-muted">
-              {card.user.age != null ? `${card.user.age} ans` : ''}
-              {card.user.age != null && card.user.city ? ' · ' : ''}
-              {card.user.city ?? ''}
-            </p>
-          </div>
-        </div>
-        <p className="font-bold text-primary-700 dark:text-primary-300">{card.title}</p>
-        {(card.profession || card.education) && (
-          <p className="text-xs font-semibold text-fg-muted">
-            {card.profession}
-            {card.profession && card.education ? ' · ' : ''}
-            {card.education ? `🎓 ${card.education}` : ''}
-          </p>
-        )}
-        {card.passions.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {card.passions.slice(0, 6).map((p) => (
-              <span
-                key={p}
-                className="rounded-full bg-primary-50 px-2 py-0.5 text-[10px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
-              >
-                {p}
-              </span>
-            ))}
-          </div>
-        )}
-        <p className="line-clamp-4 whitespace-pre-wrap text-sm text-fg-muted">{card.about}</p>
-        {card.lookingFor && (
-          <p className="rounded-lg bg-bg-secondary px-3 py-1.5 text-xs font-semibold">
-            🔎 Recherche : {card.lookingFor}
-          </p>
-        )}
-        <div className="flex items-center gap-1.5 pt-1">
-          <Button
-            variant="outline"
-            size="sm"
-            className="flex-1"
-            onClick={() => onMessage(card.user.id)}
-          >
-            <MessageCircle className="h-4 w-4" aria-hidden /> Message
-          </Button>
-          <FriendButton userId={card.user.id} size="sm" />
-        </div>
-      </CardContent>
-    </Card>
   )
 }
 
@@ -474,115 +399,111 @@ function RankList({
   )
 }
 
-type RankKind = 'actifs' | 'organisateurs' | 'categories'
 type RankPeriod = 'mois' | 'general'
 
-/** Onglet Classement — multiples classements par type de participation. */
+/** Onglet Classement — tous les classements affichés ensemble, 3 encarts par ligne. */
 function RankingsTab() {
-  const [kind, setKind] = useState<RankKind>('actifs')
   const [period, setPeriod] = useState<RankPeriod>('mois')
   const rankings = trpc.leaderboard.rankings.useQuery({ limit: 10 })
 
   if (rankings.isLoading) return <LoadingSpinner label="Chargement des classements" />
   if (!rankings.data) return null
 
-  const rows =
-    kind === 'actifs'
-      ? period === 'mois'
-        ? rankings.data.activesMonth
-        : rankings.data.activesAll
-      : period === 'mois'
-        ? rankings.data.organizersMonth
-        : rankings.data.organizersAll
-
   return (
     <div className="space-y-4">
-      {/* Sélecteur de classement */}
-      <div className="flex flex-wrap gap-2" role="group" aria-label="Type de classement">
-        {[
-          { id: 'actifs' as const, label: '🔥 Les plus actifs', icon: Flame },
-          { id: 'organisateurs' as const, label: '📣 Organisateurs', icon: Megaphone },
-          { id: 'categories' as const, label: '🎯 Par catégorie', icon: Trophy },
-        ].map((k) => (
-          <button
-            key={k.id}
-            type="button"
-            aria-pressed={kind === k.id}
-            onClick={() => setKind(k.id)}
-            className={cn(
-              'rounded-xl border px-3.5 py-2 text-sm font-bold transition-colors',
-              kind === k.id
-                ? 'border-primary-600 bg-primary-600 text-white shadow-sm'
-                : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
-            )}
-          >
-            {k.label}
-          </button>
-        ))}
+      {/* Période : mois / général */}
+      <div className="flex justify-center" role="group" aria-label="Période du classement">
+        <div className="inline-flex rounded-full border border-border bg-card p-1">
+          {[
+            { id: 'mois' as const, label: 'Ce mois-ci' },
+            { id: 'general' as const, label: 'Général' },
+          ].map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              aria-pressed={period === p.id}
+              onClick={() => setPeriod(p.id)}
+              className={cn(
+                'rounded-full px-4 py-1.5 text-xs font-bold transition-colors',
+                period === p.id
+                  ? 'bg-primary-600 text-white'
+                  : 'text-fg-muted hover:text-fg',
+              )}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {kind !== 'categories' && (
-        <>
-          {/* Période : mois / général */}
-          <div className="flex gap-2" role="group" aria-label="Période du classement">
-            {[
-              { id: 'mois' as const, label: 'Ce mois-ci' },
-              { id: 'general' as const, label: 'Général' },
-            ].map((p) => (
-              <button
-                key={p.id}
-                type="button"
-                aria-pressed={period === p.id}
-                onClick={() => setPeriod(p.id)}
-                className={cn(
-                  'rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
-                  period === p.id
-                    ? 'border-primary-600 bg-primary-50 text-primary-700 dark:bg-primary-950 dark:text-primary-300'
-                    : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
-                )}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-          <RankList rows={rows} unit={kind === 'actifs' ? 'participations' : 'plans créés'} />
-          <p className="text-center text-xs text-fg-muted">
-            💡 Le classement se met à jour automatiquement selon vos participations réelles.
-          </p>
-        </>
-      )}
+      {/* Encarts : 3 par ligne */}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        <section className="rounded-2xl border border-border bg-card p-4" aria-label="Les plus actifs">
+          <h3 className="mb-2 flex items-center gap-2 font-bold">
+            <Flame className="h-4 w-4 text-orange-500" aria-hidden />
+            Les plus actifs
+            <span className="text-xs font-semibold text-fg-muted">
+              · {period === 'mois' ? 'ce mois-ci' : 'depuis toujours'}
+            </span>
+          </h3>
+          <RankList
+            rows={period === 'mois' ? rankings.data.activesMonth : rankings.data.activesAll}
+            unit="participations"
+          />
+        </section>
 
-      {kind === 'categories' && (
-        <div className="space-y-5">
-          <p className="text-sm text-fg-muted">
-            Les champions du mois dans chaque catégorie — du lever de coude 🍻 à la rando 🥾 !
-          </p>
-          {rankings.data.byCategory.length === 0 ? (
-            <EmptyState
-              icon={Trophy}
-              title="Pas encore de champions"
-              description="Participez à des plans pour décrocher la première place de votre catégorie !"
-            />
-          ) : (
-            rankings.data.byCategory.map((cat) => (
-              <section key={cat.slug} aria-label={`Classement ${cat.name}`}>
-                <h3 className="mb-2 flex items-center gap-2 font-bold">
-                  <span
-                    className="flex h-7 w-7 items-center justify-center rounded-lg"
-                    style={{ backgroundColor: `${cat.color}22`, color: cat.color }}
-                    aria-hidden
-                  >
-                    <CategoryIcon name={cat.icon} className="h-4 w-4" />
-                  </span>
-                  {cat.name}
-                  <span className="text-xs font-semibold text-fg-muted">· ce mois-ci</span>
-                </h3>
-                <RankList rows={cat.top} unit="plans" />
-              </section>
-            ))
-          )}
-        </div>
-      )}
+        <section className="rounded-2xl border border-border bg-card p-4" aria-label="Organisateurs">
+          <h3 className="mb-2 flex items-center gap-2 font-bold">
+            <Megaphone className="h-4 w-4 text-primary-600" aria-hidden />
+            Organisateurs
+            <span className="text-xs font-semibold text-fg-muted">
+              · {period === 'mois' ? 'ce mois-ci' : 'depuis toujours'}
+            </span>
+          </h3>
+          <RankList
+            rows={period === 'mois' ? rankings.data.organizersMonth : rankings.data.organizersAll}
+            unit="plans créés"
+          />
+        </section>
+
+        {rankings.data.byCategory.length === 0 ? (
+          <section className="rounded-2xl border border-border bg-card p-4" aria-label="Par catégorie">
+            <h3 className="mb-2 flex items-center gap-2 font-bold">
+              <Trophy className="h-4 w-4 text-amber-500" aria-hidden />
+              Par catégorie
+            </h3>
+            <p className="text-sm text-fg-muted">
+              Pas encore de champions — participez à des plans pour décrocher la première place de
+              votre catégorie !
+            </p>
+          </section>
+        ) : (
+          rankings.data.byCategory.map((cat) => (
+            <section
+              key={cat.slug}
+              className="rounded-2xl border border-border bg-card p-4"
+              aria-label={`Classement ${cat.name}`}
+            >
+              <h3 className="mb-2 flex items-center gap-2 font-bold">
+                <span
+                  className="flex h-7 w-7 items-center justify-center rounded-lg"
+                  style={{ backgroundColor: `${cat.color}22`, color: cat.color }}
+                  aria-hidden
+                >
+                  <CategoryIcon name={cat.icon} className="h-4 w-4" />
+                </span>
+                {cat.name}
+                <span className="text-xs font-semibold text-fg-muted">· ce mois-ci</span>
+              </h3>
+              <RankList rows={cat.top} unit="plans" />
+            </section>
+          ))
+        )}
+      </div>
+
+      <p className="text-center text-xs text-fg-muted">
+        💡 Le classement se met à jour automatiquement selon vos participations réelles.
+      </p>
     </div>
   )
 }
@@ -591,6 +512,7 @@ function RankingsTab() {
 export default function FriendsPage() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading: loadingMe } = useCurrentUser()
+  const { t } = useLang()
   const [tab, setTab] = useState<Tab>('amis')
   const [search, setSearch] = useState('')
   const [filters, setFilters] = useState<DirectoryFilters>(DEFAULT_FILTERS)
@@ -623,17 +545,17 @@ export default function FriendsPage() {
   if (loadingMe) return <LoadingSpinner label="Chargement" />
 
   const TABS: { id: Tab; label: string; icon: typeof Users }[] = [
-    { id: 'amis', label: 'Se faire des amis', icon: UserPlus },
-    { id: 'recherche', label: 'Recherche', icon: Search },
-    { id: 'nouveau', label: 'Nouveau', icon: Sparkles },
-    { id: 'classement', label: 'Classement', icon: Trophy },
+    { id: 'amis', label: t('members_tab_friends'), icon: UserPlus },
+    { id: 'recherche', label: t('members_tab_search'), icon: Search },
+    { id: 'nouveau', label: t('members_tab_new'), icon: Sparkles },
+    { id: 'classement', label: t('members_tab_ranking'), icon: Trophy },
   ]
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-4 py-8 md:px-0">
       <header>
-        <h1 className="text-2xl font-extrabold tracking-tight">Les Membres</h1>
-        <p className="text-sm text-fg-muted">Trouvez des gens qui vous ressemblent, autour de vous.</p>
+        <h1 className="text-2xl font-extrabold tracking-tight">{t('members_title')}</h1>
+        <p className="text-sm text-fg-muted">{t('members_subtitle')}</p>
       </header>
 
       {/* Sous-onglets en boutons */}
@@ -858,11 +780,12 @@ export default function FriendsPage() {
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Nom, pseudo, ville, passion…"
+              placeholder={t('members_search_ph')}
               className="pl-12"
               aria-label="Rechercher un membre"
             />
           </div>
+          <ZoneBanner />
           <FiltersPanel value={filters} onChange={setFilters} />
           <DirectoryList
             filters={filters}

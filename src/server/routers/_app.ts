@@ -1,3 +1,4 @@
+import { agendaRouter } from './agenda'
 import { albumsRouter } from './albums'
 import { authRouter } from './auth'
 import { billingRouter } from './billing'
@@ -37,6 +38,7 @@ export const appRouter = createTRPCRouter({
   groups: groupsRouter,
   contact: contactRouter,
   introCards: introCardsRouter,
+  agenda: agendaRouter,
 })
 
 export type AppRouter = typeof appRouter

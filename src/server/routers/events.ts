@@ -107,6 +107,109 @@ async function checkEligibility(
 }
 
 export const eventsRouter = createTRPCRouter({
+  /** Like / unlike d'un plan — garder un intérêt sans s'inscrire. */
+  toggleLike: protectedProcedure
+    .input(z.object({ eventId: z.string().min(1) }))
+    .mutation(async ({ input, ctx }) => {
+      const existing = await prisma.eventLike.findUnique({
+        where: { eventId_userId: { eventId: input.eventId, userId: ctx.user.id } },
+      })
+      if (existing) {
+        await prisma.eventLike.delete({ where: { id: existing.id } })
+      } else {
+        await prisma.eventLike.create({
+          data: { eventId: input.eventId, userId: ctx.user.id },
+        })
+      }
+      const count = await prisma.eventLike.count({ where: { eventId: input.eventId } })
+      return { liked: !existing, count }
+    }),
+
+  /** Plans archivés (passés) — souvenirs photos/vidéos. */
+  archive: publicProcedure
+    .input(z.object({ limit: z.number().int().min(1).max(60).default(30) }).nullish())
+    .query(async ({ input, ctx }) => {
+      const events = await prisma.event.findMany({
+        where: {
+          OR: [{ status: 'COMPLETED' }, { endDate: { lt: new Date() } }, { startDate: { lt: new Date() } }],
+          status: { notIn: ['DRAFT', 'CANCELLED'] },
+          visibility: { in: ['PUBLIC', 'UNLISTED'] },
+        },
+        select: {
+          id: true,
+          slug: true,
+          title: true,
+          startDate: true,
+          city: true,
+          category: { select: { slug: true, name: true, icon: true, color: true } },
+          coverImage: true,
+          organizer: { select: { id: true, firstName: true, lastName: true, displayName: true } },
+          currentParticipants: true,
+          _count: { select: { likes: true } },
+          album: { select: { _count: { select: { media: true } } } },
+        },
+        orderBy: { startDate: 'desc' },
+        take: input?.limit ?? 30,
+      })
+      let likedIds = new Set<string>()
+      if (ctx.user) {
+        const likes = await prisma.eventLike.findMany({
+          where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
+          select: { eventId: true },
+        })
+        likedIds = new Set(likes.map((l) => l.eventId))
+      }
+      return events.map((e) => ({ ...e, liked: likedIds.has(e.id) }))
+    }),
+
+  /** Plans à venir dans une zone géographique (rectangle) — régions/départements. */
+  inBox: publicProcedure
+    .input(
+      z.object({
+        minLat: z.number(),
+        maxLat: z.number(),
+        minLon: z.number(),
+        maxLon: z.number(),
+        limit: z.number().int().min(1).max(60).default(40),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      const events = await prisma.event.findMany({
+        where: {
+          status: { in: ['UPCOMING', 'ONGOING'] },
+          visibility: { in: ['PUBLIC', 'UNLISTED'] },
+          startDate: { gte: new Date() },
+          latitude: { gte: input.minLat, lte: input.maxLat },
+          longitude: { gte: input.minLon, lte: input.maxLon },
+        },
+        include: eventCardInclude,
+        orderBy: { startDate: 'asc' },
+        take: input.limit,
+      })
+      let likedIds = new Set<string>()
+      let myStatuses = new Map<string, string>()
+      if (ctx.user) {
+        const [likes, parts] = await Promise.all([
+          prisma.eventLike.findMany({
+            where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
+            select: { eventId: true },
+          }),
+          prisma.eventParticipation.findMany({
+            where: { userId: ctx.user.id, eventId: { in: events.map((e) => e.id) } },
+            select: { eventId: true, status: true },
+          }),
+        ])
+        likedIds = new Set(likes.map((l) => l.eventId))
+        myStatuses = new Map(parts.map((p) => [p.eventId, p.status]))
+      }
+      return events.map((event) => ({
+        event,
+        liked: likedIds.has(event.id),
+        myStatus: myStatuses.get(event.id) ?? null,
+        isOrganizer: ctx.user?.id === event.organizerId,
+      }))
+    }),
+
   /** Catégories d'événements (pour filtres et formulaire). */
   categories: publicProcedure.query(() =>
     prisma.eventCategory.findMany({ orderBy: { name: 'asc' } }),
@@ -134,6 +237,7 @@ export const eventsRouter = createTRPCRouter({
           category: { select: { slug: true, name: true, icon: true, color: true } },
           coverImage: true,
           organizer: { select: { id: true, firstName: true, lastName: true, displayName: true } },
+          _count: { select: { likes: true } },
         },
         orderBy: { startDate: 'asc' },
       }),
@@ -205,14 +309,25 @@ export const eventsRouter = createTRPCRouter({
         .sort((a, b) => b.score - a.score)
         .slice(0, input.limit)
 
+      // Likes de l'utilisateur connecté (cœur sans inscription)
+      let likedIds = new Set<string>()
+      if (user) {
+        const likes = await prisma.eventLike.findMany({
+          where: { userId: user.id, eventId: { in: scored.map((s) => s.event.id) } },
+          select: { eventId: true },
+        })
+        likedIds = new Set(likes.map((l) => l.eventId))
+      }
+      const withLikes = scored.map((s) => ({ ...s, liked: likedIds.has(s.event.id) }))
+
       // Sections du fil : "Près de vous" (≤ 25 km) puis "Pour vous"
-      const near = scored.filter((s) => s.distanceKm != null && s.distanceKm <= 25)
-      const forYou = scored.filter((s) => s.distanceKm == null || s.distanceKm > 25)
+      const near = withLikes.filter((s) => s.distanceKm != null && s.distanceKm <= 25)
+      const forYou = withLikes.filter((s) => s.distanceKm == null || s.distanceKm > 25)
 
       return {
         near,
         forYou,
-        all: scored,
+        all: withLikes,
       }
     }),
 
@@ -369,12 +484,22 @@ export const eventsRouter = createTRPCRouter({
     const canSeeMeetup =
       isOrganizer || event.meetupVisibility === 'EVERYONE' || (isMember && revealReached)
 
+    const myLike = ctx.user
+      ? await prisma.eventLike.findUnique({
+          where: { eventId_userId: { eventId: event.id, userId: ctx.user.id } },
+          select: { id: true },
+        })
+      : null
+    const likeCount = await prisma.eventLike.count({ where: { eventId: event.id } })
+
     return {
       ...event,
       // L'adresse exacte n'est jamais renvoyée si l'utilisateur n'y a pas droit
       meetupAddress: canSeeMeetup ? event.meetupAddress : null,
       hasMeetup: !!event.meetupAddress,
       canSeeMeetup,
+      myLiked: !!myLike,
+      likeCount,
       isFull,
       myParticipation,
       myWaitlistPosition,

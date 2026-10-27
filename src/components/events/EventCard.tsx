@@ -18,6 +18,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { TiltCard } from '@/components/common/TiltCard'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { JoinButton } from './JoinButton'
+import { LikeButton } from './LikeButton'
 import { AccessibilityBadges } from '@/components/common/AccessibilityBadges'
 
 export interface EventCardData {
@@ -58,16 +59,22 @@ interface EventCardProps {
   readOnly?: boolean
   /** Position dans la liste — décale l'animation d'entrée (cascade). */
   index?: number
+  /** Nombre de likes du plan. */
+  likes?: number
+  /** L'utilisateur connecté a liké ce plan. */
+  liked?: boolean
 }
 
 /** Carte d'événement — visuel pleine largeur, inclinaison 3D et reflet au survol. */
-export function EventCard({
+function EventCardBase({
   event,
   distanceKm,
   myStatus,
   isOrganizer,
   readOnly,
   index = 0,
+  likes = 0,
+  liked = false,
 }: EventCardProps) {
   const [imgFailed, setImgFailed] = React.useState(false)
   const showImage = !!event.coverImage && !imgFailed
@@ -131,11 +138,17 @@ export function EventCard({
             </span>
           </div>
 
-          {/* Pastilles prix / places */}
+          {/* Pastilles prix / places / like */}
           <div className="absolute right-3 top-3 flex flex-col items-end gap-1.5">
             <span className="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-bold text-white backdrop-blur-md">
               {formatPrice(event.price, event.isFree)}
             </span>
+            <LikeButton
+              eventId={event.id}
+              liked={liked}
+              count={likes}
+              className="bg-black/55 text-white backdrop-blur-md hover:border-danger-300"
+            />
             <span
               className={`rounded-full px-2.5 py-1 text-[11px] font-bold backdrop-blur-md ${
                 isFull ? 'bg-danger-500/90 text-white' : 'bg-black/55 text-white'
@@ -243,3 +256,6 @@ export function EventCard({
     </TiltCard>
   )
 }
+
+
+export const EventCard = React.memo(EventCardBase)

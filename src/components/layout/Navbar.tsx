@@ -3,7 +3,9 @@
 import {
   Bell,
   CalendarDays,
+  CalendarHeart,
   CalendarPlus,
+  Languages,
   HelpCircle,
   LogOut,
   Mail,
@@ -23,6 +25,7 @@ import { useCurrentUser } from '@/lib/session'
 import { cn } from '@/lib/utils'
 import { Logo } from '@/components/common/Logo'
 import { ThemeToggle } from './ThemeToggle'
+import { useLang } from '@/lib/i18n'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -36,25 +39,26 @@ import {
 
 /** Navigation principale — bloc unique centré autour du fil d'actualité. */
 const NAV_LINKS = [
-  { href: '/friends', label: 'Les Membres', icon: Users, centered: false },
-  { href: '/events/calendar', label: 'Activité', icon: CalendarDays, centered: false },
-  { href: '/', label: 'Fil d’actualité', icon: Home, centered: true },
-  { href: '/groups', label: 'Groupes', icon: UsersRound, centered: false },
-  { href: '/pages', label: 'Pages', icon: Store, centered: false },
+  { href: '/friends', labelKey: 'nav_members', icon: Users, centered: false },
+  { href: '/events/calendar', labelKey: 'nav_activity', icon: CalendarDays, centered: false },
+  { href: '/', labelKey: 'nav_feed', icon: Home, centered: true },
+  { href: '/groups', labelKey: 'nav_groups', icon: UsersRound, centered: false },
+  { href: '/pages', labelKey: 'nav_pages', icon: Store, centered: false },
 ]
 
 function NavLink({
   href,
-  label,
+  labelKey,
   icon: Icon,
   centered,
 }: {
   href: string
-  label: string
+  labelKey: string
   icon: typeof Home
   centered?: boolean
 }) {
   const pathname = usePathname()
+  const { t } = useLang()
   const active = href === '/' ? pathname === '/' : pathname.startsWith(href)
   return (
     <Link
@@ -69,32 +73,33 @@ function NavLink({
       )}
     >
       <Icon className="h-4 w-4" aria-hidden />
-      <span className={cn(centered && 'font-extrabold')}>{label}</span>
+      <span className={cn(centered && 'font-extrabold')}>{t(labelKey)}</span>
     </Link>
   )
 }
 
 /** Menu « Créer » — nouveau plan, groupe ou page, sous le bouton +. */
 export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
+  const { t } = useLang()
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
       <DropdownMenuContent align="center" className="min-w-48">
-        <DropdownMenuLabel>Créer…</DropdownMenuLabel>
+        <DropdownMenuLabel>{t('create_menu')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/events/create">
-            <CalendarPlus className="h-4 w-4" aria-hidden /> Un plan
+            <CalendarPlus className="h-4 w-4" aria-hidden /> {t('create_plan')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/groups/new">
-            <UsersRound className="h-4 w-4" aria-hidden /> Un groupe
+            <UsersRound className="h-4 w-4" aria-hidden /> {t('create_group')}
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/pages/new">
-            <Store className="h-4 w-4" aria-hidden /> Une page
+            <Store className="h-4 w-4" aria-hidden /> {t('create_page')}
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -106,6 +111,7 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
 export function Navbar() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading } = useCurrentUser()
+  const { lang, toggle: toggleLang, t } = useLang()
   const utils = trpc.useUtils()
   const logout = trpc.auth.logout.useMutation({
     onSuccess: () => {
@@ -131,13 +137,18 @@ export function Navbar() {
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pb-1.5 pt-2 md:pb-2">
         {/* Haut : logo centré (au-dessus du fil) + actions à droite */}
         <div className="flex w-full items-center justify-between">
-          <Logo />
+          <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
+            <Logo />
+            <span className="text-lg font-black tracking-tight text-fg sm:text-xl">
+              Plan<span className="text-primary-600">B</span>
+            </span>
+          </Link>
           <div className="flex items-center gap-1.5">
           <CreateMenu
             trigger={
               <Button variant="accent" size="sm" className="hidden sm:inline-flex">
                 <Plus className="h-4 w-4" aria-hidden />
-                <span className="hidden lg:inline">Créer</span>
+                <span className="hidden lg:inline">{t('nav_create')}</span>
               </Button>
             }
           />
@@ -168,7 +179,7 @@ export function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/messages">
-                    <MessageCircle className="h-4 w-4" aria-hidden /> Messages
+                    <MessageCircle className="h-4 w-4" aria-hidden /> {t('nav_messages')}
                     {unreadMsgCount > 0 && (
                       <span className="ml-auto rounded-full bg-primary-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
                         {unreadMsgCount > 9 ? '9+' : unreadMsgCount}
@@ -178,7 +189,7 @@ export function Navbar() {
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/notifications">
-                    <Bell className="h-4 w-4" aria-hidden /> Notifications
+                    <Bell className="h-4 w-4" aria-hidden /> {t('nav_notifications')}
                     {unreadCount > 0 && (
                       <span className="ml-auto rounded-full bg-danger-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
                         {unreadCount > 9 ? '9+' : unreadCount}
@@ -189,25 +200,33 @@ export function Navbar() {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/profile">
-                    <UserIcon className="h-4 w-4" aria-hidden /> Mon profil
+                    <UserIcon className="h-4 w-4" aria-hidden /> {t('nav_profile')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
+                  <Link href="/agenda">
+                    <CalendarHeart className="h-4 w-4" aria-hidden /> {t('nav_agenda')}
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => toggleLang()}>
+                  <Languages className="h-4 w-4" aria-hidden /> {lang === 'fr' ? 'English' : 'Français'}
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
                   <Link href="/profile/settings">
-                    <Settings className="h-4 w-4" aria-hidden /> Paramètres
+                    <Settings className="h-4 w-4" aria-hidden /> {t('nav_settings')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/contact">
-                    <HelpCircle className="h-4 w-4" aria-hidden /> Contactez-nous
+                    <HelpCircle className="h-4 w-4" aria-hidden /> {t('nav_contact')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => logout.mutate()}
                   className="text-danger-500 focus:text-danger-600"
                 >
-                  <LogOut className="h-4 w-4" aria-hidden /> Se déconnecter
+                  <LogOut className="h-4 w-4" aria-hidden /> {t('nav_logout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -215,16 +234,16 @@ export function Navbar() {
             <div className="flex items-center gap-2">
               <Link
                 href="/contact"
-                aria-label="Contactez-nous"
+                aria-label={t('nav_contact')}
                 className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg"
               >
                 <Mail className="h-5 w-5" aria-hidden />
               </Link>
               <Button asChild variant="ghost" size="sm">
-                <Link href="/login">Connexion</Link>
+                <Link href="/login">{t('nav_login')}</Link>
               </Button>
               <Button asChild size="sm">
-                <Link href="/register">Inscription</Link>
+                <Link href="/register">{t('nav_register')}</Link>
               </Button>
             </div>
           )}

@@ -30,6 +30,7 @@ import { AccessibilityBadges } from '@/components/common/AccessibilityBadges'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EventMap } from '@/components/events/EventMap'
 import { JoinButton } from '@/components/events/JoinButton'
+import { LikeButton } from '@/components/events/LikeButton'
 import { ShareEventModal } from '@/components/events/ShareEventModal'
 import { CarpoolSection } from '@/components/events/CarpoolSection'
 import { TicketBanner } from '@/components/events/TicketBanner'
@@ -493,6 +494,7 @@ export default function EventDetailPage() {
             waitlistPosition={event.myWaitlistPosition}
             className="flex-1"
           />
+          <LikeButton eventId={event.id} liked={!!event.myLiked} count={event.likeCount ?? 0} />
           <ShareEventModal
             shareToken={event.shareToken}
             title={event.title}

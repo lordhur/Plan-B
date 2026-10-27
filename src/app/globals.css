@@ -375,3 +375,47 @@ nav * {
   }
   .lift-shadow::before { transition: none; }
 }
+
+/* Carte v3 : étiquettes « contour » des villes (légères, lisibles sur la carte) */
+.city-outline-label {
+  background: transparent !important;
+  border: none !important;
+}
+.city-outline-label span {
+  display: inline-block;
+  transform: translate(-50%, -50%);
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  color: #fff;
+  text-shadow:
+    -1px -1px 0 #0f172a, 1px -1px 0 #0f172a,
+    -1px 1px 0 #0f172a, 1px 1px 0 #0f172a,
+    0 0 6px rgba(15, 23, 42, 0.85);
+  pointer-events: none;
+}
+.city-outline-label span.sel {
+  color: #a5f3fc;
+  font-size: 12px;
+}
+.region-tooltip {
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* Météo animée des lignes d'activités */
+.weather-anim {
+  display: inline-block;
+  animation: weatherFloat 3s ease-in-out infinite;
+}
+@keyframes weatherFloat {
+  0%, 100% { transform: translateY(0) rotate(-4deg); }
+  50% { transform: translateY(-3px) rotate(4deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .weather-anim { animation: none; }
+}
