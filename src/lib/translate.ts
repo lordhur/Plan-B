@@ -30,13 +30,43 @@ function writeCache(cache: Cache) {
  * Hors ligne / quota atteint : on réaffiche le texte d'origine.
  * Résultat mis en cache (localStorage) pour économiser le quota.
  */
-export function useTranslate(text: string | null | undefined): string {
+async function fetchTranslation(text: string): Promise<string | null> {
+  // 1) MyMemory (gratuit, sans clé)
+  try {
+    const res = await fetch(
+      `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=fr|en`,
+    )
+    if (res.ok) {
+      const data = (await res.json()) as { responseData?: { translatedText?: string } }
+      const out = data?.responseData?.translatedText
+      if (out && !out.startsWith('MYMEMORY WARNING') && !out.startsWith('INVALID')) return out
+    }
+  } catch {
+    /* on tente le repli */
+  }
+  // 2) Repli : endpoint public Google Translate (gtx)
+  try {
+    const res = await fetch(
+      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=fr&tl=en&dt=t&q=${encodeURIComponent(text)}`,
+    )
+    if (res.ok) {
+      const data = (await res.json()) as [Array<[string | null]> | null]
+      const parts = (data?.[0] ?? []).map((seg) => seg?.[0] ?? '').join('')
+      if (parts.trim()) return parts
+    }
+  } catch {
+    /* repli suivant */
+  }
+  return null
+}
+
+export function useTranslate(text: string | null | undefined, enabled = true): string {
   const { lang } = useLang()
   const [translated, setTranslated] = useState(text ?? '')
 
   useEffect(() => {
     const original = text ?? ''
-    if (!original || lang !== 'en') {
+    if (!original || lang !== 'en' || !enabled) {
       setTranslated(original)
       return
     }
@@ -50,25 +80,20 @@ export function useTranslate(text: string | null | undefined): string {
     }
 
     let cancelled = false
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(key)}&langpair=fr|en`
-    fetch(url)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: { responseData?: { translatedText?: string } } | null) => {
-        const out = data?.responseData?.translatedText
-        if (cancelled || !out) return
-        const next = readCache()
-        next[key] = out
-        writeCache(next)
-        setTranslated(out)
-      })
-      .catch(() => {
-        /* repli : texte original */
-      })
+    setTranslated(original)
+    void fetchTranslation(key).then((out) => {
+      if (cancelled || !out) return
+      const next = readCache()
+      next[key] = out
+      writeCache(next)
+      setTranslated(out)
+    })
 
     return () => {
       cancelled = true
     }
-  }, [text, lang])
+  }, [text, lang, enabled])
 
   return translated || text || ''
 }
+

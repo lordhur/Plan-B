@@ -162,7 +162,7 @@ export function Navbar() {
             aria-label="PlanB — accueil"
           >
             <Logo withText={false} />
-            <span className="text-lg font-black tracking-tight text-fg sm:text-xl">
+            <span className="text-base font-black tracking-tight text-fg sm:text-xl">
               Plan<span className="text-primary-600">B</span>
             </span>
           </Link>
@@ -262,10 +262,10 @@ export function Navbar() {
               >
                 <Mail className="h-4.5 w-4.5" aria-hidden />
               </Link>
-              <Button asChild variant="ghost" size="sm" className="h-9 px-2.5 text-xs sm:px-4 sm:text-sm">
+              <Button asChild variant="ghost" size="sm" className="h-9 px-2 text-[11px] sm:px-4 sm:text-sm">
                 <Link href="/login">{t('nav_login')}</Link>
               </Button>
-              <Button asChild size="sm" className="h-9 px-2.5 text-xs sm:px-4 sm:text-sm">
+              <Button asChild size="sm" className="h-9 px-2 text-[11px] sm:px-4 sm:text-sm">
                 <Link href="/register">{t('nav_register')}</Link>
               </Button>
             </div>

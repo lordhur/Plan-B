@@ -235,7 +235,7 @@ export default function FeedPage() {
         {loading ? (
           <FeedSkeletons />
         ) : nearItems.length > 0 ? (
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             {nearItems.map((item, i) => (
               <EventCard
                 key={item.event.id}
@@ -280,7 +280,7 @@ export default function FeedPage() {
             <Sparkles className="h-5 w-5 text-secondary-500" aria-hidden />
             {t('feed_for_you')}
           </h2>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             {feedQuery.data.forYou.map((item, i) => (
               <EventCard
                 key={item.event.id}

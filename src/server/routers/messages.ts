@@ -171,9 +171,22 @@ export const messagesRouter = createTRPCRouter({
       })
       if (!membership) throw new TRPCError({ code: 'FORBIDDEN', message: 'Accès refusé' })
 
+      // Messages éphémères : fenêtre glissante + purge opportuniste
+      const eph = membership.conversation.ephemeralHours
+      const cutoff = eph ? new Date(Date.now() - eph * 60 * 60 * 1000) : null
+      if (cutoff) {
+        prisma.directMessage
+          .deleteMany({ where: { conversationId: input.conversationId, createdAt: { lt: cutoff } } })
+          .catch(() => undefined)
+      }
+
       const [messages] = await Promise.all([
         prisma.directMessage.findMany({
-          where: { conversationId: input.conversationId, isDeleted: false },
+          where: {
+            conversationId: input.conversationId,
+            isDeleted: false,
+            ...(cutoff ? { createdAt: { gte: cutoff } } : {}),
+          },
           orderBy: { createdAt: 'desc' },
           take: input.limit,
           include: { sender: { select: memberUserSelect } },
@@ -189,7 +202,35 @@ export const messagesRouter = createTRPCRouter({
         members: membership.conversation.members.map((m) => m.user),
         isGroup: membership.conversation.isGroup,
         name: membership.conversation.name,
+        ephemeralHours: eph,
       }
+    }),
+
+  /** Activer/désactiver les messages éphémères d'une conversation (24 h, semaine, mois). */
+  setEphemeral: protectedProcedure
+    .input(
+      z.object({
+        conversationId: z.string(),
+        hours: z.union([z.literal(24), z.literal(168), z.literal(720)]).nullable(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const membership = await prisma.conversationMember.findUnique({
+        where: { conversationId_userId: { conversationId: input.conversationId, userId: ctx.user.id } },
+      })
+      if (!membership) throw new TRPCError({ code: 'FORBIDDEN', message: 'Accès refusé' })
+      await prisma.conversation.update({
+        where: { id: input.conversationId },
+        data: { ephemeralHours: input.hours },
+      })
+      // Purge immédiate si activation
+      if (input.hours) {
+        const cutoff = new Date(Date.now() - input.hours * 60 * 60 * 1000)
+        await prisma.directMessage.deleteMany({
+          where: { conversationId: input.conversationId, createdAt: { lt: cutoff } },
+        })
+      }
+      return { ok: true as const, ephemeralHours: input.hours }
     }),
 
   /** Envoyer un message privé. */

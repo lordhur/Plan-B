@@ -381,10 +381,11 @@ nav * {
   background: transparent !important;
   border: none !important;
   overflow: visible !important;
+  transform: translate(-50%, -50%);
+  width: max-content;
 }
 .city-outline-label span {
   display: inline-block;
-  transform: translate(-50%, -50%);
   font-size: 14px;
   font-weight: 900;
   letter-spacing: 0.02em;
