@@ -6,6 +6,8 @@ import { ArrowLeft, Check, Crosshair, Loader2, RotateCcw } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, useMap } from 'react-leaflet'
 import { Button } from '@/components/ui/button'
+import { toast } from '@/components/ui/toast'
+import { cn } from '@/lib/utils'
 import { useLocationFilter, type BBox } from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
 
@@ -271,6 +273,187 @@ const TOP_CITIES: [string, number, number, number, string][] = [
   ['Florac-Trois-Rivières', 44.3264, 3.5931, 2120, '48'],
 ]
 
+/** Test d'appartenance d'un point à un anneau (ray casting) — place les noms au bon endroit. */
+function pointInRing(lat: number, lon: number, ring: L.LatLng[]): boolean {
+  let inside = false
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const a = ring[i]!
+    const b = ring[j]!
+    const crosses =
+      a.lat > lat !== b.lat > lat &&
+      lon < ((b.lng - a.lng) * (lat - a.lat)) / (b.lat - a.lat || 1e-9) + a.lng
+    if (crosses) inside = !inside
+  }
+  return inside
+}
+
+/**
+ * Centre « utile » d'une région / d'un département : le point intérieur le plus
+ * proche du centre du cadre (évite de poser le nom en mer ou sur une île lointaine).
+ */
+function areaCenter(layer: L.Layer): L.LatLng | null {
+  try {
+    const poly = layer as L.Polygon
+    const raw = typeof poly.getLatLngs === 'function' ? poly.getLatLngs() : null
+    if (!raw || raw.length === 0) return null
+
+    // Polygon : [[LatLng]] · MultiPolygon : [[[LatLng]]]
+    const isMulti = Array.isArray((raw as unknown as unknown[][])[0]?.[0])
+    const polys = isMulti ? (raw as unknown as L.LatLng[][][]) : [raw as unknown as L.LatLng[][]]
+
+    // On garde la plus grande île / le plus grand morceau de la zone.
+    let outer: L.LatLng[] | null = null
+    let bestArea = -1
+    for (const piece of polys) {
+      const ring = piece[0]
+      if (!ring || ring.length < 3) continue
+      const b = L.latLngBounds(ring)
+      const area = (b.getNorth() - b.getSouth()) * (b.getEast() - b.getWest())
+      if (area > bestArea) {
+        bestArea = area
+        outer = ring
+      }
+    }
+    if (!outer) return poly.getBounds?.().getCenter() ?? null
+
+    const bb = L.latLngBounds(outer)
+    const center = bb.getCenter()
+    if (pointInRing(center.lat, center.lng, outer)) return center
+
+    // Centre hors des terres (littoral, baie) : échantillonnage d'une grille.
+    let found: L.LatLng | null = null
+    let bestDist = Infinity
+    const N = 14
+    for (let i = 1; i < N; i++) {
+      for (let j = 1; j < N; j++) {
+        const lat = bb.getSouth() + ((bb.getNorth() - bb.getSouth()) * i) / N
+        const lng = bb.getWest() + ((bb.getEast() - bb.getWest()) * j) / N
+        if (!pointInRing(lat, lng, outer)) continue
+        const d = (lat - center.lat) ** 2 + (lng - center.lng) ** 2
+        if (d < bestDist) {
+          bestDist = d
+          found = L.latLng(lat, lng)
+        }
+      }
+    }
+    return found ?? center
+  } catch {
+    return null
+  }
+}
+
+/** Nom de région / de département posé au centre de la zone (jamais cliquable). */
+function areaLabelIcon(
+  name: string,
+  kind: 'region' | 'dept',
+  fontSize: number,
+  maxWidth: number,
+  dx = 0,
+  dy = 0,
+): L.DivIcon {
+  const safe = String(name).replace(/</g, '&lt;')
+  return L.divIcon({
+    className: 'area-label',
+    html:
+      `<span class="area-name ${kind}" style="font-size:${fontSize}px;max-width:${maxWidth}px;` +
+      `transform:translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))">${safe}</span>`,
+    iconSize: undefined,
+    iconAnchor: [0, 0],
+  })
+}
+
+/** Surface approximative d'une zone (les grandes zones gardent leur nom au centre). */
+function featureArea(feature: GeoJSON.Feature): number {
+  try {
+    const b = L.geoJSON(feature).getBounds()
+    return Math.abs((b.getNorth() - b.getSouth()) * (b.getEast() - b.getWest()))
+  } catch {
+    return 0
+  }
+}
+
+/** Trie les zones de la plus grande à la plus petite avant de poser les noms. */
+function sortedFeatures(
+  collection: GeoJSON.FeatureCollection,
+  keep: (code: string) => boolean,
+): GeoJSON.FeatureCollection {
+  const features = (collection.features ?? [])
+    .filter((f) => keep(String(f.properties?.code ?? '')))
+    .sort((a, b) => featureArea(b) - featureArea(a))
+  return { type: 'FeatureCollection', features } as GeoJSON.FeatureCollection
+}
+
+type LabelRect = { x: number; y: number; w: number; h: number }
+
+/**
+ * Placeur d'étiquettes de zones : évite que deux noms se chevauchent (décalage
+ * autour du centre, comme pour les villes) et laisse un écart de 5 px minimum.
+ */
+function createLabelPlacer(map: L.Map) {
+  const placed: LabelRect[] = []
+  const gap = 5
+  return (center: L.LatLng, text: string, fontSize: number, maxWidth: number) => {
+    const p = map.latLngToContainerPoint(center)
+    const rawW = text.length * fontSize * 0.6
+    const w = Math.min(maxWidth, Math.max(22, rawW))
+    const lines = Math.max(1, Math.ceil(rawW / maxWidth))
+    const h = lines * fontSize * 1.18 + 2
+    const offsets: [number, number][] = [
+      [0, 0],
+      [0, -h],
+      [0, h],
+      [w / 2, 0],
+      [-w / 2, 0],
+      [w / 2, -h],
+      [-w / 2, -h],
+      [w / 2, h],
+      [-w / 2, h],
+      [0, -2 * h],
+      [0, 2 * h],
+    ]
+    for (const [dx, dy] of offsets) {
+      const r: LabelRect = { x: p.x + dx - w / 2, y: p.y + dy - h / 2, w, h }
+      const hit = placed.some(
+        (o) =>
+          r.x < o.x + o.w + gap &&
+          r.x + r.w + gap > o.x &&
+          r.y < o.y + o.h + gap &&
+          r.y + r.h + gap > o.y,
+      )
+      if (!hit) {
+        placed.push(r)
+        return { dx, dy }
+      }
+    }
+    return null
+  }
+}
+
+type LabelPlacer = ReturnType<typeof createLabelPlacer>
+
+/** Ajoute le nom au centre d'une zone (région ou département). */
+function addAreaLabel(
+  group: L.LayerGroup,
+  layer: L.Layer,
+  name: string,
+  kind: 'region' | 'dept',
+  place: LabelPlacer,
+): void {
+  const center = areaCenter(layer)
+  if (!center) return
+  const fontSize = kind === 'region' ? 11 : 10.5
+  const maxWidth = kind === 'region' ? 104 : 92
+  // Chevauchement impossible à éviter : le nom reste accessible au survol.
+  const pos = place(center, name, fontSize, maxWidth)
+  if (!pos) return
+  L.marker(center, {
+    icon: areaLabelIcon(name, kind, fontSize, maxWidth, pos.dx, pos.dy),
+    interactive: false,
+    keyboard: false,
+    zIndexOffset: -200,
+  }).addTo(group)
+}
+
 type Level = 'regions' | 'depts' | 'cities'
 
 /** Cadre géographique simple (pas d'objet Leaflet dans l'état React). */
@@ -426,6 +609,22 @@ export function RegionsMapInner() {
   const [loading, setLoading] = useState(true)
   const [communes, setCommunes] = useState<Commune[]>([])
   const [mapError, setMapError] = useState<string | null>(null)
+  // Animation de confirmation après « Valider » (spec)
+  const [celebrate, setCelebrate] = useState<string | null>(null)
+  const celebrateTimer = useRef<number | null>(null)
+
+  const fireCelebration = useCallback((label: string) => {
+    setCelebrate(label)
+    if (celebrateTimer.current) window.clearTimeout(celebrateTimer.current)
+    celebrateTimer.current = window.setTimeout(() => setCelebrate(null), 2200)
+  }, [])
+
+  useEffect(
+    () => () => {
+      if (celebrateTimer.current) window.clearTimeout(celebrateTimer.current)
+    },
+    [],
+  )
 
   const { setFilter, clear } = useLocationFilter()
 
@@ -529,14 +728,18 @@ export function RegionsMapInner() {
         }
       }
 
+      // Calque des noms de régions / départements (affichés en permanence).
+      const areaLabels = L.layerGroup().addTo(group)
+      const placeArea: LabelPlacer = createLabelPlacer(map)
+
       if (level === 'regions') {
-        L.geoJSON(geo.regions, {
-          filter: (f) => METRO_REGIONS.has(String(f.properties?.code ?? '')),
+        L.geoJSON(sortedFeatures(geo.regions, (code) => METRO_REGIONS.has(code)), {
           style: () => style(false),
           onEachFeature: (feature, layer) => {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            addAreaLabel(areaLabels, layer, name, 'region', placeArea)
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
             layer.on('click', () => {
@@ -549,13 +752,13 @@ export function RegionsMapInner() {
           },
         }).addTo(group)
       } else if (level === 'depts' && regionSel) {
-        L.geoJSON(geo.depts, {
-          filter: (f) => DEPT_TO_REGION[String(f.properties?.code ?? '')] === regionSel.code,
+        L.geoJSON(sortedFeatures(geo.depts, (code) => DEPT_TO_REGION[code] === regionSel.code), {
           style: () => style(false),
           onEachFeature: (feature, layer) => {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            addAreaLabel(areaLabels, layer, name, 'dept', placeArea)
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
             layer.on('click', () => {
@@ -680,6 +883,8 @@ export function RegionsMapInner() {
   const validate = () => {
     if (level === 'cities' && citySel) {
       setFilter({ type: 'city', name: citySel.nom, lat: citySel.lat, lon: citySel.lon })
+      fireCelebration(citySel.nom)
+      toast.success(t('map_validated'), `${citySel.nom} — ${t('map_validated_desc')}`)
       return
     }
     if (!box) return
@@ -689,8 +894,15 @@ export function RegionsMapInner() {
       minLon: box.west,
       maxLon: box.east,
     }
-    if (level === 'depts' && regionSel) setFilter({ type: 'region', name: regionSel.name, bbox })
-    else if (level === 'cities' && deptSel) setFilter({ type: 'dept', name: deptSel.name, bbox })
+    if (level === 'depts' && regionSel) {
+      setFilter({ type: 'region', name: regionSel.name, bbox })
+      fireCelebration(regionSel.name)
+      toast.success(t('map_validated'), `${regionSel.name} — ${t('map_validated_desc')}`)
+    } else if (level === 'cities' && deptSel) {
+      setFilter({ type: 'dept', name: deptSel.name, bbox })
+      fireCelebration(deptSel.name)
+      toast.success(t('map_validated'), `${deptSel.name} — ${t('map_validated_desc')}`)
+    }
   }
 
   const useGps = () => {
@@ -734,8 +946,20 @@ export function RegionsMapInner() {
           <Button variant="outline" size="sm" onClick={useGps}>
             <Crosshair className="h-3.5 w-3.5" aria-hidden /> GPS
           </Button>
-          <Button size="sm" disabled={!canValidate} onClick={validate}>
-            <Check className="h-3.5 w-3.5" aria-hidden /> {t('map_validate')}
+          <Button
+            size="sm"
+            disabled={!canValidate}
+            onClick={validate}
+            className={cn(
+              'transition-transform',
+              celebrate && 'scale-105 bg-success-600 from-success-600 via-success-600 to-success-600 shadow-glow',
+            )}
+          >
+            <Check
+              className={cn('h-3.5 w-3.5', celebrate && 'animate-[validate-pop_.5s_ease-out]')}
+              aria-hidden
+            />
+            {celebrate ? t('map_validated_btn') : t('map_validate')}
           </Button>
           <Button
             variant="ghost"
@@ -751,7 +975,12 @@ export function RegionsMapInner() {
         </div>
       </div>
 
-      <div className="relative h-80 overflow-hidden rounded-xl border border-border sm:h-96">
+      <div
+        className={cn(
+          'relative h-80 overflow-hidden rounded-xl border border-border transition-colors sm:h-96',
+          celebrate && 'validate-flash border-success-500',
+        )}
+      >
         {loading && (
           <div className="absolute inset-0 z-[1000] flex items-center justify-center bg-bg/70">
             <Loader2 className="h-7 w-7 animate-spin text-primary-600" aria-label="Chargement de la carte" />
@@ -782,6 +1011,24 @@ export function RegionsMapInner() {
         {mapError && (
           <div className="absolute inset-x-2 bottom-2 z-[1000] rounded-lg bg-danger-500/90 px-3 py-2 text-center text-xs font-semibold text-white">
             {mapError}
+          </div>
+        )}
+
+        {/* Confirmation animée du « Valider » (spec) */}
+        {celebrate && (
+          <div
+            className="pointer-events-none absolute inset-0 z-[1100] flex items-center justify-center overflow-hidden"
+            role="status"
+            aria-live="polite"
+          >
+            <span className="validate-ripple absolute h-32 w-32 rounded-full" aria-hidden />
+            <span className="validate-ripple absolute h-32 w-32 rounded-full [animation-delay:.35s]" aria-hidden />
+            <span className="validate-badge">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/25">
+                <Check className="h-4 w-4" strokeWidth={3.5} aria-hidden />
+              </span>
+              <span className="min-w-0 truncate">{celebrate}</span>
+            </span>
           </div>
         )}
       </div>
