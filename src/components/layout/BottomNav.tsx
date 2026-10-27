@@ -5,26 +5,28 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { CreateMenu } from './Navbar'
+import { useLang } from '@/lib/i18n'
 
 interface NavItem {
   href: string
-  label: string
+  labelKey: string
   icon: LucideIcon
   exact: boolean
 }
 
 const LEFT_ITEMS: NavItem[] = [
-  { href: '/', label: 'Fil', icon: Home, exact: true },
-  { href: '/friends', label: 'Membres', icon: Users, exact: false },
+  { href: '/', labelKey: 'bottom_feed', icon: Home, exact: true },
+  { href: '/friends', labelKey: 'bottom_members', icon: Users, exact: false },
 ]
 
 const RIGHT_ITEMS: NavItem[] = [
-  { href: '/events/calendar', label: 'Activité', icon: CalendarDays, exact: false },
-  { href: '/groups', label: 'Groupes', icon: UsersRound, exact: false },
+  { href: '/events/calendar', labelKey: 'bottom_activity', icon: CalendarDays, exact: false },
+  { href: '/groups', labelKey: 'bottom_groups', icon: UsersRound, exact: false },
 ]
 
-function BottomNavLink({ href, label, icon: Icon, exact }: NavItem) {
+function BottomNavLink({ href, labelKey, icon: Icon, exact }: NavItem) {
   const pathname = usePathname()
+  const { t } = useLang()
   const active = exact ? pathname === href : pathname.startsWith(href)
   return (
     <Link
@@ -38,7 +40,7 @@ function BottomNavLink({ href, label, icon: Icon, exact }: NavItem) {
       )}
     >
       <Icon className="h-5 w-5" aria-hidden />
-      {label}
+      {t(labelKey)}
     </Link>
   )
 }

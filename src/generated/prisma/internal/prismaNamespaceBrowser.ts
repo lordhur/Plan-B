@@ -59,6 +59,7 @@ export const ModelName = {
   UserBadge: 'UserBadge',
   FriendRequest: 'FriendRequest',
   Friendship: 'Friendship',
+  EventLike: 'EventLike',
   EventCategory: 'EventCategory',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
@@ -234,6 +235,16 @@ export const FriendshipScalarFieldEnum = {
 } as const
 
 export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
+
+
+export const EventLikeScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type EventLikeScalarFieldEnum = (typeof EventLikeScalarFieldEnum)[keyof typeof EventLikeScalarFieldEnum]
 
 
 export const EventCategoryScalarFieldEnum = {

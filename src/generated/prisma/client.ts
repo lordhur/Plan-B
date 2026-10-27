@@ -82,6 +82,11 @@ export type FriendRequest = Prisma.FriendRequestModel
  */
 export type Friendship = Prisma.FriendshipModel
 /**
+ * Model EventLike
+ * Like d'un événement — marque un intérêt sans s'inscrire.
+ */
+export type EventLike = Prisma.EventLikeModel
+/**
  * Model EventCategory
  * 
  */

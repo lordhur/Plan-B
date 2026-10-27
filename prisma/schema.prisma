@@ -54,6 +54,7 @@ model User {
   interests          Interest[]
   favoriteCategories EventCategory[]
   introCard          IntroCard?
+  eventLikes         EventLike[]
 
   // Confidentialité
   privacyLevel        PrivacyLevel      @default(PUBLIC)
@@ -296,6 +297,19 @@ enum FriendRequestStatus {
 // 5. ÉVÉNEMENTS
 // ========================
 
+/// Like d'un événement — marque un intérêt sans s'inscrire.
+model EventLike {
+  id        String   @id @default(cuid())
+  eventId   String
+  event     Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([eventId, userId])
+  @@index([userId])
+}
+
 /// Visibilité du lieu de rendez-vous exact, choisie par l'organisateur.
 enum MeetupVisibility {
   EVERYONE // Visible par tout le monde
@@ -328,6 +342,8 @@ model Event {
   title            String
   description      String  @db.Text
   shortDescription String?
+  likes             EventLike[]
+
   // Lieu de rendez-vous exact (visibilité au choix de l'organisateur)
   meetupAddress   String?          @db.Text
   meetupVisibility MeetupVisibility @default(EVERYONE)

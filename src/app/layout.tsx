@@ -5,6 +5,7 @@ import { TRPCProvider } from '@/lib/trpc'
 import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toast'
 import { PWARegister } from '@/components/pwa-register'
+import { LangProvider } from '@/lib/i18n'
 
 export const metadata: Metadata = {
   title: {
@@ -62,9 +63,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="font-sans">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCProvider>
-            {children}
-            <Toaster />
-            <PWARegister />
+            <LangProvider>
+              {children}
+              <Toaster />
+              <PWARegister />
+            </LangProvider>
           </TRPCProvider>
         </ThemeProvider>
       </body>

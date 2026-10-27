@@ -405,6 +405,7 @@ export const ModelName = {
   UserBadge: 'UserBadge',
   FriendRequest: 'FriendRequest',
   Friendship: 'Friendship',
+  EventLike: 'EventLike',
   EventCategory: 'EventCategory',
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
@@ -454,7 +455,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1047,6 +1048,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.FriendshipCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.FriendshipCountAggregateOutputType> | number
+        }
+      }
+    }
+    EventLike: {
+      payload: Prisma.$EventLikePayload<ExtArgs>
+      fields: Prisma.EventLikeFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.EventLikeFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.EventLikeFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        findFirst: {
+          args: Prisma.EventLikeFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.EventLikeFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        findMany: {
+          args: Prisma.EventLikeFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>[]
+        }
+        create: {
+          args: Prisma.EventLikeCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        createMany: {
+          args: Prisma.EventLikeCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.EventLikeCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>[]
+        }
+        delete: {
+          args: Prisma.EventLikeDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        update: {
+          args: Prisma.EventLikeUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        deleteMany: {
+          args: Prisma.EventLikeDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.EventLikeUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.EventLikeUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>[]
+        }
+        upsert: {
+          args: Prisma.EventLikeUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$EventLikePayload>
+        }
+        aggregate: {
+          args: Prisma.EventLikeAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateEventLike>
+        }
+        groupBy: {
+          args: Prisma.EventLikeGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventLikeGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.EventLikeCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.EventLikeCountAggregateOutputType> | number
         }
       }
     }
@@ -3730,6 +3805,16 @@ export const FriendshipScalarFieldEnum = {
 export type FriendshipScalarFieldEnum = (typeof FriendshipScalarFieldEnum)[keyof typeof FriendshipScalarFieldEnum]
 
 
+export const EventLikeScalarFieldEnum = {
+  id: 'id',
+  eventId: 'eventId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type EventLikeScalarFieldEnum = (typeof EventLikeScalarFieldEnum)[keyof typeof EventLikeScalarFieldEnum]
+
+
 export const EventCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -4909,6 +4994,7 @@ export type GlobalOmitConfig = {
   userBadge?: Prisma.UserBadgeOmit
   friendRequest?: Prisma.FriendRequestOmit
   friendship?: Prisma.FriendshipOmit
+  eventLike?: Prisma.EventLikeOmit
   eventCategory?: Prisma.EventCategoryOmit
   event?: Prisma.EventOmit
   eventCollaborator?: Prisma.EventCollaboratorOmit

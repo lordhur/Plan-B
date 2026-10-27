@@ -12,7 +12,7 @@ import {
   startOfWeek,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { Activity, CalendarDays, ChevronLeft, ChevronRight, List } from 'lucide-react'
+import { Activity, Archive, CalendarDays, Camera, ChevronLeft, ChevronRight, List, MapPin } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { trpc } from '@/lib/trpc'
@@ -23,6 +23,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmptyState } from '@/components/common/EmptyState'
 import { cn } from '@/lib/utils'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
+import { useLang } from '@/lib/i18n'
 
 /** Coordonnées par défaut : Toulon (centre du Var). */
 const DEFAULT_LAT = 43.1242
@@ -53,6 +54,14 @@ function useWeather(lat: number, lon: number) {
   const [byDate, setByDate] = useState<Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }>>(
     () => new Map(),
   )
+  const [hourly, setHourly] = useState<Map<string, HourWeather[]>>(() => new Map())
+  const [tick, setTick] = useState(0)
+
+  // Rafraîchissement régulier (toutes les 15 min)
+  useEffect(() => {
+    const t = setInterval(() => setTick((v) => v + 1), 15 * 60_000)
+    return () => clearInterval(t)
+  }, [])
 
   useEffect(() => {
     let cancelled = false
@@ -85,6 +94,19 @@ function useWeather(lat: number, lon: number) {
             map.set(date, day as { matin: HourWeather; aprem: HourWeather; soir: HourWeather })
         }
         setByDate(map)
+        // Toutes les heures par date (pour la météo à l'heure exacte d'un plan)
+        const all = new Map<string, HourWeather[]>()
+        for (let i = 0; i < times.length; i++) {
+          const t = times[i]
+          const temp = temps[i]
+          const code = codes[i]
+          if (!t || temp == null || code == null) continue
+          const d = t.slice(0, 10)
+          const arr = all.get(d) ?? []
+          arr.push({ time: t, temp, code })
+          all.set(d, arr)
+        }
+        setHourly(all)
       })
       .catch(() => {
         /* météo indisponible : on ignore silencieusement */
@@ -93,9 +115,24 @@ function useWeather(lat: number, lon: number) {
     return () => {
       cancelled = true
     }
-  }, [lat, lon])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lat, lon, tick])
 
-  return byDate
+  return { byDate, hourly }
+}
+
+/** Météo à l'heure d'un événement (heure la plus proche). */
+function weatherAt(hourly: Map<string, HourWeather[]>, date: Date) {
+  const key = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
+  const arr = hourly.get(key)
+  const first = arr?.[0]
+  if (!first) return null
+  const h = date.getHours()
+  let best = first
+  for (const w of arr ?? []) {
+    if (Math.abs(Number(w.time.slice(11, 13)) - h) < Math.abs(Number(best.time.slice(11, 13)) - h)) best = w
+  }
+  return weatherMeta(best.code)
 }
 
 /** Bloc météo d'un jour : matin · après-midi · soir. */
@@ -154,7 +191,13 @@ type EventRow = {
  * (10 px de marge) sur quasi toute la hauteur, textes avec ombre portée.
  * Ordre : heure → icône catégorie → titre → ville + organisateur → inscrits.
  */
-function EventRowLink({ e }: { e: EventRow }) {
+function EventRowLink({
+  e,
+  weather,
+}: {
+  e: EventRow
+  weather?: { icon: string; label: string } | null
+}) {
   const org = e.organizer
   const orgName = org ? org.displayName || `${org.firstName} ${org.lastName}` : 'PlanB'
   const color = e.category.color
@@ -228,10 +271,89 @@ function EventRowLink({ e }: { e: EventRow }) {
   )
 }
 
-type SubTab = 'evenements' | 'calendrier'
+type SubTab = 'evenements' | 'calendrier' | 'archive'
+
+/** Sous-onglet Archive — toutes les activités passées (souvenirs photos/vidéos). */
+function ArchiveSection() {
+  const archive = trpc.events.archive.useQuery()
+
+  if (archive.isLoading) return <LoadingSpinner label="Chargement de l'archive" />
+  const events = archive.data ?? []
+  if (events.length === 0) {
+    return (
+      <EmptyState
+        icon={Archive}
+        title="Aucune activité passée"
+        description="Vos souvenirs s'accumuleront ici après vos premières sorties."
+      />
+    )
+  }
+  return (
+    <div className="space-y-4">
+      <p className="text-sm text-fg-muted">
+        Toutes vos activités passées — ajoutez vos photos et vidéos souvenirs depuis l’album de
+        chaque plan.
+      </p>
+      <ul className="space-y-2">
+        {events.map((e) => {
+          const date = new Date(e.startDate)
+          const mediaCount = e.album?._count?.media ?? 0
+          return (
+            <li key={e.id}>
+              <Link
+                href={`/events/${e.slug}/photos`}
+                className="group flex items-center gap-3 rounded-xl border border-border bg-card p-2.5 transition-colors hover:border-primary-300"
+              >
+                <span className="flex w-16 shrink-0 flex-col items-center rounded-lg bg-bg-secondary py-1.5">
+                  <span className="text-[10px] font-black uppercase text-fg-muted">
+                    {format(date, 'MMM', { locale: fr })}
+                  </span>
+                  <span className="text-sm font-extrabold leading-none">{format(date, 'd')}</span>
+                  <span className="text-[10px] font-semibold text-fg-muted">
+                    {format(date, 'yyyy')}
+                  </span>
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="flex items-center gap-1.5 text-sm font-bold">
+                    <span
+                      className="flex h-4 w-4 shrink-0 items-center justify-center"
+                      style={{ color: e.category?.color ?? '#7c3aed' }}
+                      aria-hidden
+                    >
+                      <CategoryIcon name={e.category?.icon ?? 'autres'} className="h-4 w-4" />
+                    </span>
+                    <span className="truncate">{e.title}</span>
+                  </span>
+                  <span className="mt-0.5 flex items-center gap-1.5 text-[11px] text-fg-muted">
+                    <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+                    <span className="truncate">
+                      {e.city}
+                      {e.liked ? ' · ❤️' : ''}
+                    </span>
+                  </span>
+                </span>
+                {mediaCount > 0 ? (
+                  <span className="flex shrink-0 items-center gap-1 rounded-full bg-secondary-50 px-2 py-1 text-[11px] font-bold text-secondary-600 dark:bg-secondary-500/10 dark:text-secondary-300">
+                    <Camera className="h-3.5 w-3.5" aria-hidden />
+                    {mediaCount}
+                  </span>
+                ) : (
+                  <span className="shrink-0 rounded-full border border-dashed border-border px-2 py-1 text-[11px] font-semibold text-fg-muted">
+                    + photos
+                  </span>
+                )}
+              </Link>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
 /** Page « Activité » — lignes d'événements + calendrier mensuel. */
 export default function ActivitePage() {
+  const { t: tl } = useLang()
   const { user } = useCurrentUser()
   const [sub, setSub] = useState<SubTab>('evenements')
   const [month, setMonth] = useState(() => new Date())
@@ -240,7 +362,10 @@ export default function ActivitePage() {
   const range = useMemo(() => ({ from: startOfMonth(month), to: endOfMonth(month) }), [month])
   const events = trpc.events.inRange.useQuery({ from: range.from, to: range.to })
 
-  const weather = useWeather(user?.latitude ?? DEFAULT_LAT, user?.longitude ?? DEFAULT_LON)
+  const { byDate: weatherByDate, hourly } = useWeather(
+    user?.latitude ?? DEFAULT_LAT,
+    user?.longitude ?? DEFAULT_LON,
+  )
 
   const days = useMemo(
     () =>
@@ -295,23 +420,24 @@ export default function ActivitePage() {
       {/* Sous-onglets en boutons */}
       <nav className="flex flex-wrap gap-2" aria-label="Onglets Activité">
         {[
-          { id: 'evenements' as const, label: 'Événements', icon: List },
-          { id: 'calendrier' as const, label: 'Calendrier', icon: CalendarDays },
-        ].map((t) => (
+          { id: 'evenements' as const, label: tl('activity_tab_events'), icon: List },
+          { id: 'calendrier' as const, label: tl('activity_tab_calendar'), icon: CalendarDays },
+          { id: 'archive' as const, label: tl('activity_tab_archive'), icon: Archive },
+        ].map((tabDef) => (
           <button
-            key={t.id}
+            key={tabDef.id}
             type="button"
-            aria-current={sub === t.id ? 'true' : undefined}
-            onClick={() => setSub(t.id)}
+            aria-current={sub === tabDef.id ? 'true' : undefined}
+            onClick={() => setSub(tabDef.id)}
             className={cn(
               'inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-sm font-bold shadow-sm transition-colors',
-              sub === t.id
+              sub === tabDef.id
                 ? 'border-primary-600 bg-primary-600 text-white'
                 : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
             )}
           >
-            <t.icon className="h-4 w-4" aria-hidden />
-            {t.label}
+            <tabDef.icon className="h-4 w-4" aria-hidden />
+            {tabDef.label}
           </button>
         ))}
       </nav>
@@ -344,11 +470,15 @@ export default function ActivitePage() {
                         </span>
                       )}
                     </h2>
-                    <DayWeather day={dayKey} weather={weather} />
+                    <DayWeather day={dayKey} weather={weatherByDate} />
                   </div>
                   <ul className="space-y-2">
                     {dayEvents.map((e) => (
-                      <EventRowLink key={e.id} e={e} />
+                      <EventRowLink
+                        key={e.id}
+                        e={e}
+                        weather={weatherAt(hourly, new Date(e.startDate))}
+                      />
                     ))}
                   </ul>
                 </section>
@@ -356,6 +486,9 @@ export default function ActivitePage() {
             })}
           </div>
         ))}
+
+      {/* ---------- ARCHIVE : activités passées, souvenirs photos/vidéos ---------- */}
+      {sub === 'archive' && <ArchiveSection />}
 
       {/* ---------- CALENDRIER : grille mensuelle ---------- */}
       {sub === 'calendrier' &&
@@ -415,7 +548,7 @@ export default function ActivitePage() {
             <section aria-labelledby="day-events-title">
               <h2 id="day-events-title" className="mb-3 flex flex-wrap items-center justify-between gap-2 font-semibold capitalize">
                 <span>{selected ? format(selected, 'EEEE d MMMM', { locale: fr }) : 'Sélectionnez un jour'}</span>
-                {selected && <DayWeather day={format(selected, 'yyyy-MM-dd')} weather={weather} />}
+                {selected && <DayWeather day={format(selected, 'yyyy-MM-dd')} weather={weatherByDate} />}
               </h2>
               {selectedEvents.length === 0 ? (
                 <EmptyState
@@ -426,7 +559,11 @@ export default function ActivitePage() {
               ) : (
                 <ul className="space-y-2">
                   {selectedEvents.map((e) => (
-                    <EventRowLink key={e.id} e={e} />
+                    <EventRowLink
+                      key={e.id}
+                      e={e}
+                      weather={weatherAt(hourly, new Date(e.startDate))}
+                    />
                   ))}
                 </ul>
               )}

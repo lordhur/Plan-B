@@ -496,6 +496,7 @@ export type UserWhereInput = {
   interests?: Prisma.InterestListRelationFilter
   favoriteCategories?: Prisma.EventCategoryListRelationFilter
   introCard?: Prisma.XOR<Prisma.IntroCardNullableScalarRelationFilter, Prisma.IntroCardWhereInput> | null
+  eventLikes?: Prisma.EventLikeListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
   sentFriendRequests?: Prisma.FriendRequestListRelationFilter
   receivedFriendRequests?: Prisma.FriendRequestListRelationFilter
@@ -571,6 +572,7 @@ export type UserOrderByWithRelationInput = {
   interests?: Prisma.InterestOrderByRelationAggregateInput
   favoriteCategories?: Prisma.EventCategoryOrderByRelationAggregateInput
   introCard?: Prisma.IntroCardOrderByWithRelationInput
+  eventLikes?: Prisma.EventLikeOrderByRelationAggregateInput
   badges?: Prisma.UserBadgeOrderByRelationAggregateInput
   sentFriendRequests?: Prisma.FriendRequestOrderByRelationAggregateInput
   receivedFriendRequests?: Prisma.FriendRequestOrderByRelationAggregateInput
@@ -649,6 +651,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   interests?: Prisma.InterestListRelationFilter
   favoriteCategories?: Prisma.EventCategoryListRelationFilter
   introCard?: Prisma.XOR<Prisma.IntroCardNullableScalarRelationFilter, Prisma.IntroCardWhereInput> | null
+  eventLikes?: Prisma.EventLikeListRelationFilter
   badges?: Prisma.UserBadgeListRelationFilter
   sentFriendRequests?: Prisma.FriendRequestListRelationFilter
   receivedFriendRequests?: Prisma.FriendRequestListRelationFilter
@@ -810,6 +813,7 @@ export type UserCreateInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -885,6 +889,7 @@ export type UserUncheckedCreateInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -960,6 +965,7 @@ export type UserUpdateInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -1035,6 +1041,7 @@ export type UserUncheckedUpdateInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -1539,6 +1546,20 @@ export type UserUpdateOneRequiredWithoutFriendshipsBNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFriendshipsBInput, Prisma.UserUpdateWithoutFriendshipsBInput>, Prisma.UserUncheckedUpdateWithoutFriendshipsBInput>
 }
 
+export type UserCreateNestedOneWithoutEventLikesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventLikesInput, Prisma.UserUncheckedCreateWithoutEventLikesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventLikesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutEventLikesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutEventLikesInput, Prisma.UserUncheckedCreateWithoutEventLikesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutEventLikesInput
+  upsert?: Prisma.UserUpsertWithoutEventLikesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutEventLikesInput, Prisma.UserUpdateWithoutEventLikesInput>, Prisma.UserUncheckedUpdateWithoutEventLikesInput>
+}
+
 export type UserCreateNestedManyWithoutFavoriteCategoriesInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutFavoriteCategoriesInput, Prisma.UserUncheckedCreateWithoutFavoriteCategoriesInput> | Prisma.UserCreateWithoutFavoriteCategoriesInput[] | Prisma.UserUncheckedCreateWithoutFavoriteCategoriesInput[]
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutFavoriteCategoriesInput | Prisma.UserCreateOrConnectWithoutFavoriteCategoriesInput[]
@@ -1997,6 +2018,7 @@ export type UserCreateWithoutProfilePhotosInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -2071,6 +2093,7 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -2161,6 +2184,7 @@ export type UserUpdateWithoutProfilePhotosInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -2235,6 +2259,7 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -2310,6 +2335,7 @@ export type UserCreateWithoutVerificationCodesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -2384,6 +2410,7 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -2474,6 +2501,7 @@ export type UserUpdateWithoutVerificationCodesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -2548,6 +2576,7 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -2621,6 +2650,7 @@ export type UserCreateWithoutInterestsInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -2695,6 +2725,7 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -2833,6 +2864,7 @@ export type UserCreateWithoutBadgesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
   friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
@@ -2907,6 +2939,7 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
   friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
@@ -2997,6 +3030,7 @@ export type UserUpdateWithoutBadgesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
   friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
@@ -3071,6 +3105,7 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
   friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
@@ -3145,6 +3180,7 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
   friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
@@ -3219,6 +3255,7 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
   friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
@@ -3298,6 +3335,7 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
@@ -3372,6 +3410,7 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
@@ -3462,6 +3501,7 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
   friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
@@ -3536,6 +3576,7 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
   friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
@@ -3621,6 +3662,7 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
@@ -3695,6 +3737,7 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
@@ -3769,6 +3812,7 @@ export type UserCreateWithoutFriendshipsAInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -3843,6 +3887,7 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -3922,6 +3967,7 @@ export type UserCreateWithoutFriendshipsBInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -3996,6 +4042,7 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -4086,6 +4133,7 @@ export type UserUpdateWithoutFriendshipsAInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -4160,6 +4208,7 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -4245,6 +4294,7 @@ export type UserUpdateWithoutFriendshipsBInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -4319,10 +4369,327 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
   friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUncheckedUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUncheckedUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUncheckedUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUncheckedUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUncheckedUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUncheckedUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUncheckedUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUncheckedUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUncheckedUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUncheckedUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUncheckedUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutEventLikesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutEventLikesInput = {
+  id?: string
+  email: string
+  emailVerified?: boolean
+  phone?: string | null
+  phoneVerified?: boolean
+  passwordHash: string
+  firstName: string
+  lastName: string
+  displayName?: string | null
+  dateOfBirth: Date | string
+  gender: $Enums.Gender
+  orientation?: $Enums.Orientation | null
+  bio?: string | null
+  profession?: string | null
+  education?: string | null
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
+  avatarUrl?: string | null
+  privacyLevel?: $Enums.PrivacyLevel
+  allowMessagesFrom?: $Enums.MessagePermission
+  allowFriendRequests?: boolean
+  showAge?: boolean
+  showLastName?: boolean
+  averageRating?: number
+  totalRatings?: number
+  trustScore?: number
+  eventsCreated?: number
+  eventsAttended?: number
+  friendCount?: number
+  isActive?: boolean
+  isBanned?: boolean
+  banReason?: string | null
+  lastActiveAt?: Date | string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
+  interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
+  friendshipsA?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserAInput
+  friendshipsB?: Prisma.FriendshipUncheckedCreateNestedManyWithoutUserBInput
+  organizedEvents?: Prisma.EventUncheckedCreateNestedManyWithoutOrganizerInput
+  eventParticipations?: Prisma.EventParticipationUncheckedCreateNestedManyWithoutUserInput
+  waitlistEntries?: Prisma.WaitlistEntryUncheckedCreateNestedManyWithoutUserInput
+  eventInvitations?: Prisma.EventInvitationUncheckedCreateNestedManyWithoutUserInput
+  sentMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutSenderInput
+  receivedMessages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutReceiverInput
+  conversationMembers?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutUserInput
+  eventChatMessages?: Prisma.EventChatMessageUncheckedCreateNestedManyWithoutUserInput
+  uploadedMedia?: Prisma.MediaUncheckedCreateNestedManyWithoutUploaderInput
+  mediaIdentifications?: Prisma.MediaIdentificationUncheckedCreateNestedManyWithoutUserInput
+  ownedPages?: Prisma.PageUncheckedCreateNestedManyWithoutOwnerInput
+  pageFollows?: Prisma.PageFollowUncheckedCreateNestedManyWithoutUserInput
+  groupMemberships?: Prisma.GroupMemberUncheckedCreateNestedManyWithoutUserInput
+  forumPosts?: Prisma.ForumPostUncheckedCreateNestedManyWithoutAuthorInput
+  forumReplies?: Prisma.ForumReplyUncheckedCreateNestedManyWithoutAuthorInput
+  offeredRides?: Prisma.CarpoolOfferUncheckedCreateNestedManyWithoutDriverInput
+  carpoolRequests?: Prisma.CarpoolRequestUncheckedCreateNestedManyWithoutPassengerInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUncheckedCreateNestedManyWithoutUserInput
+  subscription?: Prisma.SubscriptionUncheckedCreateNestedOneWithoutUserInput
+  reportsMade?: Prisma.ReportUncheckedCreateNestedManyWithoutReporterInput
+  reportsReceived?: Prisma.ReportUncheckedCreateNestedManyWithoutReportedInput
+  ratingsGiven?: Prisma.UserRatingUncheckedCreateNestedManyWithoutFromInput
+  ratingsReceived?: Prisma.UserRatingUncheckedCreateNestedManyWithoutToInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  pushSubscriptions?: Prisma.PushSubscriptionUncheckedCreateNestedManyWithoutUserInput
+  redeemedOffers?: Prisma.RedeemedOfferUncheckedCreateNestedManyWithoutUserInput
+  verificationCodes?: Prisma.VerificationCodeUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutEventLikesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventLikesInput, Prisma.UserUncheckedCreateWithoutEventLikesInput>
+}
+
+export type UserUpsertWithoutEventLikesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutEventLikesInput, Prisma.UserUncheckedUpdateWithoutEventLikesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutEventLikesInput, Prisma.UserUncheckedCreateWithoutEventLikesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutEventLikesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutEventLikesInput, Prisma.UserUncheckedUpdateWithoutEventLikesInput>
+}
+
+export type UserUpdateWithoutEventLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUpdateManyWithoutUserBNestedInput
+  organizedEvents?: Prisma.EventUpdateManyWithoutOrganizerNestedInput
+  eventParticipations?: Prisma.EventParticipationUpdateManyWithoutUserNestedInput
+  waitlistEntries?: Prisma.WaitlistEntryUpdateManyWithoutUserNestedInput
+  eventInvitations?: Prisma.EventInvitationUpdateManyWithoutUserNestedInput
+  sentMessages?: Prisma.DirectMessageUpdateManyWithoutSenderNestedInput
+  receivedMessages?: Prisma.DirectMessageUpdateManyWithoutReceiverNestedInput
+  conversationMembers?: Prisma.ConversationMemberUpdateManyWithoutUserNestedInput
+  eventChatMessages?: Prisma.EventChatMessageUpdateManyWithoutUserNestedInput
+  uploadedMedia?: Prisma.MediaUpdateManyWithoutUploaderNestedInput
+  mediaIdentifications?: Prisma.MediaIdentificationUpdateManyWithoutUserNestedInput
+  ownedPages?: Prisma.PageUpdateManyWithoutOwnerNestedInput
+  pageFollows?: Prisma.PageFollowUpdateManyWithoutUserNestedInput
+  groupMemberships?: Prisma.GroupMemberUpdateManyWithoutUserNestedInput
+  forumPosts?: Prisma.ForumPostUpdateManyWithoutAuthorNestedInput
+  forumReplies?: Prisma.ForumReplyUpdateManyWithoutAuthorNestedInput
+  offeredRides?: Prisma.CarpoolOfferUpdateManyWithoutDriverNestedInput
+  carpoolRequests?: Prisma.CarpoolRequestUpdateManyWithoutPassengerNestedInput
+  leaderboardEntries?: Prisma.LeaderboardEntryUpdateManyWithoutUserNestedInput
+  subscription?: Prisma.SubscriptionUpdateOneWithoutUserNestedInput
+  reportsMade?: Prisma.ReportUpdateManyWithoutReporterNestedInput
+  reportsReceived?: Prisma.ReportUpdateManyWithoutReportedNestedInput
+  ratingsGiven?: Prisma.UserRatingUpdateManyWithoutFromNestedInput
+  ratingsReceived?: Prisma.UserRatingUpdateManyWithoutToNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  pushSubscriptions?: Prisma.PushSubscriptionUpdateManyWithoutUserNestedInput
+  redeemedOffers?: Prisma.RedeemedOfferUpdateManyWithoutUserNestedInput
+  verificationCodes?: Prisma.VerificationCodeUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutEventLikesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phoneVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  firstName?: Prisma.StringFieldUpdateOperationsInput | string
+  lastName?: Prisma.StringFieldUpdateOperationsInput | string
+  displayName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  dateOfBirth?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  gender?: Prisma.EnumGenderFieldUpdateOperationsInput | $Enums.Gender
+  orientation?: Prisma.NullableEnumOrientationFieldUpdateOperationsInput | $Enums.Orientation | null
+  bio?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profession?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  education?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
+  allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
+  allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showAge?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  showLastName?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  averageRating?: Prisma.FloatFieldUpdateOperationsInput | number
+  totalRatings?: Prisma.IntFieldUpdateOperationsInput | number
+  trustScore?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsCreated?: Prisma.IntFieldUpdateOperationsInput | number
+  eventsAttended?: Prisma.IntFieldUpdateOperationsInput | number
+  friendCount?: Prisma.IntFieldUpdateOperationsInput | number
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isBanned?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  banReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastActiveAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
+  interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
+  favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
+  sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
+  receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
+  friendshipsA?: Prisma.FriendshipUncheckedUpdateManyWithoutUserANestedInput
+  friendshipsB?: Prisma.FriendshipUncheckedUpdateManyWithoutUserBNestedInput
   organizedEvents?: Prisma.EventUncheckedUpdateManyWithoutOrganizerNestedInput
   eventParticipations?: Prisma.EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   waitlistEntries?: Prisma.WaitlistEntryUncheckedUpdateManyWithoutUserNestedInput
@@ -4392,6 +4759,7 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -4466,6 +4834,7 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -4562,6 +4931,7 @@ export type UserCreateWithoutOrganizedEventsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -4636,6 +5006,7 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -4726,6 +5097,7 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -4800,6 +5172,7 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -4874,6 +5247,7 @@ export type UserCreateWithoutEventParticipationsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -4948,6 +5322,7 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -5038,6 +5413,7 @@ export type UserUpdateWithoutEventParticipationsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -5112,6 +5488,7 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -5186,6 +5563,7 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -5260,6 +5638,7 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -5350,6 +5729,7 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -5424,6 +5804,7 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -5498,6 +5879,7 @@ export type UserCreateWithoutEventInvitationsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -5572,6 +5954,7 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -5662,6 +6045,7 @@ export type UserUpdateWithoutEventInvitationsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -5736,6 +6120,7 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -5810,6 +6195,7 @@ export type UserCreateWithoutEventChatMessagesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -5884,6 +6270,7 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -5974,6 +6361,7 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -6048,6 +6436,7 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -6122,6 +6511,7 @@ export type UserCreateWithoutConversationMembersInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -6196,6 +6586,7 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -6286,6 +6677,7 @@ export type UserUpdateWithoutConversationMembersInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -6360,6 +6752,7 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -6434,6 +6827,7 @@ export type UserCreateWithoutSentMessagesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -6508,6 +6902,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -6587,6 +6982,7 @@ export type UserCreateWithoutReceivedMessagesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -6661,6 +7057,7 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -6751,6 +7148,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -6825,6 +7223,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -6910,6 +7309,7 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -6984,6 +7384,7 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -7058,6 +7459,7 @@ export type UserCreateWithoutUploadedMediaInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -7132,6 +7534,7 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -7222,6 +7625,7 @@ export type UserUpdateWithoutUploadedMediaInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -7296,6 +7700,7 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -7370,6 +7775,7 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -7444,6 +7850,7 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -7534,6 +7941,7 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -7608,6 +8016,7 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -7682,6 +8091,7 @@ export type UserCreateWithoutRatingsGivenInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -7756,6 +8166,7 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -7835,6 +8246,7 @@ export type UserCreateWithoutRatingsReceivedInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -7909,6 +8321,7 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -7999,6 +8412,7 @@ export type UserUpdateWithoutRatingsGivenInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -8073,6 +8487,7 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -8158,6 +8573,7 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -8232,6 +8648,7 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -8306,6 +8723,7 @@ export type UserCreateWithoutReportsMadeInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -8380,6 +8798,7 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -8459,6 +8878,7 @@ export type UserCreateWithoutReportsReceivedInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -8533,6 +8953,7 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -8623,6 +9044,7 @@ export type UserUpdateWithoutReportsMadeInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -8697,6 +9119,7 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -8782,6 +9205,7 @@ export type UserUpdateWithoutReportsReceivedInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -8856,6 +9280,7 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -8930,6 +9355,7 @@ export type UserCreateWithoutOfferedRidesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -9004,6 +9430,7 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -9094,6 +9521,7 @@ export type UserUpdateWithoutOfferedRidesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -9168,6 +9596,7 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -9242,6 +9671,7 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -9316,6 +9746,7 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -9406,6 +9837,7 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -9480,6 +9912,7 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -9554,6 +9987,7 @@ export type UserCreateWithoutOwnedPagesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -9628,6 +10062,7 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -9718,6 +10153,7 @@ export type UserUpdateWithoutOwnedPagesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -9792,6 +10228,7 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -9866,6 +10303,7 @@ export type UserCreateWithoutPageFollowsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -9940,6 +10378,7 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -10030,6 +10469,7 @@ export type UserUpdateWithoutPageFollowsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -10104,6 +10544,7 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -10178,6 +10619,7 @@ export type UserCreateWithoutGroupMembershipsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -10252,6 +10694,7 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -10342,6 +10785,7 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -10416,6 +10860,7 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -10490,6 +10935,7 @@ export type UserCreateWithoutForumPostsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -10564,6 +11010,7 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -10654,6 +11101,7 @@ export type UserUpdateWithoutForumPostsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -10728,6 +11176,7 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -10802,6 +11251,7 @@ export type UserCreateWithoutForumRepliesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -10876,6 +11326,7 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -10966,6 +11417,7 @@ export type UserUpdateWithoutForumRepliesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -11040,6 +11492,7 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -11114,6 +11567,7 @@ export type UserCreateWithoutRedeemedOffersInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -11188,6 +11642,7 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -11278,6 +11733,7 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -11352,6 +11808,7 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -11426,6 +11883,7 @@ export type UserCreateWithoutSubscriptionInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -11500,6 +11958,7 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -11590,6 +12049,7 @@ export type UserUpdateWithoutSubscriptionInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -11664,6 +12124,7 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -11738,6 +12199,7 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -11812,6 +12274,7 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -11902,6 +12365,7 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -11976,6 +12440,7 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -12050,6 +12515,7 @@ export type UserCreateWithoutNotificationsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -12124,6 +12590,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -12214,6 +12681,7 @@ export type UserUpdateWithoutNotificationsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -12288,6 +12756,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -12362,6 +12831,7 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -12436,6 +12906,7 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
   introCard?: Prisma.IntroCardUncheckedCreateNestedOneWithoutUserInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -12526,6 +12997,7 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -12600,6 +13072,7 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -12673,6 +13146,7 @@ export type UserCreateWithoutIntroCardInput = {
   profilePhotos?: Prisma.ProfilePhotoCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryCreateNestedManyWithoutUsersInput
+  eventLikes?: Prisma.EventLikeCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestCreateNestedManyWithoutReceiverInput
@@ -12747,6 +13221,7 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedCreateNestedManyWithoutUserInput
   interests?: Prisma.InterestUncheckedCreateNestedManyWithoutUsersInput
   favoriteCategories?: Prisma.EventCategoryUncheckedCreateNestedManyWithoutUsersInput
+  eventLikes?: Prisma.EventLikeUncheckedCreateNestedManyWithoutUserInput
   badges?: Prisma.UserBadgeUncheckedCreateNestedManyWithoutUserInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutSenderInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedCreateNestedManyWithoutReceiverInput
@@ -12837,6 +13312,7 @@ export type UserUpdateWithoutIntroCardInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -12911,6 +13387,7 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -12985,6 +13462,7 @@ export type UserUpdateWithoutInterestsInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   favoriteCategories?: Prisma.EventCategoryUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -13059,6 +13537,7 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   favoriteCategories?: Prisma.EventCategoryUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -13172,6 +13651,7 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUpdateManyWithoutReceiverNestedInput
@@ -13246,6 +13726,7 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   profilePhotos?: Prisma.ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput
   interests?: Prisma.InterestUncheckedUpdateManyWithoutUsersNestedInput
   introCard?: Prisma.IntroCardUncheckedUpdateOneWithoutUserNestedInput
+  eventLikes?: Prisma.EventLikeUncheckedUpdateManyWithoutUserNestedInput
   badges?: Prisma.UserBadgeUncheckedUpdateManyWithoutUserNestedInput
   sentFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutSenderNestedInput
   receivedFriendRequests?: Prisma.FriendRequestUncheckedUpdateManyWithoutReceiverNestedInput
@@ -13328,6 +13809,7 @@ export type UserCountOutputType = {
   profilePhotos: number
   interests: number
   favoriteCategories: number
+  eventLikes: number
   badges: number
   sentFriendRequests: number
   receivedFriendRequests: number
@@ -13365,6 +13847,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   profilePhotos?: boolean | UserCountOutputTypeCountProfilePhotosArgs
   interests?: boolean | UserCountOutputTypeCountInterestsArgs
   favoriteCategories?: boolean | UserCountOutputTypeCountFavoriteCategoriesArgs
+  eventLikes?: boolean | UserCountOutputTypeCountEventLikesArgs
   badges?: boolean | UserCountOutputTypeCountBadgesArgs
   sentFriendRequests?: boolean | UserCountOutputTypeCountSentFriendRequestsArgs
   receivedFriendRequests?: boolean | UserCountOutputTypeCountReceivedFriendRequestsArgs
@@ -13427,6 +13910,13 @@ export type UserCountOutputTypeCountInterestsArgs<ExtArgs extends runtime.Types.
  */
 export type UserCountOutputTypeCountFavoriteCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.EventCategoryWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountEventLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EventLikeWhereInput
 }
 
 /**
@@ -13688,6 +14178,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   interests?: boolean | Prisma.User$interestsArgs<ExtArgs>
   favoriteCategories?: boolean | Prisma.User$favoriteCategoriesArgs<ExtArgs>
   introCard?: boolean | Prisma.User$introCardArgs<ExtArgs>
+  eventLikes?: boolean | Prisma.User$eventLikesArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
   sentFriendRequests?: boolean | Prisma.User$sentFriendRequestsArgs<ExtArgs>
   receivedFriendRequests?: boolean | Prisma.User$receivedFriendRequestsArgs<ExtArgs>
@@ -13846,6 +14337,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   interests?: boolean | Prisma.User$interestsArgs<ExtArgs>
   favoriteCategories?: boolean | Prisma.User$favoriteCategoriesArgs<ExtArgs>
   introCard?: boolean | Prisma.User$introCardArgs<ExtArgs>
+  eventLikes?: boolean | Prisma.User$eventLikesArgs<ExtArgs>
   badges?: boolean | Prisma.User$badgesArgs<ExtArgs>
   sentFriendRequests?: boolean | Prisma.User$sentFriendRequestsArgs<ExtArgs>
   receivedFriendRequests?: boolean | Prisma.User$receivedFriendRequestsArgs<ExtArgs>
@@ -13890,6 +14382,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     interests: Prisma.$InterestPayload<ExtArgs>[]
     favoriteCategories: Prisma.$EventCategoryPayload<ExtArgs>[]
     introCard: Prisma.$IntroCardPayload<ExtArgs> | null
+    eventLikes: Prisma.$EventLikePayload<ExtArgs>[]
     badges: Prisma.$UserBadgePayload<ExtArgs>[]
     sentFriendRequests: Prisma.$FriendRequestPayload<ExtArgs>[]
     receivedFriendRequests: Prisma.$FriendRequestPayload<ExtArgs>[]
@@ -14358,6 +14851,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   interests<T extends Prisma.User$interestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$interestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$InterestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   favoriteCategories<T extends Prisma.User$favoriteCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$favoriteCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventCategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   introCard<T extends Prisma.User$introCardArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$introCardArgs<ExtArgs>>): Prisma.Prisma__IntroCardClient<runtime.Types.Result.GetResult<Prisma.$IntroCardPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  eventLikes<T extends Prisma.User$eventLikesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$eventLikesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EventLikePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   badges<T extends Prisma.User$badgesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$badgesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UserBadgePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sentFriendRequests<T extends Prisma.User$sentFriendRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sentFriendRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   receivedFriendRequests<T extends Prisma.User$receivedFriendRequestsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$receivedFriendRequestsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FriendRequestPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -14936,6 +15430,30 @@ export type User$introCardArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   include?: Prisma.IntroCardInclude<ExtArgs> | null
   where?: Prisma.IntroCardWhereInput
+}
+
+/**
+ * User.eventLikes
+ */
+export type User$eventLikesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EventLike
+   */
+  select?: Prisma.EventLikeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EventLike
+   */
+  omit?: Prisma.EventLikeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EventLikeInclude<ExtArgs> | null
+  where?: Prisma.EventLikeWhereInput
+  orderBy?: Prisma.EventLikeOrderByWithRelationInput | Prisma.EventLikeOrderByWithRelationInput[]
+  cursor?: Prisma.EventLikeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EventLikeScalarFieldEnum | Prisma.EventLikeScalarFieldEnum[]
 }
 
 /**
