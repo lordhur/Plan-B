@@ -204,7 +204,7 @@ function EventRowLink({
     <li>
       <Link
         href={`/events/${e.slug}`}
-        className="relative flex h-12 items-center overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
+        className="event-row-perf relative flex h-12 items-center overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
       >
         {/* Image en fond sur toute la largeur */}
         {e.coverImage ? (

@@ -13,6 +13,7 @@ import { messagesRouter } from './messages'
 import { notificationsRouter } from './notifications'
 import { offersRouter } from './offers'
 import { pagesRouter } from './pages'
+import { storiesRouter } from './stories'
 import { ratingsRouter } from './ratings'
 import { usersRouter } from './users'
 import { createTRPCRouter } from '../trpc'
@@ -39,6 +40,7 @@ export const appRouter = createTRPCRouter({
   contact: contactRouter,
   introCards: introCardsRouter,
   agenda: agendaRouter,
+  stories: storiesRouter,
 })
 
 export type AppRouter = typeof appRouter

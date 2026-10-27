@@ -8,6 +8,7 @@ import { ageFromBirthDate } from '@/lib/utils'
 import { formatRelative } from '@/lib/date'
 import { Avatar } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
@@ -104,6 +105,48 @@ export default function PublicProfilePage() {
           </dl>
 
           {profile.bio && <p className="mt-4 max-w-md text-sm text-fg-muted">{profile.bio}</p>}
+
+          {/* Galerie de photos */}
+          {profile.profilePhotos.length > 0 && (
+            <div className="mt-4 grid w-full grid-cols-3 gap-1.5 sm:grid-cols-4">
+              {profile.profilePhotos.map((p) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={p.id}
+                  src={p.url}
+                  alt=""
+                  loading="lazy"
+                  className="aspect-square w-full rounded-xl object-cover"
+                />
+              ))}
+            </div>
+          )}
+
+          {/* Vidéo de présentation */}
+          {profile.videoUrl && (
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            <video
+              src={profile.videoUrl}
+              controls
+              className="mt-4 max-h-72 w-full rounded-xl bg-black"
+            />
+          )}
+
+          {/* Catégories favorites */}
+          {profile.favoriteCategories.length > 0 && (
+            <div className="mt-4 flex flex-wrap justify-center gap-1.5">
+              {profile.favoriteCategories.map((c) => (
+                <span
+                  key={c.id}
+                  className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-bold"
+                  style={{ backgroundColor: `${c.color}22`, color: c.color }}
+                >
+                  <CategoryIcon name={c.icon} className="h-3.5 w-3.5" aria-hidden />
+                  {c.name}
+                </span>
+              ))}
+            </div>
+          )}
 
           {profile.interests.length > 0 && (
             <div className="mt-4 flex flex-wrap justify-center gap-1.5">

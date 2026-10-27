@@ -410,6 +410,7 @@ export const ModelName = {
   Event: 'Event',
   EventCollaborator: 'EventCollaborator',
   EventParticipation: 'EventParticipation',
+  Story: 'Story',
   WaitlistEntry: 'WaitlistEntry',
   EventInvitation: 'EventInvitation',
   EventChatMessage: 'EventChatMessage',
@@ -455,7 +456,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
+    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1418,6 +1419,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.EventParticipationCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.EventParticipationCountAggregateOutputType> | number
+        }
+      }
+    }
+    Story: {
+      payload: Prisma.$StoryPayload<ExtArgs>
+      fields: Prisma.StoryFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.StoryFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.StoryFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        findFirst: {
+          args: Prisma.StoryFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.StoryFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        findMany: {
+          args: Prisma.StoryFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>[]
+        }
+        create: {
+          args: Prisma.StoryCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        createMany: {
+          args: Prisma.StoryCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.StoryCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>[]
+        }
+        delete: {
+          args: Prisma.StoryDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        update: {
+          args: Prisma.StoryUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        deleteMany: {
+          args: Prisma.StoryDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.StoryUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.StoryUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>[]
+        }
+        upsert: {
+          args: Prisma.StoryUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$StoryPayload>
+        }
+        aggregate: {
+          args: Prisma.StoryAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateStory>
+        }
+        groupBy: {
+          args: Prisma.StoryGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StoryGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.StoryCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.StoryCountAggregateOutputType> | number
         }
       }
     }
@@ -3700,6 +3775,7 @@ export const UserScalarFieldEnum = {
   latitude: 'latitude',
   longitude: 'longitude',
   avatarUrl: 'avatarUrl',
+  videoUrl: 'videoUrl',
   privacyLevel: 'privacyLevel',
   allowMessagesFrom: 'allowMessagesFrom',
   allowFriendRequests: 'allowFriendRequests',
@@ -3909,6 +3985,18 @@ export const EventParticipationScalarFieldEnum = {
 } as const
 
 export type EventParticipationScalarFieldEnum = (typeof EventParticipationScalarFieldEnum)[keyof typeof EventParticipationScalarFieldEnum]
+
+
+export const StoryScalarFieldEnum = {
+  id: 'id',
+  authorId: 'authorId',
+  mediaUrl: 'mediaUrl',
+  type: 'type',
+  caption: 'caption',
+  createdAt: 'createdAt'
+} as const
+
+export type StoryScalarFieldEnum = (typeof StoryScalarFieldEnum)[keyof typeof StoryScalarFieldEnum]
 
 
 export const WaitlistEntryScalarFieldEnum = {
@@ -4655,6 +4743,20 @@ export type ListEnumParticipationStatusFieldRefInput<$PrismaModel> = FieldRefInp
 
 
 /**
+ * Reference to a field of type 'StoryType'
+ */
+export type EnumStoryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StoryType'>
+    
+
+
+/**
+ * Reference to a field of type 'StoryType[]'
+ */
+export type ListEnumStoryTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StoryType[]'>
+    
+
+
+/**
  * Reference to a field of type 'InvitationStatus'
  */
 export type EnumInvitationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InvitationStatus'>
@@ -4999,6 +5101,7 @@ export type GlobalOmitConfig = {
   event?: Prisma.EventOmit
   eventCollaborator?: Prisma.EventCollaboratorOmit
   eventParticipation?: Prisma.EventParticipationOmit
+  story?: Prisma.StoryOmit
   waitlistEntry?: Prisma.WaitlistEntryOmit
   eventInvitation?: Prisma.EventInvitationOmit
   eventChatMessage?: Prisma.EventChatMessageOmit

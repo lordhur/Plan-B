@@ -2,6 +2,7 @@
 
 import {
   Bell,
+  Camera,
   CalendarDays,
   CalendarHeart,
   CalendarPlus,
@@ -83,7 +84,7 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align="center" className="min-w-48">
+      <DropdownMenuContent align="start" className="min-w-52">
         <DropdownMenuLabel>{t('create_menu')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -91,6 +92,12 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
             <CalendarPlus className="h-4 w-4" aria-hidden /> {t('create_plan')}
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/stories/new">
+            <Camera className="h-4 w-4" aria-hidden /> {t('create_story')}
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
           <Link href="/groups/new">
             <UsersRound className="h-4 w-4" aria-hidden /> {t('create_group')}
@@ -134,23 +141,33 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-lg">
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pb-1.5 pt-2 md:pb-2">
-        {/* Haut : logo centré (au-dessus du fil) + actions à droite */}
-        <div className="flex w-full items-center justify-between">
-          <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
-            <Logo />
-            <span className="hidden text-lg font-black tracking-tight text-fg sm:inline sm:text-xl">
-              Plan<span className="text-primary-600">B</span>
-            </span>
-          </Link>
-          <div className="flex items-center gap-1.5">
+        {/* Haut : bouton rond « + » à gauche · logo + Plan B au centre · actions à droite */}
+        <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2">
           <CreateMenu
             trigger={
-              <Button variant="accent" size="sm" className="hidden sm:inline-flex">
-                <Plus className="h-4 w-4" aria-hidden />
-                <span className="hidden lg:inline">{t('nav_create')}</span>
+              <Button
+                variant="accent"
+                size="icon"
+                className="rounded-full shadow-md"
+                aria-label={t('nav_create')}
+              >
+                <Plus className="h-5 w-5" aria-hidden />
               </Button>
             }
           />
+
+          <Link
+            href="/"
+            className="mx-auto flex items-center gap-2"
+            aria-label="PlanB — accueil"
+          >
+            <Logo withText={false} />
+            <span className="text-lg font-black tracking-tight text-fg sm:text-xl">
+              Plan<span className="text-primary-600">B</span>
+            </span>
+          </Link>
+
+          <div className="flex items-center gap-1.5">
 
           <ThemeToggle />
 

@@ -142,6 +142,14 @@ export const ParticipationStatus = {
 export type ParticipationStatus = (typeof ParticipationStatus)[keyof typeof ParticipationStatus]
 
 
+export const StoryType = {
+  PHOTO: 'PHOTO',
+  VIDEO: 'VIDEO'
+} as const
+
+export type StoryType = (typeof StoryType)[keyof typeof StoryType]
+
+
 export const InvitationStatus = {
   PENDING: 'PENDING',
   ACCEPTED: 'ACCEPTED',

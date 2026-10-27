@@ -25,6 +25,9 @@ const publicProfileSelect = {
   eventsCreated: true,
   eventsAttended: true,
   friendCount: true,
+  videoUrl: true,
+  profilePhotos: { orderBy: { order: 'asc' }, take: 12 },
+  favoriteCategories: { select: { id: true, slug: true, name: true, icon: true, color: true } },
   createdAt: true,
   privacyLevel: true,
   interests: { select: { id: true, name: true, icon: true } },
@@ -54,6 +57,78 @@ export const usersRouter = createTRPCRouter({
       isMe: ctx.user?.id === profile.id,
     }
   }),
+
+  /** Mes photos de profil. */
+  myPhotos: protectedProcedure.query(({ ctx }) =>
+    prisma.profilePhoto.findMany({
+      where: { userId: ctx.user.id },
+      orderBy: { order: 'asc' },
+    }),
+  ),
+
+  /** Ajouter une photo de profil (max 12). */
+  addPhoto: protectedProcedure
+    .input(z.object({ url: z.string().url() }))
+    .mutation(async ({ input, ctx }) => {
+      const count = await prisma.profilePhoto.count({ where: { userId: ctx.user.id } })
+      if (count >= 12) {
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'Maximum 12 photos de profil' })
+      }
+      return prisma.profilePhoto.create({
+        data: { userId: ctx.user.id, url: input.url, isPrimary: count === 0, order: count },
+      })
+    }),
+
+  /** Supprimer une photo de profil (l'avatar suit si c'était la principale). */
+  removePhoto: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const photo = await prisma.profilePhoto.findFirst({
+        where: { id: input.id, userId: ctx.user.id },
+      })
+      if (!photo) throw new TRPCError({ code: 'NOT_FOUND', message: 'Photo introuvable' })
+      await prisma.profilePhoto.delete({ where: { id: photo.id } })
+      if (photo.isPrimary) {
+        const next = await prisma.profilePhoto.findFirst({
+          where: { userId: ctx.user.id },
+          orderBy: { order: 'asc' },
+        })
+        if (next) await prisma.profilePhoto.update({ where: { id: next.id }, data: { isPrimary: true } })
+      }
+      return { ok: true as const }
+    }),
+
+  /** Définir la photo principale (devient aussi l'avatar). */
+  setPrimaryPhoto: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const photo = await prisma.profilePhoto.findFirst({
+        where: { id: input.id, userId: ctx.user.id },
+      })
+      if (!photo) throw new TRPCError({ code: 'NOT_FOUND', message: 'Photo introuvable' })
+      await prisma.$transaction([
+        prisma.profilePhoto.updateMany({
+          where: { userId: ctx.user.id },
+          data: { isPrimary: false },
+        }),
+        prisma.profilePhoto.update({ where: { id: photo.id }, data: { isPrimary: true } }),
+        prisma.user.update({ where: { id: ctx.user.id }, data: { avatarUrl: photo.url } }),
+      ])
+      return { ok: true as const, avatarUrl: photo.url }
+    }),
+
+  /** Mes catégories favorites (slugs). */
+  setFavoriteCategories: protectedProcedure
+    .input(z.object({ slugs: z.array(z.string()).max(12) }))
+    .mutation(async ({ input, ctx }) => {
+      await prisma.user.update({
+        where: { id: ctx.user.id },
+        data: {
+          favoriteCategories: { set: input.slugs.map((slug) => ({ slug })) },
+        },
+      })
+      return { ok: true as const }
+    }),
 
   /** Mise à jour de mon profil. */
   updateProfile: protectedProcedure

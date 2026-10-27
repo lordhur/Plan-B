@@ -59,6 +59,7 @@ export const updateProfileSchema = z.object({
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
   avatarUrl: z.string().url().nullable().optional(),
+  videoUrl: z.string().url().nullable().optional(),
   phone: z
     .string()
     .regex(/^\+?[0-9 .-]{8,16}$/, 'Numéro invalide')

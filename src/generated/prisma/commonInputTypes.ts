@@ -528,6 +528,23 @@ export type EnumParticipationStatusWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumParticipationStatusFilter<$PrismaModel>
 }
 
+export type EnumStoryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.StoryType | Prisma.EnumStoryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel> | $Enums.StoryType
+}
+
+export type EnumStoryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StoryType | Prisma.EnumStoryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStoryTypeWithAggregatesFilter<$PrismaModel> | $Enums.StoryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel>
+}
+
 export type EnumInvitationStatusFilter<$PrismaModel = never> = {
   equals?: $Enums.InvitationStatus | Prisma.EnumInvitationStatusFieldRefInput<$PrismaModel>
   in?: $Enums.InvitationStatus[] | Prisma.ListEnumInvitationStatusFieldRefInput<$PrismaModel>
@@ -1293,6 +1310,23 @@ export type NestedEnumParticipationStatusWithAggregatesFilter<$PrismaModel = nev
   _count?: Prisma.NestedIntFilter<$PrismaModel>
   _min?: Prisma.NestedEnumParticipationStatusFilter<$PrismaModel>
   _max?: Prisma.NestedEnumParticipationStatusFilter<$PrismaModel>
+}
+
+export type NestedEnumStoryTypeFilter<$PrismaModel = never> = {
+  equals?: $Enums.StoryType | Prisma.EnumStoryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel> | $Enums.StoryType
+}
+
+export type NestedEnumStoryTypeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.StoryType | Prisma.EnumStoryTypeFieldRefInput<$PrismaModel>
+  in?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.StoryType[] | Prisma.ListEnumStoryTypeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumStoryTypeWithAggregatesFilter<$PrismaModel> | $Enums.StoryType
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumStoryTypeFilter<$PrismaModel>
 }
 
 export type NestedEnumInvitationStatusFilter<$PrismaModel = never> = {

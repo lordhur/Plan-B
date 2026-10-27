@@ -162,6 +162,9 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           content: m.content,
           createdAt: m.createdAt,
           author: m.user,
+          mediaUrl: m.mediaUrl,
+          mediaType: m.mediaType,
+          mediaName: null,
         }))
 
   // Auto-scroll si l'utilisateur est déjà en bas
@@ -258,10 +261,18 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
       })
       await dm.refetch()
     } else {
-      if (!text) return
+      const media = attachment
+      if (!text && !media) return
       setContent('')
+      setAttachment(null)
+      if (media?.previewUrl) URL.revokeObjectURL(media.previewUrl)
       setPinnedBottom(true)
-      await sendEvent.mutateAsync({ eventId: id, content: text })
+      await sendEvent.mutateAsync({
+        eventId: id,
+        content: text,
+        mediaUrl: media?.url,
+        mediaType: media?.type,
+      })
       await event.refetch()
     }
   }
@@ -364,12 +375,11 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           </div>
         )}
 
-        <div className="relative flex items-end gap-1.5">
-          {kind === 'dm' && (
-            <>
-              {showEmoji && (
-                <EmojiPicker onPick={insertEmoji} onClose={() => setShowEmoji(false)} />
-              )}
+        <div className="relative flex items-end gap-1.5 rounded-3xl border border-border bg-card p-1.5 shadow-sm">
+          <>
+            {showEmoji && (
+              <EmojiPicker onPick={insertEmoji} onClose={() => setShowEmoji(false)} />
+            )}
               <Button
                 type="button"
                 variant="ghost"
@@ -407,8 +417,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                   e.target.value = ''
                 }}
               />
-            </>
-          )}
+          </>
           <label htmlFor="chat-input" className="sr-only">
             Votre message
           </label>
@@ -426,14 +435,14 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
               }
             }}
             placeholder="Écrivez votre message…"
-            className="min-h-11 max-h-32 flex-1 resize-y rounded-2xl border border-border bg-bg-secondary px-4 py-2.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-primary-500"
+            className="min-h-11 max-h-32 flex-1 resize-y self-center rounded-2xl border border-transparent bg-bg-secondary px-4 py-2.5 text-sm outline-none transition-shadow focus-visible:border-primary-300 focus-visible:ring-2 focus-visible:ring-primary-500/40"
           />
           <Button
             type="submit"
             size="icon"
             aria-label="Envoyer"
             disabled={(!content.trim() && !attachment) || sending}
-            className="h-11 w-11 shrink-0 rounded-full"
+            className="h-11 w-11 shrink-0 rounded-full bg-gradient-to-tr from-primary-600 to-secondary-500 shadow-md transition-transform hover:scale-105 disabled:hover:scale-100"
           >
             <Send className="h-4 w-4" aria-hidden />
           </Button>
