@@ -113,6 +113,16 @@ export type Conversation = Prisma.ConversationModel
  */
 export type ConversationMember = Prisma.ConversationMemberModel
 /**
+ * Model MessageHide
+ * * Message masqué pour un seul membre (« supprimer pour moi »).
+ */
+export type MessageHide = Prisma.MessageHideModel
+/**
+ * Model UserBlock
+ * * Blocage : le bloqué disparaît du site pour le bloqueur (et inversement).
+ */
+export type UserBlock = Prisma.UserBlockModel
+/**
  * Model DirectMessage
  * 
  */

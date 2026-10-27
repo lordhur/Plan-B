@@ -40,6 +40,7 @@ export type ConversationMinAggregateOutputType = {
   isGroup: boolean | null
   avatarUrl: string | null
   ephemeralHours: number | null
+  theme: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +51,7 @@ export type ConversationMaxAggregateOutputType = {
   isGroup: boolean | null
   avatarUrl: string | null
   ephemeralHours: number | null
+  theme: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -60,6 +62,7 @@ export type ConversationCountAggregateOutputType = {
   isGroup: number
   avatarUrl: number
   ephemeralHours: number
+  theme: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -80,6 +83,7 @@ export type ConversationMinAggregateInputType = {
   isGroup?: true
   avatarUrl?: true
   ephemeralHours?: true
+  theme?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -90,6 +94,7 @@ export type ConversationMaxAggregateInputType = {
   isGroup?: true
   avatarUrl?: true
   ephemeralHours?: true
+  theme?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -100,6 +105,7 @@ export type ConversationCountAggregateInputType = {
   isGroup?: true
   avatarUrl?: true
   ephemeralHours?: true
+  theme?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -197,6 +203,7 @@ export type ConversationGroupByOutputType = {
   isGroup: boolean
   avatarUrl: string | null
   ephemeralHours: number | null
+  theme: string | null
   createdAt: Date
   updatedAt: Date
   _count: ConversationCountAggregateOutputType | null
@@ -230,6 +237,7 @@ export type ConversationWhereInput = {
   isGroup?: Prisma.BoolFilter<"Conversation"> | boolean
   avatarUrl?: Prisma.StringNullableFilter<"Conversation"> | string | null
   ephemeralHours?: Prisma.IntNullableFilter<"Conversation"> | number | null
+  theme?: Prisma.StringNullableFilter<"Conversation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   members?: Prisma.ConversationMemberListRelationFilter
@@ -242,6 +250,7 @@ export type ConversationOrderByWithRelationInput = {
   isGroup?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   ephemeralHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  theme?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   members?: Prisma.ConversationMemberOrderByRelationAggregateInput
@@ -257,6 +266,7 @@ export type ConversationWhereUniqueInput = Prisma.AtLeast<{
   isGroup?: Prisma.BoolFilter<"Conversation"> | boolean
   avatarUrl?: Prisma.StringNullableFilter<"Conversation"> | string | null
   ephemeralHours?: Prisma.IntNullableFilter<"Conversation"> | number | null
+  theme?: Prisma.StringNullableFilter<"Conversation"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Conversation"> | Date | string
   members?: Prisma.ConversationMemberListRelationFilter
@@ -269,6 +279,7 @@ export type ConversationOrderByWithAggregationInput = {
   isGroup?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   ephemeralHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  theme?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.ConversationCountOrderByAggregateInput
@@ -287,6 +298,7 @@ export type ConversationScalarWhereWithAggregatesInput = {
   isGroup?: Prisma.BoolWithAggregatesFilter<"Conversation"> | boolean
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   ephemeralHours?: Prisma.IntNullableWithAggregatesFilter<"Conversation"> | number | null
+  theme?: Prisma.StringNullableWithAggregatesFilter<"Conversation"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Conversation"> | Date | string
 }
@@ -297,6 +309,7 @@ export type ConversationCreateInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.ConversationMemberCreateNestedManyWithoutConversationInput
@@ -309,6 +322,7 @@ export type ConversationUncheckedCreateInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutConversationInput
@@ -321,6 +335,7 @@ export type ConversationUpdateInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.ConversationMemberUpdateManyWithoutConversationNestedInput
@@ -333,6 +348,7 @@ export type ConversationUncheckedUpdateInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.ConversationMemberUncheckedUpdateManyWithoutConversationNestedInput
@@ -345,6 +361,7 @@ export type ConversationCreateManyInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -355,6 +372,7 @@ export type ConversationUpdateManyMutationInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -365,6 +383,7 @@ export type ConversationUncheckedUpdateManyInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -375,6 +394,7 @@ export type ConversationCountOrderByAggregateInput = {
   isGroup?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   ephemeralHours?: Prisma.SortOrder
+  theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -389,6 +409,7 @@ export type ConversationMaxOrderByAggregateInput = {
   isGroup?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   ephemeralHours?: Prisma.SortOrder
+  theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -399,6 +420,7 @@ export type ConversationMinOrderByAggregateInput = {
   isGroup?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
   ephemeralHours?: Prisma.SortOrder
+  theme?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -446,6 +468,7 @@ export type ConversationCreateWithoutMembersInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.DirectMessageCreateNestedManyWithoutConversationInput
@@ -457,6 +480,7 @@ export type ConversationUncheckedCreateWithoutMembersInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   messages?: Prisma.DirectMessageUncheckedCreateNestedManyWithoutConversationInput
@@ -484,6 +508,7 @@ export type ConversationUpdateWithoutMembersInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.DirectMessageUpdateManyWithoutConversationNestedInput
@@ -495,6 +520,7 @@ export type ConversationUncheckedUpdateWithoutMembersInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   messages?: Prisma.DirectMessageUncheckedUpdateManyWithoutConversationNestedInput
@@ -506,6 +532,7 @@ export type ConversationCreateWithoutMessagesInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.ConversationMemberCreateNestedManyWithoutConversationInput
@@ -517,6 +544,7 @@ export type ConversationUncheckedCreateWithoutMessagesInput = {
   isGroup?: boolean
   avatarUrl?: string | null
   ephemeralHours?: number | null
+  theme?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   members?: Prisma.ConversationMemberUncheckedCreateNestedManyWithoutConversationInput
@@ -544,6 +572,7 @@ export type ConversationUpdateWithoutMessagesInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.ConversationMemberUpdateManyWithoutConversationNestedInput
@@ -555,6 +584,7 @@ export type ConversationUncheckedUpdateWithoutMessagesInput = {
   isGroup?: Prisma.BoolFieldUpdateOperationsInput | boolean
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   ephemeralHours?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  theme?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   members?: Prisma.ConversationMemberUncheckedUpdateManyWithoutConversationNestedInput
@@ -606,6 +636,7 @@ export type ConversationSelect<ExtArgs extends runtime.Types.Extensions.Internal
   isGroup?: boolean
   avatarUrl?: boolean
   ephemeralHours?: boolean
+  theme?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   members?: boolean | Prisma.Conversation$membersArgs<ExtArgs>
@@ -619,6 +650,7 @@ export type ConversationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   isGroup?: boolean
   avatarUrl?: boolean
   ephemeralHours?: boolean
+  theme?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["conversation"]>
@@ -629,6 +661,7 @@ export type ConversationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   isGroup?: boolean
   avatarUrl?: boolean
   ephemeralHours?: boolean
+  theme?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["conversation"]>
@@ -639,11 +672,12 @@ export type ConversationSelectScalar = {
   isGroup?: boolean
   avatarUrl?: boolean
   ephemeralHours?: boolean
+  theme?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isGroup" | "avatarUrl" | "ephemeralHours" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
+export type ConversationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "isGroup" | "avatarUrl" | "ephemeralHours" | "theme" | "createdAt" | "updatedAt", ExtArgs["result"]["conversation"]>
 export type ConversationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.Conversation$membersArgs<ExtArgs>
   messages?: boolean | Prisma.Conversation$messagesArgs<ExtArgs>
@@ -664,6 +698,7 @@ export type $ConversationPayload<ExtArgs extends runtime.Types.Extensions.Intern
     isGroup: boolean
     avatarUrl: string | null
     ephemeralHours: number | null
+    theme: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["conversation"]>
@@ -1096,6 +1131,7 @@ export interface ConversationFieldRefs {
   readonly isGroup: Prisma.FieldRef<"Conversation", 'Boolean'>
   readonly avatarUrl: Prisma.FieldRef<"Conversation", 'String'>
   readonly ephemeralHours: Prisma.FieldRef<"Conversation", 'Int'>
+  readonly theme: Prisma.FieldRef<"Conversation", 'String'>
   readonly createdAt: Prisma.FieldRef<"Conversation", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Conversation", 'DateTime'>
 }

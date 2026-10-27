@@ -70,6 +70,8 @@ export const ModelName = {
   EventChatMessage: 'EventChatMessage',
   Conversation: 'Conversation',
   ConversationMember: 'ConversationMember',
+  MessageHide: 'MessageHide',
+  UserBlock: 'UserBlock',
   DirectMessage: 'DirectMessage',
   EventAlbum: 'EventAlbum',
   Media: 'Media',
@@ -402,6 +404,7 @@ export const ConversationScalarFieldEnum = {
   isGroup: 'isGroup',
   avatarUrl: 'avatarUrl',
   ephemeralHours: 'ephemeralHours',
+  theme: 'theme',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -416,10 +419,32 @@ export const ConversationMemberScalarFieldEnum = {
   role: 'role',
   joinedAt: 'joinedAt',
   lastReadAt: 'lastReadAt',
-  isMuted: 'isMuted'
+  deliveredAt: 'deliveredAt',
+  isMuted: 'isMuted',
+  mutedUntil: 'mutedUntil',
+  hiddenAt: 'hiddenAt'
 } as const
 
 export type ConversationMemberScalarFieldEnum = (typeof ConversationMemberScalarFieldEnum)[keyof typeof ConversationMemberScalarFieldEnum]
+
+
+export const MessageHideScalarFieldEnum = {
+  id: 'id',
+  messageId: 'messageId',
+  userId: 'userId'
+} as const
+
+export type MessageHideScalarFieldEnum = (typeof MessageHideScalarFieldEnum)[keyof typeof MessageHideScalarFieldEnum]
+
+
+export const UserBlockScalarFieldEnum = {
+  id: 'id',
+  blockerId: 'blockerId',
+  blockedId: 'blockedId',
+  createdAt: 'createdAt'
+} as const
+
+export type UserBlockScalarFieldEnum = (typeof UserBlockScalarFieldEnum)[keyof typeof UserBlockScalarFieldEnum]
 
 
 export const DirectMessageScalarFieldEnum = {

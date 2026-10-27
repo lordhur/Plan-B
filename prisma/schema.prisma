@@ -51,6 +51,9 @@ model User {
   avatarUrl     String? // Photo principale
   videoUrl      String? // Vidéo de présentation
   stories       Story[]
+  blocksGiven   UserBlock[]    @relation("UserBlockBlocker")
+  blocksReceived UserBlock[]   @relation("UserBlockBlocked")
+  messageHides  MessageHide[]
 
   // Préférences
   interests          Interest[]
@@ -584,6 +587,7 @@ model Conversation {
   isGroup   Boolean              @default(false)
   avatarUrl String?
   ephemeralHours Int? // Messages éphémères : 24, 168 (semaine), 720 (mois) — null = permanent
+  theme     String? // Thème de la discussion (couleur des bulles)
   members   ConversationMember[]
   messages  DirectMessage[]
   createdAt DateTime             @default(now())
@@ -599,15 +603,43 @@ model ConversationMember {
   role           String       @default("member") // admin, member
   joinedAt       DateTime     @default(now())
   lastReadAt     DateTime     @default(now())
+  deliveredAt    DateTime? // Dernière réception constatée (✓✓ noirs)
   isMuted        Boolean      @default(false)
+  mutedUntil     DateTime? // Mode silencieux temporaire (8 h, 1 j, 1 semaine)
+  hiddenAt       DateTime? // Discussion effacée de ma liste jusqu'au prochain message
 
   @@unique([conversationId, userId])
+}
+
+/** Message masqué pour un seul membre (« supprimer pour moi »). */
+model MessageHide {
+  id        String        @id @default(cuid())
+  messageId String
+  message   DirectMessage @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([messageId, userId])
+}
+
+/** Blocage : le bloqué disparaît du site pour le bloqueur (et inversement). */
+model UserBlock {
+  id        String   @id @default(cuid())
+  blockerId String
+  blocker   User     @relation("UserBlockBlocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("UserBlockBlocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+  @@index([blockedId])
 }
 
 model DirectMessage {
   id             String       @id @default(cuid())
   conversationId String
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  hiddenFor      MessageHide[]
   senderId       String
   sender         User         @relation("Sender", fields: [senderId], references: [id])
   receiverId     String? // null pour les messages de groupe

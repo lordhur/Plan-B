@@ -376,7 +376,7 @@ nav * {
   .lift-shadow::before { transition: none; }
 }
 
-/* Carte v3 : étiquettes « contour » des villes — lisibles ET cliquables */
+/* Carte v4 : noms de villes en TEXTE CONTOUR (pas de pastille pleine) + point */
 .city-outline-label {
   background: transparent !important;
   border: none !important;
@@ -384,32 +384,29 @@ nav * {
   transform: translate(-50%, -50%);
   width: max-content;
 }
-.city-outline-label span {
+.city-outline-label .city-dot {
   display: inline-block;
-  font-size: 14px;
-  font-weight: 900;
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 9999px;
+  background: #7c3aed;
+  box-shadow: 0 0 0 1.5px #fff, 0 1px 3px rgba(15, 23, 42, 0.6);
+  vertical-align: middle;
+}
+.city-outline-label span:not(.city-dot) {
+  display: inline-block;
+  font-weight: 800;
   letter-spacing: 0.02em;
   white-space: nowrap;
-  color: #fff;
-  cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 9999px;
-  background: rgba(15, 23, 42, 0.45);
+  color: #0f172a;
+  vertical-align: middle;
   text-shadow:
-    -1px -1px 0 #0f172a, 1px -1px 0 #0f172a,
-    -1px 1px 0 #0f172a, 1px 1px 0 #0f172a,
-    0 2px 6px rgba(15, 23, 42, 0.9);
+    -1.5px -1.5px 0 #fff, 1.5px -1.5px 0 #fff,
+    -1.5px 1.5px 0 #fff, 1.5px 1.5px 0 #fff,
+    0 0 3px #fff, 0 1px 4px rgba(15, 23, 42, 0.35);
   pointer-events: auto;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.city-outline-label span:hover {
-  background: rgba(124, 58, 237, 0.75);
-}
-.city-outline-label span.sel {
-  color: #fff;
-  font-size: 15px;
-  background: #7c3aed;
-  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.6);
+  cursor: default;
 }
 .region-tooltip {
   background: rgba(15, 23, 42, 0.85);
