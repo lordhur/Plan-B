@@ -12,6 +12,7 @@ import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { AlbumsSection } from '@/components/profile/AlbumsSection'
 import { FriendButton } from '@/components/friends/FriendButton'
 
 /** PROFIL PUBLIC d'un autre utilisateur. */
@@ -121,6 +122,9 @@ export default function PublicProfilePage() {
               ))}
             </div>
           )}
+
+          {/* Albums photos personnels */}
+          <AlbumsSection userId={profile.id} isMe={!!profile.isMe} />
 
           {/* Vidéo de présentation */}
           {profile.videoUrl && (

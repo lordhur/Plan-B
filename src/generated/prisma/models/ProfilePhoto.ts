@@ -40,6 +40,8 @@ export type ProfilePhotoMinAggregateOutputType = {
   url: string | null
   isPrimary: boolean | null
   order: number | null
+  source: string | null
+  albumId: string | null
   createdAt: Date | null
 }
 
@@ -49,6 +51,8 @@ export type ProfilePhotoMaxAggregateOutputType = {
   url: string | null
   isPrimary: boolean | null
   order: number | null
+  source: string | null
+  albumId: string | null
   createdAt: Date | null
 }
 
@@ -58,6 +62,8 @@ export type ProfilePhotoCountAggregateOutputType = {
   url: number
   isPrimary: number
   order: number
+  source: number
+  albumId: number
   createdAt: number
   _all: number
 }
@@ -77,6 +83,8 @@ export type ProfilePhotoMinAggregateInputType = {
   url?: true
   isPrimary?: true
   order?: true
+  source?: true
+  albumId?: true
   createdAt?: true
 }
 
@@ -86,6 +94,8 @@ export type ProfilePhotoMaxAggregateInputType = {
   url?: true
   isPrimary?: true
   order?: true
+  source?: true
+  albumId?: true
   createdAt?: true
 }
 
@@ -95,6 +105,8 @@ export type ProfilePhotoCountAggregateInputType = {
   url?: true
   isPrimary?: true
   order?: true
+  source?: true
+  albumId?: true
   createdAt?: true
   _all?: true
 }
@@ -191,6 +203,8 @@ export type ProfilePhotoGroupByOutputType = {
   url: string
   isPrimary: boolean
   order: number
+  source: string
+  albumId: string | null
   createdAt: Date
   _count: ProfilePhotoCountAggregateOutputType | null
   _avg: ProfilePhotoAvgAggregateOutputType | null
@@ -223,8 +237,11 @@ export type ProfilePhotoWhereInput = {
   url?: Prisma.StringFilter<"ProfilePhoto"> | string
   isPrimary?: Prisma.BoolFilter<"ProfilePhoto"> | boolean
   order?: Prisma.IntFilter<"ProfilePhoto"> | number
+  source?: Prisma.StringFilter<"ProfilePhoto"> | string
+  albumId?: Prisma.StringNullableFilter<"ProfilePhoto"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProfilePhoto"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  album?: Prisma.XOR<Prisma.PhotoAlbumNullableScalarRelationFilter, Prisma.PhotoAlbumWhereInput> | null
 }
 
 export type ProfilePhotoOrderByWithRelationInput = {
@@ -233,8 +250,11 @@ export type ProfilePhotoOrderByWithRelationInput = {
   url?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
+  album?: Prisma.PhotoAlbumOrderByWithRelationInput
 }
 
 export type ProfilePhotoWhereUniqueInput = Prisma.AtLeast<{
@@ -246,8 +266,11 @@ export type ProfilePhotoWhereUniqueInput = Prisma.AtLeast<{
   url?: Prisma.StringFilter<"ProfilePhoto"> | string
   isPrimary?: Prisma.BoolFilter<"ProfilePhoto"> | boolean
   order?: Prisma.IntFilter<"ProfilePhoto"> | number
+  source?: Prisma.StringFilter<"ProfilePhoto"> | string
+  albumId?: Prisma.StringNullableFilter<"ProfilePhoto"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProfilePhoto"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  album?: Prisma.XOR<Prisma.PhotoAlbumNullableScalarRelationFilter, Prisma.PhotoAlbumWhereInput> | null
 }, "id">
 
 export type ProfilePhotoOrderByWithAggregationInput = {
@@ -256,6 +279,8 @@ export type ProfilePhotoOrderByWithAggregationInput = {
   url?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  albumId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.ProfilePhotoCountOrderByAggregateInput
   _avg?: Prisma.ProfilePhotoAvgOrderByAggregateInput
@@ -273,6 +298,8 @@ export type ProfilePhotoScalarWhereWithAggregatesInput = {
   url?: Prisma.StringWithAggregatesFilter<"ProfilePhoto"> | string
   isPrimary?: Prisma.BoolWithAggregatesFilter<"ProfilePhoto"> | boolean
   order?: Prisma.IntWithAggregatesFilter<"ProfilePhoto"> | number
+  source?: Prisma.StringWithAggregatesFilter<"ProfilePhoto"> | string
+  albumId?: Prisma.StringNullableWithAggregatesFilter<"ProfilePhoto"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"ProfilePhoto"> | Date | string
 }
 
@@ -281,8 +308,10 @@ export type ProfilePhotoCreateInput = {
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
   createdAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutProfilePhotosInput
+  album?: Prisma.PhotoAlbumCreateNestedOneWithoutPhotosInput
 }
 
 export type ProfilePhotoUncheckedCreateInput = {
@@ -291,6 +320,8 @@ export type ProfilePhotoUncheckedCreateInput = {
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
+  albumId?: string | null
   createdAt?: Date | string
 }
 
@@ -299,8 +330,10 @@ export type ProfilePhotoUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutProfilePhotosNestedInput
+  album?: Prisma.PhotoAlbumUpdateOneWithoutPhotosNestedInput
 }
 
 export type ProfilePhotoUncheckedUpdateInput = {
@@ -309,6 +342,8 @@ export type ProfilePhotoUncheckedUpdateInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -318,6 +353,8 @@ export type ProfilePhotoCreateManyInput = {
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
+  albumId?: string | null
   createdAt?: Date | string
 }
 
@@ -326,6 +363,7 @@ export type ProfilePhotoUpdateManyMutationInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -335,6 +373,8 @@ export type ProfilePhotoUncheckedUpdateManyInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -354,6 +394,8 @@ export type ProfilePhotoCountOrderByAggregateInput = {
   url?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -367,6 +409,8 @@ export type ProfilePhotoMaxOrderByAggregateInput = {
   url?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -376,6 +420,8 @@ export type ProfilePhotoMinOrderByAggregateInput = {
   url?: Prisma.SortOrder
   isPrimary?: Prisma.SortOrder
   order?: Prisma.SortOrder
+  source?: Prisma.SortOrder
+  albumId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -425,12 +471,56 @@ export type ProfilePhotoUncheckedUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.ProfilePhotoScalarWhereInput | Prisma.ProfilePhotoScalarWhereInput[]
 }
 
+export type ProfilePhotoCreateNestedManyWithoutAlbumInput = {
+  create?: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput> | Prisma.ProfilePhotoCreateWithoutAlbumInput[] | Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput | Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput[]
+  createMany?: Prisma.ProfilePhotoCreateManyAlbumInputEnvelope
+  connect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+}
+
+export type ProfilePhotoUncheckedCreateNestedManyWithoutAlbumInput = {
+  create?: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput> | Prisma.ProfilePhotoCreateWithoutAlbumInput[] | Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput | Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput[]
+  createMany?: Prisma.ProfilePhotoCreateManyAlbumInputEnvelope
+  connect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+}
+
+export type ProfilePhotoUpdateManyWithoutAlbumNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput> | Prisma.ProfilePhotoCreateWithoutAlbumInput[] | Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput | Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput[]
+  upsert?: Prisma.ProfilePhotoUpsertWithWhereUniqueWithoutAlbumInput | Prisma.ProfilePhotoUpsertWithWhereUniqueWithoutAlbumInput[]
+  createMany?: Prisma.ProfilePhotoCreateManyAlbumInputEnvelope
+  set?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  disconnect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  delete?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  connect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  update?: Prisma.ProfilePhotoUpdateWithWhereUniqueWithoutAlbumInput | Prisma.ProfilePhotoUpdateWithWhereUniqueWithoutAlbumInput[]
+  updateMany?: Prisma.ProfilePhotoUpdateManyWithWhereWithoutAlbumInput | Prisma.ProfilePhotoUpdateManyWithWhereWithoutAlbumInput[]
+  deleteMany?: Prisma.ProfilePhotoScalarWhereInput | Prisma.ProfilePhotoScalarWhereInput[]
+}
+
+export type ProfilePhotoUncheckedUpdateManyWithoutAlbumNestedInput = {
+  create?: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput> | Prisma.ProfilePhotoCreateWithoutAlbumInput[] | Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput[]
+  connectOrCreate?: Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput | Prisma.ProfilePhotoCreateOrConnectWithoutAlbumInput[]
+  upsert?: Prisma.ProfilePhotoUpsertWithWhereUniqueWithoutAlbumInput | Prisma.ProfilePhotoUpsertWithWhereUniqueWithoutAlbumInput[]
+  createMany?: Prisma.ProfilePhotoCreateManyAlbumInputEnvelope
+  set?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  disconnect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  delete?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  connect?: Prisma.ProfilePhotoWhereUniqueInput | Prisma.ProfilePhotoWhereUniqueInput[]
+  update?: Prisma.ProfilePhotoUpdateWithWhereUniqueWithoutAlbumInput | Prisma.ProfilePhotoUpdateWithWhereUniqueWithoutAlbumInput[]
+  updateMany?: Prisma.ProfilePhotoUpdateManyWithWhereWithoutAlbumInput | Prisma.ProfilePhotoUpdateManyWithWhereWithoutAlbumInput[]
+  deleteMany?: Prisma.ProfilePhotoScalarWhereInput | Prisma.ProfilePhotoScalarWhereInput[]
+}
+
 export type ProfilePhotoCreateWithoutUserInput = {
   id?: string
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
   createdAt?: Date | string
+  album?: Prisma.PhotoAlbumCreateNestedOneWithoutPhotosInput
 }
 
 export type ProfilePhotoUncheckedCreateWithoutUserInput = {
@@ -438,6 +528,8 @@ export type ProfilePhotoUncheckedCreateWithoutUserInput = {
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
+  albumId?: string | null
   createdAt?: Date | string
 }
 
@@ -476,7 +568,55 @@ export type ProfilePhotoScalarWhereInput = {
   url?: Prisma.StringFilter<"ProfilePhoto"> | string
   isPrimary?: Prisma.BoolFilter<"ProfilePhoto"> | boolean
   order?: Prisma.IntFilter<"ProfilePhoto"> | number
+  source?: Prisma.StringFilter<"ProfilePhoto"> | string
+  albumId?: Prisma.StringNullableFilter<"ProfilePhoto"> | string | null
   createdAt?: Prisma.DateTimeFilter<"ProfilePhoto"> | Date | string
+}
+
+export type ProfilePhotoCreateWithoutAlbumInput = {
+  id?: string
+  url: string
+  isPrimary?: boolean
+  order?: number
+  source?: string
+  createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutProfilePhotosInput
+}
+
+export type ProfilePhotoUncheckedCreateWithoutAlbumInput = {
+  id?: string
+  userId: string
+  url: string
+  isPrimary?: boolean
+  order?: number
+  source?: string
+  createdAt?: Date | string
+}
+
+export type ProfilePhotoCreateOrConnectWithoutAlbumInput = {
+  where: Prisma.ProfilePhotoWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput>
+}
+
+export type ProfilePhotoCreateManyAlbumInputEnvelope = {
+  data: Prisma.ProfilePhotoCreateManyAlbumInput | Prisma.ProfilePhotoCreateManyAlbumInput[]
+  skipDuplicates?: boolean
+}
+
+export type ProfilePhotoUpsertWithWhereUniqueWithoutAlbumInput = {
+  where: Prisma.ProfilePhotoWhereUniqueInput
+  update: Prisma.XOR<Prisma.ProfilePhotoUpdateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedUpdateWithoutAlbumInput>
+  create: Prisma.XOR<Prisma.ProfilePhotoCreateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedCreateWithoutAlbumInput>
+}
+
+export type ProfilePhotoUpdateWithWhereUniqueWithoutAlbumInput = {
+  where: Prisma.ProfilePhotoWhereUniqueInput
+  data: Prisma.XOR<Prisma.ProfilePhotoUpdateWithoutAlbumInput, Prisma.ProfilePhotoUncheckedUpdateWithoutAlbumInput>
+}
+
+export type ProfilePhotoUpdateManyWithWhereWithoutAlbumInput = {
+  where: Prisma.ProfilePhotoScalarWhereInput
+  data: Prisma.XOR<Prisma.ProfilePhotoUpdateManyMutationInput, Prisma.ProfilePhotoUncheckedUpdateManyWithoutAlbumInput>
 }
 
 export type ProfilePhotoCreateManyUserInput = {
@@ -484,6 +624,8 @@ export type ProfilePhotoCreateManyUserInput = {
   url: string
   isPrimary?: boolean
   order?: number
+  source?: string
+  albumId?: string | null
   createdAt?: Date | string
 }
 
@@ -492,7 +634,9 @@ export type ProfilePhotoUpdateWithoutUserInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  album?: Prisma.PhotoAlbumUpdateOneWithoutPhotosNestedInput
 }
 
 export type ProfilePhotoUncheckedUpdateWithoutUserInput = {
@@ -500,6 +644,8 @@ export type ProfilePhotoUncheckedUpdateWithoutUserInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -508,6 +654,48 @@ export type ProfilePhotoUncheckedUpdateManyWithoutUserInput = {
   url?: Prisma.StringFieldUpdateOperationsInput | string
   isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
   order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  albumId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfilePhotoCreateManyAlbumInput = {
+  id?: string
+  userId: string
+  url: string
+  isPrimary?: boolean
+  order?: number
+  source?: string
+  createdAt?: Date | string
+}
+
+export type ProfilePhotoUpdateWithoutAlbumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutProfilePhotosNestedInput
+}
+
+export type ProfilePhotoUncheckedUpdateWithoutAlbumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type ProfilePhotoUncheckedUpdateManyWithoutAlbumInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  isPrimary?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  order?: Prisma.IntFieldUpdateOperationsInput | number
+  source?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -519,8 +707,11 @@ export type ProfilePhotoSelect<ExtArgs extends runtime.Types.Extensions.Internal
   url?: boolean
   isPrimary?: boolean
   order?: boolean
+  source?: boolean
+  albumId?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }, ExtArgs["result"]["profilePhoto"]>
 
 export type ProfilePhotoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -529,8 +720,11 @@ export type ProfilePhotoSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   isPrimary?: boolean
   order?: boolean
+  source?: boolean
+  albumId?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }, ExtArgs["result"]["profilePhoto"]>
 
 export type ProfilePhotoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -539,8 +733,11 @@ export type ProfilePhotoSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   url?: boolean
   isPrimary?: boolean
   order?: boolean
+  source?: boolean
+  albumId?: boolean
   createdAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }, ExtArgs["result"]["profilePhoto"]>
 
 export type ProfilePhotoSelectScalar = {
@@ -549,24 +746,30 @@ export type ProfilePhotoSelectScalar = {
   url?: boolean
   isPrimary?: boolean
   order?: boolean
+  source?: boolean
+  albumId?: boolean
   createdAt?: boolean
 }
 
-export type ProfilePhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "url" | "isPrimary" | "order" | "createdAt", ExtArgs["result"]["profilePhoto"]>
+export type ProfilePhotoOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "url" | "isPrimary" | "order" | "source" | "albumId" | "createdAt", ExtArgs["result"]["profilePhoto"]>
 export type ProfilePhotoInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }
 export type ProfilePhotoIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }
 export type ProfilePhotoIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  album?: boolean | Prisma.ProfilePhoto$albumArgs<ExtArgs>
 }
 
 export type $ProfilePhotoPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "ProfilePhoto"
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
+    album: Prisma.$PhotoAlbumPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -574,6 +777,8 @@ export type $ProfilePhotoPayload<ExtArgs extends runtime.Types.Extensions.Intern
     url: string
     isPrimary: boolean
     order: number
+    source: string
+    albumId: string | null
     createdAt: Date
   }, ExtArgs["result"]["profilePhoto"]>
   composites: {}
@@ -970,6 +1175,7 @@ readonly fields: ProfilePhotoFieldRefs;
 export interface Prisma__ProfilePhotoClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  album<T extends Prisma.ProfilePhoto$albumArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ProfilePhoto$albumArgs<ExtArgs>>): Prisma.Prisma__PhotoAlbumClient<runtime.Types.Result.GetResult<Prisma.$PhotoAlbumPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1004,6 +1210,8 @@ export interface ProfilePhotoFieldRefs {
   readonly url: Prisma.FieldRef<"ProfilePhoto", 'String'>
   readonly isPrimary: Prisma.FieldRef<"ProfilePhoto", 'Boolean'>
   readonly order: Prisma.FieldRef<"ProfilePhoto", 'Int'>
+  readonly source: Prisma.FieldRef<"ProfilePhoto", 'String'>
+  readonly albumId: Prisma.FieldRef<"ProfilePhoto", 'String'>
   readonly createdAt: Prisma.FieldRef<"ProfilePhoto", 'DateTime'>
 }
     
@@ -1403,6 +1611,25 @@ export type ProfilePhotoDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many ProfilePhotos to delete.
    */
   limit?: number
+}
+
+/**
+ * ProfilePhoto.album
+ */
+export type ProfilePhoto$albumArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PhotoAlbum
+   */
+  select?: Prisma.PhotoAlbumSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PhotoAlbum
+   */
+  omit?: Prisma.PhotoAlbumOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PhotoAlbumInclude<ExtArgs> | null
+  where?: Prisma.PhotoAlbumWhereInput
 }
 
 /**

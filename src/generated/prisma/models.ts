@@ -10,6 +10,8 @@
  */
 export type * from './models/User'
 export type * from './models/ProfilePhoto'
+export type * from './models/PhotoAlbum'
+export type * from './models/ConnectedAccount'
 export type * from './models/VerificationCode'
 export type * from './models/Interest'
 export type * from './models/Badge'

@@ -13,8 +13,11 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { SocialAuthButtons } from '@/components/auth/SocialAuthButtons'
+import { useLang } from '@/lib/i18n'
 
 function LoginForm() {
+  const { t: tl } = useLang()
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next') ?? '/'
@@ -84,13 +87,13 @@ function LoginForm() {
 
           <Button type="submit" className="w-full" disabled={login.isPending}>
             {login.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <LogIn className="h-4 w-4" aria-hidden />}
-            Se connecter
+            {tl('auth_login')}
           </Button>
 
           <p className="text-center text-sm text-fg-muted">
-            Pas encore de compte ?{' '}
+            {tl('auth_no_account')}{' '}
             <Link href="/register" className="font-semibold text-primary-600 hover:underline">
-              Inscription gratuite
+              {tl('auth_register')}
             </Link>
           </p>
 
@@ -98,6 +101,8 @@ function LoginForm() {
             🧪 Démo : <code className="font-semibold">thomas@planb.app</code> / <code className="font-semibold">planb1234</code>
           </p>
         </form>
+
+        <SocialAuthButtons label="login" />
       </CardContent>
     </Card>
   )

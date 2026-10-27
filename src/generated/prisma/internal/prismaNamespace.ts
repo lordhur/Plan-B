@@ -399,6 +399,8 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 export const ModelName = {
   User: 'User',
   ProfilePhoto: 'ProfilePhoto',
+  PhotoAlbum: 'PhotoAlbum',
+  ConnectedAccount: 'ConnectedAccount',
   VerificationCode: 'VerificationCode',
   Interest: 'Interest',
   Badge: 'Badge',
@@ -458,7 +460,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "profilePhoto" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "messageHide" | "userBlock" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
+    modelProps: "user" | "profilePhoto" | "photoAlbum" | "connectedAccount" | "verificationCode" | "interest" | "badge" | "userBadge" | "friendRequest" | "friendship" | "eventLike" | "eventCategory" | "event" | "eventCollaborator" | "eventParticipation" | "story" | "waitlistEntry" | "eventInvitation" | "eventChatMessage" | "conversation" | "conversationMember" | "messageHide" | "userBlock" | "directMessage" | "eventAlbum" | "media" | "mediaIdentification" | "userRating" | "report" | "carpoolOffer" | "carpoolRequest" | "page" | "pageFollow" | "interestGroup" | "groupMember" | "forumPost" | "forumReply" | "partner" | "partnerOffer" | "redeemedOffer" | "subscription" | "leaderboardEntry" | "notification" | "pushSubscription" | "advertisement" | "imageBlob" | "contactMessage" | "introCard"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -607,6 +609,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.ProfilePhotoCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.ProfilePhotoCountAggregateOutputType> | number
+        }
+      }
+    }
+    PhotoAlbum: {
+      payload: Prisma.$PhotoAlbumPayload<ExtArgs>
+      fields: Prisma.PhotoAlbumFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PhotoAlbumFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PhotoAlbumFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        findFirst: {
+          args: Prisma.PhotoAlbumFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PhotoAlbumFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        findMany: {
+          args: Prisma.PhotoAlbumFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>[]
+        }
+        create: {
+          args: Prisma.PhotoAlbumCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        createMany: {
+          args: Prisma.PhotoAlbumCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PhotoAlbumCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>[]
+        }
+        delete: {
+          args: Prisma.PhotoAlbumDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        update: {
+          args: Prisma.PhotoAlbumUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        deleteMany: {
+          args: Prisma.PhotoAlbumDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PhotoAlbumUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PhotoAlbumUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>[]
+        }
+        upsert: {
+          args: Prisma.PhotoAlbumUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PhotoAlbumPayload>
+        }
+        aggregate: {
+          args: Prisma.PhotoAlbumAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePhotoAlbum>
+        }
+        groupBy: {
+          args: Prisma.PhotoAlbumGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PhotoAlbumGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PhotoAlbumCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PhotoAlbumCountAggregateOutputType> | number
+        }
+      }
+    }
+    ConnectedAccount: {
+      payload: Prisma.$ConnectedAccountPayload<ExtArgs>
+      fields: Prisma.ConnectedAccountFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ConnectedAccountFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ConnectedAccountFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        findFirst: {
+          args: Prisma.ConnectedAccountFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ConnectedAccountFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        findMany: {
+          args: Prisma.ConnectedAccountFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>[]
+        }
+        create: {
+          args: Prisma.ConnectedAccountCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        createMany: {
+          args: Prisma.ConnectedAccountCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ConnectedAccountCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>[]
+        }
+        delete: {
+          args: Prisma.ConnectedAccountDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        update: {
+          args: Prisma.ConnectedAccountUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        deleteMany: {
+          args: Prisma.ConnectedAccountDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ConnectedAccountUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ConnectedAccountUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>[]
+        }
+        upsert: {
+          args: Prisma.ConnectedAccountUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ConnectedAccountPayload>
+        }
+        aggregate: {
+          args: Prisma.ConnectedAccountAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateConnectedAccount>
+        }
+        groupBy: {
+          args: Prisma.ConnectedAccountGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConnectedAccountGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ConnectedAccountCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ConnectedAccountCountAggregateOutputType> | number
         }
       }
     }
@@ -3954,10 +4104,40 @@ export const ProfilePhotoScalarFieldEnum = {
   url: 'url',
   isPrimary: 'isPrimary',
   order: 'order',
+  source: 'source',
+  albumId: 'albumId',
   createdAt: 'createdAt'
 } as const
 
 export type ProfilePhotoScalarFieldEnum = (typeof ProfilePhotoScalarFieldEnum)[keyof typeof ProfilePhotoScalarFieldEnum]
+
+
+export const PhotoAlbumScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  name: 'name',
+  coverUrl: 'coverUrl',
+  isPublic: 'isPublic',
+  createdAt: 'createdAt'
+} as const
+
+export type PhotoAlbumScalarFieldEnum = (typeof PhotoAlbumScalarFieldEnum)[keyof typeof PhotoAlbumScalarFieldEnum]
+
+
+export const ConnectedAccountScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  provider: 'provider',
+  providerUserId: 'providerUserId',
+  email: 'email',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
+  expiresAt: 'expiresAt',
+  photosSyncedAt: 'photosSyncedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type ConnectedAccountScalarFieldEnum = (typeof ConnectedAccountScalarFieldEnum)[keyof typeof ConnectedAccountScalarFieldEnum]
 
 
 export const VerificationCodeScalarFieldEnum = {
@@ -5264,6 +5444,8 @@ export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaC
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
   profilePhoto?: Prisma.ProfilePhotoOmit
+  photoAlbum?: Prisma.PhotoAlbumOmit
+  connectedAccount?: Prisma.ConnectedAccountOmit
   verificationCode?: Prisma.VerificationCodeOmit
   interest?: Prisma.InterestOmit
   badge?: Prisma.BadgeOmit

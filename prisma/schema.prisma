@@ -48,6 +48,8 @@ model User {
 
   // Photos de profil (une ou plusieurs)
   profilePhotos ProfilePhoto[]
+  photoAlbums   PhotoAlbum[]
+  connectedAccounts ConnectedAccount[]
   avatarUrl     String? // Photo principale
   videoUrl      String? // Vidéo de présentation
   stories       Story[]
@@ -185,8 +187,44 @@ model ProfilePhoto {
   url       String
   isPrimary Boolean  @default(false)
   order     Int      @default(0)
+  source    String   @default("upload") @db.VarChar(20) // upload | facebook | instagram
+  albumId   String?
+  album     PhotoAlbum? @relation(fields: [albumId], references: [id], onDelete: SetNull)
   createdAt DateTime @default(now())
 
+  @@index([userId])
+  @@index([albumId])
+}
+
+/** Albums photos personnels du profil. */
+model PhotoAlbum {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name      String   @db.VarChar(80)
+  coverUrl  String?
+  isPublic  Boolean  @default(true)
+  photos    ProfilePhoto[]
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+/** Compte social connecté (Google / Facebook / Instagram). */
+model ConnectedAccount {
+  id             String    @id @default(cuid())
+  userId         String
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider       String    @db.VarChar(20) // google | facebook | instagram
+  providerUserId String    @db.VarChar(191)
+  email          String?
+  accessToken    String?   @db.Text
+  refreshToken   String?   @db.Text
+  expiresAt      DateTime?
+  photosSyncedAt DateTime?
+  createdAt      DateTime  @default(now())
+
+  @@unique([provider, providerUserId])
   @@index([userId])
 }
 

@@ -154,4 +154,144 @@ export const albumsRouter = createTRPCRouter({
         event: m.album.event,
       }))
     }),
+  /** Mes albums personnels avec compte de photos et couverture. */
+  myAlbums: protectedProcedure.query(async ({ ctx }) => {
+    const albums = await prisma.photoAlbum.findMany({
+      where: { userId: ctx.user.id },
+      orderBy: { createdAt: 'desc' },
+      include: { photos: { orderBy: { order: 'asc' }, select: { id: true, url: true } } },
+    })
+    return albums.map((a) => ({
+      id: a.id,
+      name: a.name,
+      isPublic: a.isPublic,
+      createdAt: a.createdAt,
+      count: a.photos.length,
+      coverUrl: a.coverUrl ?? a.photos[0]?.url ?? null,
+    }))
+  }),
+
+  /** Créer un album personnel. */
+  createAlbum: protectedProcedure
+    .input(z.object({ name: z.string().min(1).max(80), isPublic: z.boolean().default(true) }))
+    .mutation(async ({ input, ctx }) =>
+      prisma.photoAlbum.create({
+        data: { userId: ctx.user.id, name: input.name.trim(), isPublic: input.isPublic },
+        select: { id: true, name: true, isPublic: true, createdAt: true },
+      }),
+    ),
+
+  /** Renommer / visibilité d'un album. */
+  updateAlbum: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        name: z.string().min(1).max(80).optional(),
+        isPublic: z.boolean().optional(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const album = await prisma.photoAlbum.findFirst({ where: { id: input.id, userId: ctx.user.id } })
+      if (!album) throw new TRPCError({ code: 'NOT_FOUND' })
+      return prisma.photoAlbum.update({
+        where: { id: input.id },
+        data: {
+          ...(input.name !== undefined ? { name: input.name.trim() } : {}),
+          ...(input.isPublic !== undefined ? { isPublic: input.isPublic } : {}),
+        },
+        select: { id: true, name: true, isPublic: true },
+      })
+    }),
+
+  /** Supprimer un album (les photos restent dans le profil). */
+  deleteAlbum: protectedProcedure.input(z.object({ id: z.string() })).mutation(async ({ input, ctx }) => {
+    const album = await prisma.photoAlbum.findFirst({ where: { id: input.id, userId: ctx.user.id } })
+    if (!album) throw new TRPCError({ code: 'NOT_FOUND' })
+    await prisma.photoAlbum.delete({ where: { id: input.id } })
+    return { ok: true }
+  }),
+
+  /** Contenu d'un album (le mien, ou public si celui d'un autre membre). */
+  albumPhotos: publicProcedure.input(z.object({ id: z.string() })).query(async ({ input, ctx }) => {
+    const album = await prisma.photoAlbum.findUnique({
+      where: { id: input.id },
+      include: { photos: { orderBy: { order: 'asc' }, select: { id: true, url: true, createdAt: true } } },
+    })
+    if (!album || (!album.isPublic && album.userId !== ctx.user?.id)) {
+      throw new TRPCError({ code: 'NOT_FOUND' })
+    }
+    return {
+      id: album.id,
+      name: album.name,
+      isPublic: album.isPublic,
+      mine: album.userId === ctx.user?.id,
+      photos: album.photos,
+    }
+  }),
+
+  /** Ajouter une photo (URL déjà téléversée) à un album personnel. */
+  addPhotoToAlbum: protectedProcedure
+    .input(z.object({ albumId: z.string(), url: z.string().url().max(600) }))
+    .mutation(async ({ input, ctx }) => {
+      const album = await prisma.photoAlbum.findFirst({
+        where: { id: input.albumId, userId: ctx.user.id },
+      })
+      if (!album) throw new TRPCError({ code: 'NOT_FOUND' })
+      const last = await prisma.profilePhoto.findFirst({
+        where: { userId: ctx.user.id },
+        orderBy: { order: 'desc' },
+        select: { order: true },
+      })
+      const photo = await prisma.profilePhoto.create({
+        data: {
+          userId: ctx.user.id,
+          url: input.url,
+          albumId: album.id,
+          order: (last?.order ?? 0) + 1,
+        },
+        select: { id: true, url: true, albumId: true },
+      })
+      if (!album.coverUrl) {
+        await prisma.photoAlbum.update({ where: { id: album.id }, data: { coverUrl: input.url } })
+      }
+      return photo
+    }),
+
+  /** Déplacer une photo vers un autre album (null = hors album). */
+  movePhoto: protectedProcedure
+    .input(z.object({ photoId: z.string(), albumId: z.string().nullable() }))
+    .mutation(async ({ input, ctx }) => {
+      const photo = await prisma.profilePhoto.findFirst({
+        where: { id: input.photoId, userId: ctx.user.id },
+      })
+      if (!photo) throw new TRPCError({ code: 'NOT_FOUND' })
+      if (input.albumId) {
+        const album = await prisma.photoAlbum.findFirst({
+          where: { id: input.albumId, userId: ctx.user.id },
+        })
+        if (!album) throw new TRPCError({ code: 'NOT_FOUND' })
+      }
+      await prisma.profilePhoto.update({
+        where: { id: input.photoId },
+        data: { albumId: input.albumId },
+      })
+      return { ok: true }
+    }),
+
+  /** Albums publics d'un membre (vue profil). */
+  memberAlbums: publicProcedure.input(z.object({ userId: z.string() })).query(async ({ input }) => {
+    const albums = await prisma.photoAlbum.findMany({
+      where: { userId: input.userId, isPublic: true },
+      orderBy: { createdAt: 'desc' },
+      include: { photos: { orderBy: { order: 'asc' }, select: { id: true, url: true } } },
+    })
+    return albums.map((a) => ({
+      id: a.id,
+      name: a.name,
+      count: a.photos.length,
+      coverUrl: a.coverUrl ?? a.photos[0]?.url ?? null,
+      createdAt: a.createdAt,
+    }))
+  }),
+
 })
