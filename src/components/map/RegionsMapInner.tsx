@@ -273,25 +273,212 @@ const TOP_CITIES: [string, number, number, number, string][] = [
   ['Florac-Trois-Rivières', 44.3264, 3.5931, 2120, '48'],
 ]
 
-/** Test d'appartenance d'un point à un anneau (ray casting) — place les noms au bon endroit. */
-function pointInRing(lat: number, lon: number, ring: L.LatLng[]): boolean {
+// ------------------------------------------------------------------
+// Étiquettes de zones (régions / départements)
+// Ancrage « polylabel » : le nom est posé au point intérieur le plus éloigné
+// des bords, puis orienté sur l'axe principal de la zone → le nom colle à
+// l'emplacement réel de la région / du département (spec).
+// ------------------------------------------------------------------
+
+type XY = { x: number; y: number }
+
+/** Repère local métrique (degrés × cos φ) : calculs stables et sans distorsion. */
+type AreaFrame = {
+  ring: XY[]
+  pole: XY
+  angleDeg: number
+  toXY: (lat: number, lng: number) => XY
+  toLatLng: (p: XY) => L.LatLng
+}
+
+/** Distance au carré d'un point à un segment. */
+function segDistSq(px: number, py: number, ax: number, ay: number, bx: number, by: number): number {
+  let x = ax
+  let y = ay
+  let dx = bx - x
+  let dy = by - y
+  if (dx !== 0 || dy !== 0) {
+    const t = ((px - x) * dx + (py - y) * dy) / (dx * dx + dy * dy)
+    if (t > 1) {
+      x = bx
+      y = by
+    } else if (t > 0) {
+      x += dx * t
+      y += dy * t
+    }
+  }
+  dx = px - x
+  dy = py - y
+  return dx * dx + dy * dy
+}
+
+/** Distance signée au bord du polygone : positive à l'intérieur. */
+function polygonDist(px: number, py: number, ring: XY[]): number {
+  let minSq = Infinity
   let inside = false
   for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
     const a = ring[i]!
     const b = ring[j]!
-    const crosses =
-      a.lat > lat !== b.lat > lat &&
-      lon < ((b.lng - a.lng) * (lat - a.lat)) / (b.lat - a.lat || 1e-9) + a.lng
-    if (crosses) inside = !inside
+    minSq = Math.min(minSq, segDistSq(px, py, a.x, a.y, b.x, b.y))
+    if (a.y > py !== b.y > py && px < ((b.x - a.x) * (py - a.y)) / (b.y - a.y || 1e-12) + a.x) {
+      inside = !inside
+    }
   }
-  return inside
+  return (inside ? 1 : -1) * Math.sqrt(minSq)
 }
 
 /**
- * Centre « utile » d'une région / d'un département : le point intérieur le plus
- * proche du centre du cadre (évite de poser le nom en mer ou sur une île lointaine).
+ * Pôle d'inaccessibilité (algorithme « polylabel » de Mapbox) : point intérieur
+ * le plus éloigné des bords. C'est l'endroit naturel d'un nom de zone.
  */
-function areaCenter(layer: L.Layer): L.LatLng | null {
+function poleOfInaccessibility(ring: XY[], precision = 0.0004): XY {
+  let minX = Infinity
+  let minY = Infinity
+  let maxX = -Infinity
+  let maxY = -Infinity
+  for (const p of ring) {
+    if (p.x < minX) minX = p.x
+    if (p.x > maxX) maxX = p.x
+    if (p.y < minY) minY = p.y
+    if (p.y > maxY) maxY = p.y
+  }
+  const width = maxX - minX
+  const height = maxY - minY
+  if (!(width > 0) || !(height > 0)) return { x: (minX + maxX) / 2, y: (minY + maxY) / 2 }
+
+  type Cell = { x: number; y: number; h: number; d: number; max: number }
+
+  // File de priorité binaire (les cellules les plus prometteuses d'abord).
+  const heap: Cell[] = []
+  const push = (c: Cell) => {
+    heap.push(c)
+    let i = heap.length - 1
+    while (i > 0) {
+      const parent = (i - 1) >> 1
+      if (heap[parent]!.max >= heap[i]!.max) break
+      ;[heap[parent], heap[i]] = [heap[i]!, heap[parent]!]
+      i = parent
+    }
+  }
+  const pop = (): Cell | undefined => {
+    const top = heap[0]
+    const last = heap.pop()
+    if (heap.length > 0 && last) {
+      heap[0] = last
+      let i = 0
+      for (;;) {
+        const l = 2 * i + 1
+        const r = l + 1
+        let best = i
+        if (l < heap.length && heap[l]!.max > heap[best]!.max) best = l
+        if (r < heap.length && heap[r]!.max > heap[best]!.max) best = r
+        if (best === i) break
+        ;[heap[best], heap[i]] = [heap[i]!, heap[best]!]
+        i = best
+      }
+    }
+    return top
+  }
+
+  const cellSize = Math.min(width, height)
+  const half = cellSize / 2
+  for (let x = minX; x < maxX; x += cellSize) {
+    for (let y = minY; y < maxY; y += cellSize) {
+      const cx = x + half
+      const cy = y + half
+      const d = polygonDist(cx, cy, ring)
+      push({ x: cx, y: cy, h: half, d, max: d + half * Math.SQRT2 })
+    }
+  }
+
+  let best: XY = { x: minX + width / 2, y: minY + height / 2 }
+  let bestDist = polygonDist(best.x, best.y, ring)
+
+  let cell = pop()
+  while (cell) {
+    if (cell.d > bestDist) {
+      bestDist = cell.d
+      best = { x: cell.x, y: cell.y }
+    }
+    if (cell.max - bestDist > precision) {
+      const h = cell.h / 2
+      const children: XY[] = [
+        { x: cell.x - h, y: cell.y - h },
+        { x: cell.x + h, y: cell.y - h },
+        { x: cell.x - h, y: cell.y + h },
+        { x: cell.x + h, y: cell.y + h },
+      ]
+      for (const c of children) {
+        const d = polygonDist(c.x, c.y, ring)
+        push({ x: c.x, y: c.y, h, d, max: d + h * Math.SQRT2 })
+      }
+    }
+    cell = pop()
+  }
+  return best
+}
+
+/**
+ * Axe principal de la zone (analyse en composantes principales) : renvoie
+ * l'angle en degrés (entre −90° et 90°) et l'élongation de la forme.
+ */
+function principalAxis(ring: XY[]): { angleDeg: number; elongation: number } {
+  const n = ring.length
+  if (n < 3) return { angleDeg: 0, elongation: 1 }
+  let mx = 0
+  let my = 0
+  for (const p of ring) {
+    mx += p.x
+    my += p.y
+  }
+  mx /= n
+  my /= n
+  let cxx = 0
+  let cyy = 0
+  let cxy = 0
+  for (const p of ring) {
+    const dx = p.x - mx
+    const dy = p.y - my
+    cxx += dx * dx
+    cyy += dy * dy
+    cxy += dx * dy
+  }
+  const theta = 0.5 * Math.atan2(2 * cxy, cxx - cyy)
+  // Élongation : étendue le long de l'axe / étendue perpendiculaire.
+  const cos = Math.cos(theta)
+  const sin = Math.sin(theta)
+  let minA = Infinity
+  let maxA = -Infinity
+  let minB = Infinity
+  let maxB = -Infinity
+  for (const p of ring) {
+    const dx = p.x - mx
+    const dy = p.y - my
+    const a = dx * cos + dy * sin
+    const b = -dx * sin + dy * cos
+    if (a < minA) minA = a
+    if (a > maxA) maxA = a
+    if (b < minB) minB = b
+    if (b > maxB) maxB = b
+  }
+  const elongation = (maxA - minA) / Math.max(1e-9, maxB - minB)
+  let angleDeg = (theta * 180) / Math.PI
+  while (angleDeg > 90) angleDeg -= 180
+  while (angleDeg < -90) angleDeg += 180
+  return { angleDeg, elongation }
+}
+
+/** Réduit le nombre de sommets (le pôle reste quasi identique) pour rester fluide. */
+function decimate(ring: XY[], maxPoints = 420): XY[] {
+  if (ring.length <= maxPoints) return ring
+  const step = Math.ceil(ring.length / maxPoints)
+  const out: XY[] = []
+  for (let i = 0; i < ring.length; i += step) out.push(ring[i]!)
+  return out
+}
+
+/** Géométrie d'ancrage d'une zone : plus grand anneau, pôle et orientation. */
+function areaFrame(layer: L.Layer): AreaFrame | null {
   try {
     const poly = layer as L.Polygon
     const raw = typeof poly.getLatLngs === 'function' ? poly.getLatLngs() : null
@@ -314,35 +501,28 @@ function areaCenter(layer: L.Layer): L.LatLng | null {
         outer = ring
       }
     }
-    if (!outer) return poly.getBounds?.().getCenter() ?? null
+    if (!outer) return null
 
     const bb = L.latLngBounds(outer)
-    const center = bb.getCenter()
-    if (pointInRing(center.lat, center.lng, outer)) return center
+    const lat0 = bb.getCenter().lat
+    const lng0 = bb.getCenter().lng
+    const k = Math.cos((lat0 * Math.PI) / 180)
+    const toXY = (lat: number, lng: number): XY => ({ x: (lng - lng0) * k, y: lat - lat0 })
+    const toLatLng = (p: XY): L.LatLng => L.latLng(lat0 + p.y, lng0 + (k ? p.x / k : p.x))
 
-    // Centre hors des terres (littoral, baie) : échantillonnage d'une grille.
-    let found: L.LatLng | null = null
-    let bestDist = Infinity
-    const N = 14
-    for (let i = 1; i < N; i++) {
-      for (let j = 1; j < N; j++) {
-        const lat = bb.getSouth() + ((bb.getNorth() - bb.getSouth()) * i) / N
-        const lng = bb.getWest() + ((bb.getEast() - bb.getWest()) * j) / N
-        if (!pointInRing(lat, lng, outer)) continue
-        const d = (lat - center.lat) ** 2 + (lng - center.lng) ** 2
-        if (d < bestDist) {
-          bestDist = d
-          found = L.latLng(lat, lng)
-        }
-      }
-    }
-    return found ?? center
+    const ring = decimate(outer.map((ll) => toXY(ll.lat, ll.lng)))
+    const pole = poleOfInaccessibility(ring)
+    const { angleDeg, elongation } = principalAxis(ring)
+    // Rotation seulement pour les zones nettement allongées, plafonnée pour rester lisible.
+    const rotated = elongation >= 1.45 ? Math.max(-25, Math.min(25, angleDeg)) : 0
+
+    return { ring, pole, angleDeg: rotated, toXY, toLatLng }
   } catch {
     return null
   }
 }
 
-/** Nom de région / de département posé au centre de la zone (jamais cliquable). */
+/** Nom de région / de département — orienté sur l'axe de la zone (jamais cliquable). */
 function areaLabelIcon(
   name: string,
   kind: 'region' | 'dept',
@@ -350,13 +530,15 @@ function areaLabelIcon(
   maxWidth: number,
   dx = 0,
   dy = 0,
+  angleDeg = 0,
 ): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
+  const rotate = angleDeg ? ` rotate(${angleDeg}deg)` : ''
   return L.divIcon({
     className: 'area-label',
     html:
       `<span class="area-name ${kind}" style="font-size:${fontSize}px;max-width:${maxWidth}px;` +
-      `transform:translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))">${safe}</span>`,
+      `transform:translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px))${rotate}">${safe}</span>`,
     iconSize: undefined,
     iconAnchor: [0, 0],
   })
@@ -386,33 +568,49 @@ function sortedFeatures(
 type LabelRect = { x: number; y: number; w: number; h: number }
 
 /**
- * Placeur d'étiquettes de zones : évite que deux noms se chevauchent (décalage
- * autour du centre, comme pour les villes) et laisse un écart de 5 px minimum.
+ * Placeur d'étiquettes de zones : le nom reste DANS sa zone (décalages testés
+ * un par un) et garde 5 px avec les autres noms. Les positions sont essayées
+ * de la plus naturelle (pôle d'inaccessibilité, sans décalage) à la plus éloignée.
  */
 function createLabelPlacer(map: L.Map) {
   const placed: LabelRect[] = []
   const gap = 5
-  return (center: L.LatLng, text: string, fontSize: number, maxWidth: number) => {
-    const p = map.latLngToContainerPoint(center)
+  return (frame: AreaFrame, text: string, fontSize: number, maxWidth: number) => {
+    const anchor = frame.toLatLng(frame.pole)
+    const p = map.latLngToContainerPoint(anchor)
     const rawW = text.length * fontSize * 0.6
     const w = Math.min(maxWidth, Math.max(22, rawW))
     const lines = Math.max(1, Math.ceil(rawW / maxWidth))
     const h = lines * fontSize * 1.18 + 2
+    // Un nom sur plusieurs lignes n'est jamais incliné (lisibilité) : l'axe de la
+    // zone ne sert qu'aux noms tenant sur une ligne.
+    const angle = lines > 1 ? 0 : frame.angleDeg
+    const rad = (angle * Math.PI) / 180
+    const ac = Math.abs(Math.cos(rad))
+    const as = Math.abs(Math.sin(rad))
+    const bw = w * ac + h * as
+    const bh = w * as + h * ac
+
     const offsets: [number, number][] = [
       [0, 0],
-      [0, -h],
-      [0, h],
-      [w / 2, 0],
-      [-w / 2, 0],
-      [w / 2, -h],
-      [-w / 2, -h],
-      [w / 2, h],
-      [-w / 2, h],
-      [0, -2 * h],
-      [0, 2 * h],
+      [0, -h * 0.55],
+      [0, h * 0.55],
+      [-w * 0.25, 0],
+      [w * 0.25, 0],
+      [0, -h * 1.1],
+      [0, h * 1.1],
+      [-w * 0.35, -h * 0.6],
+      [w * 0.35, -h * 0.6],
+      [-w * 0.35, h * 0.6],
+      [w * 0.35, h * 0.6],
     ]
+
     for (const [dx, dy] of offsets) {
-      const r: LabelRect = { x: p.x + dx - w / 2, y: p.y + dy - h / 2, w, h }
+      // Le nom doit rester à l'intérieur de sa propre zone (aligné sur son emplacement).
+      const ll = map.containerPointToLatLng([p.x + dx, p.y + dy])
+      const local = frame.toXY(ll.lat, ll.lng)
+      if (polygonDist(local.x, local.y, frame.ring) <= 0) continue
+      const r: LabelRect = { x: p.x + dx - bw / 2, y: p.y + dy - bh / 2, w: bw, h: bh }
       const hit = placed.some(
         (o) =>
           r.x < o.x + o.w + gap &&
@@ -422,7 +620,7 @@ function createLabelPlacer(map: L.Map) {
       )
       if (!hit) {
         placed.push(r)
-        return { dx, dy }
+        return { dx, dy, angleDeg: angle }
       }
     }
     return null
@@ -431,27 +629,44 @@ function createLabelPlacer(map: L.Map) {
 
 type LabelPlacer = ReturnType<typeof createLabelPlacer>
 
-/** Ajoute le nom au centre d'une zone (région ou département). */
-function addAreaLabel(
-  group: L.LayerGroup,
-  layer: L.Layer,
-  name: string,
-  kind: 'region' | 'dept',
-  place: LabelPlacer,
-): void {
-  const center = areaCenter(layer)
-  if (!center) return
-  const fontSize = kind === 'region' ? 11 : 10.5
-  const maxWidth = kind === 'region' ? 104 : 92
-  // Chevauchement impossible à éviter : le nom reste accessible au survol.
-  const pos = place(center, name, fontSize, maxWidth)
-  if (!pos) return
-  L.marker(center, {
-    icon: areaLabelIcon(name, kind, fontSize, maxWidth, pos.dx, pos.dy),
-    interactive: false,
-    keyboard: false,
-    zIndexOffset: -200,
-  }).addTo(group)
+/** Une zone dont le nom doit être posé (région ou département). */
+type AreaLabelItem = { frame: AreaFrame; name: string; kind: 'region' | 'dept' }
+
+/** Géométrie d'ancrage mémorisée (le pôle ne dépend pas du zoom). */
+const frameCache = new Map<string, AreaFrame>()
+function cachedAreaFrame(key: string, layer: L.Layer): AreaFrame | null {
+  const hit = frameCache.get(key)
+  if (hit) return hit
+  const frame = areaFrame(layer)
+  if (frame) frameCache.set(key, frame)
+  return frame
+}
+
+/**
+ * Pose les noms sur le calque, pour le zoom courant : le nom est ancré au cœur
+ * de sa zone puis légèrement décalé si nécessaire — mais TOUJOURS à l'intérieur
+ * de sa propre zone, pour rester aligné sur son emplacement.
+ * Recalculé à chaque zoom : les noms restent donc bien répartis.
+ */
+function placeAreaLabels(group: L.LayerGroup, map: L.Map, items: AreaLabelItem[]): void {
+  group.clearLayers()
+  const place: LabelPlacer = createLabelPlacer(map)
+  for (const { frame, name, kind } of items) {
+    const maxWidth = kind === 'region' ? 96 : 84
+    // On réduit la police avant d'abandonner : un maximum de noms reste affiché.
+    const sizes = kind === 'region' ? [11, 10, 9] : [10.5, 9.5, 8.5]
+    for (const fontSize of sizes) {
+      const pos = place(frame, name, fontSize, maxWidth)
+      if (!pos) continue
+      L.marker(frame.toLatLng(frame.pole), {
+        icon: areaLabelIcon(name, kind, fontSize, maxWidth, pos.dx, pos.dy, pos.angleDeg),
+        interactive: false,
+        keyboard: false,
+        zIndexOffset: -200,
+      }).addTo(group)
+      break
+    }
+  }
 }
 
 type Level = 'regions' | 'depts' | 'cities'
@@ -596,6 +811,8 @@ export function RegionsMapInner() {
   const mapRef = useRef<L.Map | null>(null)
   const layersRef = useRef<L.LayerGroup | null>(null)
   const cityLayerRef = useRef<L.LayerGroup | null>(null)
+  const areaLabelGroupRef = useRef<L.LayerGroup | null>(null)
+  const areaLabelItemsRef = useRef<AreaLabelItem[]>([])
   const [level, setLevel] = useState<Level>('regions')
   const [regionSel, setRegionSel] = useState<{ code: string; name: string } | null>(null)
   const [deptSel, setDeptSel] = useState<{ code: string; name: string } | null>(null)
@@ -649,6 +866,18 @@ export function RegionsMapInner() {
       })
     return () => {
       cancelled = true
+    }
+  }, [])
+
+  /** Redessine les noms de régions / départements au zoom courant. */
+  const drawAreaLabels = useCallback(() => {
+    const map = mapRef.current
+    const group = areaLabelGroupRef.current
+    if (!map || !group) return
+    try {
+      placeAreaLabels(group, map, areaLabelItemsRef.current)
+    } catch (err) {
+      console.error('[FranceMap] noms de zones', err)
     }
   }, [])
 
@@ -730,7 +959,7 @@ export function RegionsMapInner() {
 
       // Calque des noms de régions / départements (affichés en permanence).
       const areaLabels = L.layerGroup().addTo(group)
-      const placeArea: LabelPlacer = createLabelPlacer(map)
+      const areaItems: AreaLabelItem[] = []
 
       if (level === 'regions') {
         L.geoJSON(sortedFeatures(geo.regions, (code) => METRO_REGIONS.has(code)), {
@@ -739,7 +968,8 @@ export function RegionsMapInner() {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
-            addAreaLabel(areaLabels, layer, name, 'region', placeArea)
+            const frame = cachedAreaFrame(`region:${code}`, layer)
+            if (frame) areaItems.push({ frame, name, kind: 'region' })
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
             layer.on('click', () => {
@@ -758,7 +988,8 @@ export function RegionsMapInner() {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
-            addAreaLabel(areaLabels, layer, name, 'dept', placeArea)
+            const frame = cachedAreaFrame(`dept:${code}`, layer)
+            if (frame) areaItems.push({ frame, name, kind: 'dept' })
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
             layer.on('click', () => {
@@ -825,6 +1056,12 @@ export function RegionsMapInner() {
         const cityGroup = L.layerGroup().addTo(group)
         cityLayerRef.current = cityGroup
       }
+
+      // Noms de zones : calculés une première fois ici, puis replacés à chaque zoom
+      areaLabelGroupRef.current = areaLabels
+      areaLabelItemsRef.current = areaItems
+      placeAreaLabels(areaLabels, map, areaItems)
+
       setMapError(null)
     } catch (err) {
       console.error('[FranceMap]', err)
@@ -836,25 +1073,30 @@ export function RegionsMapInner() {
         layersRef.current?.remove()
         layersRef.current = null
         cityLayerRef.current = null
+        areaLabelGroupRef.current = null
       } catch {
         /* déjà retiré */
       }
     }
   }, [geo, level, regionSel, deptSel])
 
-  // (Re)dessin des villes dès qu'elles changent + à chaque zoom/déplacement
+  // (Re)dessin des villes et des noms de zones à chaque zoom/déplacement
   useEffect(() => {
     const map = mapRef.current
     if (!map || !geo.depts) return
     drawCities()
-    const onChange = () => drawCities()
+    drawAreaLabels()
+    const onChange = () => {
+      drawCities()
+      drawAreaLabels()
+    }
     map.on('zoomend', onChange)
     map.on('moveend', onChange)
     return () => {
       map.off('zoomend', onChange)
       map.off('moveend', onChange)
     }
-  }, [level, drawCities, communes, geo])
+  }, [level, drawCities, drawAreaLabels, communes, geo])
 
   const goRegions = useCallback(() => {
     setLevel('regions')
