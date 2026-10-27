@@ -23,6 +23,7 @@ import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmptyState } from '@/components/common/EmptyState'
 import { cn } from '@/lib/utils'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
+import { GeoFilterBar, useGeoQuery } from '@/components/geo/GeoFilterBar'
 import { useLang } from '@/lib/i18n'
 
 /** Coordonnées par défaut : Toulon (centre du Var). */
@@ -360,7 +361,9 @@ export default function ActivitePage() {
   const [selected, setSelected] = useState<Date | null>(() => new Date())
 
   const range = useMemo(() => ({ from: startOfMonth(month), to: endOfMonth(month) }), [month])
-  const events = trpc.events.inRange.useQuery({ from: range.from, to: range.to })
+  // Même jauge de kilomètres que la carte et le fil d'actualité.
+  const geo = useGeoQuery()
+  const events = trpc.events.inRange.useQuery({ from: range.from, to: range.to, ...geo })
 
   const { byDate: weatherByDate, hourly } = useWeather(
     user?.latitude ?? DEFAULT_LAT,
@@ -441,6 +444,13 @@ export default function ActivitePage() {
           </button>
         ))}
       </nav>
+
+      <GeoFilterBar
+        compact
+        resultLabel={
+          events.data ? tl('geo_count_plans').replace('{n}', String(events.data.length)) : undefined
+        }
+      />
 
       {/* ---------- ÉVÉNEMENTS : toutes les lignes d'affilée ---------- */}
       {sub === 'evenements' &&

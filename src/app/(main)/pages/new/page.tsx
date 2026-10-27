@@ -16,6 +16,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { toast } from '@/components/ui/toast'
 import { CoverImageField } from '@/components/events/CoverImageField'
+import { CityDatalist } from '@/components/geo/CityDatalist'
 
 const schema = z.object({
   name: z.string().trim().min(3, 'Nom trop court').max(80),
@@ -121,7 +122,17 @@ export default function NewPagePage() {
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <Label htmlFor="page-city">Ville</Label>
-                <Input id="page-city" {...register('city')} placeholder="Draguignan" />
+                <Input
+                  id="page-city"
+                  {...register('city')}
+                  list="page-city-options"
+                  autoComplete="address-level2"
+                  placeholder="Draguignan"
+                />
+                <CityDatalist id="page-city-options" />
+                <p className="mt-1 text-xs text-fg-muted">
+                  Sert au filtre par rayon (km) dans l’annuaire des pages.
+                </p>
               </div>
               <div>
                 <Label htmlFor="page-address">Adresse</Label>

@@ -626,6 +626,8 @@ export const PageScalarFieldEnum = {
   coverUrl: 'coverUrl',
   address: 'address',
   city: 'city',
+  latitude: 'latitude',
+  longitude: 'longitude',
   phone: 'phone',
   website: 'website',
   email: 'email',
@@ -655,6 +657,9 @@ export const InterestGroupScalarFieldEnum = {
   description: 'description',
   coverImage: 'coverImage',
   category: 'category',
+  city: 'city',
+  latitude: 'latitude',
+  longitude: 'longitude',
   isPrivate: 'isPrivate',
   memberCount: 'memberCount',
   createdAt: 'createdAt'

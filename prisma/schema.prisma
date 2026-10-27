@@ -886,6 +886,8 @@ model Page {
   coverUrl      String?
   address       String?
   city          String?
+  latitude      Float?
+  longitude     Float?
   phone         String?
   website       String?
   email         String?
@@ -920,6 +922,9 @@ model InterestGroup {
   description String?       @db.Text
   coverImage  String?
   category    String
+  city        String?
+  latitude    Float?
+  longitude   Float?
   isPrivate   Boolean       @default(false)
   memberCount Int           @default(0)
   members     GroupMember[]

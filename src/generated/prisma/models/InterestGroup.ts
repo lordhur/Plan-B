@@ -27,10 +27,14 @@ export type AggregateInterestGroup = {
 }
 
 export type InterestGroupAvgAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   memberCount: number | null
 }
 
 export type InterestGroupSumAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   memberCount: number | null
 }
 
@@ -41,6 +45,9 @@ export type InterestGroupMinAggregateOutputType = {
   description: string | null
   coverImage: string | null
   category: string | null
+  city: string | null
+  latitude: number | null
+  longitude: number | null
   isPrivate: boolean | null
   memberCount: number | null
   createdAt: Date | null
@@ -53,6 +60,9 @@ export type InterestGroupMaxAggregateOutputType = {
   description: string | null
   coverImage: string | null
   category: string | null
+  city: string | null
+  latitude: number | null
+  longitude: number | null
   isPrivate: boolean | null
   memberCount: number | null
   createdAt: Date | null
@@ -65,6 +75,9 @@ export type InterestGroupCountAggregateOutputType = {
   description: number
   coverImage: number
   category: number
+  city: number
+  latitude: number
+  longitude: number
   isPrivate: number
   memberCount: number
   createdAt: number
@@ -73,10 +86,14 @@ export type InterestGroupCountAggregateOutputType = {
 
 
 export type InterestGroupAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
   memberCount?: true
 }
 
 export type InterestGroupSumAggregateInputType = {
+  latitude?: true
+  longitude?: true
   memberCount?: true
 }
 
@@ -87,6 +104,9 @@ export type InterestGroupMinAggregateInputType = {
   description?: true
   coverImage?: true
   category?: true
+  city?: true
+  latitude?: true
+  longitude?: true
   isPrivate?: true
   memberCount?: true
   createdAt?: true
@@ -99,6 +119,9 @@ export type InterestGroupMaxAggregateInputType = {
   description?: true
   coverImage?: true
   category?: true
+  city?: true
+  latitude?: true
+  longitude?: true
   isPrivate?: true
   memberCount?: true
   createdAt?: true
@@ -111,6 +134,9 @@ export type InterestGroupCountAggregateInputType = {
   description?: true
   coverImage?: true
   category?: true
+  city?: true
+  latitude?: true
+  longitude?: true
   isPrivate?: true
   memberCount?: true
   createdAt?: true
@@ -210,6 +236,9 @@ export type InterestGroupGroupByOutputType = {
   description: string | null
   coverImage: string | null
   category: string
+  city: string | null
+  latitude: number | null
+  longitude: number | null
   isPrivate: boolean
   memberCount: number
   createdAt: Date
@@ -245,6 +274,9 @@ export type InterestGroupWhereInput = {
   description?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
   coverImage?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
   category?: Prisma.StringFilter<"InterestGroup"> | string
+  city?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"InterestGroup"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"InterestGroup"> | number | null
   isPrivate?: Prisma.BoolFilter<"InterestGroup"> | boolean
   memberCount?: Prisma.IntFilter<"InterestGroup"> | number
   createdAt?: Prisma.DateTimeFilter<"InterestGroup"> | Date | string
@@ -259,6 +291,9 @@ export type InterestGroupOrderByWithRelationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -276,6 +311,9 @@ export type InterestGroupWhereUniqueInput = Prisma.AtLeast<{
   description?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
   coverImage?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
   category?: Prisma.StringFilter<"InterestGroup"> | string
+  city?: Prisma.StringNullableFilter<"InterestGroup"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"InterestGroup"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"InterestGroup"> | number | null
   isPrivate?: Prisma.BoolFilter<"InterestGroup"> | boolean
   memberCount?: Prisma.IntFilter<"InterestGroup"> | number
   createdAt?: Prisma.DateTimeFilter<"InterestGroup"> | Date | string
@@ -290,6 +328,9 @@ export type InterestGroupOrderByWithAggregationInput = {
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   category?: Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -310,6 +351,9 @@ export type InterestGroupScalarWhereWithAggregatesInput = {
   description?: Prisma.StringNullableWithAggregatesFilter<"InterestGroup"> | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"InterestGroup"> | string | null
   category?: Prisma.StringWithAggregatesFilter<"InterestGroup"> | string
+  city?: Prisma.StringNullableWithAggregatesFilter<"InterestGroup"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"InterestGroup"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"InterestGroup"> | number | null
   isPrivate?: Prisma.BoolWithAggregatesFilter<"InterestGroup"> | boolean
   memberCount?: Prisma.IntWithAggregatesFilter<"InterestGroup"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"InterestGroup"> | Date | string
@@ -322,6 +366,9 @@ export type InterestGroupCreateInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -336,6 +383,9 @@ export type InterestGroupUncheckedCreateInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -350,6 +400,9 @@ export type InterestGroupUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -364,6 +417,9 @@ export type InterestGroupUncheckedUpdateInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -378,6 +434,9 @@ export type InterestGroupCreateManyInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -390,6 +449,9 @@ export type InterestGroupUpdateManyMutationInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -402,6 +464,9 @@ export type InterestGroupUncheckedUpdateManyInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -414,12 +479,17 @@ export type InterestGroupCountOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type InterestGroupAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
 }
 
@@ -430,6 +500,9 @@ export type InterestGroupMaxOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -442,12 +515,17 @@ export type InterestGroupMinOrderByAggregateInput = {
   description?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
+  city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   isPrivate?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
 export type InterestGroupSumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   memberCount?: Prisma.SortOrder
 }
 
@@ -491,6 +569,9 @@ export type InterestGroupCreateWithoutMembersInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -504,6 +585,9 @@ export type InterestGroupUncheckedCreateWithoutMembersInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -533,6 +617,9 @@ export type InterestGroupUpdateWithoutMembersInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -546,6 +633,9 @@ export type InterestGroupUncheckedUpdateWithoutMembersInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -559,6 +649,9 @@ export type InterestGroupCreateWithoutForumPostsInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -572,6 +665,9 @@ export type InterestGroupUncheckedCreateWithoutForumPostsInput = {
   description?: string | null
   coverImage?: string | null
   category: string
+  city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   isPrivate?: boolean
   memberCount?: number
   createdAt?: Date | string
@@ -601,6 +697,9 @@ export type InterestGroupUpdateWithoutForumPostsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -614,6 +713,9 @@ export type InterestGroupUncheckedUpdateWithoutForumPostsInput = {
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   category?: Prisma.StringFieldUpdateOperationsInput | string
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   isPrivate?: Prisma.BoolFieldUpdateOperationsInput | boolean
   memberCount?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -667,6 +769,9 @@ export type InterestGroupSelect<ExtArgs extends runtime.Types.Extensions.Interna
   description?: boolean
   coverImage?: boolean
   category?: boolean
+  city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isPrivate?: boolean
   memberCount?: boolean
   createdAt?: boolean
@@ -682,6 +787,9 @@ export type InterestGroupSelectCreateManyAndReturn<ExtArgs extends runtime.Types
   description?: boolean
   coverImage?: boolean
   category?: boolean
+  city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isPrivate?: boolean
   memberCount?: boolean
   createdAt?: boolean
@@ -694,6 +802,9 @@ export type InterestGroupSelectUpdateManyAndReturn<ExtArgs extends runtime.Types
   description?: boolean
   coverImage?: boolean
   category?: boolean
+  city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isPrivate?: boolean
   memberCount?: boolean
   createdAt?: boolean
@@ -706,12 +817,15 @@ export type InterestGroupSelectScalar = {
   description?: boolean
   coverImage?: boolean
   category?: boolean
+  city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   isPrivate?: boolean
   memberCount?: boolean
   createdAt?: boolean
 }
 
-export type InterestGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "coverImage" | "category" | "isPrivate" | "memberCount" | "createdAt", ExtArgs["result"]["interestGroup"]>
+export type InterestGroupOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "slug" | "description" | "coverImage" | "category" | "city" | "latitude" | "longitude" | "isPrivate" | "memberCount" | "createdAt", ExtArgs["result"]["interestGroup"]>
 export type InterestGroupInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   members?: boolean | Prisma.InterestGroup$membersArgs<ExtArgs>
   forumPosts?: boolean | Prisma.InterestGroup$forumPostsArgs<ExtArgs>
@@ -733,6 +847,9 @@ export type $InterestGroupPayload<ExtArgs extends runtime.Types.Extensions.Inter
     description: string | null
     coverImage: string | null
     category: string
+    city: string | null
+    latitude: number | null
+    longitude: number | null
     isPrivate: boolean
     memberCount: number
     createdAt: Date
@@ -1167,6 +1284,9 @@ export interface InterestGroupFieldRefs {
   readonly description: Prisma.FieldRef<"InterestGroup", 'String'>
   readonly coverImage: Prisma.FieldRef<"InterestGroup", 'String'>
   readonly category: Prisma.FieldRef<"InterestGroup", 'String'>
+  readonly city: Prisma.FieldRef<"InterestGroup", 'String'>
+  readonly latitude: Prisma.FieldRef<"InterestGroup", 'Float'>
+  readonly longitude: Prisma.FieldRef<"InterestGroup", 'Float'>
   readonly isPrivate: Prisma.FieldRef<"InterestGroup", 'Boolean'>
   readonly memberCount: Prisma.FieldRef<"InterestGroup", 'Int'>
   readonly createdAt: Prisma.FieldRef<"InterestGroup", 'DateTime'>

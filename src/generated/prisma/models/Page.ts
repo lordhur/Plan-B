@@ -27,10 +27,14 @@ export type AggregatePage = {
 }
 
 export type PageAvgAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   followerCount: number | null
 }
 
 export type PageSumAggregateOutputType = {
+  latitude: number | null
+  longitude: number | null
   followerCount: number | null
 }
 
@@ -45,6 +49,8 @@ export type PageMinAggregateOutputType = {
   coverUrl: string | null
   address: string | null
   city: string | null
+  latitude: number | null
+  longitude: number | null
   phone: string | null
   website: string | null
   email: string | null
@@ -65,6 +71,8 @@ export type PageMaxAggregateOutputType = {
   coverUrl: string | null
   address: string | null
   city: string | null
+  latitude: number | null
+  longitude: number | null
   phone: string | null
   website: string | null
   email: string | null
@@ -85,6 +93,8 @@ export type PageCountAggregateOutputType = {
   coverUrl: number
   address: number
   city: number
+  latitude: number
+  longitude: number
   phone: number
   website: number
   email: number
@@ -97,10 +107,14 @@ export type PageCountAggregateOutputType = {
 
 
 export type PageAvgAggregateInputType = {
+  latitude?: true
+  longitude?: true
   followerCount?: true
 }
 
 export type PageSumAggregateInputType = {
+  latitude?: true
+  longitude?: true
   followerCount?: true
 }
 
@@ -115,6 +129,8 @@ export type PageMinAggregateInputType = {
   coverUrl?: true
   address?: true
   city?: true
+  latitude?: true
+  longitude?: true
   phone?: true
   website?: true
   email?: true
@@ -135,6 +151,8 @@ export type PageMaxAggregateInputType = {
   coverUrl?: true
   address?: true
   city?: true
+  latitude?: true
+  longitude?: true
   phone?: true
   website?: true
   email?: true
@@ -155,6 +173,8 @@ export type PageCountAggregateInputType = {
   coverUrl?: true
   address?: true
   city?: true
+  latitude?: true
+  longitude?: true
   phone?: true
   website?: true
   email?: true
@@ -262,6 +282,8 @@ export type PageGroupByOutputType = {
   coverUrl: string | null
   address: string | null
   city: string | null
+  latitude: number | null
+  longitude: number | null
   phone: string | null
   website: string | null
   email: string | null
@@ -305,6 +327,8 @@ export type PageWhereInput = {
   coverUrl?: Prisma.StringNullableFilter<"Page"> | string | null
   address?: Prisma.StringNullableFilter<"Page"> | string | null
   city?: Prisma.StringNullableFilter<"Page"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Page"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Page"> | number | null
   phone?: Prisma.StringNullableFilter<"Page"> | string | null
   website?: Prisma.StringNullableFilter<"Page"> | string | null
   email?: Prisma.StringNullableFilter<"Page"> | string | null
@@ -329,6 +353,8 @@ export type PageOrderByWithRelationInput = {
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -356,6 +382,8 @@ export type PageWhereUniqueInput = Prisma.AtLeast<{
   coverUrl?: Prisma.StringNullableFilter<"Page"> | string | null
   address?: Prisma.StringNullableFilter<"Page"> | string | null
   city?: Prisma.StringNullableFilter<"Page"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Page"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Page"> | number | null
   phone?: Prisma.StringNullableFilter<"Page"> | string | null
   website?: Prisma.StringNullableFilter<"Page"> | string | null
   email?: Prisma.StringNullableFilter<"Page"> | string | null
@@ -380,6 +408,8 @@ export type PageOrderByWithAggregationInput = {
   coverUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   address?: Prisma.SortOrderInput | Prisma.SortOrder
   city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -408,6 +438,8 @@ export type PageScalarWhereWithAggregatesInput = {
   coverUrl?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   address?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   city?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
+  latitude?: Prisma.FloatNullableWithAggregatesFilter<"Page"> | number | null
+  longitude?: Prisma.FloatNullableWithAggregatesFilter<"Page"> | number | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"Page"> | string | null
@@ -427,6 +459,8 @@ export type PageCreateInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -451,6 +485,8 @@ export type PageUncheckedCreateInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -473,6 +509,8 @@ export type PageUpdateInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -497,6 +535,8 @@ export type PageUncheckedUpdateInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -520,6 +560,8 @@ export type PageCreateManyInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -539,6 +581,8 @@ export type PageUpdateManyMutationInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -559,6 +603,8 @@ export type PageUncheckedUpdateManyInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -594,6 +640,8 @@ export type PageCountOrderByAggregateInput = {
   coverUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   website?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -604,6 +652,8 @@ export type PageCountOrderByAggregateInput = {
 }
 
 export type PageAvgOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   followerCount?: Prisma.SortOrder
 }
 
@@ -618,6 +668,8 @@ export type PageMaxOrderByAggregateInput = {
   coverUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   website?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -638,6 +690,8 @@ export type PageMinOrderByAggregateInput = {
   coverUrl?: Prisma.SortOrder
   address?: Prisma.SortOrder
   city?: Prisma.SortOrder
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   website?: Prisma.SortOrder
   email?: Prisma.SortOrder
@@ -648,6 +702,8 @@ export type PageMinOrderByAggregateInput = {
 }
 
 export type PageSumOrderByAggregateInput = {
+  latitude?: Prisma.SortOrder
+  longitude?: Prisma.SortOrder
   followerCount?: Prisma.SortOrder
 }
 
@@ -754,6 +810,8 @@ export type PageCreateWithoutOwnerInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -776,6 +834,8 @@ export type PageUncheckedCreateWithoutOwnerInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -828,6 +888,8 @@ export type PageScalarWhereInput = {
   coverUrl?: Prisma.StringNullableFilter<"Page"> | string | null
   address?: Prisma.StringNullableFilter<"Page"> | string | null
   city?: Prisma.StringNullableFilter<"Page"> | string | null
+  latitude?: Prisma.FloatNullableFilter<"Page"> | number | null
+  longitude?: Prisma.FloatNullableFilter<"Page"> | number | null
   phone?: Prisma.StringNullableFilter<"Page"> | string | null
   website?: Prisma.StringNullableFilter<"Page"> | string | null
   email?: Prisma.StringNullableFilter<"Page"> | string | null
@@ -847,6 +909,8 @@ export type PageCreateWithoutEventsInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -870,6 +934,8 @@ export type PageUncheckedCreateWithoutEventsInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -907,6 +973,8 @@ export type PageUpdateWithoutEventsInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -930,6 +998,8 @@ export type PageUncheckedUpdateWithoutEventsInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -951,6 +1021,8 @@ export type PageCreateWithoutFollowersInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -974,6 +1046,8 @@ export type PageUncheckedCreateWithoutFollowersInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -1011,6 +1085,8 @@ export type PageUpdateWithoutFollowersInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1034,6 +1110,8 @@ export type PageUncheckedUpdateWithoutFollowersInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1055,6 +1133,8 @@ export type PageCreateWithoutPartnerOffersInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -1078,6 +1158,8 @@ export type PageUncheckedCreateWithoutPartnerOffersInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -1115,6 +1197,8 @@ export type PageUpdateWithoutPartnerOffersInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1138,6 +1222,8 @@ export type PageUncheckedUpdateWithoutPartnerOffersInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1159,6 +1245,8 @@ export type PageCreateManyOwnerInput = {
   coverUrl?: string | null
   address?: string | null
   city?: string | null
+  latitude?: number | null
+  longitude?: number | null
   phone?: string | null
   website?: string | null
   email?: string | null
@@ -1178,6 +1266,8 @@ export type PageUpdateWithoutOwnerInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1200,6 +1290,8 @@ export type PageUncheckedUpdateWithoutOwnerInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1222,6 +1314,8 @@ export type PageUncheckedUpdateManyWithoutOwnerInput = {
   coverUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1291,6 +1385,8 @@ export type PageSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   coverUrl?: boolean
   address?: boolean
   city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   phone?: boolean
   website?: boolean
   email?: boolean
@@ -1316,6 +1412,8 @@ export type PageSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   coverUrl?: boolean
   address?: boolean
   city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   phone?: boolean
   website?: boolean
   email?: boolean
@@ -1337,6 +1435,8 @@ export type PageSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   coverUrl?: boolean
   address?: boolean
   city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   phone?: boolean
   website?: boolean
   email?: boolean
@@ -1358,6 +1458,8 @@ export type PageSelectScalar = {
   coverUrl?: boolean
   address?: boolean
   city?: boolean
+  latitude?: boolean
+  longitude?: boolean
   phone?: boolean
   website?: boolean
   email?: boolean
@@ -1367,7 +1469,7 @@ export type PageSelectScalar = {
   updatedAt?: boolean
 }
 
-export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "slug" | "description" | "category" | "avatarUrl" | "coverUrl" | "address" | "city" | "phone" | "website" | "email" | "isVerified" | "followerCount" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
+export type PageOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "ownerId" | "name" | "slug" | "description" | "category" | "avatarUrl" | "coverUrl" | "address" | "city" | "latitude" | "longitude" | "phone" | "website" | "email" | "isVerified" | "followerCount" | "createdAt" | "updatedAt", ExtArgs["result"]["page"]>
 export type PageInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   followers?: boolean | Prisma.Page$followersArgs<ExtArgs>
@@ -1401,6 +1503,8 @@ export type $PagePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     coverUrl: string | null
     address: string | null
     city: string | null
+    latitude: number | null
+    longitude: number | null
     phone: string | null
     website: string | null
     email: string | null
@@ -1845,6 +1949,8 @@ export interface PageFieldRefs {
   readonly coverUrl: Prisma.FieldRef<"Page", 'String'>
   readonly address: Prisma.FieldRef<"Page", 'String'>
   readonly city: Prisma.FieldRef<"Page", 'String'>
+  readonly latitude: Prisma.FieldRef<"Page", 'Float'>
+  readonly longitude: Prisma.FieldRef<"Page", 'Float'>
   readonly phone: Prisma.FieldRef<"Page", 'String'>
   readonly website: Prisma.FieldRef<"Page", 'String'>
   readonly email: Prisma.FieldRef<"Page", 'String'>

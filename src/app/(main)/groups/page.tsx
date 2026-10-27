@@ -8,6 +8,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
+import { GeoFilterBar, useGeoQuery } from '@/components/geo/GeoFilterBar'
+import { useLang } from '@/lib/i18n'
 
 const CATEGORY_LABELS: Record<string, string> = {
   sport: 'Sport',
@@ -22,8 +24,11 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 /** Annuaire des groupes d'intérêt (spec Phase 5 §5.2). */
 export default function GroupsDirectoryPage() {
+  const { t } = useLang()
   const [search, setSearch] = useState('')
-  const groups = trpc.groups.list.useQuery(search ? { search } : undefined)
+  // Même jauge de kilomètres que la carte / le fil : ville + rayon partagés.
+  const geo = useGeoQuery()
+  const groups = trpc.groups.list.useQuery({ ...(search ? { search } : {}), ...geo })
 
   return (
     <div className="mx-auto max-w-2xl space-y-6 px-4 py-8 md:px-0">
@@ -53,10 +58,20 @@ export default function GroupsDirectoryPage() {
         />
       </div>
 
+      <GeoFilterBar
+        resultLabel={
+          groups.data ? t('geo_count_groups').replace('{n}', String(groups.data.length)) : undefined
+        }
+      />
+
       {groups.isLoading ? (
         <LoadingSpinner label="Chargement des groupes" />
       ) : !groups.data || groups.data.length === 0 ? (
-        <EmptyState icon={Users} title="Aucun groupe trouvé" description="Créez le premier groupe de votre passion !" />
+        <EmptyState
+          icon={Users}
+          title="Aucun groupe trouvé"
+          description="Élargissez le rayon, changez de ville ou créez le premier groupe de votre passion !"
+        />
       ) : (
         <ul className="grid gap-4 sm:grid-cols-2">
           {groups.data.map((group) => (
@@ -100,6 +115,14 @@ export default function GroupsDirectoryPage() {
                   {group.description && (
                     <span className="mt-1 line-clamp-2 block text-sm text-fg-muted">{group.description}</span>
                   )}
+                  <span className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-fg-muted">
+                    {group.city && <span>📍 {group.city}</span>}
+                    {group.distanceKm != null && (
+                      <span className="font-semibold text-primary-700 dark:text-primary-300">
+                        à {Math.round(group.distanceKm)} km
+                      </span>
+                    )}
+                  </span>
                 </span>
               </Link>
             </li>

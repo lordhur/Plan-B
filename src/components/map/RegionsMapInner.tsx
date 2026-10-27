@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import {
   MAX_RADIUS_KM,
   MIN_RADIUS_KM,
-  syncRadiusFromStorage,
+  syncGeoFromStorage,
   useLocationFilter,
   type BBox,
 } from '@/lib/locationFilter'
@@ -806,7 +806,7 @@ export function RegionsMapInner() {
 
   // Rayon mémorisé (km) relu côté client
   useEffect(() => {
-    syncRadiusFromStorage()
+    syncGeoFromStorage()
   }, [])
 
   // Nettoyage du calque « rayon » au démontage

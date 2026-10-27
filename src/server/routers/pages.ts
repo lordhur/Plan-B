@@ -1,6 +1,8 @@
 import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
+import { cityCoords } from '@/lib/frenchCities'
 import { prisma } from '../db'
+import { distanceTo, geoWhere, resolveGeo, withinGeo } from '../geo'
 import { notify } from '../notifications'
 import { createTRPCRouter, publicProcedure, verifiedProcedure } from '../trpc'
 
@@ -18,20 +20,37 @@ function slugify(input: string): string {
 
 /** Pages organisateurs/commerces (spec Phase 5 §5.1). */
 export const pagesRouter = createTRPCRouter({
-  /** Annuaire des pages (+ recherche). */
+  /** Annuaire des pages (+ recherche + filtre géographique). */
   list: publicProcedure
-    .input(z.object({ search: z.string().trim().max(60).optional() }).nullish())
-    .query(async ({ input }) =>
-      prisma.page.findMany({
-        where: input?.search
-          ? {
-              OR: [
-                { name: { contains: input.search, mode: 'insensitive' } },
-                { description: { contains: input.search, mode: 'insensitive' } },
-                { city: { contains: input.search, mode: 'insensitive' } },
-              ],
-            }
-          : undefined,
+    .input(
+      z
+        .object({
+          search: z.string().trim().max(60).optional(),
+          lat: z.number().optional(),
+          lon: z.number().optional(),
+          radiusKm: z.number().min(1).max(300).optional(),
+          minLat: z.number().optional(),
+          maxLat: z.number().optional(),
+          minLon: z.number().optional(),
+          maxLon: z.number().optional(),
+        })
+        .nullish(),
+    )
+    .query(async ({ input }) => {
+      const geo = resolveGeo(input ?? {})
+      const rows = await prisma.page.findMany({
+        where: {
+          ...(input?.search
+            ? {
+                OR: [
+                  { name: { contains: input.search, mode: 'insensitive' } },
+                  { description: { contains: input.search, mode: 'insensitive' } },
+                  { city: { contains: input.search, mode: 'insensitive' } },
+                ],
+              }
+            : {}),
+          ...geoWhere(geo),
+        },
         select: {
           id: true,
           name: true,
@@ -41,14 +60,24 @@ export const pagesRouter = createTRPCRouter({
           avatarUrl: true,
           coverUrl: true,
           city: true,
+          latitude: true,
+          longitude: true,
           isVerified: true,
           followerCount: true,
           _count: { select: { events: true } },
         },
         orderBy: [{ followerCount: 'desc' }, { name: 'asc' }],
-        take: 60,
-      }),
-    ),
+        take: 120,
+      })
+      return rows
+        .filter((p) => withinGeo(geo, p.latitude, p.longitude))
+        .map((p) => ({ ...p, distanceKm: distanceTo(geo, p.latitude, p.longitude) }))
+        .sort((a, b) => {
+          if (geo.center) return (a.distanceKm ?? 1e9) - (b.distanceKm ?? 1e9)
+          return b.followerCount - a.followerCount || a.name.localeCompare(b.name)
+        })
+        .slice(0, 60)
+    }),
 
   /** Détail d'une page (+ mon suivi). */
   bySlug: publicProcedure.input(z.object({ slug: z.string() })).query(async ({ input, ctx }) => {
@@ -121,6 +150,10 @@ export const pagesRouter = createTRPCRouter({
           description: input.description,
           category: input.category,
           city: input.city,
+          ...(() => {
+            const c = cityCoords(input.city)
+            return c ? { latitude: c.lat, longitude: c.lon } : {}
+          })(),
           address: input.address,
           phone: input.phone,
           website: input.website,
@@ -150,7 +183,11 @@ export const pagesRouter = createTRPCRouter({
       if (!page) throw new TRPCError({ code: 'NOT_FOUND', message: 'Page introuvable' })
       if (page.ownerId !== ctx.user.id) throw new TRPCError({ code: 'FORBIDDEN', message: 'Réservé au propriétaire' })
       const { pageId, ...data } = input
-      return prisma.page.update({ where: { id: pageId }, data })
+      const coords = data.city === undefined ? null : cityCoords(data.city)
+      return prisma.page.update({
+        where: { id: pageId },
+        data: { ...data, ...(coords ? { latitude: coords.lat, longitude: coords.lon } : {}) },
+      })
     }),
 
   /** Mes pages. */
