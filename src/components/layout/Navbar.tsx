@@ -254,7 +254,7 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-1.5">
+            <div className="hidden items-center gap-1.5 sm:flex">
               <Link
                 href="/contact"
                 aria-label={t('nav_contact')}
@@ -262,16 +262,28 @@ export function Navbar() {
               >
                 <Mail className="h-4.5 w-4.5" aria-hidden />
               </Link>
-              <Button asChild variant="ghost" size="sm" className="h-9 px-2 text-[11px] sm:px-4 sm:text-sm">
+              <Button asChild variant="ghost" size="sm" className="h-9 px-4 text-sm">
                 <Link href="/login">{t('nav_login')}</Link>
               </Button>
-              <Button asChild size="sm" className="h-9 px-2 text-[11px] sm:px-4 sm:text-sm">
+              <Button asChild size="sm" className="h-9 px-4 text-sm">
                 <Link href="/register">{t('nav_register')}</Link>
               </Button>
             </div>
           )}
           </div>
         </div>
+
+        {/* Mobile (invité) : Connexion + Inscription sur toute la largeur de l'écran */}
+        {!isLoading && !isAuthenticated && (
+          <div className="grid w-full grid-cols-2 gap-2 pb-1 sm:hidden">
+            <Button asChild variant="outline" className="h-10 w-full px-2 text-xs">
+              <Link href="/login">{t('nav_login')}</Link>
+            </Button>
+            <Button asChild className="h-10 w-full px-2 text-xs">
+              <Link href="/register">{t('nav_register')}</Link>
+            </Button>
+          </div>
+        )}
 
         {/* Bas : tous les onglets regroupés et centrés, sous le logo */}
         <nav
