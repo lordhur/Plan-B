@@ -42,18 +42,18 @@ function LoginForm() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Connexion</CardTitle>
-        <CardDescription>Heureux de vous revoir ! Prêt·e pour de nouveaux plans ?</CardDescription>
+        <CardTitle>{tl('auth_login_title')}</CardTitle>
+        <CardDescription>{tl('auth_login_sub')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit((data) => login.mutate(data))} className="space-y-4" noValidate>
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{tl('auth_email')}</Label>
             <Input
               id="email"
               type="email"
               autoComplete="email"
-              placeholder="vous@exemple.fr"
+              placeholder={tl('auth_email_ph')}
               aria-invalid={!!errors.email}
               {...register('email')}
             />
@@ -66,9 +66,9 @@ function LoginForm() {
 
           <div>
             <div className="flex items-center justify-between">
-              <Label htmlFor="password">Mot de passe</Label>
+              <Label htmlFor="password">{tl('auth_password')}</Label>
               <Link href="/forgot-password" className="text-xs font-medium text-primary-600 hover:underline">
-                Mot de passe oublié ?
+                {tl('auth_forgot')}
               </Link>
             </div>
             <Input
@@ -98,7 +98,7 @@ function LoginForm() {
           </p>
 
           <p className="rounded-lg bg-bg-secondary p-3 text-center text-xs text-fg-muted">
-            🧪 Démo : <code className="font-semibold">thomas@planb.app</code> / <code className="font-semibold">planb1234</code>
+            🧪 {tl('auth_demo')} : <code className="font-semibold">thomas@planb.app</code> / <code className="font-semibold">planb1234</code>
           </p>
         </form>
 

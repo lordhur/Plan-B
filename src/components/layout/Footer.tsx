@@ -1,4 +1,7 @@
+'use client'
+
 import { LogoMark } from '@/components/common/Logo'
+import { useLang } from '@/lib/i18n'
 
 /**
  * Pied de page ultra-compact — TOUT sur une seule ligne (spec mobile).
@@ -7,6 +10,7 @@ import { LogoMark } from '@/components/common/Logo'
  */
 export function Footer() {
   const year = new Date().getFullYear()
+  const { t } = useLang()
   return (
     <footer className="mt-8 border-t border-border bg-bg-secondary pb-20 md:pb-0">
       <div className="mx-auto flex max-w-6xl flex-nowrap items-center justify-center gap-1.5 overflow-hidden px-3 py-2.5 md:justify-between md:gap-4 md:px-4 md:py-4">
@@ -17,11 +21,11 @@ export function Footer() {
           </span>
         </span>
 
-        <span className="hidden whitespace-nowrap text-xs text-fg-muted md:inline">Le réseau social du futur</span>
+        <span className="hidden whitespace-nowrap text-xs text-fg-muted md:inline">{t('footer_tagline')}</span>
 
         <span className="min-w-0 truncate whitespace-nowrap text-[10px] leading-none text-fg-muted md:text-xs">
           <span className="md:hidden">
-            Le réseau social du futur · © {year} — Fait en France 🇫🇷
+            {t('footer_tagline')} · © {year} — {t('footer_made_in')} 🇫🇷
           </span>
           <span className="hidden md:inline">
             © {year} PlanB — Fait en France 🇫🇷

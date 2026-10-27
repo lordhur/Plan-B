@@ -1,8 +1,9 @@
 'use client'
 
-import { Bookmark, BookmarkCheck, ChevronLeft, ChevronRight, Plus, Trash2, X } from 'lucide-react'
+import { Bookmark, BookmarkCheck, ChevronLeft, ChevronRight, Heart, Plus, Trash2, X } from 'lucide-react'
 import * as React from 'react'
 import { trpc } from '@/lib/trpc'
+import { useLang } from '@/lib/i18n'
 import { useCurrentUser } from '@/lib/session'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -19,6 +20,8 @@ type StoryItem = {
   type: 'PHOTO' | 'VIDEO'
   caption: string | null
   createdAt: Date | string
+  likes?: number
+  likedByMe?: boolean
 }
 
 type StoryGroup = {
@@ -35,6 +38,7 @@ type StoryGroup = {
 
 /** Barre de stories (24 h) — moi + mes amis, plusieurs stories par personne. */
 export function StoryRail() {
+  const { t } = useLang()
   const { isAuthenticated } = useCurrentUser()
   const stories = trpc.stories.feed.useQuery(undefined, { enabled: isAuthenticated })
   const [viewFrom, setViewFrom] = React.useState<number | null>(null)
@@ -51,12 +55,12 @@ export function StoryRail() {
         type="button"
         onClick={() => setCreating(true)}
         className="flex w-16 shrink-0 flex-col items-center gap-1"
-        aria-label="Ajouter une story"
+        aria-label={t('story_add')}
       >
         <span className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-primary-400 bg-primary-50 dark:bg-primary-500/10">
           <Plus className="h-6 w-6 text-primary-600" aria-hidden />
         </span>
-        <span className="text-[10px] font-semibold text-fg-muted">Ma story</span>
+        <span className="text-[10px] font-semibold text-fg-muted">{t('story_my')}</span>
       </button>
 
       {groups.map((g, gi) => {
@@ -82,7 +86,7 @@ export function StoryRail() {
               </span>
             )}
             <span className="w-full truncate text-center text-[10px] font-semibold text-fg-muted">
-              {g.isMe ? 'Ma story' : g.author.firstName}
+              {g.isMe ? t('story_my') : g.author.firstName}
             </span>
           </button>
         )
@@ -107,6 +111,7 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
   const [caption, setCaption] = React.useState('')
   const [uploading, setUploading] = React.useState(false)
   const inputRef = React.useRef<HTMLInputElement>(null)
+  const { t } = useLang()
   const utils = trpc.useUtils()
   const create = trpc.stories.create.useMutation({
     onSuccess: () => {
@@ -145,7 +150,7 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
       role="dialog"
       aria-modal="true"
-      aria-label="Ajouter une story"
+      aria-label={t('story_add')}
       onClick={onClose}
     >
       <div
@@ -153,7 +158,7 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold">Ajouter une story</h2>
+          <h2 className="text-lg font-bold">{t('story_add')}</h2>
           <button
             type="button"
             onClick={onClose}
@@ -174,10 +179,10 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
 
         <div className="mb-3 flex gap-2">
           <Button variant={type === 'PHOTO' ? 'default' : 'outline'} className="flex-1" onClick={() => pick('PHOTO')}>
-            📷 Photo
+            📷 {t('story_photo')}
           </Button>
           <Button variant={type === 'VIDEO' ? 'default' : 'outline'} className="flex-1" onClick={() => pick('VIDEO')}>
-            🎬 Vidéo
+            🎬 {t('story_video')}
           </Button>
         </div>
 
@@ -190,14 +195,14 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
         <Input
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
-          placeholder="Légende (facultatif)"
+          placeholder={t('story_caption_ph')}
           maxLength={200}
           className="mb-4"
           aria-label="Légende de la story"
         />
 
         <Button className="w-full" disabled={!file || uploading || create.isPending} onClick={publish}>
-          {uploading || create.isPending ? 'Publication…' : 'Publier ma story'}
+          {uploading || create.isPending ? '…' : t('story_publish')}
         </Button>
         <p className="mt-2 text-center text-[11px] text-fg-muted">
           Visible par vos amis pendant 24 h · max 50 Mo · publiez autant de stories que vous voulez
@@ -209,7 +214,8 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
 
 /**
  * Visionneuse plein écran — clic sur le média : story suivante de la personne,
- * puis personne suivante (spec). Bouton « mémoriser » pour l'album stories.
+ * puis personne suivante (spec). Mes stories : « mémoriser » (album stories) +
+ * suppression. Celles des autres : « j'aime » uniquement.
  */
 function StoryViewer({
   groups,
@@ -223,6 +229,7 @@ function StoryViewer({
   const [gi, setGi] = React.useState(startGroup)
   const [idx, setIdx] = React.useState(0)
   const [progress, setProgress] = React.useState(0)
+  const { t } = useLang()
   const utils = trpc.useUtils()
 
   const group = groups[gi]
@@ -246,6 +253,14 @@ function StoryViewer({
   })
   const savedList = trpc.stories.mySavedStories.useQuery(undefined, { refetchInterval: false })
   const isSaved = !!item && (savedList.data ?? []).some((s) => s.story.id === item.id)
+
+  // « J'aime » — possible sur les stories des autres (spec)
+  const like = trpc.stories.likeStory.useMutation({
+    onSuccess: () => void utils.stories.feed.invalidate(),
+  })
+  const unlike = trpc.stories.unlikeStory.useMutation({
+    onSuccess: () => void utils.stories.feed.invalidate(),
+  })
 
   /** Story suivante : d'abord la personne, puis la personne suivante (spec). */
   const next = React.useCallback(() => {
@@ -324,24 +339,48 @@ function StoryViewer({
             {formatDistanceToNow(new Date(item.createdAt), { addSuffix: true, locale: fr })}
           </span>
           <span className="ml-auto flex items-center gap-1">
-            {/* Mémoriser la story → album stories du profil */}
-            <button
-              type="button"
-              className="rounded-lg p-2 hover:bg-white/15"
-              aria-label={isSaved ? 'Retirer de mon album stories' : 'Mémoriser cette story'}
-              title={isSaved ? 'Retirer de mon album stories' : 'Mémoriser cette story'}
-              onClick={() =>
-                isSaved
-                  ? unsave.mutate({ storyId: item.id })
-                  : save.mutate({ storyId: item.id })
-              }
-            >
-              {isSaved ? (
-                <BookmarkCheck className="h-4 w-4 text-secondary-400" aria-hidden />
-              ) : (
-                <Bookmark className="h-4 w-4" aria-hidden />
-              )}
-            </button>
+            {/* Mes stories : mémoriser dans mon album stories */}
+            {group.isMe && (
+              <button
+                type="button"
+                className="rounded-lg p-2 hover:bg-white/15"
+                aria-label={isSaved ? t('story_unsave') : t('story_save')}
+                title={isSaved ? t('story_unsave') : t('story_save')}
+                onClick={() =>
+                  isSaved
+                    ? unsave.mutate({ storyId: item.id })
+                    : save.mutate({ storyId: item.id })
+                }
+              >
+                {isSaved ? (
+                  <BookmarkCheck className="h-4 w-4 text-secondary-400" aria-hidden />
+                ) : (
+                  <Bookmark className="h-4 w-4" aria-hidden />
+                )}
+              </button>
+            )}
+            {!group.isMe && (
+              <button
+                type="button"
+                className="flex items-center gap-1 rounded-lg p-2 hover:bg-white/15"
+                aria-label={item.likedByMe ? t('story_like_remove') : t('story_like_aria')}
+                aria-pressed={!!item.likedByMe}
+                title={item.likedByMe ? t('story_like_remove') : t('story_like_aria')}
+                onClick={() =>
+                  item.likedByMe
+                    ? unlike.mutate({ storyId: item.id })
+                    : like.mutate({ storyId: item.id })
+                }
+              >
+                <Heart
+                  className={cn('h-5 w-5', item.likedByMe && 'fill-rose-500 text-rose-500')}
+                  aria-hidden
+                />
+                {(item.likes ?? 0) > 0 && (
+                  <span className="text-xs font-bold">{item.likes}</span>
+                )}
+              </button>
+            )}
             {group.isMe && (
               <button
                 type="button"
@@ -404,8 +443,8 @@ function StoryViewer({
         </div>
 
         <p className="pb-4 text-center text-[11px] text-white/60">
-          Touchez à droite pour la story suivante · {idx + 1}/{total} de {name}
-          {gi + 1 < groups.length && ' · puis personne suivante'}
+          {t('story_next_hint')} · {idx + 1}/{total} — {name}
+          {gi + 1 < groups.length && ` · ${t('story_then_next')}`}
         </p>
       </div>
     </div>

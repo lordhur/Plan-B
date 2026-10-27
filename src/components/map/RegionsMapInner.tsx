@@ -310,38 +310,52 @@ function labelSize(pop: number): number {
   return 11
 }
 
-/** Villes affichées selon le zoom — les plus grandes d'abord, zoom = petites villes. */
-function citiesForZoom(cities: Commune[], zoom: number, deptMode: boolean): Commune[] {
-  if (deptMode) {
-    if (zoom < 10) return cities.filter((c) => c.population >= 20000)
-    if (zoom < 12) return cities.filter((c) => c.population >= 5000)
-    if (zoom < 14) return cities.filter((c) => c.population >= 1000)
-    return cities
-  }
-  if (zoom < 7) return cities.filter((c) => c.population >= 150000)
-  if (zoom < 9) return cities.filter((c) => c.population >= 40000)
-  if (zoom < 11) return cities.filter((c) => c.population >= 10000)
-  if (zoom < 13) return cities.filter((c) => c.population >= 3000)
-  return cities
-}
+/** Écart minimal exigé entre deux noms de villes (spec : 5 px). */
+const LABEL_GAP = 5
 
-/** Anti-chevauchement : placement des libellés, grandes villes prioritaires. */
-function declutter(cities: Commune[], map: L.Map): Commune[] {
+/**
+ * Placement des libellés — spec : « affiche les villes tant qu'il y a au moins
+ * 5 px entre les noms ». Aucun seuil de population : on garde TOUTES les villes
+ * dont l'étiquette tient sans coller aux autres, les plus grandes d'abord.
+ */
+function placeLabels(cities: Commune[], map: L.Map, pinned?: Commune | null): Commune[] {
+  const bounds = map.getBounds().pad(0.08)
+  // On ignore les villes hors écran : elles ne doivent pas bloquer celles visibles.
+  const candidates = cities.filter((c) => bounds.contains([c.lat, c.lon]))
+  candidates.sort((a, b) => b.population - a.population)
+
   const placed: { x: number; y: number; w: number; h: number }[] = []
   const out: Commune[] = []
-  for (const c of cities) {
+
+  const rectOf = (c: Commune) => {
     const p = map.latLngToContainerPoint([c.lat, c.lon])
     const size = labelSize(c.population)
-    const w = Math.max(28, c.nom.length * size * 0.6) + 14
-    const h = size + 10
-    const rect = { x: p.x - w / 2, y: p.y - h - 4, w, h }
+    // Étiquette réelle : pastille 7 px + 4 px d'écart + nom, centrée sur le point
+    // (voir .city-outline-label dans globals.css) + marge pour le contour blanc.
+    const textW = Math.max(16, c.nom.length * size * 0.6)
+    const w = 7 + 4 + textW + 4
+    const h = size + 4
+    return { x: p.x - w / 2, y: p.y - h / 2, w, h }
+  }
+
+  for (const c of candidates) {
+    const rect = rectOf(c)
     const collides = placed.some(
-      (r) => rect.x < r.x + r.w && rect.x + rect.w > r.x && rect.y < r.y + r.h && rect.y + rect.h > r.y,
+      (r) =>
+        rect.x < r.x + r.w + LABEL_GAP &&
+        rect.x + rect.w + LABEL_GAP > r.x &&
+        rect.y < r.y + r.h + LABEL_GAP &&
+        rect.y + rect.h + LABEL_GAP > r.y,
     )
     if (!collides) {
       placed.push(rect)
       out.push(c)
     }
+  }
+
+  // La ville sélectionnée reste toujours visible, même si elle chevauche.
+  if (pinned && !out.some((c) => c.nom === pinned.nom)) {
+    out.push(pinned)
   }
   return out
 }
@@ -383,6 +397,7 @@ export function RegionsMapInner() {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [communes, setCommunes] = useState<Commune[]>([])
+  const [regionCommunes, setRegionCommunes] = useState<Commune[]>([])
   const [mapError, setMapError] = useState<string | null>(null)
 
   const { setFilter, clear } = useLocationFilter()
@@ -419,9 +434,10 @@ export function RegionsMapInner() {
     try {
       group.clearLayers()
       const deptMode = level === 'cities' && communes.length > 0
-      const pool = deptMode ? communes : TOP_COMMUNES
-      const zoomed = citiesForZoom(pool, map.getZoom(), deptMode)
-      const visible = declutter(zoomed, map)
+      // Département ouvert → toutes ses communes. Région ouverte → toutes les
+      // communes de la région (remplies en arrière-plan). Vue France → villes majeures.
+      const pool = deptMode ? communes : regionCommunes.length > 0 ? regionCommunes : TOP_COMMUNES
+      const visible = placeLabels(pool, map, citySel)
       for (const c of visible) {
         const m = L.marker([c.lat, c.lon], {
           icon: cityLabelIcon(c.nom, citySel?.nom === c.nom, labelSize(c.population)),
@@ -435,7 +451,7 @@ export function RegionsMapInner() {
     } catch (err) {
       console.error('[FranceMap] villes', err)
     }
-  }, [communes, citySel, level])
+  }, [communes, regionCommunes, citySel, level])
 
   // Rendu des couches selon le niveau — protégé : une erreur Leaflet ne casse pas la page
   useEffect(() => {
@@ -521,9 +537,17 @@ export function RegionsMapInner() {
                 if (dep === code) merged.set(nom.toLowerCase(), { nom, lat, lon, population: pop })
               }
               fetch(
-                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&limit=100`,
+                `https://geo.api.gouv.fr/departements/${code}/communes?fields=nom,centre,population`,
               )
-                .then((r) => (r.ok ? r.json() : []))
+                .then((r) => (r.ok ? r.json() : null))
+                .then((data) =>
+                  // Repli : l'ancien endpoint limité à 100 communes
+                  data && Array.isArray(data)
+                    ? data
+                    : fetch(
+                        `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&limit=100`,
+                      ).then((r) => (r.ok ? r.json() : []))
+                )
                 .then((data: unknown) => {
                   if (Array.isArray(data)) {
                     for (const c of data) {
@@ -592,6 +616,34 @@ export function RegionsMapInner() {
       map.off('moveend', onChange)
     }
   }, [level, drawCities, communes, geo])
+
+  // Communes de la région sélectionnée — pour afficher un maximum de villes dès ce niveau
+  useEffect(() => {
+    if (level !== 'depts' || !regionSel) {
+      setRegionCommunes([])
+      return
+    }
+    let cancelled = false
+    fetch(`https://geo.api.gouv.fr/regions/${regionSel.code}/communes?fields=nom,centre,population`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data: unknown) => {
+        if (cancelled || !Array.isArray(data)) return
+        const list: Commune[] = []
+        for (const raw of data) {
+          const c = raw as { nom?: string; centre?: { coordinates?: [number, number] }; population?: number }
+          const lon = c.centre?.coordinates?.[0]
+          const lat = c.centre?.coordinates?.[1]
+          if (!c.nom || typeof lat !== 'number' || typeof lon !== 'number') continue
+          list.push({ nom: c.nom, lat, lon, population: c.population ?? 0 })
+        }
+        list.sort((a, b) => b.population - a.population)
+        setRegionCommunes(list)
+      })
+      .catch(() => setRegionCommunes([]))
+    return () => {
+      cancelled = true
+    }
+  }, [level, regionSel])
 
   const goRegions = useCallback(() => {
     setLevel('regions')

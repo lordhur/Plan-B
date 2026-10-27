@@ -127,6 +127,11 @@ export type Story = Prisma.StoryModel
  */
 export type SavedStory = Prisma.SavedStoryModel
 /**
+ * Model StoryLike
+ * * « J'aime » sur une story d'un autre membre (spec : on ne peut que liker).
+ */
+export type StoryLike = Prisma.StoryLikeModel
+/**
  * Model WaitlistEntry
  * 
  */

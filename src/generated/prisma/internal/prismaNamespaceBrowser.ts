@@ -68,6 +68,7 @@ export const ModelName = {
   EventParticipation: 'EventParticipation',
   Story: 'Story',
   SavedStory: 'SavedStory',
+  StoryLike: 'StoryLike',
   WaitlistEntry: 'WaitlistEntry',
   EventInvitation: 'EventInvitation',
   EventChatMessage: 'EventChatMessage',
@@ -401,6 +402,16 @@ export const SavedStoryScalarFieldEnum = {
 } as const
 
 export type SavedStoryScalarFieldEnum = (typeof SavedStoryScalarFieldEnum)[keyof typeof SavedStoryScalarFieldEnum]
+
+
+export const StoryLikeScalarFieldEnum = {
+  id: 'id',
+  storyId: 'storyId',
+  userId: 'userId',
+  createdAt: 'createdAt'
+} as const
+
+export type StoryLikeScalarFieldEnum = (typeof StoryLikeScalarFieldEnum)[keyof typeof StoryLikeScalarFieldEnum]
 
 
 export const WaitlistEntryScalarFieldEnum = {
