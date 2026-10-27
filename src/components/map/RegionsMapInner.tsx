@@ -2,13 +2,19 @@
 
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import { ArrowLeft, Check, Crosshair, Loader2, RotateCcw } from 'lucide-react'
+import { ArrowLeft, Check, Crosshair, Loader2, Radar, RotateCcw } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { MapContainer, useMap } from 'react-leaflet'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toast'
 import { cn } from '@/lib/utils'
-import { useLocationFilter, type BBox } from '@/lib/locationFilter'
+import {
+  MAX_RADIUS_KM,
+  MIN_RADIUS_KM,
+  syncRadiusFromStorage,
+  useLocationFilter,
+  type BBox,
+} from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
 
 /** GeoJSON officiels simplifiés (chargés dans le navigateur). */
@@ -741,6 +747,35 @@ export function RegionsMapInner() {
   const [loading, setLoading] = useState(true)
   const [communes, setCommunes] = useState<Commune[]>([])
   const [mapError, setMapError] = useState<string | null>(null)
+  const [mapReady, setMapReady] = useState(false)
+  // Animation jouée à chaque sélection (région → département → ville)
+  const [selectFx, setSelectFx] = useState<{
+    x: number
+    y: number
+    label: string
+    kind: 'region' | 'dept' | 'city'
+  } | null>(null)
+  const selectTimer = useRef<number | null>(null)
+  const radiusLayerRef = useRef<L.LayerGroup | null>(null)
+
+  const fireSelectFx = useCallback(
+    (label: string, kind: 'region' | 'dept' | 'city', point?: L.Point) => {
+      const map = mapRef.current
+      const size = map?.getSize()
+      const raw = point ?? (size ? L.point(size.x / 2, size.y / 2) : null)
+      if (!raw || !size) return
+      // On garde l'effet (anneaux + étiquette du nom) dans le cadre, même si l'on
+      // clique tout au bord de la carte.
+      const chipW = Math.min(190, label.length * 6.2 + 30)
+      const halfX = Math.max(48, chipW / 2)
+      const x = Math.min(Math.max(raw.x, halfX), Math.max(halfX, size.x - halfX))
+      const y = Math.min(Math.max(raw.y, 34), Math.max(34, size.y - 10))
+      setSelectFx({ x, y, label, kind })
+      if (selectTimer.current) window.clearTimeout(selectTimer.current)
+      selectTimer.current = window.setTimeout(() => setSelectFx(null), 1500)
+    },
+    [],
+  )
   // Animation de confirmation après « Valider » (spec)
   const [celebrate, setCelebrate] = useState<string | null>(null)
   const celebrateTimer = useRef<number | null>(null)
@@ -754,11 +789,30 @@ export function RegionsMapInner() {
   useEffect(
     () => () => {
       if (celebrateTimer.current) window.clearTimeout(celebrateTimer.current)
+      if (selectTimer.current) window.clearTimeout(selectTimer.current)
     },
     [],
   )
 
-  const { setFilter, clear } = useLocationFilter()
+  const { filter, setFilter, clear, radiusKm, setRadiusKm } = useLocationFilter()
+
+  // Rayon mémorisé (km) relu côté client
+  useEffect(() => {
+    syncRadiusFromStorage()
+  }, [])
+
+  // Nettoyage du calque « rayon » au démontage
+  useEffect(
+    () => () => {
+      try {
+        radiusLayerRef.current?.remove()
+      } catch {
+        /* déjà retiré */
+      }
+      radiusLayerRef.current = null
+    },
+    [],
+  )
 
   // Chargement des contours
   useEffect(() => {
@@ -815,13 +869,16 @@ export function RegionsMapInner() {
           title: c.nom,
           alt: c.nom,
         })
-        m.on('click', () => setCitySel(c))
+        m.on('click', (e) => {
+          fireSelectFx(c.nom, 'city', e.containerPoint)
+          setCitySel(c)
+        })
         m.addTo(group)
       }
     } catch (err) {
       console.error('[FranceMap] villes', err)
     }
-  }, [communes, citySel, level])
+  }, [communes, citySel, level, fireSelectFx])
 
   // Rendu des couches selon le niveau — protégé : une erreur Leaflet ne casse pas la page
   useEffect(() => {
@@ -887,7 +944,8 @@ export function RegionsMapInner() {
             if (frame) areaItems.push({ frame, name, kind: 'region' })
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
-            layer.on('click', () => {
+            layer.on('click', (e) => {
+              fireSelectFx(name, 'region', e.containerPoint)
               setRegionSel({ code, name })
               setDeptSel(null)
               setCitySel(null)
@@ -907,7 +965,8 @@ export function RegionsMapInner() {
             if (frame) areaItems.push({ frame, name, kind: 'dept' })
             layer.on('mouseover', hoverIn)
             layer.on('mouseout', hoverOut)
-            layer.on('click', () => {
+            layer.on('click', (e) => {
+              fireSelectFx(name, 'dept', e.containerPoint)
               setDeptSel({ code, name })
               setCitySel(null)
               setLevel('cities')
@@ -993,7 +1052,46 @@ export function RegionsMapInner() {
         /* déjà retiré */
       }
     }
-  }, [geo, level, regionSel, deptSel])
+  }, [geo, level, regionSel, deptSel, fireSelectFx])
+
+  /**
+   * Cercle du rayon de recherche (jauge « km autour d'une ville / de ma position »).
+   * Dessiné autour de la ville sélectionnée ou de la position validée (GPS inclus).
+   * Le rayon est lu dans le store : glisser la jauge ne recalcule pas les noms.
+   */
+  const drawRadius = useCallback(() => {
+    const map = mapRef.current
+    if (!map) return
+    if (!radiusLayerRef.current) radiusLayerRef.current = L.layerGroup().addTo(map)
+    const group = radiusLayerRef.current
+    group.clearLayers()
+
+    const store = useLocationFilter.getState()
+    const activeFilter = store.filter
+    const center =
+      citySel != null
+        ? { lat: citySel.lat, lon: citySel.lon }
+        : activeFilter?.type === 'city'
+          ? { lat: activeFilter.lat, lon: activeFilter.lon }
+          : null
+    if (!center) return
+
+    try {
+      L.circle([center.lat, center.lon], {
+        radius: store.radiusKm * 1000,
+        className: 'radius-circle',
+        color: '#7c3aed',
+        weight: 1.5,
+        opacity: 0.85,
+        dashArray: '7 7',
+        fillColor: '#8b5cf6',
+        fillOpacity: 0.1,
+        interactive: false,
+      }).addTo(group)
+    } catch (err) {
+      console.error('[FranceMap] rayon', err)
+    }
+  }, [citySel])
 
   // (Re)dessin des villes et des noms de zones à chaque zoom/déplacement
   useEffect(() => {
@@ -1001,9 +1099,11 @@ export function RegionsMapInner() {
     if (!map || !geo.depts) return
     drawCities()
     drawAreaLabels()
+    drawRadius()
     const onChange = () => {
       drawCities()
       drawAreaLabels()
+      drawRadius()
     }
     map.on('zoomend', onChange)
     map.on('moveend', onChange)
@@ -1011,7 +1111,12 @@ export function RegionsMapInner() {
       map.off('zoomend', onChange)
       map.off('moveend', onChange)
     }
-  }, [level, drawCities, drawAreaLabels, communes, geo])
+  }, [level, drawCities, drawAreaLabels, drawRadius, communes, geo])
+
+  // Le cercle suit la jauge en direct (et la ville / position choisie)
+  useEffect(() => {
+    drawRadius()
+  }, [drawRadius, radiusKm, citySel, filter, mapReady])
 
   const goRegions = useCallback(() => {
     setLevel('regions')
@@ -1065,13 +1170,20 @@ export function RegionsMapInner() {
   const useGps = () => {
     if (!navigator.geolocation) return
     navigator.geolocation.getCurrentPosition(
-      (pos) =>
-        setFilter({
-          type: 'city',
-          name: 'Ma position',
-          lat: pos.coords.latitude,
-          lon: pos.coords.longitude,
-        }),
+      (pos) => {
+        const lat = pos.coords.latitude
+        const lon = pos.coords.longitude
+        setFilter({ type: 'city', name: t('map_my_position'), lat, lon })
+        fireSelectFx(t('map_my_position'), 'city')
+        // On recentre la carte sur la position et on montre le rayon choisi.
+        try {
+          mapRef.current?.flyTo([lat, lon], Math.max(mapRef.current.getZoom(), 9), {
+            duration: 0.8,
+          })
+        } catch {
+          /* carte pas prête */
+        }
+      },
       () => undefined,
       { timeout: 8000 },
     )
@@ -1159,6 +1271,7 @@ export function RegionsMapInner() {
             className="map-blank h-full w-full"
             ref={(m) => {
               mapRef.current = m ?? null
+              if (m) setMapReady(true)
             }}
           >
             {/* Carte vierge : aucun fond satellite ni plan de rues (spec) */}
@@ -1168,6 +1281,21 @@ export function RegionsMapInner() {
         {mapError && (
           <div className="absolute inset-x-2 bottom-2 z-[1000] rounded-lg bg-danger-500/90 px-3 py-2 text-center text-xs font-semibold text-white">
             {mapError}
+          </div>
+        )}
+
+        {/* Animation de sélection : région / département / ville (spec) */}
+        {selectFx && (
+          <div
+            className="pointer-events-none absolute z-[1080]"
+            style={{ left: selectFx.x, top: selectFx.y }}
+            role="status"
+            aria-live="polite"
+          >
+            <span className={cn('map-select-ring', selectFx.kind)} aria-hidden />
+            <span className={cn('map-select-ring map-select-ring-2', selectFx.kind)} aria-hidden />
+            <span className={cn('map-select-dot', selectFx.kind)} aria-hidden />
+            <span className={cn('map-select-chip', selectFx.kind)}>{selectFx.label}</span>
           </div>
         )}
 
@@ -1188,6 +1316,45 @@ export function RegionsMapInner() {
             </span>
           </div>
         )}
+      </div>
+
+      {/* Jauge : nombre de kilomètres autour de la ville / de ma position (spec) */}
+      <div className="mt-2.5 rounded-xl border border-border bg-bg-secondary/70 px-3 py-2.5">
+        <div className="flex items-center justify-between gap-2">
+          <label
+            htmlFor="radius-km"
+            className="flex items-center gap-1.5 text-xs font-bold text-fg-muted"
+          >
+            <Radar className="h-3.5 w-3.5 text-primary-600" aria-hidden />
+            {t('map_radius')}
+          </label>
+          <span className="rounded-full bg-primary-600 px-2 py-0.5 text-[11px] font-black tabular-nums text-white">
+            {radiusKm} km
+          </span>
+        </div>
+        <input
+          id="radius-km"
+          type="range"
+          min={MIN_RADIUS_KM}
+          max={MAX_RADIUS_KM}
+          step={1}
+          value={radiusKm}
+          onChange={(e) => setRadiusKm(Number(e.target.value))}
+          className="radius-range mt-2 w-full cursor-pointer"
+          aria-label={t('map_radius')}
+          aria-valuetext={`${radiusKm} ${t('map_radius_unit')}`}
+        />
+        <div className="mt-1 flex justify-between text-[10px] font-semibold tabular-nums text-fg-muted">
+          <span>{MIN_RADIUS_KM} km</span>
+          <span>50</span>
+          <span>100</span>
+          <span>{MAX_RADIUS_KM} km</span>
+        </div>
+        <p className="mt-1 text-center text-[10px] leading-snug text-fg-muted">
+          {filter?.type === 'region' || filter?.type === 'dept'
+            ? t('map_radius_zone_hint')
+            : t('map_radius_hint')}
+        </p>
       </div>
 
       <p className="mt-1.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] text-fg-muted">

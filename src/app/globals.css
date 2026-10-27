@@ -431,6 +431,135 @@ nav * {
   color: #1e293b;
 }
 
+/* ------------------------------------------------------------------
+   Animation de sélection : région → département → ville (spec)
+   Anneaux qui se propagent depuis le point cliqué + étiquette du nom.
+   ------------------------------------------------------------------ */
+@keyframes map-select-ring {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.9; }
+  70% { opacity: 0.35; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+}
+@keyframes map-select-chip {
+  0% { transform: translate(-50%, 6px) scale(0.82); opacity: 0; }
+  55% { transform: translate(-50%, 0) scale(1.06); opacity: 1; }
+  100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+@keyframes map-select-dot {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}
+.map-select-ring {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 96px;
+  height: 96px;
+  border-radius: 9999px;
+  border: 2.5px solid currentColor;
+  transform: translate(-50%, -50%);
+  animation: map-select-ring 0.95s ease-out forwards;
+}
+.map-select-ring-2 { animation-delay: 0.18s; }
+.map-select-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  background: currentColor;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.9);
+  animation: map-select-dot 0.4s cubic-bezier(0.22, 1.4, 0.4, 1) both;
+}
+.map-select-chip {
+  position: absolute;
+  left: 0;
+  top: 16px;
+  max-width: 190px;
+  padding: 0.3rem 0.65rem;
+  border-radius: 9999px;
+  background: currentColor;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.28);
+  animation: map-select-chip 0.5s cubic-bezier(0.22, 1.4, 0.4, 1) both;
+}
+/* Couleur selon le niveau sélectionné */
+.map-select-ring.region, .map-select-dot.region, .map-select-chip.region { color: #7c3aed; }
+.map-select-ring.dept, .map-select-dot.dept, .map-select-chip.dept { color: #2563eb; }
+.map-select-ring.city, .map-select-dot.city, .map-select-chip.city { color: #059669; }
+
+/* Cercle du rayon de recherche (jauge km) */
+.radius-circle {
+  transition: none;
+}
+
+/* Jauge de rayon : piste fine, curseur confortable (cible ≥ 44 px au doigt) */
+.radius-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  background: transparent;
+}
+.radius-range::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+  opacity: 0.85;
+}
+.radius-range::-moz-range-track {
+  height: 6px;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #7c3aed, #8b5cf6);
+  opacity: 0.85;
+}
+.radius-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -7px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #7c3aed;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+  cursor: grab;
+}
+.radius-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 9999px;
+  background: #fff;
+  border: 3px solid #7c3aed;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.25);
+  cursor: grab;
+}
+.radius-range:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.08);
+}
+.radius-range:focus-visible {
+  outline: 2px solid #7c3aed;
+  outline-offset: 4px;
+  border-radius: 9999px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .map-select-ring,
+  .map-select-ring-2,
+  .map-select-chip,
+  .map-select-dot {
+    animation-duration: 0.01ms;
+  }
+}
+
 /* Animation de confirmation après « Valider » */
 @keyframes validate-pop {
   0% { transform: scale(0.4); opacity: 0; }

@@ -64,6 +64,13 @@ const dict: Record<Lang, Record<string, string>> = {
     map_depts: 'Départements',
     map_validate: 'Valider',
     map_validated_btn: 'Validé !',
+    map_my_position: 'Ma position',
+    map_radius: 'Rayon autour de moi',
+    map_radius_unit: 'kilomètres',
+    map_radius_hint:
+      'Ajustez la distance : les plans à moins de ce rayon autour de la ville choisie ou de votre position GPS sont affichés.',
+    map_radius_zone_hint:
+      'Le rayon s’applique à une ville ou à votre position GPS : cliquez une ville (ou sur GPS) pour en profiter.',
     map_validated: 'Zone validée ✓',
     map_validated_desc: 'les plans et membres de cette zone sont affichés',
     map_hint: 'Puis Validez pour afficher les plans et membres de la zone.',
@@ -294,6 +301,13 @@ const dict: Record<Lang, Record<string, string>> = {
     map_depts: 'Departments',
     map_validate: 'Confirm',
     map_validated_btn: 'Confirmed!',
+    map_my_position: 'My location',
+    map_radius: 'Radius around me',
+    map_radius_unit: 'kilometres',
+    map_radius_hint:
+      'Adjust the distance: plans within this radius of the chosen city or your GPS position are shown.',
+    map_radius_zone_hint:
+      'The radius applies to a city or your GPS position: pick a city (or tap GPS) to use it.',
     map_validated: 'Area confirmed ✓',
     map_validated_desc: 'plans and members for this area are now shown',
     map_hint: 'Then Confirm to show the plans and members of the area.',
