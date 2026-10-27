@@ -14,8 +14,10 @@ import {
   Loader2,
   Mic,
   MoreVertical,
+  Pause,
   Paperclip,
   Phone,
+  Play,
   Search,
   Send,
   Smile,
@@ -92,23 +94,97 @@ const THEMES: Record<string, { label: string; bg?: string }> = {
   nuit: { label: 'Nuit', bg: 'linear-gradient(135deg,#312e81,#1e293b)' },
 }
 
-/** Lecteur audio : pastille de vitesse à droite — clic : x1 → x1,5 → x2 → x1 (spec). */
+function fmtTime(s: number) {
+  const total = Number.isFinite(s) && s > 0 ? Math.floor(s) : 0
+  return `${Math.floor(total / 60)}:${String(total % 60).padStart(2, '0')}`
+}
+
+/**
+ * Lecteur vocal compact — la bulle s'adapte au contenu (spec) :
+ * bouton lecture/pause · barre de progression · durée · pastille de vitesse
+ * (clic : x1 → x1,5 → x2 → x1).
+ */
 function AudioPlayer({ url }: { url: string }) {
   const ref = useRef<HTMLAudioElement>(null)
   const [rate, setRate] = useState(1)
+  const [playing, setPlaying] = useState(false)
+  const [current, setCurrent] = useState(0)
+  const [duration, setDuration] = useState(0)
+
   const cycle = () => {
     const next = rate === 1 ? 1.5 : rate === 1.5 ? 2 : 1
     setRate(next)
     if (ref.current) ref.current.playbackRate = next
   }
+
+  const toggle = async () => {
+    const el = ref.current
+    if (!el) return
+    if (el.paused) {
+      try {
+        await el.play()
+      } catch {
+        /* lecture bloquée par le navigateur */
+      }
+    } else {
+      el.pause()
+    }
+  }
+
+  const pct = duration > 0 ? Math.min(100, (current / duration) * 100) : 0
+
   return (
-    <div className="flex items-center gap-2">
-      <audio ref={ref} src={url} controls className="h-9 min-w-0 max-w-[11rem]" />
+    <div className="flex w-[12.5rem] max-w-full items-center gap-1.5">
+      <audio
+        ref={ref}
+        src={url}
+        preload="metadata"
+        className="hidden"
+        onPlay={() => setPlaying(true)}
+        onPause={() => setPlaying(false)}
+        onEnded={() => {
+          setPlaying(false)
+          setCurrent(0)
+        }}
+        onTimeUpdate={(e) => setCurrent(e.currentTarget.currentTime)}
+        onLoadedMetadata={(e) => {
+          const el = e.currentTarget
+          setDuration(Number.isFinite(el.duration) ? el.duration : 0)
+          el.playbackRate = rate
+        }}
+      />
+      <button
+        type="button"
+        onClick={toggle}
+        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-600 text-white transition-colors hover:bg-primary-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+        aria-label={playing ? 'Mettre en pause' : 'Lire le message vocal'}
+      >
+        {playing ? <Pause className="h-3.5 w-3.5 fill-current" aria-hidden /> : <Play className="ml-0.5 h-3.5 w-3.5 fill-current" aria-hidden />}
+      </button>
+      <input
+        type="range"
+        min={0}
+        max={100}
+        step={0.5}
+        value={pct}
+        onChange={(e) => {
+          const el = ref.current
+          if (!el || !duration) return
+          const ratio = Number(e.target.value) / 100
+          el.currentTime = ratio * duration
+          setCurrent(el.currentTime)
+        }}
+        aria-label="Position de lecture"
+        className="h-1.5 min-w-0 flex-1 cursor-pointer accent-primary-600"
+      />
+      <span className="shrink-0 text-[11px] font-semibold tabular-nums text-fg-muted">
+        {fmtTime(playing ? current : duration)}
+      </span>
       <button
         type="button"
         onClick={cycle}
-        className="shrink-0 rounded-full bg-muted px-2 py-1 text-[11px] font-bold text-fg hover:bg-primary hover:text-primary-foreground"
-        aria-label={`Vitesse de lecture : x${rate} — cliquer pour changer`}
+        className="shrink-0 rounded-full bg-muted px-1.5 py-1 text-[11px] font-bold leading-none text-fg hover:bg-primary-600 hover:text-white"
+        aria-label={`Vitesse de lecture : x${rate === 1.5 ? '1,5' : rate} — cliquer pour changer`}
         title="Vitesse de lecture"
       >
         x{rate === 1.5 ? '1,5' : rate}
@@ -130,11 +206,17 @@ function AttachmentView({
   compact?: boolean
 }) {
   if (type === 'IMAGE') {
-    // eslint-disable-next-line @next/next/no-img-element
-    return <img src={url} alt={name ?? 'Image'} className={cn('rounded-lg object-cover', compact ? 'max-h-48' : 'max-h-72')} />
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={url}
+        alt={name ?? 'Image'}
+        className={cn('max-w-full rounded-lg object-cover', compact ? 'max-h-48' : 'max-h-64')}
+      />
+    )
   }
   if (type === 'VIDEO') {
-    return <video src={url} controls playsInline className="max-h-64 w-full rounded-lg" />
+    return <video src={url} controls playsInline className="max-h-64 max-w-full rounded-lg" />
   }
   if (type === 'AUDIO') {
     return <AudioPlayer url={url} />
@@ -829,13 +911,18 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         {visible.map((m) => {
           const mine = m.author.id === user?.id
           const created = new Date(m.createdAt).getTime()
+          // Vocal : pas de libellé dans la bulle (spec) — juste le lecteur
+          const isVoice = m.mediaType === 'AUDIO'
+          const caption = m.content && !isVoice ? m.content : null
+          const noCaption = !!m.mediaUrl && !caption && m.mediaType !== 'FILE'
           return (
             <div key={m.id} className={cn('group flex items-end gap-2', mine && 'flex-row-reverse')}>
               {!mine && <Avatar src={m.author.avatarUrl} name={m.author.firstName} className="h-8 w-8 shrink-0" />}
-              <div className={cn('max-w-[85%] min-w-0 sm:max-w-[70%]', mine && 'items-end text-right')}>
+              <div className={cn('flex w-fit min-w-0 max-w-[85%] flex-col sm:max-w-[70%]', mine ? 'items-end' : 'items-start')}>
                 <div
                   className={cn(
-                    'rounded-2xl border border-border bg-card px-3 py-2 text-sm shadow-sm',
+                    'w-fit max-w-full rounded-2xl border border-border bg-card text-left text-sm shadow-sm',
+                    noCaption ? 'p-1.5' : 'px-3 py-2',
                     mine ? 'rounded-br-sm' : 'rounded-bl-sm',
                   )}
                 >
@@ -845,13 +932,13 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                     </p>
                   )}
                   {m.mediaUrl ? (
-                    <div>
+                    <div className="w-fit max-w-full">
                       <AttachmentView url={m.mediaUrl} type={m.mediaType} name={m.mediaName} />
                     </div>
                   ) : null}
-                  {m.content && (
+                  {caption && (
                     <p className={cn(m.mediaUrl && 'mt-1.5')}>
-                      <MsgText text={m.content} mine={mine} translateEnabled={kind === 'event' ? translateEnabled : false} lang={lang} />
+                      <MsgText text={caption} mine={mine} translateEnabled={kind === 'event' ? translateEnabled : false} lang={lang} />
                     </p>
                   )}
                   {dmData?.ephemeralHours && (
