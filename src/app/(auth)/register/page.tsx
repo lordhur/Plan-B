@@ -55,7 +55,7 @@ function RegisterForm() {
           <Sparkles className="h-5 w-5 text-primary-600" aria-hidden /> {tl('auth_create')}
         </CardTitle>
         <CardDescription>
-          2 minutes chrono. Ensuite, à vous les plans près de chez vous.
+          {tl('auth_register_sub')}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -79,7 +79,7 @@ function RegisterForm() {
 
           <div>
             <Label htmlFor="email">{tl('auth_email')} *</Label>
-            <Input id="email" type="email" autoComplete="email" placeholder="vous@exemple.fr" aria-invalid={!!errors.email} {...register('email')} />
+            <Input id="email" type="email" autoComplete="email" placeholder={tl('auth_email_ph')} aria-invalid={!!errors.email} {...register('email')} />
             {errors.email && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.email.message}</p>}
           </div>
 
@@ -87,7 +87,7 @@ function RegisterForm() {
             <Label htmlFor="password">{tl('auth_password')} *</Label>
             <Input id="password" type="password" autoComplete="new-password" aria-describedby="password-hint" aria-invalid={!!errors.password} {...register('password')} />
             <p id="password-hint" className="mt-1 text-xs text-fg-muted">
-              8 caractères min., avec au moins une lettre et un chiffre.
+              {tl('auth_pwd_hint')}
             </p>
             {errors.password && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.password.message}</p>}
           </div>
@@ -122,18 +122,17 @@ function RegisterForm() {
             ) : (
               <ArrowRight className="h-4 w-4" aria-hidden />
             )}
-            Continuer
+            {tl('auth_continue')}
           </Button>
 
           <p className="text-center text-xs text-fg-muted">
-            En créant un compte, vous acceptez nos conditions d’utilisation et notre politique de
-            confidentialité (RGPD).
+            {tl('auth_terms')}
           </p>
 
           <p className="text-center text-sm text-fg-muted">
-            Déjà inscrit·e ?{' '}
+            {tl('auth_already')}{' '}
             <Link href="/login" className="font-semibold text-primary-600 hover:underline">
-              Connexion
+              {tl('auth_have_account')}
             </Link>
           </p>
         </form>

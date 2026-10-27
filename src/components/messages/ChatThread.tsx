@@ -40,7 +40,7 @@ import {
 } from './CallOverlay'
 import { uploadToStorage } from '@/lib/supabaseUpload'
 import { useLang } from '@/lib/i18n'
-import { useTranslate } from '@/lib/translate'
+import { detectLang, useTranslation } from '@/lib/translate'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { formatRelative } from '@/lib/date'
@@ -245,11 +245,45 @@ function StatusTicks({ read, delivered }: { read: boolean; delivered: boolean })
   return <Check className="h-4 w-4" aria-label={t('msg_sent')} />
 }
 
-/** Contenu traduit à la demande (spec : boutons traduction). */
-function MsgText({ text, translateEnabled, lang }: { text: string; mine: boolean; translateEnabled: boolean; lang: string }) {
-  const wantTranslate = translateEnabled && lang !== 'fr'
-  const translated = useTranslate(text, wantTranslate)
-  return <span className="whitespace-pre-wrap break-words">{wantTranslate ? translated || text : text}</span>
+/**
+ * Contenu du message, avec traduction à la demande (spec) :
+ * la pastille « Traduire » / « Voir l'original » permet d'afficher la version
+ * traduite ou d'annuler la traduction, message par message.
+ */
+function MsgText({
+  text,
+  translate,
+  onToggle,
+  lang,
+}: {
+  text: string
+  mine?: boolean
+  translate: boolean
+  onToggle: () => void
+  lang: string
+}) {
+  const { t } = useLang()
+  // Message déjà dans la langue de l'interface ? Inutile de proposer une traduction.
+  const sameLang = detectLang(text) === lang
+  const active = translate && !sameLang
+  const { text: shown, loading } = useTranslation(text, active, lang)
+  return (
+    <>
+      <span className="whitespace-pre-wrap break-words">{shown}</span>
+      {!sameLang && (
+        <button
+          type="button"
+          onClick={onToggle}
+          className="mt-0.5 flex items-center gap-1 text-[10px] font-semibold text-fg-muted transition-colors hover:text-primary-600"
+          aria-pressed={active}
+          title={active ? t('trans_original') : t('trans_translate')}
+        >
+          <Languages className="h-3 w-3" aria-hidden />
+          {loading ? t('trans_loading') : active ? t('trans_original') : t('trans_translate')}
+        </button>
+      )}
+    </>
+  )
 }
 
 /** Sélecteur GIF/stickers — Giphy (clé publique), repli grille d'emojis. */
@@ -337,7 +371,30 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQ, setSearchQ] = useState('')
   const [mediaOnly, setMediaOnly] = useState(false)
-  const [translateEnabled, setTranslateEnabled] = useState(false)
+  // Traduction automatique de la conversation (DM et événements) — persistée
+  const [autoTranslate, setAutoTranslate] = useState(false)
+  const [manualTranslate, setManualTranslate] = useState<Record<string, boolean>>({})
+  useEffect(() => {
+    try {
+      setAutoTranslate(window.localStorage.getItem('planb_autotranslate') === '1')
+    } catch {
+      /* stockage indisponible */
+    }
+  }, [])
+  const toggleAutoTranslate = () => {
+    setAutoTranslate((v) => {
+      const next = !v
+      try {
+        window.localStorage.setItem('planb_autotranslate', next ? '1' : '0')
+      } catch {
+        /* ignore */
+      }
+      return next
+    })
+  }
+  const isTranslated = (id: string) => manualTranslate[id] ?? autoTranslate
+  const toggleMsgTranslate = (id: string) =>
+    setManualTranslate((prev) => ({ ...prev, [id]: !(prev[id] ?? autoTranslate) }))
   const [menuSection, setMenuSection] = useState<null | 'main' | 'mute' | 'ephemeral' | 'theme' | 'members' | 'report' | 'block' | 'erase' | 'group'>(null)
   const [actionMsg, setActionMsg] = useState<ChatMessage | null>(null)
   const [reportText, setReportText] = useState('')
@@ -579,18 +636,20 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
     <div className={cn('flex h-full flex-col', className)}>
       {/* Barre d'outils de la conversation */}
       <div className="flex items-center justify-end gap-1 border-b border-border px-2 py-1">
-        {kind === 'event' && (
-          <Button
-            variant={translateEnabled ? 'default' : 'ghost'}
-            size="sm"
-            onClick={() => setTranslateEnabled((v) => !v)}
-            aria-pressed={translateEnabled}
-            title="Traduire les messages en anglais"
-          >
-            <Languages className="h-4 w-4" aria-hidden />
-            <span className="sr-only sm:not-sr-only sm:ml-1">Traduire</span>
-          </Button>
-        )}
+        <Button
+          variant={autoTranslate ? 'default' : 'ghost'}
+          size="sm"
+          onClick={toggleAutoTranslate}
+          aria-pressed={autoTranslate}
+          title={
+            autoTranslate ? t('trans_auto_on_title') : t('trans_auto_title')
+          }
+        >
+          <Languages className="h-4 w-4" aria-hidden />
+          <span className="sr-only sm:not-sr-only sm:ml-1">
+            {autoTranslate ? t('trans_on') : t('trans_translate')}
+          </span>
+        </Button>
         {kind === 'dm' && (
           <>
             <Button variant="ghost" size="icon" aria-label={t('msg_call')} onClick={() => setCall({ mode: 'audio', isCaller: true })}>
@@ -893,6 +952,8 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         className="flex-1 space-y-3 overflow-y-auto p-3"
         role="log"
         aria-live="polite"
+        // Le contenu des messages a ses propres boutons « Traduire / Original »
+        data-no-translate
         style={theme.bg ? { backgroundImage: theme.bg } : undefined}
       >
         {kind === 'event' && meta.isLoading && <LoadingSpinner label="Chargement du chat" />}
@@ -938,7 +999,13 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                   ) : null}
                   {caption && (
                     <p className={cn(m.mediaUrl && 'mt-1.5')}>
-                      <MsgText text={caption} mine={mine} translateEnabled={kind === 'event' ? translateEnabled : false} lang={lang} />
+                      <MsgText
+                        text={caption}
+                        mine={mine}
+                        translate={isTranslated(m.id)}
+                        onToggle={() => toggleMsgTranslate(m.id)}
+                        lang={lang}
+                      />
                     </p>
                   )}
                   {dmData?.ephemeralHours && (

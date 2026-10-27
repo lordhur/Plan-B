@@ -54,6 +54,7 @@ model User {
   videoUrl      String? // Vidéo de présentation
   stories       Story[]
   savedStories SavedStory[]
+  storyLikes   StoryLike[]
   blocksGiven   UserBlock[]    @relation("UserBlockBlocker")
   blocksReceived UserBlock[]   @relation("UserBlockBlocked")
   messageHides  MessageHide[]
@@ -556,6 +557,7 @@ model Story {
   caption   String?
   createdAt DateTime @default(now())
   savedBy   SavedStory[]
+  likes     StoryLike[]
 
   @@index([authorId])
   @@index([createdAt])
@@ -572,6 +574,20 @@ model SavedStory {
   createdAt DateTime @default(now())
 
   @@unique([userId, storyId])
+  @@index([userId])
+}
+
+/** « J'aime » sur une story d'un autre membre (spec : on ne peut que liker). */
+model StoryLike {
+  id        String   @id @default(cuid())
+  storyId   String
+  story     Story    @relation(fields: [storyId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([storyId, userId])
+  @@index([storyId])
   @@index([userId])
 }
 

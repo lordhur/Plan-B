@@ -34,56 +34,48 @@ export const storiesRouter = createTRPCRouter({
         createdAt: { gte: since },
         authorId: { in: [ctx.user.id, ...friendIds] },
       },
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-      include: { author: { select: AUTHOR_SELECT } },
+      orderBy: { createdAt: 'asc' },
+      take: 150,
+      include: {
+        author: { select: AUTHOR_SELECT },
+        _count: { select: { likes: true } },
+        likes: { where: { userId: ctx.user.id }, select: { id: true } },
+      },
     })
 
+    type Item = {
+      id: string
+      mediaUrl: string
+      type: 'PHOTO' | 'VIDEO'
+      caption: string | null
+      createdAt: Date
+      likes: number
+      likedByMe: boolean
+    }
+    type Author = {
+      id: string
+      firstName: string
+      lastName: string
+      displayName: string | null
+      avatarUrl: string | null
+    }
+
     // Regroupement par auteur (moi en premier)
-    const byAuthor = new Map<
-      string,
-      {
-        author: {
-          id: string
-          firstName: string
-          lastName: string
-          displayName: string | null
-          avatarUrl: string | null
-        }
-        isMe: boolean
-        items: {
-          id: string
-          mediaUrl: string
-          type: 'PHOTO' | 'VIDEO'
-          caption: string | null
-          createdAt: Date
-        }[]
-      }
-    >()
+    const byAuthor = new Map<string, { author: Author; isMe: boolean; items: Item[] }>()
     for (const s of stories) {
-      const entry =
-        byAuthor.get(s.authorId) ??
-        (() => {
-          const e = {
-            author: s.author,
-            isMe: s.authorId === ctx.user.id,
-            items: [] as {
-              id: string
-              mediaUrl: string
-              type: 'PHOTO' | 'VIDEO'
-              caption: string | null
-              createdAt: Date
-            }[],
-          }
-          byAuthor.set(s.authorId, e)
-          return e
-        })()
+      let entry = byAuthor.get(s.authorId)
+      if (!entry) {
+        entry = { author: s.author, isMe: s.authorId === ctx.user.id, items: [] }
+        byAuthor.set(s.authorId, entry)
+      }
       entry.items.push({
         id: s.id,
         mediaUrl: s.mediaUrl,
         type: s.type,
         caption: s.caption,
         createdAt: s.createdAt,
+        likes: s._count.likes,
+        likedByMe: s.likes.length > 0,
       })
     }
 
@@ -137,8 +129,18 @@ export const storiesRouter = createTRPCRouter({
   saveStory: protectedProcedure
     .input(z.object({ storyId: z.string() }))
     .mutation(async ({ input, ctx }) => {
-      const story = await prisma.story.findUnique({ where: { id: input.storyId }, select: { id: true } })
+      const story = await prisma.story.findUnique({
+        where: { id: input.storyId },
+        select: { id: true, authorId: true },
+      })
       if (!story) throw new TRPCError({ code: 'NOT_FOUND', message: 'Story introuvable' })
+      // Spec : on ne mémorise que SES propres stories ; celles des autres se likent.
+      if (story.authorId !== ctx.user.id) {
+        throw new TRPCError({
+          code: 'FORBIDDEN',
+          message: 'Vous pouvez seulement mémoriser vos propres stories — likez celles des autres.',
+        })
+      }
       const last = await prisma.savedStory.findFirst({
         where: { userId: ctx.user.id },
         orderBy: { order: 'desc' },
@@ -182,6 +184,38 @@ export const storiesRouter = createTRPCRouter({
       },
     }))
   }),
+
+  // ------------------------------------------------------------------
+  // « J'aime » sur les stories des autres (spec)
+  // ------------------------------------------------------------------
+
+  /** Aimer la story d'un autre membre (idempotent). */
+  likeStory: protectedProcedure
+    .input(z.object({ storyId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const story = await prisma.story.findUnique({
+        where: { id: input.storyId },
+        select: { id: true, authorId: true },
+      })
+      if (!story) throw new TRPCError({ code: 'NOT_FOUND', message: 'Story introuvable' })
+      if (story.authorId === ctx.user.id) {
+        return { ok: true as const, likes: await prisma.storyLike.count({ where: { storyId: story.id } }) }
+      }
+      await prisma.storyLike.upsert({
+        where: { storyId_userId: { storyId: story.id, userId: ctx.user.id } },
+        create: { storyId: story.id, userId: ctx.user.id },
+        update: {},
+      })
+      return { ok: true as const, likes: await prisma.storyLike.count({ where: { storyId: story.id } }) }
+    }),
+
+  /** Retirer mon « j'aime » d'une story. */
+  unlikeStory: protectedProcedure
+    .input(z.object({ storyId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      await prisma.storyLike.deleteMany({ where: { storyId: input.storyId, userId: ctx.user.id } })
+      return { ok: true as const, likes: await prisma.storyLike.count({ where: { storyId: input.storyId } }) }
+    }),
 
   /** Déplacer une story mémorisée dans l'album (haut/bas). */
   reorderSavedStory: protectedProcedure

@@ -6,6 +6,7 @@ import { ThemeProvider } from '@/components/theme-provider'
 import { Toaster } from '@/components/ui/toast'
 import { PWARegister } from '@/components/pwa-register'
 import { LangProvider } from '@/lib/i18n'
+import { AutoTranslate } from '@/components/common/AutoTranslate'
 
 export const metadata: Metadata = {
   title: {
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TRPCProvider>
             <LangProvider>
+              <AutoTranslate />
               {children}
               <Toaster />
               <PWARegister />

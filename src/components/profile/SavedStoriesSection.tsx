@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { trpc } from '@/lib/trpc'
 import { cn } from '@/lib/utils'
+import { useLang } from '@/lib/i18n'
 
 /**
  * Album stories du profil (spec) : les stories mémorisées pendant la lecture,
  * dans l'ordre choisi par le membre (flèches haut/bas).
  */
 export function SavedStoriesSection() {
+  const { t } = useLang()
   const [openId, setOpenId] = useState<string | null>(null)
   const saved = trpc.stories.mySavedStories.useQuery(undefined, { refetchInterval: false })
   const reorder = trpc.stories.reorderSavedStory.useMutation({
@@ -24,13 +26,12 @@ export function SavedStoriesSection() {
   const rows = saved.data ?? []
   if (rows.length === 0) {
     return (
-      <section className="mt-5 w-full text-left" aria-label="Album stories">
+      <section className="mt-5 w-full text-left" aria-label={t('saved_title')}>
         <h3 className="flex items-center gap-1.5 text-sm font-bold text-fg-muted">
-          <Bookmark className="h-3.5 w-3.5" aria-hidden /> Album stories
+          <Bookmark className="h-3.5 w-3.5" aria-hidden /> {t('saved_title')}
         </h3>
         <p className="mt-1 text-xs text-fg-muted">
-          Mémorisez des stories avec l’icône signet pendant leur lecture — elles apparaîtront ici,
-          dans l’ordre de votre choix.
+          {t('saved_empty')}
         </p>
       </section>
     )
@@ -39,9 +40,9 @@ export function SavedStoriesSection() {
   const open = rows.find((r) => r.id === openId)
 
   return (
-    <section className="mt-5 w-full text-left" aria-label="Album stories">
+    <section className="mt-5 w-full text-left" aria-label={t('saved_title')}>
       <h3 className="flex items-center gap-1.5 text-sm font-bold text-fg-muted">
-        <Bookmark className="h-3.5 w-3.5 text-primary-600" aria-hidden /> Album stories
+        <Bookmark className="h-3.5 w-3.5 text-primary-600" aria-hidden /> {t('saved_title')}
         <span className="rounded-full bg-primary-100 px-1.5 text-[10px] font-bold text-primary-700">
           {rows.length}
         </span>
@@ -57,7 +58,7 @@ export function SavedStoriesSection() {
                 'block aspect-[9/14] w-full overflow-hidden rounded-xl border border-border bg-black',
                 openId === r.id && 'ring-2 ring-primary-600',
               )}
-              aria-label={`Story mémorisée ${i + 1} — voir`}
+              aria-label={`${t('saved_open')} ${i + 1} — ${t('card_details')}`}
             >
               {r.story.type === 'VIDEO' ? (
                 <span className="relative flex h-full w-full items-center justify-center bg-neutral-900">
@@ -88,14 +89,14 @@ export function SavedStoriesSection() {
             className="h-7 w-7"
           />
           <p className="mr-auto truncate text-xs font-semibold">
-            Story de {open.story.author.firstName} {open.story.author.lastName}
+            {open.story.author.firstName} {open.story.author.lastName}
             {open.story.caption ? ` — « ${open.story.caption} »` : ''}
           </p>
           <Button
             variant="outline"
             size="icon"
             className="h-8 w-8"
-            aria-label="Monter dans l’album"
+            aria-label={t('saved_up')}
             disabled={reorder.isPending}
             onClick={() => reorder.mutate({ id: open.id, direction: 'up' })}
           >
@@ -105,7 +106,7 @@ export function SavedStoriesSection() {
             variant="outline"
             size="icon"
             className="h-8 w-8"
-            aria-label="Descendre dans l’album"
+            aria-label={t('saved_down')}
             disabled={reorder.isPending}
             onClick={() => reorder.mutate({ id: open.id, direction: 'down' })}
           >
@@ -115,7 +116,7 @@ export function SavedStoriesSection() {
             variant="ghost"
             size="icon"
             className="h-8 w-8"
-            aria-label="Retirer de l’album"
+            aria-label={t('saved_remove')}
             disabled={unsave.isPending}
             onClick={() => unsave.mutate({ storyId: open.story.id })}
           >
