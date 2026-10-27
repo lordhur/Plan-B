@@ -15,6 +15,9 @@ import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmojiPicker } from './EmojiPicker'
 import { uploadToStorage } from '@/lib/supabaseUpload'
+import { useLang } from '@/lib/i18n'
+import { useTranslate } from '@/lib/translate'
+import { Timer, Languages } from 'lucide-react'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { formatRelative } from '@/lib/date'
@@ -110,6 +113,12 @@ function AttachmentView({
   )
 }
 
+/** Texte du message — traduction automatique FR→EN activable. */
+function MsgText({ text, translate }: { text: string; translate: boolean }) {
+  const out = useTranslate(text, translate)
+  return <>{out}</>
+}
+
 /**
  * Fil de discussion partagé (DM + chat d'événement).
  * DM : émojis + pièces jointes (photos, vidéos, audio, PDF ≤ 4 Mo).
@@ -127,6 +136,14 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
   const [showEmoji, setShowEmoji] = useState(false)
   const [attachment, setAttachment] = useState<PendingAttachment | null>(null)
   const [uploading, setUploading] = useState(false)
+  const [translateOn, setTranslateOn] = useState(false)
+  const { lang } = useLang()
+  const utils = trpc.useUtils()
+  const setEphemeral = trpc.messages.setEphemeral.useMutation({
+    onSuccess: async () => {
+      await utils.messages.invalidate()
+    },
+  })
 
   const dm = trpc.messages.messages.useQuery(
     { conversationId: id, limit: 80 },
@@ -288,6 +305,52 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
 
   return (
     <div className={cn('flex min-h-0 flex-1 flex-col', className)}>
+      {/* Outils : messages éphémères (DM) · traduction auto (chat d'événement) */}
+      {kind === 'dm' ? (
+        <div className="flex items-center gap-1.5 border-b border-border bg-bg-secondary/60 px-3 py-1.5">
+          <Timer className="h-3.5 w-3.5 text-fg-muted" aria-hidden />
+          <span className="text-[11px] font-semibold text-fg-muted">Messages éphémères :</span>
+          {[
+            { v: null, label: 'Non' },
+            { v: 24 as const, label: '24 h' },
+            { v: 168 as const, label: '1 semaine' },
+            { v: 720 as const, label: '1 mois' },
+          ].map((opt) => (
+            <button
+              key={opt.label}
+              type="button"
+              aria-pressed={(dm.data?.ephemeralHours ?? null) === opt.v}
+              onClick={() => setEphemeral.mutate({ conversationId: id, hours: opt.v })}
+              className={cn(
+                'rounded-full px-2 py-0.5 text-[11px] font-bold transition-colors',
+                (dm.data?.ephemeralHours ?? null) === opt.v
+                  ? 'bg-primary-600 text-white'
+                  : 'bg-card text-fg-muted hover:text-fg',
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="flex items-center gap-1.5 border-b border-border bg-bg-secondary/60 px-3 py-1.5">
+          <button
+            type="button"
+            aria-pressed={translateOn}
+            onClick={() => setTranslateOn((v) => !v)}
+            className={cn(
+              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold transition-colors',
+              translateOn
+                ? 'bg-primary-600 text-white'
+                : 'bg-card text-fg-muted hover:text-fg',
+            )}
+          >
+            <Languages className="h-3.5 w-3.5" aria-hidden />
+            {lang === 'en' ? 'Translate messages' : 'Traduire les messages'}
+          </button>
+        </div>
+      )}
+
       <div
         ref={listRef}
         onScroll={onScroll}
@@ -333,7 +396,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
                       <AttachmentView type={m.mediaType!} url={m.mediaUrl!} name={m.mediaName} mine={mine} />
                     </div>
                   )}
-                  {m.content}
+                  {m.content && <MsgText text={m.content} translate={translateOn} />}
                 </div>
                 <p className={cn('mt-0.5 px-1 text-[10px] text-fg-muted', mine && 'text-right')}>
                   {formatRelative(m.createdAt)}

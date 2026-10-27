@@ -10,7 +10,7 @@ const STORAGE_KEY = 'planb_lang'
 const dict: Record<Lang, Record<string, string>> = {
   fr: {
     // Navigation
-    nav_feed: 'Fil d’actualité',
+    nav_feed: 'Accueil',
     nav_members: 'Les Membres',
     nav_activity: 'Activité',
     nav_groups: 'Groupes',
@@ -112,10 +112,11 @@ const dict: Record<Lang, Record<string, string>> = {
     story_video: 'Vidéo',
     story_caption_ph: 'Légende (facultatif)',
     story_publish: 'Publier ma story',
-    bottom_feed: 'Fil',
+    bottom_feed: 'Accueil',
     bottom_members: 'Membres',
     bottom_activity: 'Activité',
     bottom_groups: 'Groupes',
+    bottom_pages: 'Pages',
   },
   en: {
     nav_feed: 'Feed',
@@ -218,6 +219,7 @@ const dict: Record<Lang, Record<string, string>> = {
     bottom_members: 'Members',
     bottom_activity: 'Activity',
     bottom_groups: 'Groups',
+    bottom_pages: 'Pages',
   },
 }
 

@@ -21,6 +21,7 @@ import { JoinButton } from './JoinButton'
 import { LikeButton } from './LikeButton'
 import { AccessibilityBadges } from '@/components/common/AccessibilityBadges'
 import { useLang } from '@/lib/i18n'
+import { useTranslate } from '@/lib/translate'
 
 export interface EventCardData {
   id: string
@@ -81,6 +82,7 @@ function EventCardBase({
   waitlistPosition = null,
 }: EventCardProps) {
   const { t } = useLang()
+  const titleT = useTranslate(event.title)
   const [imgFailed, setImgFailed] = React.useState(false)
   const showImage = !!event.coverImage && !imgFailed
 
@@ -188,7 +190,7 @@ function EventCardBase({
               className="transition-colors hover:text-primary-500 focus-visible:text-primary-500"
             >
               <span className="absolute inset-0" aria-hidden />
-              {event.title}
+              {titleT || event.title}
             </Link>
           </h3>
 

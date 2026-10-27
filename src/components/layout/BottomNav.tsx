@@ -1,10 +1,9 @@
 'use client'
 
-import { CalendarDays, Home, Plus, Users, UsersRound, type LucideIcon } from 'lucide-react'
+import { CalendarDays, Home, Store, Users, UsersRound, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import { CreateMenu } from './Navbar'
 import { useLang } from '@/lib/i18n'
 
 interface NavItem {
@@ -14,14 +13,12 @@ interface NavItem {
   exact: boolean
 }
 
-const LEFT_ITEMS: NavItem[] = [
-  { href: '/', labelKey: 'bottom_feed', icon: Home, exact: true },
+const ITEMS: NavItem[] = [
   { href: '/friends', labelKey: 'bottom_members', icon: Users, exact: false },
-]
-
-const RIGHT_ITEMS: NavItem[] = [
   { href: '/events/calendar', labelKey: 'bottom_activity', icon: CalendarDays, exact: false },
+  { href: '/', labelKey: 'bottom_feed', icon: Home, exact: true },
   { href: '/groups', labelKey: 'bottom_groups', icon: UsersRound, exact: false },
+  { href: '/pages', labelKey: 'bottom_pages', icon: Store, exact: false },
 ]
 
 function BottomNavLink({ href, labelKey, icon: Icon, exact }: NavItem) {
@@ -46,8 +43,8 @@ function BottomNavLink({ href, labelKey, icon: Icon, exact }: NavItem) {
 }
 
 /**
- * Barre de navigation mobile — même présentation que la barre du haut
- * (pastilles arrondies, état actif teinté), cibles ≥ 44 px.
+ * Barre de navigation mobile — Membres · Activité · Accueil · Groupes · Pages.
+ * Pastilles arrondies, état actif teinté, cibles ≥ 44 px, jamais de zoom.
  */
 export function BottomNav() {
   return (
@@ -56,26 +53,7 @@ export function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-bg/95 backdrop-blur-lg md:hidden"
     >
       <div className="mx-auto flex max-w-lg items-stretch gap-1 p-1.5 safe-bottom">
-        {LEFT_ITEMS.map((item) => (
-          <BottomNavLink key={item.href} {...item} />
-        ))}
-
-        {/* + central : menu de création (plan, groupe, page) */}
-        <div className="flex flex-1 items-center justify-center">
-          <CreateMenu
-            trigger={
-              <button
-                type="button"
-                aria-label="Créer un plan, un groupe ou une page"
-                className="-mt-5 flex h-14 w-14 items-center justify-center rounded-full bg-primary-600 text-white shadow-glow transition-transform active:scale-95"
-              >
-                <Plus className="h-6 w-6" aria-hidden />
-              </button>
-            }
-          />
-        </div>
-
-        {RIGHT_ITEMS.map((item) => (
+        {ITEMS.map((item) => (
           <BottomNavLink key={item.href} {...item} />
         ))}
       </div>

@@ -4043,6 +4043,7 @@ export const ConversationScalarFieldEnum = {
   name: 'name',
   isGroup: 'isGroup',
   avatarUrl: 'avatarUrl',
+  ephemeralHours: 'ephemeralHours',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

@@ -583,6 +583,7 @@ model Conversation {
   name      String? // Nom du groupe (null pour 1-1)
   isGroup   Boolean              @default(false)
   avatarUrl String?
+  ephemeralHours Int? // Messages éphémères : 24, 168 (semaine), 720 (mois) — null = permanent
   members   ConversationMember[]
   messages  DirectMessage[]
   createdAt DateTime             @default(now())

@@ -248,6 +248,11 @@ function EventRowLink({
           <CategoryIcon name={e.category.icon} className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate text-[13px] font-bold">{e.title}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2 text-[11px] font-semibold">
+            {e.organizer && (
+              <span className="hidden max-w-24 truncate font-semibold opacity-90 md:inline">
+                {e.organizer.displayName || `${e.organizer.firstName} ${e.organizer.lastName.charAt(0)}.`}
+              </span>
+            )}
             <span className="hidden max-w-28 truncate sm:inline">{e.city}</span>
             <span className="rounded-full bg-white/20 px-1.5 py-0.5 tabular-nums">
               {e.currentParticipants}

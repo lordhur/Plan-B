@@ -47,7 +47,7 @@ type Box = { south: number; west: number; north: number; east: number }
 
 interface Commune {
   nom: string
-  centre: { lat: number; lon: number }
+  centre: { type: string; coordinates: [number, number] }
   population: number
 }
 
@@ -57,7 +57,8 @@ function cityLabelIcon(name: string, selected: boolean): L.DivIcon {
   return L.divIcon({
     className: 'city-outline-label',
     html: `<span class="${selected ? 'sel' : ''}">${safe}</span>`,
-    iconSize: [0, 0],
+    iconSize: undefined,
+    iconAnchor: [0, 0],
   })
 }
 
@@ -188,11 +189,23 @@ export function RegionsMapInner() {
               setDeptSel({ code, name })
               setCitySel(null)
               setLevel('cities')
-              setBox(boxOf(layer))
+              const b = boxOf(layer)
+              setBox(b)
+              // Zoom immédiat sur le département
+              if (b && mapRef.current) {
+                try {
+                  mapRef.current.fitBounds(
+                    L.latLngBounds([b.south, b.west], [b.north, b.east]),
+                    { padding: [16, 16], maxZoom: 11 },
+                  )
+                } catch {
+                  /* ignore */
+                }
+              }
               setCommunes([])
-              // Villes du département (API officielle, triées par population)
+              // Villes du département (API officielle) — les plus importantes d'abord
               fetch(
-                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&boost=population&limit=18`,
+                `https://geo.api.gouv.fr/communes?codeDepartement=${code}&fields=nom,centre,population&limit=100`,
               )
                 .then((r) => (r.ok ? r.json() : []))
                 .then((data: unknown) => {
@@ -200,15 +213,16 @@ export function RegionsMapInner() {
                     setCommunes([])
                     return
                   }
-                  setCommunes(
-                    data.filter(
-                      (c): c is Commune =>
-                        !!c &&
-                        typeof (c as Commune).nom === 'string' &&
-                        typeof (c as Commune).centre?.lat === 'number' &&
-                        typeof (c as Commune).centre?.lon === 'number',
-                    ),
+                  const valid = data.filter(
+                    (c): c is Commune =>
+                      !!c &&
+                      typeof (c as Commune).nom === 'string' &&
+                      Array.isArray((c as Commune).centre?.coordinates) &&
+                      typeof (c as Commune).centre.coordinates[0] === 'number' &&
+                      typeof (c as Commune).centre.coordinates[1] === 'number',
                   )
+                  valid.sort((a, b2) => (b2.population ?? 0) - (a.population ?? 0))
+                  setCommunes(valid.slice(0, 18))
                 })
                 .catch(() => setCommunes([]))
             })
@@ -222,8 +236,10 @@ export function RegionsMapInner() {
         }).addTo(group)
         // Villes : étiquettes contour cliquables (coordonnées validées)
         for (const c of communes) {
-          if (typeof c.centre?.lat !== 'number' || typeof c.centre?.lon !== 'number') continue
-          const m = L.marker([c.centre.lat, c.centre.lon], {
+          const lon = c.centre?.coordinates?.[0]
+          const lat = c.centre?.coordinates?.[1]
+          if (typeof lat !== 'number' || typeof lon !== 'number') continue
+          const m = L.marker([lat, lon], {
             icon: cityLabelIcon(c.nom, citySel?.nom === c.nom),
             keyboard: true,
             title: c.nom,
@@ -279,8 +295,8 @@ export function RegionsMapInner() {
       setFilter({
         type: 'city',
         name: citySel.nom,
-        lat: citySel.centre.lat,
-        lon: citySel.centre.lon,
+        lat: citySel.centre.coordinates[1],
+        lon: citySel.centre.coordinates[0],
       })
       return
     }
@@ -317,7 +333,7 @@ export function RegionsMapInner() {
         ? `${regionSel?.name} — ${t('map_pick_dept')}`
         : `${deptSel?.name} — ${t('map_pick_city')}`
 
-  const canValidate = level === 'cities' ? !!citySel : !!box
+  const canValidate = level === 'cities' ? !!citySel || !!box : !!box
 
   return (
     <div className="rounded-2xl border border-border bg-card/60 p-4">
