@@ -384,6 +384,25 @@ nav * {
   transform: translate(-50%, -50%);
   width: max-content;
 }
+/* Carte vierge : fond uni, aucune tuile */
+.map-blank {
+  background-color: #eef2f7;
+  background-image: radial-gradient(rgba(124, 58, 237, 0.10) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.dark .map-blank {
+  background-color: #0b1220;
+  background-image: radial-gradient(rgba(139, 92, 246, 0.16) 1px, transparent 1px);
+}
+.map-blank .leaflet-container {
+  background: transparent;
+}
+/* Étiquette décalable (anti-chevauchement) */
+.city-outline-label .city-shift {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
 .city-outline-label .city-dot {
   display: inline-block;
   width: 7px;
@@ -394,7 +413,7 @@ nav * {
   box-shadow: 0 0 0 1.5px #fff, 0 1px 3px rgba(15, 23, 42, 0.6);
   vertical-align: middle;
 }
-.city-outline-label span:not(.city-dot) {
+.city-outline-label .city-name {
   display: inline-block;
   font-weight: 800;
   letter-spacing: 0.02em;
@@ -408,7 +427,7 @@ nav * {
   pointer-events: auto;
   cursor: pointer;
 }
-.city-outline-label span.sel {
+.city-outline-label .city-name.sel {
   color: #7c3aed;
   font-weight: 900;
   text-shadow:

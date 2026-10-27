@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import { ArrowLeft, Check, Crosshair, Loader2, RotateCcw } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { MapContainer, TileLayer, useMap } from 'react-leaflet'
+import { MapContainer, useMap } from 'react-leaflet'
 import { Button } from '@/components/ui/button'
 import { useLocationFilter, type BBox } from '@/lib/locationFilter'
 import { useLang } from '@/lib/i18n'
@@ -283,79 +283,107 @@ interface Commune {
   population: number
 }
 
-/** Pool « France entière » : les villes majeures, visibles dès la vue nationale. */
-const TOP_COMMUNES: Commune[] = TOP_CITIES.map(([nom, lat, lon, population]) => ({
-  nom,
-  lat,
-  lon,
-  population,
-}))
-
-/** Étiquette « contour » du nom de ville — légère et lisible. */
-function cityLabelIcon(name: string, selected: boolean, size: number): L.DivIcon {
+/** Étiquette « contour » du nom de ville — décalable (dx/dy) en cas de chevauchement. */
+function cityLabelIcon(name: string, selected: boolean, size: number, dx = 0, dy = 0): L.DivIcon {
   const safe = String(name).replace(/</g, '&lt;')
+  const shift = dx || dy ? `transform:translate(${dx}px,${dy}px)` : ''
   return L.divIcon({
     className: 'city-outline-label',
-    html: `<span class="city-dot" aria-hidden="true"></span><span class="${selected ? 'sel' : ''}" style="font-size:${size}px">${safe}</span>`,
+    html: `<span class="city-shift" style="${shift}"><span class="city-dot" aria-hidden="true"></span><span class="city-name${selected ? ' sel' : ''}" style="font-size:${size}px">${safe}</span></span>`,
     iconSize: undefined,
     iconAnchor: [0, 0],
   })
 }
 
-/** Taille du nom selon la population. */
+/** Taille du nom selon la population (villages plus petits pour en caser davantage). */
 function labelSize(pop: number): number {
   if (pop >= 300000) return 15
   if (pop >= 80000) return 13
   if (pop >= 20000) return 12
-  return 11
+  if (pop >= 2000) return 11
+  return 10
 }
 
 /** Écart minimal exigé entre deux noms de villes (spec : 5 px). */
 const LABEL_GAP = 5
 
 /**
- * Placement des libellés — spec : « affiche les villes tant qu'il y a au moins
- * 5 px entre les noms ». Aucun seuil de population : on garde TOUTES les villes
- * dont l'étiquette tient sans coller aux autres, les plus grandes d'abord.
+ * Placement des libellés (spec) :
+ *  - écart minimal de 5 px entre deux noms ;
+ *  - en cas de chevauchement, l'étiquette est DÉCALÉE (quelques pixels autour du
+ *    point) au lieu d'être masquée → les villes ET les villages restent visibles ;
+ *  - les plus grandes villes choisissent leur place en premier.
  */
-function placeLabels(cities: Commune[], map: L.Map, pinned?: Commune | null): Commune[] {
-  const bounds = map.getBounds().pad(0.08)
-  // On ignore les villes hors écran : elles ne doivent pas bloquer celles visibles.
+export type PlacedLabel = { commune: Commune; dx: number; dy: number }
+
+function placeLabels(cities: Commune[], map: L.Map, pinned?: Commune | null): PlacedLabel[] {
+  const bounds = map.getBounds().pad(0.12)
   const candidates = cities.filter((c) => bounds.contains([c.lat, c.lon]))
   candidates.sort((a, b) => b.population - a.population)
 
   const placed: { x: number; y: number; w: number; h: number }[] = []
-  const out: Commune[] = []
+  const out: PlacedLabel[] = []
 
-  const rectOf = (c: Commune) => {
-    const p = map.latLngToContainerPoint([c.lat, c.lon])
-    const size = labelSize(c.population)
-    // Étiquette réelle : pastille 7 px + 4 px d'écart + nom, centrée sur le point
-    // (voir .city-outline-label dans globals.css) + marge pour le contour blanc.
-    const textW = Math.max(16, c.nom.length * size * 0.6)
-    const w = 7 + 4 + textW + 4
-    const h = size + 4
-    return { x: p.x - w / 2, y: p.y - h / 2, w, h }
-  }
+  /** Rectangle occupé par une étiquette décalée de (dx, dy) autour du point p. */
+  const rectAt = (p: L.Point, w: number, h: number, dx: number, dy: number) => ({
+    x: p.x + dx - w / 2,
+    y: p.y + dy - h / 2,
+    w,
+    h,
+  })
+
+  const collides = (r: { x: number; y: number; w: number; h: number }) =>
+    placed.some(
+      (o) =>
+        r.x < o.x + o.w + LABEL_GAP &&
+        r.x + r.w + LABEL_GAP > o.x &&
+        r.y < o.y + o.h + LABEL_GAP &&
+        r.y + r.h + LABEL_GAP > o.y,
+    )
 
   for (const c of candidates) {
-    const rect = rectOf(c)
-    const collides = placed.some(
-      (r) =>
-        rect.x < r.x + r.w + LABEL_GAP &&
-        rect.x + rect.w + LABEL_GAP > r.x &&
-        rect.y < r.y + r.h + LABEL_GAP &&
-        rect.y + rect.h + LABEL_GAP > r.y,
-    )
-    if (!collides) {
-      placed.push(rect)
-      out.push(c)
+    const p = map.latLngToContainerPoint([c.lat, c.lon])
+    const size = labelSize(c.population)
+    const h = size + 3
+    // Pastille 7 px + 4 px d'écart + nom (voir globals.css)
+    const w = Math.max(14, c.nom.length * size * 0.58) + 13
+    // Positions essayées, de la plus proche à la plus éloignée : on ne « saute »
+    // que de quelques pixels pour que le nom reste attaché à sa ville.
+    const offsets: [number, number][] = [
+      [0, 0],
+      [0, -h - LABEL_GAP],
+      [0, h + LABEL_GAP],
+      [w / 2 + LABEL_GAP, -h / 2],
+      [-(w / 2 + LABEL_GAP), -h / 2],
+      [w / 2 + LABEL_GAP, h / 2],
+      [-(w / 2 + LABEL_GAP), h / 2],
+      [0, -2 * (h + LABEL_GAP)],
+      [0, 2 * (h + LABEL_GAP)],
+      [w + LABEL_GAP, 0],
+      [-(w + LABEL_GAP), 0],
+      [w / 2 + LABEL_GAP, -h - LABEL_GAP],
+      [-(w / 2 + LABEL_GAP), -h - LABEL_GAP],
+      [w / 2 + LABEL_GAP, h + LABEL_GAP],
+      [-(w / 2 + LABEL_GAP), h + LABEL_GAP],
+      [0, 3 * (h + LABEL_GAP)],
+      [0, -3 * (h + LABEL_GAP)],
+    ]
+    let best: { dx: number; dy: number } | null = null
+    for (const [dx, dy] of offsets) {
+      if (!collides(rectAt(p, w, h, dx, dy))) {
+        best = { dx, dy }
+        break
+      }
+    }
+    if (best) {
+      placed.push(rectAt(p, w, h, best.dx, best.dy))
+      out.push({ commune: c, dx: best.dx, dy: best.dy })
     }
   }
 
   // La ville sélectionnée reste toujours visible, même si elle chevauche.
-  if (pinned && !out.some((c) => c.nom === pinned.nom)) {
-    out.push(pinned)
+  if (pinned && !out.some((l) => l.commune.nom === pinned.nom)) {
+    out.push({ commune: pinned, dx: 0, dy: 0 })
   }
   return out
 }
@@ -368,8 +396,8 @@ function FitBox({ box }: { box: Box | null }) {
     if (!box) return
     try {
       map.fitBounds(L.latLngBounds([box.south, box.west], [box.north, box.east]), {
-        padding: [16, 16],
-        maxZoom: 11,
+        padding: [12, 12],
+        maxZoom: 12,
       })
     } catch {
       /* cadre invalide : on ignore */
@@ -397,7 +425,6 @@ export function RegionsMapInner() {
   const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true)
   const [communes, setCommunes] = useState<Commune[]>([])
-  const [regionCommunes, setRegionCommunes] = useState<Commune[]>([])
   const [mapError, setMapError] = useState<string | null>(null)
 
   const { setFilter, clear } = useLocationFilter()
@@ -426,21 +453,21 @@ export function RegionsMapInner() {
     }
   }, [])
 
-  /** Dessine les villes visibles (anti-chevauchement recalculé au zoom). */
+  /**
+   * Dessine les villes ET villages — uniquement au niveau « département »
+   * (spec : aucune ville en vue France ni en vue région).
+   */
   const drawCities = useCallback(() => {
     const map = mapRef.current
     const group = cityLayerRef.current
     if (!map || !group) return
     try {
       group.clearLayers()
-      const deptMode = level === 'cities' && communes.length > 0
-      // Département ouvert → toutes ses communes. Région ouverte → toutes les
-      // communes de la région (remplies en arrière-plan). Vue France → villes majeures.
-      const pool = deptMode ? communes : regionCommunes.length > 0 ? regionCommunes : TOP_COMMUNES
-      const visible = placeLabels(pool, map, citySel)
-      for (const c of visible) {
+      if (level !== 'cities' || communes.length === 0) return
+      const visible = placeLabels(communes, map, citySel)
+      for (const { commune: c, dx, dy } of visible) {
         const m = L.marker([c.lat, c.lon], {
-          icon: cityLabelIcon(c.nom, citySel?.nom === c.nom, labelSize(c.population)),
+          icon: cityLabelIcon(c.nom, citySel?.nom === c.nom, labelSize(c.population), dx, dy),
           keyboard: true,
           title: c.nom,
           alt: c.nom,
@@ -451,7 +478,7 @@ export function RegionsMapInner() {
     } catch (err) {
       console.error('[FranceMap] villes', err)
     }
-  }, [communes, regionCommunes, citySel, level])
+  }, [communes, citySel, level])
 
   // Rendu des couches selon le niveau — protégé : une erreur Leaflet ne casse pas la page
   useEffect(() => {
@@ -466,12 +493,26 @@ export function RegionsMapInner() {
       const group = L.layerGroup().addTo(map)
       layersRef.current = group
 
+      // Carte VIERGE : aucun fond satellite ni plan de rues, juste les contours
+      // administratifs sur fond uni (spec).
       const style = (active: boolean): L.PathOptions => ({
-        color: '#7c3aed',
+        color: active ? '#6d28d9' : '#7c3aed',
         weight: active ? 2.5 : 1.2,
-        fillColor: '#8b5cf6',
-        fillOpacity: active ? 0.35 : 0.12,
+        fillColor: active ? '#ede9fe' : '#ffffff',
+        fillOpacity: 1,
+        dashArray: undefined,
       })
+
+      /** Survol : la zone cliquable se teinte légèrement. */
+      const hoverIn = (e: L.LeafletMouseEvent) => {
+        const layer = e.target as L.Path
+        layer.setStyle({ fillColor: '#ede9fe', color: '#6d28d9', weight: 2 })
+        layer.bringToFront()
+      }
+      const hoverOut = (e: L.LeafletMouseEvent) => {
+        const layer = e.target as L.Path
+        layer.setStyle(style(false))
+      }
 
       const boxOf = (layer: unknown): Box | null => {
         try {
@@ -496,6 +537,8 @@ export function RegionsMapInner() {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            layer.on('mouseover', hoverIn)
+            layer.on('mouseout', hoverOut)
             layer.on('click', () => {
               setRegionSel({ code, name })
               setDeptSel(null)
@@ -513,22 +556,15 @@ export function RegionsMapInner() {
             const code = String(feature.properties?.code ?? '')
             const name = String(feature.properties?.nom ?? '')
             layer.bindTooltip(name, { sticky: true, direction: 'top', className: 'region-tooltip' })
+            layer.on('mouseover', hoverIn)
+            layer.on('mouseout', hoverOut)
             layer.on('click', () => {
               setDeptSel({ code, name })
               setCitySel(null)
               setLevel('cities')
+              // Le cadrage est assuré par <FitBox> (déclenché par le nouveau cadre).
               const b = boxOf(layer)
               setBox(b)
-              if (b && mapRef.current) {
-                try {
-                  mapRef.current.fitBounds(L.latLngBounds([b.south, b.west], [b.north, b.east]), {
-                    padding: [16, 16],
-                    maxZoom: 11,
-                  })
-                } catch {
-                  /* ignore */
-                }
-              }
               setCommunes([])
               // Toutes les villes du département : liste statique + API officielle,
               // fusionnées et triées par population décroissante.
@@ -589,7 +625,7 @@ export function RegionsMapInner() {
       setMapError(null)
     } catch (err) {
       console.error('[FranceMap]', err)
-      setMapError('La carte a rencontré un problème. Réessayez.')
+      setMapError(t('map_error'))
     }
 
     return () => {
@@ -616,34 +652,6 @@ export function RegionsMapInner() {
       map.off('moveend', onChange)
     }
   }, [level, drawCities, communes, geo])
-
-  // Communes de la région sélectionnée — pour afficher un maximum de villes dès ce niveau
-  useEffect(() => {
-    if (level !== 'depts' || !regionSel) {
-      setRegionCommunes([])
-      return
-    }
-    let cancelled = false
-    fetch(`https://geo.api.gouv.fr/regions/${regionSel.code}/communes?fields=nom,centre,population`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data: unknown) => {
-        if (cancelled || !Array.isArray(data)) return
-        const list: Commune[] = []
-        for (const raw of data) {
-          const c = raw as { nom?: string; centre?: { coordinates?: [number, number] }; population?: number }
-          const lon = c.centre?.coordinates?.[0]
-          const lat = c.centre?.coordinates?.[1]
-          if (!c.nom || typeof lat !== 'number' || typeof lon !== 'number') continue
-          list.push({ nom: c.nom, lat, lon, population: c.population ?? 0 })
-        }
-        list.sort((a, b) => b.population - a.population)
-        setRegionCommunes(list)
-      })
-      .catch(() => setRegionCommunes([]))
-    return () => {
-      cancelled = true
-    }
-  }, [level, regionSel])
 
   const goRegions = useCallback(() => {
     setLevel('regions')
@@ -736,7 +744,7 @@ export function RegionsMapInner() {
               clear()
               goRegions()
             }}
-            aria-label="Réinitialiser la carte"
+            aria-label={t('map_clear')}
           >
             <RotateCcw className="h-3.5 w-3.5" aria-hidden />
           </Button>
@@ -751,27 +759,23 @@ export function RegionsMapInner() {
         )}
         {error ? (
           <div className="flex h-full flex-col items-center justify-center gap-2 p-4 text-center">
-            <p className="text-sm text-fg-muted">
-              Impossible de charger les contours de la carte. Vérifiez votre connexion et
-              réessayez.
-            </p>
+            <p className="text-sm text-fg-muted">{t('map_load_error')}</p>
             <Button size="sm" onClick={() => window.location.reload()}>
-              Réessayer
+              {t('map_retry')}
             </Button>
           </div>
         ) : (
           <MapContainer
             bounds={FRANCE_BOUNDS}
             scrollWheelZoom
-            className="h-full w-full"
+            attributionControl={false}
+            zoomControl={false}
+            className="map-blank h-full w-full"
             ref={(m) => {
               mapRef.current = m ?? null
             }}
           >
-            <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            />
+            {/* Carte vierge : aucun fond satellite ni plan de rues (spec) */}
             <FitBox box={box} />
           </MapContainer>
         )}
@@ -782,7 +786,17 @@ export function RegionsMapInner() {
         )}
       </div>
 
-      <p className="mt-1.5 text-center text-[11px] text-fg-muted">{t('map_hint')}</p>
+      <p className="mt-1.5 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] text-fg-muted">
+        <span>
+          {level === 'regions'
+            ? t('map_lvl_regions')
+            : level === 'depts'
+              ? t('map_lvl_depts')
+              : t('map_lvl_cities')}
+        </span>
+        <span aria-hidden>·</span>
+        <span>{t('map_hint')}</span>
+      </p>
     </div>
   )
 }
