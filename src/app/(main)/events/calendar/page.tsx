@@ -67,7 +67,7 @@ function useWeather(lat: number, lon: number) {
     let cancelled = false
     const url =
       `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
-      '&hourly=temperature_2m,weather_code&timezone=auto&forecast_days=7'
+      '&hourly=temperature_2m,weather_code&timezone=auto&forecast_days=16'
 
     fetch(url)
       .then((r) => (r.ok ? r.json() : null))
@@ -198,15 +198,13 @@ function EventRowLink({
   e: EventRow
   weather?: { icon: string; label: string } | null
 }) {
-  const org = e.organizer
-  const orgName = org ? org.displayName || `${org.firstName} ${org.lastName}` : 'PlanB'
   const color = e.category.color
 
   return (
     <li>
       <Link
         href={`/events/${e.slug}`}
-        className="relative flex min-h-[84px] items-stretch overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
+        className="relative flex h-12 items-center overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
       >
         {/* Image en fond sur toute la largeur */}
         {e.coverImage ? (
@@ -218,52 +216,46 @@ function EventRowLink({
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
-          <span
-            className="absolute inset-0 flex items-center justify-center text-5xl opacity-25"
-            style={{ backgroundColor: `${color}22` }}
-            aria-hidden
-          >
-            <CategoryIcon name={e.category.icon} className="h-10 w-10" />
-          </span>
+          <span className="absolute inset-0" style={{ backgroundColor: `${color}33` }} aria-hidden />
         )}
 
-        {/* Long dégradé naturel vers la couleur unie de la catégorie */}
+        {/* Dégradé de lisibilité */}
         <span
           className="absolute inset-0"
           aria-hidden
           style={{
-            background: `linear-gradient(90deg, rgba(0,0,0,0.25) 0%, ${color}00 18%, ${color}A6 55%, ${color} 78%)`,
+            background: `linear-gradient(90deg, rgba(0,0,0,0.45) 0%, ${color}33 30%, ${color}CC 70%, ${color} 100%)`,
           }}
         />
 
-        {/* Encart heure : à gauche, quasi toute la hauteur, 10 px de marge */}
+        {/* UNE seule ligne : météo · heure · titre · ville · inscrits · prix */}
         <span
-          className="relative z-10 m-[10px] flex w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm"
-          style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+          className="relative z-10 flex w-full min-w-0 items-center gap-2 px-2 text-white"
+          style={{ textShadow: '0 1px 3px rgba(0,0,0,0.75)' }}
         >
-          <span className="text-base font-black leading-none tabular-nums text-white sm:text-lg">
+          {weather && (
+            <span
+              className="weather-anim inline-block shrink-0 text-sm leading-none"
+              title={`Météo à l'heure du plan : ${weather.label}`}
+              aria-label={`Météo : ${weather.label}`}
+            >
+              {weather.icon}
+            </span>
+          )}
+          <span className="shrink-0 rounded-md bg-black/55 px-1.5 py-0.5 text-xs font-black tabular-nums">
             {format(e.startDate, 'HH:mm')}
           </span>
-        </span>
-
-        {/* Contenu : icône → titre → ville + organisateur → inscrits */}
-        <span
-          className="relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-0.5 py-2 pr-3 text-white"
-          style={{ textShadow: '0 1px 3px rgba(0,0,0,0.65)' }}
-        >
-          <span className="flex items-center gap-1.5">
-            <CategoryIcon name={e.category.icon} className="h-4 w-4 shrink-0" />
-            <span className="truncate text-sm font-bold leading-tight">{e.title}</span>
-          </span>
-          <span className="truncate text-xs font-medium opacity-95">
-            {e.city} · par {orgName}
-          </span>
-          <span className="flex items-center gap-2 text-xs font-semibold">
-            <span className="rounded-full bg-white/20 px-2 py-0.5">
+          <CategoryIcon name={e.category.icon} className="h-3.5 w-3.5 shrink-0" />
+          <span className="truncate text-[13px] font-bold">{e.title}</span>
+          <span className="ml-auto flex shrink-0 items-center gap-2 text-[11px] font-semibold">
+            <span className="hidden max-w-28 truncate sm:inline">{e.city}</span>
+            <span className="rounded-full bg-white/20 px-1.5 py-0.5 tabular-nums">
               {e.currentParticipants}
-              {e.maxParticipants != null ? `/${e.maxParticipants}` : ''} inscrits
+              {e.maxParticipants != null ? `/${e.maxParticipants}` : ''}
             </span>
-            <span>{e.price != null && e.price > 0 ? `${e.price.toFixed(2)} €` : 'Gratuit'}</span>
+            <span className="hidden sm:inline">
+              {e.price != null && e.price > 0 ? `${e.price.toFixed(0)} €` : 'Gratuit'}
+            </span>
           </span>
         </span>
       </Link>

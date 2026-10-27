@@ -5,7 +5,6 @@ import {
   CalendarDays,
   CalendarHeart,
   CalendarPlus,
-  Languages,
   HelpCircle,
   LogOut,
   Mail,
@@ -139,7 +138,7 @@ export function Navbar() {
         <div className="flex w-full items-center justify-between">
           <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
             <Logo />
-            <span className="text-lg font-black tracking-tight text-fg sm:text-xl">
+            <span className="hidden text-lg font-black tracking-tight text-fg sm:inline sm:text-xl">
               Plan<span className="text-primary-600">B</span>
             </span>
           </Link>
@@ -154,6 +153,16 @@ export function Navbar() {
           />
 
           <ThemeToggle />
+
+          <button
+            type="button"
+            onClick={toggleLang}
+            className="inline-flex h-9 min-h-9 w-9 items-center justify-center rounded-xl text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600"
+            aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+            title={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
+          >
+            <span className="text-sm font-black">{lang === 'fr' ? 'EN' : 'FR'}</span>
+          </button>
 
           {isLoading ? (
             <div className="h-9 w-9 animate-pulse-soft rounded-full bg-border" aria-hidden />
@@ -208,9 +217,6 @@ export function Navbar() {
                     <CalendarHeart className="h-4 w-4" aria-hidden /> {t('nav_agenda')}
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => toggleLang()}>
-                  <Languages className="h-4 w-4" aria-hidden /> {lang === 'fr' ? 'English' : 'Français'}
-                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link href="/profile/settings">
                     <Settings className="h-4 w-4" aria-hidden /> {t('nav_settings')}
@@ -231,18 +237,18 @@ export function Navbar() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5">
               <Link
                 href="/contact"
                 aria-label={t('nav_contact')}
-                className="inline-flex h-11 w-11 items-center justify-center rounded-xl text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg"
+                className="hidden h-9 w-9 items-center justify-center rounded-xl text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg sm:inline-flex"
               >
-                <Mail className="h-5 w-5" aria-hidden />
+                <Mail className="h-4.5 w-4.5" aria-hidden />
               </Link>
-              <Button asChild variant="ghost" size="sm">
+              <Button asChild variant="ghost" size="sm" className="h-9 px-2.5 text-xs sm:px-4 sm:text-sm">
                 <Link href="/login">{t('nav_login')}</Link>
               </Button>
-              <Button asChild size="sm">
+              <Button asChild size="sm" className="h-9 px-2.5 text-xs sm:px-4 sm:text-sm">
                 <Link href="/register">{t('nav_register')}</Link>
               </Button>
             </div>
