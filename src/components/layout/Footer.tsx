@@ -17,9 +17,6 @@ export function Footer() {
         <nav aria-label="Liens de bas de page">
           <ul className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-fg-muted">
             <li>
-              <Link href="/explore" className="hover:text-fg">
-                Explorer
-              </Link>
             </li>
             <li>
               <Link href="/register" className="hover:text-fg">

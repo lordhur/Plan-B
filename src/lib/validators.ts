@@ -65,6 +65,8 @@ export const updateProfileSchema = z.object({
     .optional()
     .or(z.literal('')),
   gender: z.enum(['MALE', 'FEMALE', 'NON_BINARY', 'OTHER', 'PREFER_NOT_TO_SAY']).optional(),
+  profession: z.string().trim().max(120).nullish(),
+  education: z.string().trim().max(1000).nullish(),
   orientation: z.enum(['HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER']).nullable().optional(),
   showAge: z.boolean().optional(),
   showLastName: z.boolean().optional(),
@@ -115,6 +117,13 @@ export const createEventSchema = z
     longitude: z.number().min(-180).max(180),
     isOnline: z.boolean().default(false),
     onlineLink: z.string().url().optional(),
+    // Lieu de rendez-vous exact — visibilité au choix de l'organisateur
+    meetupAddress: z.string().trim().max(400).optional().or(z.literal('')),
+    meetupVisibility: z.enum(['EVERYONE', 'MEMBERS', 'SCHEDULED']).default('EVERYONE'),
+    meetupRevealAt: z.preprocess(
+      (v) => (v === '' || v == null ? null : v),
+      z.coerce.date().nullish(),
+    ),
     // Étape 3 — qui peut venir
     maxParticipants: z.number().int().min(1).max(5000).nullable().optional(),
     minParticipants: z.number().int().min(1).max(5000).default(1),

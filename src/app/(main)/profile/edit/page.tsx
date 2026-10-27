@@ -24,6 +24,8 @@ const profileFormSchema = z.object({
   city: z.string().trim().max(80),
   phone: z.string().max(20),
   gender: z.enum(['MALE', 'FEMALE', 'NON_BINARY', 'OTHER', 'PREFER_NOT_TO_SAY']).nullish(),
+  profession: z.string().trim().max(120).nullish(),
+  education: z.string().trim().max(1000).nullish(),
   orientation: z.enum(['HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER']).nullish(),
   showAge: z.boolean(),
   showLastName: z.boolean(),
@@ -61,6 +63,8 @@ export default function ProfileEditPage() {
         phone: me.phone ?? '',
         gender: me.gender ?? null,
         orientation: me.orientation ?? null,
+        profession: me.profession ?? '',
+        education: me.education ?? '',
         showAge: me.showAge,
         showLastName: me.showLastName,
         latitude: me.latitude ?? null,
@@ -123,6 +127,8 @@ export default function ProfileEditPage() {
             ...data,
             gender: data.gender ?? undefined,
             orientation: data.orientation ?? undefined,
+            profession: data.profession || null,
+            education: data.education || null,
           }),
         )}
         className="space-y-5"
@@ -143,6 +149,27 @@ export default function ProfileEditPage() {
             <div>
               <Label htmlFor="phone">Téléphone</Label>
               <Input id="phone" type="tel" placeholder="+33 6 12 34 56 78" {...register('phone')} />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="profession">Profession</Label>
+                <Input
+                  id="profession"
+                  maxLength={120}
+                  placeholder="Ex : Infirmière, développeur…"
+                  {...register('profession')}
+                />
+              </div>
+              <div>
+                <Label htmlFor="education">Études / diplômes</Label>
+                <Input
+                  id="education"
+                  maxLength={200}
+                  placeholder="Ex : Fac de droit de Toulon"
+                  {...register('education')}
+                />
+              </div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">

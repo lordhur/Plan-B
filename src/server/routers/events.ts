@@ -358,12 +358,27 @@ export const eventsRouter = createTRPCRouter({
     const isFull =
       event.maxParticipants != null && event.currentParticipants >= event.maxParticipants
 
+    // Lieu de rendez-vous exact : visibilité choisie par l'organisateur
+    const isOrganizer = ctx.user?.id === event.organizerId
+    const isMember =
+      myParticipation?.status === 'CONFIRMED' || myParticipation?.status === 'ATTENDED'
+    const revealReached =
+      event.meetupVisibility !== 'SCHEDULED' ||
+      !event.meetupRevealAt ||
+      event.meetupRevealAt <= new Date()
+    const canSeeMeetup =
+      isOrganizer || event.meetupVisibility === 'EVERYONE' || (isMember && revealReached)
+
     return {
       ...event,
+      // L'adresse exacte n'est jamais renvoyée si l'utilisateur n'y a pas droit
+      meetupAddress: canSeeMeetup ? event.meetupAddress : null,
+      hasMeetup: !!event.meetupAddress,
+      canSeeMeetup,
       isFull,
       myParticipation,
       myWaitlistPosition,
-      isOrganizer: ctx.user?.id === event.organizerId,
+      isOrganizer,
       shareUrl: `/join/${event.shareToken}`,
     }
   }),

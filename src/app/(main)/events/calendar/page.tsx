@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmptyState } from '@/components/common/EmptyState'
 import { cn } from '@/lib/utils'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 
 /** Coordonnées par défaut : Toulon (centre du Var). */
 const DEFAULT_LAT = 43.1242
@@ -148,8 +149,10 @@ type EventRow = {
 }
 
 /**
- * Ligne d'événement : photo sur la moitié gauche, dégradé vers la couleur
- * unie de la catégorie sur la moitié droite.
+ * Ligne d'événement compacte : image en fond sur toute la ligne, long dégradé
+ * naturel vers la couleur de la catégorie, encart heure collé à gauche
+ * (10 px de marge) sur quasi toute la hauteur, textes avec ombre portée.
+ * Ordre : heure → icône catégorie → titre → ville + organisateur → inscrits.
  */
 function EventRowLink({ e }: { e: EventRow }) {
   const org = e.organizer
@@ -160,47 +163,56 @@ function EventRowLink({ e }: { e: EventRow }) {
     <li>
       <Link
         href={`/events/${e.slug}`}
-        className="relative flex min-h-24 items-stretch overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
+        className="relative flex min-h-[84px] items-stretch overflow-hidden rounded-xl border border-border shadow-sm transition-shadow hover:shadow-card-hover"
       >
-        {/* Moitié gauche : image de couverture (ou teinte catégorie) */}
+        {/* Image en fond sur toute la largeur */}
         {e.coverImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={e.coverImage}
             alt=""
             loading="lazy"
-            className="absolute inset-y-0 left-0 h-full w-1/2 object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
           <span
-            className="absolute inset-y-0 left-0 flex w-1/2 items-center justify-center text-3xl"
-            style={{ backgroundColor: `${color}33` }}
+            className="absolute inset-0 flex items-center justify-center text-5xl opacity-25"
+            style={{ backgroundColor: `${color}22` }}
             aria-hidden
           >
-            {e.category.icon}
+            <CategoryIcon name={e.category.icon} className="h-10 w-10" />
           </span>
         )}
 
-        {/* Dégradé : transparent sur l'image → couleur unie de la catégorie */}
+        {/* Long dégradé naturel vers la couleur unie de la catégorie */}
         <span
           className="absolute inset-0"
           aria-hidden
           style={{
-            background: `linear-gradient(90deg, ${color}00 20%, ${color}CC 48%, ${color} 60%)`,
+            background: `linear-gradient(90deg, rgba(0,0,0,0.25) 0%, ${color}00 18%, ${color}A6 55%, ${color} 78%)`,
           }}
         />
 
-        {/* Heure, posée sur l'image */}
-        <span className="relative z-10 flex w-[30%] shrink-0 items-start justify-center pt-3">
-          <span className="rounded-lg bg-black/55 px-2 py-1 text-sm font-black tabular-nums text-white backdrop-blur-sm">
+        {/* Encart heure : à gauche, quasi toute la hauteur, 10 px de marge */}
+        <span
+          className="relative z-10 m-[10px] flex w-14 shrink-0 flex-col items-center justify-center rounded-lg bg-black/60 backdrop-blur-sm"
+          style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}
+        >
+          <span className="text-base font-black leading-none tabular-nums text-white sm:text-lg">
             {format(e.startDate, 'HH:mm')}
           </span>
         </span>
 
-        {/* Contenu sur la couleur unie */}
-        <span className="relative z-10 flex w-[70%] flex-col justify-center gap-1 p-3 pl-1 text-white">
-          <span className="line-clamp-2 font-bold leading-tight drop-shadow-sm">{e.title}</span>
-          <span className="text-xs font-medium opacity-90">
+        {/* Contenu : icône → titre → ville + organisateur → inscrits */}
+        <span
+          className="relative z-10 flex min-w-0 flex-1 flex-col justify-center gap-0.5 py-2 pr-3 text-white"
+          style={{ textShadow: '0 1px 3px rgba(0,0,0,0.65)' }}
+        >
+          <span className="flex items-center gap-1.5">
+            <CategoryIcon name={e.category.icon} className="h-4 w-4 shrink-0" />
+            <span className="truncate text-sm font-bold leading-tight">{e.title}</span>
+          </span>
+          <span className="truncate text-xs font-medium opacity-95">
             {e.city} · par {orgName}
           </span>
           <span className="flex items-center gap-2 text-xs font-semibold">

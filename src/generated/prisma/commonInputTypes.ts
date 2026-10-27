@@ -399,6 +399,13 @@ export type EnumFriendRequestStatusWithAggregatesFilter<$PrismaModel = never> = 
   _max?: Prisma.NestedEnumFriendRequestStatusFilter<$PrismaModel>
 }
 
+export type EnumMeetupVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.MeetupVisibility | Prisma.EnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel> | $Enums.MeetupVisibility
+}
+
 export type IntNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.IntFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListIntFieldRefInput<$PrismaModel> | null
@@ -436,6 +443,16 @@ export type EnumEventStatusFilter<$PrismaModel = never> = {
   in?: $Enums.EventStatus[] | Prisma.ListEnumEventStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.EventStatus[] | Prisma.ListEnumEventStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
+}
+
+export type EnumMeetupVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MeetupVisibility | Prisma.EnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMeetupVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MeetupVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel>
 }
 
 export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -1160,6 +1177,13 @@ export type NestedEnumFriendRequestStatusWithAggregatesFilter<$PrismaModel = nev
   _max?: Prisma.NestedEnumFriendRequestStatusFilter<$PrismaModel>
 }
 
+export type NestedEnumMeetupVisibilityFilter<$PrismaModel = never> = {
+  equals?: $Enums.MeetupVisibility | Prisma.EnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel> | $Enums.MeetupVisibility
+}
+
 export type NestedEnumRegistrationTypeFilter<$PrismaModel = never> = {
   equals?: $Enums.RegistrationType | Prisma.EnumRegistrationTypeFieldRefInput<$PrismaModel>
   in?: $Enums.RegistrationType[] | Prisma.ListEnumRegistrationTypeFieldRefInput<$PrismaModel>
@@ -1186,6 +1210,16 @@ export type NestedEnumEventStatusFilter<$PrismaModel = never> = {
   in?: $Enums.EventStatus[] | Prisma.ListEnumEventStatusFieldRefInput<$PrismaModel>
   notIn?: $Enums.EventStatus[] | Prisma.ListEnumEventStatusFieldRefInput<$PrismaModel>
   not?: Prisma.NestedEnumEventStatusFilter<$PrismaModel> | $Enums.EventStatus
+}
+
+export type NestedEnumMeetupVisibilityWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.MeetupVisibility | Prisma.EnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  in?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  notIn?: $Enums.MeetupVisibility[] | Prisma.ListEnumMeetupVisibilityFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumMeetupVisibilityWithAggregatesFilter<$PrismaModel> | $Enums.MeetupVisibility
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumMeetupVisibilityFilter<$PrismaModel>
 }
 
 export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {

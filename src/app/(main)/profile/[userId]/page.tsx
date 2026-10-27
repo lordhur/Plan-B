@@ -57,6 +57,12 @@ export default function PublicProfilePage() {
               <MapPin className="h-4 w-4" aria-hidden /> {profile.city}
             </p>
           )}
+          {profile.profession && (
+            <p className="mt-1 text-sm font-semibold">💼 {profile.profession}</p>
+          )}
+          {profile.education && (
+            <p className="text-sm text-fg-muted">🎓 {profile.education}</p>
+          )}
           <p className="mt-2 flex items-center gap-2 text-sm">
             <span className="font-semibold text-warning-600">
               <Star className="mr-0.5 inline h-3.5 w-3.5 fill-current" aria-hidden />

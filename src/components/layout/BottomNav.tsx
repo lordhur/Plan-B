@@ -1,6 +1,6 @@
 'use client'
 
-import { CalendarDays, Compass, Home, Plus, Users, type LucideIcon } from 'lucide-react'
+import { CalendarDays, Home, Plus, Users, UsersRound, type LucideIcon } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -20,7 +20,7 @@ const LEFT_ITEMS: NavItem[] = [
 
 const RIGHT_ITEMS: NavItem[] = [
   { href: '/events/calendar', label: 'Activité', icon: CalendarDays, exact: false },
-  { href: '/explore', label: 'Explorer', icon: Compass, exact: false },
+  { href: '/groups', label: 'Groupes', icon: UsersRound, exact: false },
 ]
 
 function BottomNavLink({ href, label, icon: Icon, exact }: NavItem) {

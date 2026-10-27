@@ -40,6 +40,10 @@ export const introCardsRouter = createTRPCRouter({
           about: c.about,
           lookingFor: c.lookingFor,
           photoUrl: c.photoUrl,
+          photos: c.photos,
+          passions: c.passions,
+          profession: c.profession,
+          education: c.education,
           createdAt: c.createdAt,
           user: {
             id: c.user.id,
@@ -77,6 +81,10 @@ export const introCardsRouter = createTRPCRouter({
         about: z.string().trim().min(20, 'Décrivez-vous en 20 caractères minimum').max(2000),
         lookingFor: z.string().trim().max(200).optional().or(z.literal('')),
         photoUrl: z.string().trim().max(500).optional().or(z.literal('')),
+        photos: z.array(z.string().trim().max(500)).max(6).default([]),
+        passions: z.array(z.string().trim().min(1).max(40)).max(12).default([]),
+        profession: z.string().trim().max(120).optional().or(z.literal('')),
+        education: z.string().trim().max(1000).optional().or(z.literal('')),
       }),
     )
     .mutation(async ({ input, ctx }) => {
@@ -87,13 +95,21 @@ export const introCardsRouter = createTRPCRouter({
           title: input.title,
           about: input.about,
           lookingFor: input.lookingFor || null,
-          photoUrl: input.photoUrl || null,
+          photoUrl: input.photoUrl || input.photos[0] || null,
+          photos: input.photos,
+          passions: input.passions,
+          profession: input.profession || null,
+          education: input.education || null,
         },
         update: {
           title: input.title,
           about: input.about,
           lookingFor: input.lookingFor || null,
-          photoUrl: input.photoUrl || null,
+          photoUrl: input.photoUrl || input.photos[0] || null,
+          photos: input.photos,
+          passions: input.passions,
+          profession: input.profession || null,
+          education: input.education || null,
         },
       })
       return card

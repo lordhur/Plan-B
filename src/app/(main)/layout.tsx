@@ -1,6 +1,5 @@
 import { Navbar } from '@/components/layout/Navbar'
 import { BottomNav } from '@/components/layout/BottomNav'
-import { Sidebar } from '@/components/layout/Sidebar'
 import { Footer } from '@/components/layout/Footer'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { AuroraBackground } from '@/components/common/AuroraBackground'
@@ -12,7 +11,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <AuroraBackground />
       <Navbar />
       <div className="mx-auto flex w-full max-w-6xl flex-1">
-        <Sidebar />
         <main id="main" className="min-w-0 flex-1 px-4 py-6">
           <ErrorBoundary>{children}</ErrorBoundary>
         </main>

@@ -63,6 +63,9 @@ export type EventMinAggregateOutputType = {
   title: string | null
   description: string | null
   shortDescription: string | null
+  meetupAddress: string | null
+  meetupVisibility: $Enums.MeetupVisibility | null
+  meetupRevealAt: Date | null
   coverImage: string | null
   categoryId: string | null
   startDate: Date | null
@@ -115,6 +118,9 @@ export type EventMaxAggregateOutputType = {
   title: string | null
   description: string | null
   shortDescription: string | null
+  meetupAddress: string | null
+  meetupVisibility: $Enums.MeetupVisibility | null
+  meetupRevealAt: Date | null
   coverImage: string | null
   categoryId: string | null
   startDate: Date | null
@@ -167,6 +173,9 @@ export type EventCountAggregateOutputType = {
   title: number
   description: number
   shortDescription: number
+  meetupAddress: number
+  meetupVisibility: number
+  meetupRevealAt: number
   coverImage: number
   categoryId: number
   tags: number
@@ -250,6 +259,9 @@ export type EventMinAggregateInputType = {
   title?: true
   description?: true
   shortDescription?: true
+  meetupAddress?: true
+  meetupVisibility?: true
+  meetupRevealAt?: true
   coverImage?: true
   categoryId?: true
   startDate?: true
@@ -302,6 +314,9 @@ export type EventMaxAggregateInputType = {
   title?: true
   description?: true
   shortDescription?: true
+  meetupAddress?: true
+  meetupVisibility?: true
+  meetupRevealAt?: true
   coverImage?: true
   categoryId?: true
   startDate?: true
@@ -354,6 +369,9 @@ export type EventCountAggregateInputType = {
   title?: true
   description?: true
   shortDescription?: true
+  meetupAddress?: true
+  meetupVisibility?: true
+  meetupRevealAt?: true
   coverImage?: true
   categoryId?: true
   tags?: true
@@ -494,6 +512,9 @@ export type EventGroupByOutputType = {
   title: string
   description: string
   shortDescription: string | null
+  meetupAddress: string | null
+  meetupVisibility: $Enums.MeetupVisibility
+  meetupRevealAt: Date | null
   coverImage: string | null
   categoryId: string
   tags: string[]
@@ -570,6 +591,9 @@ export type EventWhereInput = {
   title?: Prisma.StringFilter<"Event"> | string
   description?: Prisma.StringFilter<"Event"> | string
   shortDescription?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupAddress?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFilter<"Event"> | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   coverImage?: Prisma.StringNullableFilter<"Event"> | string | null
   categoryId?: Prisma.StringFilter<"Event"> | string
   tags?: Prisma.StringNullableListFilter<"Event">
@@ -634,6 +658,9 @@ export type EventOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetupAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetupVisibility?: Prisma.SortOrder
+  meetupRevealAt?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -701,6 +728,9 @@ export type EventWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Event"> | string
   description?: Prisma.StringFilter<"Event"> | string
   shortDescription?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupAddress?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFilter<"Event"> | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   coverImage?: Prisma.StringNullableFilter<"Event"> | string | null
   categoryId?: Prisma.StringFilter<"Event"> | string
   tags?: Prisma.StringNullableListFilter<"Event">
@@ -765,6 +795,9 @@ export type EventOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetupAddress?: Prisma.SortOrderInput | Prisma.SortOrder
+  meetupVisibility?: Prisma.SortOrder
+  meetupRevealAt?: Prisma.SortOrderInput | Prisma.SortOrder
   coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -826,6 +859,9 @@ export type EventScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Event"> | string
   description?: Prisma.StringWithAggregatesFilter<"Event"> | string
   shortDescription?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  meetupAddress?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityWithAggregatesFilter<"Event"> | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Event"> | Date | string | null
   coverImage?: Prisma.StringNullableWithAggregatesFilter<"Event"> | string | null
   categoryId?: Prisma.StringWithAggregatesFilter<"Event"> | string
   tags?: Prisma.StringNullableListFilter<"Event">
@@ -877,6 +913,9 @@ export type EventCreateInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -939,6 +978,9 @@ export type EventUncheckedCreateInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -997,6 +1039,9 @@ export type EventUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1059,6 +1104,9 @@ export type EventUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -1119,6 +1167,9 @@ export type EventCreateManyInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -1170,6 +1221,9 @@ export type EventUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1221,6 +1275,9 @@ export type EventUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -1292,6 +1349,9 @@ export type EventCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  meetupAddress?: Prisma.SortOrder
+  meetupVisibility?: Prisma.SortOrder
+  meetupRevealAt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   tags?: Prisma.SortOrder
@@ -1359,6 +1419,9 @@ export type EventMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  meetupAddress?: Prisma.SortOrder
+  meetupVisibility?: Prisma.SortOrder
+  meetupRevealAt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
@@ -1411,6 +1474,9 @@ export type EventMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   shortDescription?: Prisma.SortOrder
+  meetupAddress?: Prisma.SortOrder
+  meetupVisibility?: Prisma.SortOrder
+  meetupRevealAt?: Prisma.SortOrder
   coverImage?: Prisma.SortOrder
   categoryId?: Prisma.SortOrder
   startDate?: Prisma.SortOrder
@@ -1559,6 +1625,10 @@ export type EventUncheckedUpdateManyWithoutCategoryNestedInput = {
 
 export type EventCreatetagsInput = {
   set: string[]
+}
+
+export type EnumMeetupVisibilityFieldUpdateOperationsInput = {
+  set?: $Enums.MeetupVisibility
 }
 
 export type EventUpdatetagsInput = {
@@ -1779,6 +1849,9 @@ export type EventCreateWithoutOrganizerInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -1839,6 +1912,9 @@ export type EventUncheckedCreateWithoutOrganizerInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -1928,6 +2004,9 @@ export type EventScalarWhereInput = {
   title?: Prisma.StringFilter<"Event"> | string
   description?: Prisma.StringFilter<"Event"> | string
   shortDescription?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupAddress?: Prisma.StringNullableFilter<"Event"> | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFilter<"Event"> | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.DateTimeNullableFilter<"Event"> | Date | string | null
   coverImage?: Prisma.StringNullableFilter<"Event"> | string | null
   categoryId?: Prisma.StringFilter<"Event"> | string
   tags?: Prisma.StringNullableListFilter<"Event">
@@ -1979,6 +2058,9 @@ export type EventCreateWithoutCategoryInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2040,6 +2122,9 @@ export type EventUncheckedCreateWithoutCategoryInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2123,6 +2208,9 @@ export type EventCreateWithoutCollaboratorsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2184,6 +2272,9 @@ export type EventUncheckedCreateWithoutCollaboratorsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -2257,6 +2348,9 @@ export type EventUpdateWithoutCollaboratorsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2318,6 +2412,9 @@ export type EventUncheckedUpdateWithoutCollaboratorsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -2375,6 +2472,9 @@ export type EventCreateWithoutParticipationsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2436,6 +2536,9 @@ export type EventUncheckedCreateWithoutParticipationsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -2509,6 +2612,9 @@ export type EventUpdateWithoutParticipationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2570,6 +2676,9 @@ export type EventUncheckedUpdateWithoutParticipationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -2627,6 +2736,9 @@ export type EventCreateWithoutWaitlistInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2688,6 +2800,9 @@ export type EventUncheckedCreateWithoutWaitlistInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -2761,6 +2876,9 @@ export type EventUpdateWithoutWaitlistInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2822,6 +2940,9 @@ export type EventUncheckedUpdateWithoutWaitlistInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -2879,6 +3000,9 @@ export type EventCreateWithoutInvitationsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -2940,6 +3064,9 @@ export type EventUncheckedCreateWithoutInvitationsInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -3013,6 +3140,9 @@ export type EventUpdateWithoutInvitationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3074,6 +3204,9 @@ export type EventUncheckedUpdateWithoutInvitationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -3131,6 +3264,9 @@ export type EventCreateWithoutChatMessagesInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -3192,6 +3328,9 @@ export type EventUncheckedCreateWithoutChatMessagesInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -3265,6 +3404,9 @@ export type EventUpdateWithoutChatMessagesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3326,6 +3468,9 @@ export type EventUncheckedUpdateWithoutChatMessagesInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -3383,6 +3528,9 @@ export type EventCreateWithoutAlbumInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -3444,6 +3592,9 @@ export type EventUncheckedCreateWithoutAlbumInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -3517,6 +3668,9 @@ export type EventUpdateWithoutAlbumInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3578,6 +3732,9 @@ export type EventUncheckedUpdateWithoutAlbumInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -3635,6 +3792,9 @@ export type EventCreateWithoutCarpoolOffersInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -3696,6 +3856,9 @@ export type EventUncheckedCreateWithoutCarpoolOffersInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -3769,6 +3932,9 @@ export type EventUpdateWithoutCarpoolOffersInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -3830,6 +3996,9 @@ export type EventUncheckedUpdateWithoutCarpoolOffersInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -3887,6 +4056,9 @@ export type EventCreateWithoutPageInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -3947,6 +4119,9 @@ export type EventUncheckedCreateWithoutPageInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -4031,6 +4206,9 @@ export type EventCreateWithoutSponsorInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -4092,6 +4270,9 @@ export type EventUncheckedCreateWithoutSponsorInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -4176,6 +4357,9 @@ export type EventCreateManyOrganizerInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -4227,6 +4411,9 @@ export type EventUpdateWithoutOrganizerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4287,6 +4474,9 @@ export type EventUncheckedUpdateWithoutOrganizerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -4346,6 +4536,9 @@ export type EventUncheckedUpdateManyWithoutOrganizerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -4399,6 +4592,9 @@ export type EventCreateManyCategoryInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   tags?: Prisma.EventCreatetagsInput | string[]
   startDate: Date | string
@@ -4449,6 +4645,9 @@ export type EventUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4510,6 +4709,9 @@ export type EventUncheckedUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4569,6 +4771,9 @@ export type EventUncheckedUpdateManyWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4620,6 +4825,9 @@ export type EventCreateManyPageInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -4671,6 +4879,9 @@ export type EventUpdateWithoutPageInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4731,6 +4942,9 @@ export type EventUncheckedUpdateWithoutPageInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -4790,6 +5004,9 @@ export type EventUncheckedUpdateManyWithoutPageInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -4843,6 +5060,9 @@ export type EventCreateManySponsorInput = {
   title: string
   description: string
   shortDescription?: string | null
+  meetupAddress?: string | null
+  meetupVisibility?: $Enums.MeetupVisibility
+  meetupRevealAt?: Date | string | null
   coverImage?: string | null
   categoryId: string
   tags?: Prisma.EventCreatetagsInput | string[]
@@ -4893,6 +5113,9 @@ export type EventUpdateWithoutSponsorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   tags?: Prisma.EventUpdatetagsInput | string[]
   startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -4954,6 +5177,9 @@ export type EventUncheckedUpdateWithoutSponsorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -5013,6 +5239,9 @@ export type EventUncheckedUpdateManyWithoutSponsorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   shortDescription?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupAddress?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetupVisibility?: Prisma.EnumMeetupVisibilityFieldUpdateOperationsInput | $Enums.MeetupVisibility
+  meetupRevealAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   categoryId?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.EventUpdatetagsInput | string[]
@@ -5141,6 +5370,9 @@ export type EventSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   title?: boolean
   description?: boolean
   shortDescription?: boolean
+  meetupAddress?: boolean
+  meetupVisibility?: boolean
+  meetupRevealAt?: boolean
   coverImage?: boolean
   categoryId?: boolean
   tags?: boolean
@@ -5206,6 +5438,9 @@ export type EventSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   title?: boolean
   description?: boolean
   shortDescription?: boolean
+  meetupAddress?: boolean
+  meetupVisibility?: boolean
+  meetupRevealAt?: boolean
   coverImage?: boolean
   categoryId?: boolean
   tags?: boolean
@@ -5263,6 +5498,9 @@ export type EventSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   title?: boolean
   description?: boolean
   shortDescription?: boolean
+  meetupAddress?: boolean
+  meetupVisibility?: boolean
+  meetupRevealAt?: boolean
   coverImage?: boolean
   categoryId?: boolean
   tags?: boolean
@@ -5320,6 +5558,9 @@ export type EventSelectScalar = {
   title?: boolean
   description?: boolean
   shortDescription?: boolean
+  meetupAddress?: boolean
+  meetupVisibility?: boolean
+  meetupRevealAt?: boolean
   coverImage?: boolean
   categoryId?: boolean
   tags?: boolean
@@ -5364,7 +5605,7 @@ export type EventSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "shareToken" | "organizerId" | "pageId" | "title" | "description" | "shortDescription" | "coverImage" | "categoryId" | "tags" | "startDate" | "endDate" | "timezone" | "locationName" | "address" | "city" | "zipCode" | "latitude" | "longitude" | "isOnline" | "onlineLink" | "maxParticipants" | "minParticipants" | "currentParticipants" | "registrationType" | "minAge" | "maxAge" | "genderRestriction" | "minRating" | "wheelchairAccessible" | "hearingAccessible" | "visuallyAccessible" | "accessibilityNotes" | "visibility" | "isCollaborative" | "isFree" | "price" | "currency" | "stripePriceId" | "platformFeePercent" | "isSponsored" | "sponsorId" | "status" | "cancelReason" | "lastLocationUpdate" | "lastUpdate" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
+export type EventOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "shareToken" | "organizerId" | "pageId" | "title" | "description" | "shortDescription" | "meetupAddress" | "meetupVisibility" | "meetupRevealAt" | "coverImage" | "categoryId" | "tags" | "startDate" | "endDate" | "timezone" | "locationName" | "address" | "city" | "zipCode" | "latitude" | "longitude" | "isOnline" | "onlineLink" | "maxParticipants" | "minParticipants" | "currentParticipants" | "registrationType" | "minAge" | "maxAge" | "genderRestriction" | "minRating" | "wheelchairAccessible" | "hearingAccessible" | "visuallyAccessible" | "accessibilityNotes" | "visibility" | "isCollaborative" | "isFree" | "price" | "currency" | "stripePriceId" | "platformFeePercent" | "isSponsored" | "sponsorId" | "status" | "cancelReason" | "lastLocationUpdate" | "lastUpdate" | "viewCount" | "createdAt" | "updatedAt", ExtArgs["result"]["event"]>
 export type EventInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organizer?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   page?: boolean | Prisma.Event$pageArgs<ExtArgs>
@@ -5416,6 +5657,9 @@ export type $EventPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     title: string
     description: string
     shortDescription: string | null
+    meetupAddress: string | null
+    meetupVisibility: $Enums.MeetupVisibility
+    meetupRevealAt: Date | null
     coverImage: string | null
     categoryId: string
     tags: string[]
@@ -5900,6 +6144,9 @@ export interface EventFieldRefs {
   readonly title: Prisma.FieldRef<"Event", 'String'>
   readonly description: Prisma.FieldRef<"Event", 'String'>
   readonly shortDescription: Prisma.FieldRef<"Event", 'String'>
+  readonly meetupAddress: Prisma.FieldRef<"Event", 'String'>
+  readonly meetupVisibility: Prisma.FieldRef<"Event", 'MeetupVisibility'>
+  readonly meetupRevealAt: Prisma.FieldRef<"Event", 'DateTime'>
   readonly coverImage: Prisma.FieldRef<"Event", 'String'>
   readonly categoryId: Prisma.FieldRef<"Event", 'String'>
   readonly tags: Prisma.FieldRef<"Event", 'String[]'>

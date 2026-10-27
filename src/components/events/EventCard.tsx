@@ -16,6 +16,7 @@ import { formatDistance as fmtDist, formatPrice } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { Avatar } from '@/components/ui/avatar'
 import { TiltCard } from '@/components/common/TiltCard'
+import { CategoryIcon } from '@/components/common/CategoryIcon'
 import { JoinButton } from './JoinButton'
 import { AccessibilityBadges } from '@/components/common/AccessibilityBadges'
 
@@ -110,8 +111,8 @@ export function EventCard({
                 `,
               }}
             >
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none text-7xl opacity-35 transition-transform duration-700 group-hover:scale-110">
-                {event.category.icon || '🎉'}
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 select-none opacity-35 transition-transform duration-700 group-hover:scale-110">
+                <CategoryIcon name={event.category.icon} className="h-24 w-24" />
               </span>
             </div>
           )}
@@ -150,7 +151,7 @@ export function EventCard({
               className="border-0 font-bold backdrop-blur-md"
               style={{ backgroundColor: `${catColor}dd`, color: '#fff' }}
             >
-              {event.category.icon ? `${event.category.icon} ` : ''}
+              <CategoryIcon name={event.category.icon} className="h-3 w-3" />
               {event.category.name}
             </Badge>
             {event.isSponsored && (

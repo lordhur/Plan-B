@@ -17,6 +17,8 @@ const publicProfileSelect = {
   showAge: true,
   showLastName: true,
   gender: true,
+  profession: true,
+  education: true,
   averageRating: true,
   totalRatings: true,
   trustScore: true,
