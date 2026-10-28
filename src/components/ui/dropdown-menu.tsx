@@ -16,7 +16,8 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       sideOffset={sideOffset}
       className={cn(
-        'z-50 min-w-[12rem] overflow-hidden rounded-xl border border-border bg-card p-1.5 shadow-card-hover',
+        // z-index au-dessus de la navbar fixe (z-50) et de la barre mobile (z-40)
+        'z-[70] min-w-[12rem] overflow-y-auto rounded-xl border border-border bg-card p-1.5 shadow-card-hover',
         'data-[state=open]:animate-fade-in',
         className,
       )}

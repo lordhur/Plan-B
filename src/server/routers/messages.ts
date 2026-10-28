@@ -570,15 +570,18 @@ export const messagesRouter = createTRPCRouter({
     .input(
       z.object({
         eventId: z.string(),
-        content: z.string().trim().max(2000),
+        content: z.string().trim().max(2000).default(''),
         mediaUrl: z
           .string()
           .url()
           .refine(
             (v) =>
               v.startsWith('/api/img/') ||
-              v.startsWith('https://kwnqvyjrynlgokdcqmwi.supabase.co/storage/'),
-            'mediaUrl doit pointer vers /api/img/ ou le stockage PlanB',
+              v.startsWith('https://kwnqvyjrynlgokdcqmwi.supabase.co/storage/') ||
+              // GIF & stickers envoyés depuis Tenor / Giphy
+              /^https:\/\/([a-z0-9-]+\.)*giphy\.com\//.test(v) ||
+              /^https:\/\/([a-z0-9-]+\.)*tenor\.com\//.test(v),
+            'mediaUrl doit pointer vers /api/img/, le stockage PlanB, Tenor ou Giphy',
           )
           .optional(),
         mediaType: z.enum(['IMAGE', 'VIDEO', 'AUDIO', 'FILE']).optional(),

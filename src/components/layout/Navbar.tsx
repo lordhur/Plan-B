@@ -19,6 +19,7 @@ import {
   Home,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
@@ -84,7 +85,12 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="min-w-52">
+      <DropdownMenuContent
+        align="start"
+        sideOffset={8}
+        avoidCollisions={false}
+        className="z-[70] max-h-[min(72vh,32rem)] w-56 overflow-y-auto overscroll-contain"
+      >
         <DropdownMenuLabel>{t('create_menu')}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
@@ -138,8 +144,31 @@ export function Navbar() {
   })
   const unreadMsgCount = unreadMessages?.count ?? 0
 
+  // La barre est FIXE : on publie sa hauteur réelle dans `--nav-h` pour que
+  // le contenu (et la messagerie plein écran) démarre juste en dessous.
+  const headerRef = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    const el = headerRef.current
+    if (!el) return
+    const publish = () => {
+      const h = Math.round(el.getBoundingClientRect().height)
+      document.documentElement.style.setProperty('--nav-h', `${h}px`)
+    }
+    publish()
+    const ro = new ResizeObserver(publish)
+    ro.observe(el)
+    window.addEventListener('orientationchange', publish)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('orientationchange', publish)
+    }
+  }, [isAuthenticated, isLoading, lang])
+
   return (
-    <header className="sticky top-0 z-40 border-b border-border bg-bg/80 backdrop-blur-lg">
+    <header
+      ref={headerRef}
+      className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/85 shadow-[0_1px_0_0_rgba(0,0,0,0.04)] backdrop-blur-lg supports-[backdrop-filter]:bg-bg/75"
+    >
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-1 px-4 pb-1.5 pt-2 md:pb-2">
         {/* Haut : bouton rond « + » puis logo + Plan B à sa droite · actions à droite */}
         <div className="grid w-full grid-cols-[auto_1fr_auto] items-center gap-2">
@@ -198,7 +227,13 @@ export function Navbar() {
                   />
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-56">
+              <DropdownMenuContent
+                align="end"
+                alignOffset={-6}
+                sideOffset={8}
+                avoidCollisions={false}
+                className="z-[70] max-h-[min(72vh,32rem)] w-60 overflow-y-auto overscroll-contain"
+              >
                 <DropdownMenuLabel>
                   {user.firstName} {user.lastName}
                 </DropdownMenuLabel>

@@ -32,6 +32,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EmojiPicker } from './EmojiPicker'
+import { GifPicker } from './GifPicker'
 import {
   CallOverlay,
   IncomingCallOverlay,
@@ -286,78 +287,6 @@ function MsgText({
   )
 }
 
-/** Sélecteur GIF/stickers — Giphy (clé publique), repli grille d'emojis. */
-const STICKER_EMOJIS = ['😀', '😂', '😍', '🥳', '😎', '🤗', '👍', '🙏', '👏', '🔥', '❤️', '🎉', '😅', '🤔', '😴', '💪', '🍕', '⚽', '🎸', '🌞']
-
-function GifPicker({ onPick, onClose }: { onPick: (url: string | null, text?: string) => void; onClose: () => void }) {
-  const [q, setQ] = useState('')
-  const [gifs, setGifs] = useState<{ id: string; url: string }[]>([])
-  const [failed, setFailed] = useState(false)
-
-  useEffect(() => {
-    const ctrl = new AbortController()
-    const endpoint = q
-      ? `https://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&q=${encodeURIComponent(q)}&limit=24&rating=g&lang=fr`
-      : `https://api.giphy.com/v1/gifs/trending?api_key=dc6zaTOxFJmzC&limit=24&rating=g`
-    fetch(endpoint, { signal: ctrl.signal })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then((data: { data?: { id: string; images?: { fixed_width?: { url?: string } } }[] }) => {
-        const items = (data.data ?? [])
-          .map((g) => ({ id: g.id, url: g.images?.fixed_width?.url ?? '' }))
-          .filter((g) => g.url)
-        if (items.length === 0) setFailed(true)
-        setGifs(items)
-      })
-      .catch(() => {
-        if (!ctrl.signal.aborted) setFailed(true)
-      })
-    return () => ctrl.abort()
-  }, [q])
-
-  return (
-    <div className="absolute bottom-full left-0 right-0 z-20 mb-2 rounded-2xl border border-border bg-card p-3 shadow-xl">
-      <div className="flex items-center gap-2">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Rechercher un GIF…"
-          className="h-9 flex-1 rounded-lg border border-border bg-background px-3 text-sm outline-none"
-          aria-label="Rechercher un GIF"
-        />
-        <Button variant="ghost" size="icon" onClick={onClose} aria-label="Fermer les stickers">
-          <X className="h-4 w-4" aria-hidden />
-        </Button>
-      </div>
-      <div className="mt-2 max-h-56 overflow-y-auto">
-        {failed || gifs.length === 0 ? (
-          <div className="grid grid-cols-7 gap-2 p-1">
-            {STICKER_EMOJIS.map((e) => (
-              <button
-                key={e}
-                type="button"
-                onClick={() => onPick(null, e)}
-                className="rounded-lg p-1.5 text-2xl hover:bg-muted"
-                aria-label={`Sticker ${e}`}
-              >
-                {e}
-              </button>
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-3 gap-1.5">
-            {gifs.map((g) => (
-              <button key={g.id} type="button" onClick={() => onPick(g.url)} className="overflow-hidden rounded-lg bg-muted" aria-label="Envoyer ce GIF">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={g.url} alt="" className="h-24 w-full object-cover" loading="lazy" />
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  )
-}
-
 export function ChatThread({ kind, id, className }: ChatThreadProps) {
   const { lang, t } = useLang()
   const { user } = useCurrentUser()
@@ -518,7 +447,6 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
   ) => {
     const trimmed = text.trim()
     if (!trimmed && !media) return
-    if (!trimmed && media && kind === 'event') return
     setSending(true)
     setAttachmentError(null)
     try {
@@ -633,7 +561,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
     m.author.id === user?.id && Date.now() - new Date(m.createdAt).getTime() < 60 * 60 * 1000
 
   return (
-    <div className={cn('flex h-full flex-col', className)}>
+    <div className={cn('flex min-h-0 flex-1 flex-col', className)}>
       {/* Barre d'outils de la conversation */}
       <div className="flex items-center justify-end gap-1 border-b border-border px-2 py-1">
         <Button
@@ -949,7 +877,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
 
       <div
         ref={scrollerRef}
-        className="flex-1 space-y-3 overflow-y-auto p-3"
+        className="min-h-0 flex-1 space-y-3 overflow-y-auto overscroll-contain p-3"
         role="log"
         aria-live="polite"
         // Le contenu des messages a ses propres boutons « Traduire / Original »
@@ -1089,15 +1017,13 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
         </div>
       )}
 
-      {/* Composer */}
-      <div className="relative border-t border-border p-2">
+      {/* Composer — toujours visible en bas de la fenêtre */}
+      <div className="relative z-20 shrink-0 border-t border-border bg-card p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:pb-2">
         {showEmoji && (
-          <div className="absolute bottom-full left-0 z-20 mb-2">
-            <EmojiPicker
-              onPick={(e: string) => setInput((v) => v + e)}
-              onClose={() => setShowEmoji(false)}
-            />
-          </div>
+          <EmojiPicker
+            onPick={(e: string) => setInput((v) => v + e)}
+            onClose={() => setShowEmoji(false)}
+          />
         )}
         {showGif && (
           <GifPicker
@@ -1166,7 +1092,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             type="button"
             variant={showGif ? 'secondary' : 'ghost'}
             size="icon"
-            className="h-9 w-9"
+            className="h-10 w-10"
             aria-label={t('msg_sticker')}
             title={t('msg_sticker')}
             aria-expanded={showGif}
@@ -1178,7 +1104,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             type="button"
             variant={showEmoji ? 'secondary' : 'ghost'}
             size="icon"
-            className="h-9 w-9"
+            className="h-10 w-10"
             aria-label="Insérer un emoji"
             aria-expanded={showEmoji}
             onClick={() => { setShowEmoji((v) => !v); setShowGif(false) }}
@@ -1189,7 +1115,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="h-9 w-9"
+            className="h-10 w-10"
             aria-label={t('msg_photo')}
             title={t('msg_photo')}
             onClick={() => cameraRef.current?.click()}
@@ -1200,7 +1126,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="h-9 w-9"
+            className="h-10 w-10"
             aria-label={t('msg_attach')}
             title={t('msg_attach')}
             onClick={() => fileRef.current?.click()}
@@ -1211,7 +1137,7 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
             type="button"
             variant="ghost"
             size="icon"
-            className="h-9 w-9"
+            className="h-10 w-10"
             aria-label={recording ? "Arrêter" : t('msg_voice')}
             title={t('msg_voice')}
             onClick={() => (recording ? stopRecording() : void startRecording())}

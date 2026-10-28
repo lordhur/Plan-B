@@ -81,7 +81,7 @@ export const usersRouter = createTRPCRouter({
     }),
   ),
 
-  /** Ajouter une photo de profil (max 12). */
+  /** Ajouter une photo de profil (max 12). La 1re devient l'avatar. */
   addPhoto: protectedProcedure
     .input(z.object({ url: z.string().url() }))
     .mutation(async ({ input, ctx }) => {
@@ -89,9 +89,42 @@ export const usersRouter = createTRPCRouter({
       if (count >= 12) {
         throw new TRPCError({ code: 'BAD_REQUEST', message: 'Maximum 12 photos de profil' })
       }
-      return prisma.profilePhoto.create({
-        data: { userId: ctx.user.id, url: input.url, isPrimary: count === 0, order: count },
+      const isFirst = count === 0
+      const [photo] = await prisma.$transaction([
+        prisma.profilePhoto.create({
+          data: {
+            userId: ctx.user.id,
+            url: input.url,
+            isPrimary: isFirst,
+            order: count,
+          },
+        }),
+        // La toute première photo doit IMMÉDIATEMENT devenir la photo de profil.
+        ...(isFirst
+          ? [prisma.user.update({ where: { id: ctx.user.id }, data: { avatarUrl: input.url } })]
+          : []),
+      ])
+      return { ...photo, becameAvatar: isFirst }
+    }),
+
+  /** Réordonner mes photos (glisser-déposer / flèches). */
+  reorderPhotos: protectedProcedure
+    .input(z.object({ ids: z.array(z.string()).min(1).max(12) }))
+    .mutation(async ({ input, ctx }) => {
+      const mine = await prisma.profilePhoto.findMany({
+        where: { userId: ctx.user.id },
+        select: { id: true },
       })
+      const owned = new Set(mine.map((p) => p.id))
+      if (input.ids.some((id) => !owned.has(id))) {
+        throw new TRPCError({ code: 'FORBIDDEN', message: 'Photo inconnue' })
+      }
+      await prisma.$transaction(
+        input.ids.map((id, index) =>
+          prisma.profilePhoto.update({ where: { id }, data: { order: index } }),
+        ),
+      )
+      return { ok: true as const }
     }),
 
   /** Supprimer une photo de profil (l'avatar suit si c'était la principale). */
@@ -108,7 +141,15 @@ export const usersRouter = createTRPCRouter({
           where: { userId: ctx.user.id },
           orderBy: { order: 'asc' },
         })
-        if (next) await prisma.profilePhoto.update({ where: { id: next.id }, data: { isPrimary: true } })
+        if (next) {
+          await prisma.$transaction([
+            prisma.profilePhoto.update({ where: { id: next.id }, data: { isPrimary: true } }),
+            // L'avatar suit la nouvelle photo principale (ou redevient vide).
+            prisma.user.update({ where: { id: ctx.user.id }, data: { avatarUrl: next.url } }),
+          ])
+        } else {
+          await prisma.user.update({ where: { id: ctx.user.id }, data: { avatarUrl: null } })
+        }
       }
       return { ok: true as const }
     }),

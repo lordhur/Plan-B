@@ -7,6 +7,10 @@
    ============================================================ */
 @layer base {
   :root {
+    /* Hauteur approx. de la barre fixe avant mesure JS (évite tout saut) */
+    --nav-h: 7rem;
+    /* Hauteur réservée à la barre de navigation mobile (0 sur desktop) */
+    --bottom-nav-h: 0px;
     --bg: 255 255 255;
     --bg-secondary: 248 250 252;
     --card: 255 255 255;
@@ -104,6 +108,21 @@
 
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Conversation plein écran : la zone de saisie reste visible en bas */
+  .chat-shell {
+    display: flex;
+    height: calc(100dvh - var(--nav-h, 4.5rem) - var(--bottom-nav-h, 0px));
+    min-height: 0;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 767px) {
+  :root {
+    --nav-h: 3.9rem;
+    --bottom-nav-h: calc(4.75rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
