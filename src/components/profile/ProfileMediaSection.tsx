@@ -1,6 +1,6 @@
 'use client'
 
-import { Film, ImagePlus, Star, Trash2, Upload } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Film, GripVertical, ImagePlus, Star, Trash2, Upload } from 'lucide-react'
 import * as React from 'react'
 import { trpc } from '@/lib/trpc'
 import { toast } from '@/components/ui/toast'
@@ -38,6 +38,61 @@ export function ProfileMediaSection() {
     onSuccess: () => void utils.users.myPhotos.invalidate(),
     onError: (e) => toast.error(e.message),
   })
+  const reorderPhotos = trpc.users.reorderPhotos.useMutation({
+    onSuccess: () => {
+      void utils.users.myPhotos.invalidate()
+      toast.success('Ordre des photos enregistré')
+    },
+    onError: (e) => toast.error(e.message),
+  })
+  // Ordre local optimiste pendant le glisser-déposer
+  const [order, setOrder] = React.useState<string[]>([])
+  const [dragging, setDragging] = React.useState<string | null>(null)
+  React.useEffect(() => {
+    if (photos.data) setOrder(photos.data.map((p) => p.id))
+  }, [photos.data])
+
+  const orderedPhotos = React.useMemo(() => {
+    const list = photos.data ?? []
+    if (order.length === 0) return list
+    const byId = new Map(list.map((p) => [p.id, p]))
+    const sorted = order.map((id) => byId.get(id)).filter(Boolean) as typeof list
+    // garde les éventuelles photos non encore listées
+    for (const p of list) if (!order.includes(p.id)) sorted.push(p)
+    return sorted
+  }, [photos.data, order])
+
+  const commitOrder = (ids: string[]) => {
+    setOrder(ids)
+    reorderPhotos.mutate({ ids })
+  }
+
+  const movePhoto = (id: string, direction: -1 | 1) => {
+    const ids = orderedPhotos.map((p) => p.id)
+    const from = ids.indexOf(id)
+    const to = from + direction
+    if (from < 0 || to < 0 || to >= ids.length) return
+    const next = [...ids]
+    const [moved] = next.splice(from, 1)
+    if (!moved) return
+    next.splice(to, 0, moved)
+    commitOrder(next)
+  }
+
+  const dropOn = (targetId: string) => {
+    if (!dragging || dragging === targetId) return
+    const ids = orderedPhotos.map((p) => p.id)
+    const from = ids.indexOf(dragging)
+    const to = ids.indexOf(targetId)
+    if (from < 0 || to < 0) return
+    const next = [...ids]
+    const [moved] = next.splice(from, 1)
+    if (!moved) return
+    next.splice(to, 0, moved)
+    setDragging(null)
+    commitOrder(next)
+  }
+
   const setPrimary = trpc.users.setPrimaryPhoto.useMutation({
     onSuccess: () => {
       void utils.users.myPhotos.invalidate()
@@ -109,7 +164,7 @@ export function ProfileMediaSection() {
             <ImagePlus className="h-4 w-4 text-primary-600" aria-hidden /> Mes photos
           </CardTitle>
           <CardDescription>
-            Jusqu’à 12 photos. La principale devient votre avatar.
+            Jusqu’à 12 photos. La première ajoutée devient votre avatar — glissez pour réordonner.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -123,29 +178,72 @@ export function ProfileMediaSection() {
               e.target.value = ''
             }}
           />
+          <p className="mb-2 text-xs font-medium text-fg-muted">
+            Glissez une photo pour changer l’ordre · la 1<sup>re</sup> photo ajoutée devient
+            automatiquement votre photo de profil.
+          </p>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
-            {(photos.data ?? []).map((p) => (
+            {orderedPhotos.map((p, index) => (
               <div
                 key={p.id}
+                draggable
+                onDragStart={() => setDragging(p.id)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => dropOn(p.id)}
+                onDragEnd={() => setDragging(null)}
                 className={cn(
-                  'group relative aspect-square overflow-hidden rounded-xl border-2',
+                  'group relative aspect-square cursor-grab overflow-hidden rounded-xl border-2 active:cursor-grabbing',
                   p.isPrimary ? 'border-primary-500' : 'border-border',
+                  dragging === p.id && 'opacity-50',
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.url} alt="" loading="lazy" className="h-full w-full object-cover" />
-                {p.isPrimary && (
-                  <span className="absolute left-1 top-1 rounded-full bg-primary-600 p-1 text-white" title="Photo principale">
+                <img src={p.url} alt="" loading="lazy" draggable={false} className="h-full w-full object-cover" />
+                {p.isPrimary ? (
+                  <span
+                    className="absolute left-1 top-1 rounded-full bg-primary-600 p-1 text-white"
+                    title="Photo de profil"
+                  >
                     <Star className="h-3 w-3 fill-current" aria-hidden />
                   </span>
+                ) : (
+                  <span
+                    className="absolute left-1 top-1 rounded-full bg-black/50 p-1 text-white"
+                    title={`Position ${index + 1}`}
+                  >
+                    <GripVertical className="h-3 w-3" aria-hidden />
+                  </span>
                 )}
-                <span className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-black/60 p-1 opacity-0 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100">
+                {index === 0 && !p.isPrimary && (
+                  <span className="absolute right-1 top-1 rounded-full bg-primary-600/90 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                    1re
+                  </span>
+                )}
+                <span className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-black/60 p-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                  <button
+                    type="button"
+                    onClick={() => movePhoto(p.id, -1)}
+                    disabled={index === 0}
+                    className="rounded-md bg-white/20 p-1.5 text-white hover:bg-white/40 disabled:opacity-30"
+                    aria-label="Déplacer cette photo vers la gauche"
+                  >
+                    <ChevronLeft className="h-3.5 w-3.5" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => movePhoto(p.id, 1)}
+                    disabled={index === orderedPhotos.length - 1}
+                    className="rounded-md bg-white/20 p-1.5 text-white hover:bg-white/40 disabled:opacity-30"
+                    aria-label="Déplacer cette photo vers la droite"
+                  >
+                    <ChevronRight className="h-3.5 w-3.5" aria-hidden />
+                  </button>
                   {!p.isPrimary && (
                     <button
                       type="button"
                       onClick={() => setPrimary.mutate({ id: p.id })}
-                      className="rounded-md bg-white/20 p-1 text-white hover:bg-white/40"
-                      aria-label="Définir comme photo principale"
+                      className="rounded-md bg-white/20 p-1.5 text-white hover:bg-white/40"
+                      aria-label="Définir comme photo de profil"
                     >
                       <Star className="h-3.5 w-3.5" aria-hidden />
                     </button>
@@ -153,7 +251,7 @@ export function ProfileMediaSection() {
                   <button
                     type="button"
                     onClick={() => removePhoto.mutate({ id: p.id })}
-                    className="rounded-md bg-danger-500/80 p-1 text-white hover:bg-danger-600"
+                    className="rounded-md bg-danger-500/80 p-1.5 text-white hover:bg-danger-600"
                     aria-label="Supprimer cette photo"
                   >
                     <Trash2 className="h-3.5 w-3.5" aria-hidden />

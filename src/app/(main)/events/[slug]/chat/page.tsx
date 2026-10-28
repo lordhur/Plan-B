@@ -22,7 +22,7 @@ export default function EventChatPage({ params }: { params: Promise<{ slug: stri
   }
 
   return (
-    <div className="mx-auto flex h-[calc(100dvh-8.5rem)] max-w-2xl flex-col px-4 md:h-[calc(100dvh-6rem)] md:px-0">
+    <div className="chat-shell mx-auto w-full max-w-2xl px-3 sm:px-4 md:px-0">
       <header className="flex items-center gap-3 border-b border-border py-3">
         <Button asChild variant="ghost" size="icon" aria-label="Retour à l’événement">
           <Link href={`/events/${slug}`}>
