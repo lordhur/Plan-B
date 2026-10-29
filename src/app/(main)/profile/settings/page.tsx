@@ -4,6 +4,7 @@ import { Bell, Moon, Palette, Shield, Sun, Monitor } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { hardSignOut } from '@/lib/logout'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
 import { toast } from '@/components/ui/toast'
@@ -25,11 +26,14 @@ export default function SettingsPage() {
   useEffect(() => setMounted(true), [])
 
   const logout = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      void utils.auth.me.invalidate()
-      toast.info('À bientôt sur PlanB 👋')
-      router.push('/')
-      router.refresh()
+    onSuccess: async () => {
+      // Déconnexion dure : caches vidés + rechargement complet (voir lib/logout).
+      utils.auth.me.setData(undefined, undefined as never)
+      toast.info('À bientôt sur Plan B 👋')
+      await hardSignOut()
+    },
+    onError: () => {
+      void hardSignOut()
     },
   })
 

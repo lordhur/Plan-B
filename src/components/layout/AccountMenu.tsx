@@ -24,18 +24,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { useLang } from '@/lib/i18n'
+import { hardSignOut } from '@/lib/logout'
 import { trpc } from '@/lib/trpc'
-
-/** Vide les caches du service worker : indispensable après une déconnexion. */
-async function purgeCaches(): Promise<void> {
-  if (typeof window === 'undefined' || !('caches' in window)) return
-  try {
-    const keys = await caches.keys()
-    await Promise.all(keys.map((key) => caches.delete(key)))
-  } catch {
-    /* caches indisponibles : on continue */
-  }
-}
 
 /**
  * MENU DU COMPTE — accessible depuis le bouton « trois tirets » du profil.
@@ -59,11 +49,10 @@ export function AccountMenu({
       // 1. on jette la session en mémoire, 2. on jette les caches hors-ligne,
       // 3. on recharge entièrement la page : plus aucun état « connecté ».
       utils.auth.me.setData(undefined, undefined as never)
-      await purgeCaches()
-      window.location.assign('/login?signedOut=1')
+      await hardSignOut()
     },
     onError: () => {
-      void purgeCaches().then(() => window.location.assign('/login?signedOut=1'))
+      void hardSignOut()
     },
   })
 

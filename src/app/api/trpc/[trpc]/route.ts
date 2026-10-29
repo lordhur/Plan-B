@@ -6,7 +6,7 @@ import { createTRPCContext } from '@/server/trpc'
  * Point d'entrée HTTP tRPC (App Router).
  * Toutes les procédures passent par /api/trpc/<router>.<procedure>.
  */
-const handler = (req: Request) =>
+const inner = (req: Request) =>
   fetchRequestHandler({
     endpoint: '/api/trpc',
     req,
@@ -19,4 +19,22 @@ const handler = (req: Request) =>
     },
   })
 
-export { handler as GET, handler as POST }
+/**
+ * Aucune réponse tRPC ne doit être conservée : ni par le navigateur, ni par un
+ * cache intermédiaire. Sans cet en-tête, un `auth.me` mis en cache (service
+ * worker, CDN, cache disque) pouvait répondre « connecté » après une
+ * déconnexion — l'utilisateur restait alors bloqué dans sa session.
+ */
+async function handler(req: Request) {
+  const res = await inner(req)
+  const headers = new Headers(res.headers)
+  headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+  headers.set('Pragma', 'no-cache')
+  return new Response(res.body, {
+    status: res.status,
+    statusText: res.statusText,
+    headers,
+  })
+}
+
+export { handler as GET, handler as POST, handler as PATCH, handler as PUT, handler as DELETE }
