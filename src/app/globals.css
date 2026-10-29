@@ -24,6 +24,8 @@
     --wordmark-outline: #ffffff;
     /* Survol de la navigation : l'orange exact de l'icône Accueil (#EA580C) */
     --nav-hover: 234 88 12;
+    /* Onglet actif : nuance d'orange un peu plus dense pour le libellé (AA) */
+    --nav-active: 194 65 12;
   }
 
   .dark {
@@ -37,6 +39,7 @@
     --pill-bg-warm: 31 26 34;
     --wordmark-outline: #0a0e1c;
     --nav-hover: 234 88 12;
+    --nav-active: 251 146 60;
   }
 
   * {
@@ -985,6 +988,24 @@ nav * {
     0 0 0 1px rgba(249, 115, 22, 0.16),
     0 0 22px 2px rgba(249, 115, 22, 0.28),
     0 10px 28px -8px rgba(234, 88, 12, 0.42);
+}
+
+/* ============================================================
+   Onglet ACTIF : son icône et son libellé restent orange en
+   permanence (et non seulement au survol).
+   - l'icône garde l'orange du logo Accueil (#EA580C) ;
+   - le libellé, plus petit, utilise une nuance un peu plus dense
+     (--nav-active) pour rester lisible en AA sur fond clair comme
+     sur fond sombre.
+   ============================================================ */
+.nav-tab[aria-current='page'] .nav-tab-glyph,
+.nav-home[aria-current='page'] .nav-home-glyph {
+  color: rgb(var(--nav-hover));
+}
+/* placé après la règle ci-dessus : le libellé actif l'emporte sur l'icône */
+.nav-tab[aria-current='page'] .nav-tab-label,
+.nav-home[aria-current='page'] .nav-home-label {
+  color: rgb(var(--nav-active));
 }
 
 /* ============================================================
