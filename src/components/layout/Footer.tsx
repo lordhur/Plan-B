@@ -21,15 +21,15 @@ export function Footer() {
           </span>
         </span>
 
-        <span className="hidden whitespace-nowrap text-xs text-fg-muted md:inline">{t('footer_tagline')}</span>
+        <span className="hidden whitespace-nowrap text-xs text-fg-muted md:inline">
+          {t('footer_tagline')}
+        </span>
 
         <span className="min-w-0 truncate whitespace-nowrap text-[10px] leading-none text-fg-muted md:text-xs">
           <span className="md:hidden">
             {t('footer_tagline')} · © {year} — {t('footer_made_in')} 🇫🇷
           </span>
-          <span className="hidden md:inline">
-            © {year} PlanB — Fait en France 🇫🇷
-          </span>
+          <span className="hidden md:inline">© {year} PlanB — Fait en France 🇫🇷</span>
         </span>
       </div>
     </footer>

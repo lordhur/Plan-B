@@ -51,7 +51,15 @@ model User {
   photoAlbums   PhotoAlbum[]
   connectedAccounts ConnectedAccount[]
   avatarUrl     String? // Photo principale
+  coverImage    String?  @db.Text // Photo de couverture (profil)
+  lastSeenAt    DateTime? // Présence : dernier signe de vie (point vert « en ligne »)
   videoUrl      String? // Vidéo de présentation
+
+  // Réseaux sociaux affichés sur le profil
+  instagram String? @db.VarChar(200)
+  tiktok    String? @db.VarChar(200)
+  youtube   String? @db.VarChar(200)
+  spotify   String? @db.VarChar(200)
   stories       Story[]
   savedStories SavedStory[]
   storyLikes   StoryLike[]

@@ -13,6 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { AlbumsSection } from '@/components/profile/AlbumsSection'
+import { SocialLinks } from '@/components/profile/ProfileHeader'
 import { SavedStoriesSection } from '@/components/profile/SavedStoriesSection'
 import { FriendButton } from '@/components/friends/FriendButton'
 
@@ -107,6 +108,14 @@ export default function PublicProfilePage() {
           </dl>
 
           {profile.bio && <p className="mt-4 max-w-md text-sm text-fg-muted">{profile.bio}</p>}
+
+          <SocialLinks
+            instagram={profile.instagram}
+            tiktok={profile.tiktok}
+            youtube={profile.youtube}
+            spotify={profile.spotify}
+            editable={false}
+          />
 
           {/* Galerie de photos */}
           {profile.profilePhotos.length > 0 && (

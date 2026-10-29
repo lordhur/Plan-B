@@ -27,6 +27,12 @@ const publicProfileSelect = {
   eventsAttended: true,
   friendCount: true,
   videoUrl: true,
+  coverImage: true,
+  instagram: true,
+  tiktok: true,
+  youtube: true,
+  spotify: true,
+  lastSeenAt: true,
   profilePhotos: { orderBy: { order: 'asc' }, take: 12 },
   favoriteCategories: { select: { id: true, slug: true, name: true, icon: true, color: true } },
   createdAt: true,
@@ -82,6 +88,12 @@ export const usersRouter = createTRPCRouter({
   ),
 
   /** Ajouter une photo de profil (max 12). La 1re devient l'avatar. */
+  /** Présence : signale que l'utilisateur est actif (point vert « en ligne »). */
+  ping: protectedProcedure.mutation(async ({ ctx }) => {
+    await prisma.user.update({ where: { id: ctx.user.id }, data: { lastSeenAt: new Date() } })
+    return { ok: true }
+  }),
+
   addPhoto: protectedProcedure
     .input(z.object({ url: z.string().url() }))
     .mutation(async ({ input, ctx }) => {

@@ -116,8 +116,8 @@ export default function FeedPage() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-8">
-      {/* En-tête de bienvenue */}
-      <section aria-label="Bienvenue">
+      {/* En-tête de bienvenue — masqué sur mobile : la maquette démarre sur les stories */}
+      <section aria-label="Bienvenue" className="hidden md:block">
         <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
           {isAuthenticated && firstName ? `${greeting}, ${firstName} 👋` : `${greeting} 👋`}
         </h1>
@@ -133,22 +133,22 @@ export default function FeedPage() {
             </Button>
           </div>
         )}
-
-        {isAuthenticated && user && !user.emailVerified && (
-          <div className="mt-4 rounded-xl border border-warning-500/40 bg-warning-50 p-4 text-sm dark:bg-warning-500/10">
-            <p className="font-semibold text-warning-600">Vérifiez votre email 📬</p>
-            <p className="mt-0.5 text-fg-muted">
-              Votre compte n’est pas encore actif : vous ne pouvez pas créer ni rejoindre de plans.
-            </p>
-            <Button asChild size="sm" className="mt-3">
-              <Link href="/verify">Vérifier maintenant</Link>
-            </Button>
-          </div>
-        )}
       </section>
 
-      {/* Stories (24 h) — moi + mes amis */}
+      {/* Stories (24 h) — moi + mes amis, juste sous l'en-tête */}
       <StoryRail />
+
+      {isAuthenticated && user && !user.emailVerified && (
+        <div className="mt-4 rounded-xl border border-warning-500/40 bg-warning-50 p-4 text-sm dark:bg-warning-500/10">
+          <p className="font-semibold text-warning-600">Vérifiez votre email 📬</p>
+          <p className="mt-0.5 text-fg-muted">
+            Votre compte n’est pas encore actif : vous ne pouvez pas créer ni rejoindre de plans.
+          </p>
+          <Button asChild size="sm" className="mt-3">
+            <Link href="/verify">Vérifier maintenant</Link>
+          </Button>
+        </div>
+      )}
 
       {/* Carte régions → départements → villes + bouton Valider */}
       <section aria-labelledby="feed-map">
@@ -181,7 +181,10 @@ export default function FeedPage() {
             <Sparkles className="h-5 w-5 text-secondary-500" aria-hidden />
             {t('feed_intro')}
           </h2>
-          <div key={introCard.id} className="animate-in fade-in slide-in-from-bottom-1 duration-500">
+          <div
+            key={introCard.id}
+            className="duration-500 animate-in fade-in slide-in-from-bottom-1"
+          >
             <IntroCardView card={introCard as IntroCardItem} />
           </div>
         </section>
@@ -266,9 +269,7 @@ export default function FeedPage() {
                 : t('feed_empty_near').replace('{km}', String(radiusKm))
             }
             description={
-              geoState === 'denied' && !filter
-                ? t('feed_empty_desc_denied')
-                : t('feed_empty_desc')
+              geoState === 'denied' && !filter ? t('feed_empty_desc_denied') : t('feed_empty_desc')
             }
             action={
               <div className="flex gap-2">
@@ -309,25 +310,30 @@ export default function FeedPage() {
         </section>
       )}
 
-      {!loading && nearItems.length === 0 && (!feedQuery.data || feedQuery.data.forYou.length === 0) && (
-        <EmptyState
-          icon={Compass}
-          title={t('feed_calm')}
-          description={t('feed_calm_desc')}
-          action={
-            <Button asChild>
-              <Link href="/events/create">{t('first_plan')}</Link>
-            </Button>
-          }
-        />
-      )}
+      {!loading &&
+        nearItems.length === 0 &&
+        (!feedQuery.data || feedQuery.data.forYou.length === 0) && (
+          <EmptyState
+            icon={Compass}
+            title={t('feed_calm')}
+            description={t('feed_calm_desc')}
+            action={
+              <Button asChild>
+                <Link href="/events/create">{t('first_plan')}</Link>
+              </Button>
+            }
+          />
+        )}
     </div>
   )
 }
 
 function FeedSkeletons() {
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-label="Chargement des plans">
+    <div
+      className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+      aria-label="Chargement des plans"
+    >
       {[0, 1, 2].map((i) => (
         <div key={i} className="rounded-2xl border border-border p-4">
           <Skeleton className="h-4 w-24" />
