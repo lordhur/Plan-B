@@ -17,8 +17,14 @@ name: Vercel Provision & Deploy
 
 on:
   push:
-    branches: [main, 'arena/**']
+    branches: [main]
   workflow_dispatch:
+  schedule:
+    # Filet de sécurité quotidien (21 h 45 UTC ≈ après la remise à zéro du
+    # quota Vercel de 100 déploiements/jour). Si la production tourne déjà sur
+    # le dernier commit de main, aucun déploiement n'est créé : le passage ne
+    # consomme rien.
+    - cron: '45 21 * * *'
 
 concurrency:
   group: vercel-deploy
@@ -139,6 +145,16 @@ jobs:
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           LIST=$(apir "https://api.vercel.com/v6/deployments?projectId=$PROJECT&limit=10")
+          # 1. Si ce commit est DÉJÀ en production, on ne redéploie rien
+          #    (économie du quota : 100 déploiements par jour en Hobby).
+          ready=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha and ((.readyState // .state)=="READY"))] | first | .id // empty')
+          if [ -n "$ready" ]; then
+            url=$(apir "https://api.vercel.com/v3/deployments/$ready" | jq -r '.alias[0] // .url')
+            echo "LAST_URL=$url" >> "$GITHUB_ENV"
+            echo "SKIP_DEPLOY=1" >> "$GITHUB_ENV"
+            echo "::notice::Production déjà à jour pour $GITHUB_SHA : https://$url — aucun déploiement créé"
+            exit 0
+          fi
           id=$(echo "$LIST" | jq -r --arg sha "$GITHUB_SHA" '[.deployments[]? | select(.target=="production" and (.meta.githubCommitSha // "")==$sha)] | first | .id // empty')
           if [ -z "$id" ]; then
             id=$(echo "$LIST" | jq -r '[.deployments[]? | select(.target=="production" and ((.readyState // .state)=="BUILDING" or (.readyState // .state)=="QUEUED"))] | first | .id // empty')
@@ -149,7 +165,18 @@ jobs:
           if [ -z "$id" ]; then
             dep=$(jq -n --arg n "$PROJECT" --arg ref "$GITHUB_REF_NAME" --argjson r "$REPO_ID" '{name:$n,target:"production",gitSource:{type:"github",ref:$ref,repoId:$r}}' | api -X POST https://api.vercel.com/v13/deployments -d @-)
             id=$(echo "$dep" | jq -r '.id // empty')
-            if [ -z "$id" ]; then echo "::error::Déploiement refusé : $dep"; exit 1; fi
+            if [ -z "$id" ]; then
+              code=$(echo "$dep" | jq -r '.error.code // empty')
+              if [ "$code" = "payment_required" ]; then
+                # Quota Hobby (100 déploiements/jour) épuisé : le code est sur
+                # main, la mise en ligne se fera au prochain passage (cron).
+                echo "::warning::Quota Vercel épuisé (100 déploiements/jour). Aucun déploiement créé ; nouvelle tentative automatique demain à 21 h 45 UTC (ou « gh workflow run vercel-deploy.yml »)."
+                echo "SKIP_DEPLOY=1" >> "$GITHUB_ENV"
+                exit 0
+              fi
+              echo "::error::Déploiement refusé : $dep"
+              exit 1
+            fi
           fi
           echo "Suivi du déploiement $id…"
           prev=""
@@ -183,12 +210,23 @@ jobs:
         run: |
           set -euo pipefail
           trap 'echo "::error::Échec inattendu ligne $LINENO (code $?)"' ERR
+          if [ "${SKIP_DEPLOY:-}" = "1" ]; then
+            echo "::notice::Rien à déployer (déjà en ligne ou quota atteint) — étape finale ignorée"
+            exit 0
+          fi
           api() { local args=() a; for a in "$@"; do case "$a" in http*) if [ -n "${TEAM_ID:-}" ]; then case "$a" in *\?*) args+=("$a&teamId=$TEAM_ID");; *) args+=("$a?teamId=$TEAM_ID");; esac; else args+=("$a"); fi;; *) args+=("$a");; esac; done; curl -sS --max-time 60 -H "Authorization: Bearer $VERCEL_TOKEN" -H 'Content-Type: application/json' "${args[@]}"; }
           apir() { local out; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 5; if out=$(api "$@"); then printf '%s' "$out"; return 0; fi; sleep 10; api "$@"; }
           canon=$LAST_URL
           h=$(printf '%s' "$LAST_URL" | cut -d- -f2)
           if printf '%s' "$h" | grep -qE '^[a-z0-9]{9}$'; then canon="$(printf '%s' "$LAST_URL" | cut -d- -f1)-$(printf '%s' "$LAST_URL" | cut -d- -f3-)"; fi
           echo "URL canonique : https://$canon"
+          # Si NEXT_PUBLIC_APP_URL est déjà la bonne valeur, le second build est
+          # inutile : on économise un déploiement sur les deux.
+          current=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .value' | head -1)
+          if [ "$current" = "https://$canon" ]; then
+            echo "::notice::NEXT_PUBLIC_APP_URL déjà à jour (https://$canon) — build final inutile"
+            exit 0
+          fi
           ids=$(apir "https://api.vercel.com/v9/projects/$PROJECT/env" | jq -r '.envs[]? | select(.key=="NEXT_PUBLIC_APP_URL") | .id')
           for id in $ids; do api -X DELETE "https://api.vercel.com/v9/projects/$PROJECT/env/$id" >/dev/null || true; done
           resp=$(jq -n --arg v "https://$canon" '{key:"NEXT_PUBLIC_APP_URL",value:$v,type:"plain",target:["production","preview","development"]}' | api -X POST "https://api.vercel.com/v10/projects/$PROJECT/env" -d @-)
