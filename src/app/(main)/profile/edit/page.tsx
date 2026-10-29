@@ -213,6 +213,10 @@ export default function ProfileEditPage() {
                 placeholder="Parlez-nous de vous en quelques mots…"
                 {...register('bio')}
               />
+              <p className="mt-1 text-[11px] text-fg-muted">
+                Astuce : collez vos liens (https://instagram.com/moncompte, tiktok.com/@moi…) — ils
+                deviennent cliquables et le logo du site s’affiche sous votre description.
+              </p>
             </div>
             <div>
               <Label htmlFor="phone">Téléphone</Label>

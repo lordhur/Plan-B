@@ -11,6 +11,25 @@ const withPWA = withPWAInit({
   fallbacks: {
     document: '/offline',
   },
+  workboxOptions: {
+    runtimeCaching: [
+      {
+        /**
+         * AUCUNE réponse d'API en cache.
+         * Le cache « apis » de next-pwa gardait 24 h de réponses GET, dont
+         * `auth.me` : après une déconnexion (ou une connexion) le service
+         * worker resservait l'ancienne session et l'utilisateur restait
+         * « connecté ». On garde le même cacheName pour remplacer la règle
+         * par défaut, avec une stratégie réseau strict.
+         */
+        urlPattern: ({ sameOrigin, url: { pathname } }) =>
+          Boolean(sameOrigin) && pathname.startsWith('/api/'),
+        handler: 'NetworkOnly',
+        method: 'GET',
+        options: { cacheName: 'apis' },
+      },
+    ],
+  },
 })
 
 /** @type {import('next').NextConfig} */

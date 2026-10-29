@@ -72,7 +72,16 @@ export async function setSessionCookie(userId: string): Promise<void> {
 
 export async function clearSessionCookie(): Promise<void> {
   const store = await cookies()
-  store.set(SESSION_COOKIE, '', { httpOnly: true, maxAge: 0, path: '/' })
+  // Mêmes attributs que `setSessionCookie` : un navigateur ne remplace un
+  // cookie que si nom + domaine + chemin concordent (Safari est strict).
+  store.set(SESSION_COOKIE, '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0,
+    expires: new Date(0),
+    path: '/',
+  })
 }
 
 export type SessionUser = {

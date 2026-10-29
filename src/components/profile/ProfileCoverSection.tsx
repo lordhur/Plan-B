@@ -3,6 +3,7 @@
 import { ImagePlus, Loader2, Trash2 } from 'lucide-react'
 import * as React from 'react'
 
+import { ImageCropper } from '@/components/common/ImageCropper'
 import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/toast'
 import { uploadToStorage, MAX_STORAGE_FILE } from '@/lib/supabaseUpload'
@@ -19,6 +20,7 @@ export function ProfileCoverSection() {
   const { data: me } = trpc.auth.me.useQuery()
   const input = React.useRef<HTMLInputElement>(null)
   const [uploading, setUploading] = React.useState(false)
+  const [toCrop, setToCrop] = React.useState<File | null>(null)
 
   const save = trpc.users.updateProfile.useMutation({
     onSuccess: async () => {
@@ -102,8 +104,27 @@ export function ProfileCoverSection() {
         accept="image/*"
         className="sr-only"
         aria-label="Choisir une photo de couverture"
-        onChange={(e) => void onFile(e.target.files?.[0])}
+        onChange={(e) => {
+          const picked = e.target.files?.[0] ?? null
+          if (e.target) e.target.value = ''
+          if (picked) setToCrop(picked)
+        }}
       />
+
+      {/* Recadrage obligatoire avant l'envoi */}
+      {toCrop && (
+        <ImageCropper
+          file={toCrop}
+          aspect={16 / 6}
+          outputWidth={1600}
+          title="Recadrer ma photo de couverture"
+          onCancel={() => setToCrop(null)}
+          onDone={(cropped) => {
+            setToCrop(null)
+            void onFile(cropped)
+          }}
+        />
+      )}
     </div>
   )
 }

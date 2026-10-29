@@ -26,10 +26,7 @@ export function AlbumsSection({ userId, isMe }: { userId: string; isMe: boolean 
   const albums = isMe
     ? trpc.albums.myAlbums.useQuery(undefined, { refetchInterval: false })
     : trpc.albums.memberAlbums.useQuery({ userId })
-  const detail = trpc.albums.albumPhotos.useQuery(
-    { id: openId ?? '' },
-    { enabled: !!openId },
-  )
+  const detail = trpc.albums.albumPhotos.useQuery({ id: openId ?? '' }, { enabled: !!openId })
 
   const create = trpc.albums.createAlbum.useMutation({
     onSuccess: () => {
@@ -95,14 +92,21 @@ export function AlbumsSection({ userId, isMe }: { userId: string; isMe: boolean 
                   ? 'Google ne partage que la photo de profil'
                   : `Importer mes photos ${a.provider === 'facebook' ? 'Facebook' : 'Instagram'}`
               }
-              onClick={() => sync.mutate({ provider: a.provider as 'facebook' | 'instagram' | 'google' })}
+              onClick={() =>
+                sync.mutate({ provider: a.provider as 'facebook' | 'instagram' | 'google' })
+              }
             >
               {sync.isPending ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
               ) : (
                 <RefreshCw className="h-3.5 w-3.5" aria-hidden />
               )}
-              Photos {a.provider === 'facebook' ? 'Facebook' : a.provider === 'instagram' ? 'Instagram' : 'Google'}
+              Photos{' '}
+              {a.provider === 'facebook'
+                ? 'Facebook'
+                : a.provider === 'instagram'
+                  ? 'Instagram'
+                  : 'Google'}
             </Button>
           ))}
         </div>
@@ -133,9 +137,7 @@ export function AlbumsSection({ userId, isMe }: { userId: string; isMe: boolean 
 
       {list.length === 0 && (
         <p className="mt-2 text-xs text-fg-muted">
-          {isMe
-            ? t('prof_no_album_me')
-            : t('prof_no_album')}
+          {isMe ? t('prof_no_album_me') : t('prof_no_album')}
         </p>
       )}
 
@@ -211,13 +213,21 @@ export function AlbumsSection({ userId, isMe }: { userId: string; isMe: boolean 
                   </Button>
                 </>
               )}
-              <Button variant="ghost" size="icon" aria-label="Fermer l’album" onClick={() => setOpenId(null)}>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label="Fermer l’album"
+                onClick={() => setOpenId(null)}
+              >
                 <X className="h-4 w-4" aria-hidden />
               </Button>
             </div>
           </div>
           {detail.isLoading ? (
-            <Loader2 className="mx-auto h-5 w-5 animate-spin text-fg-muted" aria-label="Chargement" />
+            <Loader2
+              className="mx-auto h-5 w-5 animate-spin text-fg-muted"
+              aria-label="Chargement"
+            />
           ) : (detail.data?.photos.length ?? 0) === 0 ? (
             <p className="py-2 text-center text-xs text-fg-muted">{t('prof_empty_album')}</p>
           ) : (

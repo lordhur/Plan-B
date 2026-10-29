@@ -10,16 +10,19 @@ CREATE TABLE "_EventCategoryToUser" (
   PRIMARY KEY ("A", "B")
 );
 CREATE TYPE "Gender" AS ENUM ('MALE', 'FEMALE', 'NON_BINARY', 'OTHER', 'PREFER_NOT_TO_SAY');
+CREATE TYPE "Orientation" AS ENUM ('HETEROSEXUAL', 'HOMOSEXUAL', 'BISEXUAL', 'OTHER');
 CREATE TYPE "PrivacyLevel" AS ENUM ('PUBLIC', 'FRIENDS_OF_FRIENDS', 'FRIENDS_ONLY', 'PRIVATE');
 CREATE TYPE "MessagePermission" AS ENUM ('EVERYONE', 'FRIENDS_OF_FRIENDS', 'FRIENDS_ONLY', 'NOBODY');
 CREATE TYPE "VerificationType" AS ENUM ('EMAIL_VERIFICATION', 'PHONE_VERIFICATION', 'PASSWORD_RESET');
 CREATE TYPE "BadgeCategory" AS ENUM ('TRUST', 'ORGANIZER', 'PARTICIPANT', 'SOCIAL', 'CATEGORY', 'SPECIAL');
 CREATE TYPE "FriendRequestStatus" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED', 'BLOCKED');
+CREATE TYPE "MeetupVisibility" AS ENUM ('EVERYONE', 'MEMBERS', 'SCHEDULED');
 CREATE TYPE "RegistrationType" AS ENUM ('OPEN', 'APPROVAL_REQUIRED', 'INVITATION_ONLY');
 CREATE TYPE "GenderRestriction" AS ENUM ('ALL', 'MALE_ONLY', 'FEMALE_ONLY', 'NON_BINARY_ONLY');
 CREATE TYPE "EventVisibility" AS ENUM ('PUBLIC', 'FRIENDS_ONLY', 'PRIVATE', 'UNLISTED');
 CREATE TYPE "EventStatus" AS ENUM ('DRAFT', 'UPCOMING', 'ONGOING', 'COMPLETED', 'CANCELLED');
 CREATE TYPE "ParticipationStatus" AS ENUM ('PENDING', 'CONFIRMED', 'DECLINED', 'CANCELLED', 'ATTENDED', 'NO_SHOW');
+CREATE TYPE "StoryType" AS ENUM ('PHOTO', 'VIDEO');
 CREATE TYPE "InvitationStatus" AS ENUM ('PENDING', 'ACCEPTED', 'DECLINED');
 CREATE TYPE "MediaType" AS ENUM ('IMAGE', 'VIDEO', 'AUDIO', 'FILE');
 CREATE TYPE "ReportReason" AS ENUM ('HARASSMENT', 'INAPPROPRIATE_BEHAVIOR', 'NO_SHOW', 'FAKE_PROFILE', 'SPAM', 'VIOLENCE', 'OTHER');
@@ -44,11 +47,21 @@ CREATE TABLE "User" (
   "displayName" text,
   "dateOfBirth" timestamp(3) NOT NULL,
   "gender" "Gender" NOT NULL,
+  "orientation" "Orientation",
   "bio" text,
+  "profession" text,
+  "education" text,
   "city" text,
   "latitude" double precision,
   "longitude" double precision,
   "avatarUrl" text,
+  "coverImage" text,
+  "lastSeenAt" timestamp(3),
+  "videoUrl" text,
+  "instagram" text,
+  "tiktok" text,
+  "youtube" text,
+  "spotify" text,
   "privacyLevel" "PrivacyLevel" NOT NULL DEFAULT 'PUBLIC'::"PrivacyLevel",
   "allowMessagesFrom" "MessagePermission" NOT NULL DEFAULT 'EVERYONE'::"MessagePermission",
   "allowFriendRequests" boolean NOT NULL DEFAULT true,
@@ -75,7 +88,31 @@ CREATE TABLE "ProfilePhoto" (
   "url" text NOT NULL,
   "isPrimary" boolean NOT NULL DEFAULT false,
   "order" integer NOT NULL DEFAULT 0,
+  "source" text NOT NULL DEFAULT 'upload',
+  "albumId" text,
   "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE "PhotoAlbum" (
+  "id" text NOT NULL PRIMARY KEY,
+  "userId" text NOT NULL,
+  "name" text NOT NULL,
+  "coverUrl" text,
+  "isPublic" boolean NOT NULL DEFAULT true,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE "ConnectedAccount" (
+  "id" text NOT NULL PRIMARY KEY,
+  "userId" text NOT NULL,
+  "provider" text NOT NULL,
+  "providerUserId" text NOT NULL,
+  "email" text,
+  "accessToken" text,
+  "refreshToken" text,
+  "expiresAt" timestamp(3),
+  "photosSyncedAt" timestamp(3),
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE ("provider", "providerUserId"),
+  CONSTRAINT "ConnectedAccount_provider_providerUserId_key" UNIQUE ("provider", "providerUserId")
 );
 CREATE TABLE "VerificationCode" (
   "id" text NOT NULL PRIMARY KEY,
@@ -132,6 +169,14 @@ CREATE TABLE "Friendship" (
   UNIQUE ("userAId", "userBId"),
   CONSTRAINT "Friendship_userAId_userBId_key" UNIQUE ("userAId", "userBId")
 );
+CREATE TABLE "EventLike" (
+  "id" text NOT NULL PRIMARY KEY,
+  "eventId" text NOT NULL,
+  "userId" text NOT NULL,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE ("eventId", "userId"),
+  CONSTRAINT "EventLike_eventId_userId_key" UNIQUE ("eventId", "userId")
+);
 CREATE TABLE "EventCategory" (
   "id" text NOT NULL PRIMARY KEY,
   "name" text NOT NULL,
@@ -150,6 +195,9 @@ CREATE TABLE "Event" (
   "title" text NOT NULL,
   "description" text NOT NULL,
   "shortDescription" text,
+  "meetupAddress" text,
+  "meetupVisibility" "MeetupVisibility" NOT NULL DEFAULT 'EVERYONE'::"MeetupVisibility",
+  "meetupRevealAt" timestamp(3),
   "coverImage" text,
   "categoryId" text NOT NULL,
   "tags" text[] NOT NULL,
@@ -218,6 +266,31 @@ CREATE TABLE "EventParticipation" (
   UNIQUE ("eventId", "userId"),
   CONSTRAINT "EventParticipation_eventId_userId_key" UNIQUE ("eventId", "userId")
 );
+CREATE TABLE "Story" (
+  "id" text NOT NULL PRIMARY KEY,
+  "authorId" text NOT NULL,
+  "mediaUrl" text NOT NULL,
+  "type" "StoryType" NOT NULL DEFAULT 'PHOTO'::"StoryType",
+  "caption" text,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE "SavedStory" (
+  "id" text NOT NULL PRIMARY KEY,
+  "userId" text NOT NULL,
+  "storyId" text NOT NULL,
+  "order" integer NOT NULL DEFAULT 0,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE ("userId", "storyId"),
+  CONSTRAINT "SavedStory_userId_storyId_key" UNIQUE ("userId", "storyId")
+);
+CREATE TABLE "StoryLike" (
+  "id" text NOT NULL PRIMARY KEY,
+  "storyId" text NOT NULL,
+  "userId" text NOT NULL,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE ("storyId", "userId"),
+  CONSTRAINT "StoryLike_storyId_userId_key" UNIQUE ("storyId", "userId")
+);
 CREATE TABLE "WaitlistEntry" (
   "id" text NOT NULL PRIMARY KEY,
   "eventId" text NOT NULL,
@@ -254,6 +327,8 @@ CREATE TABLE "Conversation" (
   "name" text,
   "isGroup" boolean NOT NULL DEFAULT false,
   "avatarUrl" text,
+  "ephemeralHours" integer,
+  "theme" text,
   "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "updatedAt" timestamp(3) NOT NULL
 );
@@ -264,9 +339,27 @@ CREATE TABLE "ConversationMember" (
   "role" text NOT NULL DEFAULT 'member',
   "joinedAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "lastReadAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "deliveredAt" timestamp(3),
   "isMuted" boolean NOT NULL DEFAULT false,
+  "mutedUntil" timestamp(3),
+  "hiddenAt" timestamp(3),
   UNIQUE ("conversationId", "userId"),
   CONSTRAINT "ConversationMember_conversationId_userId_key" UNIQUE ("conversationId", "userId")
+);
+CREATE TABLE "MessageHide" (
+  "id" text NOT NULL PRIMARY KEY,
+  "messageId" text NOT NULL,
+  "userId" text NOT NULL,
+  UNIQUE ("messageId", "userId"),
+  CONSTRAINT "MessageHide_messageId_userId_key" UNIQUE ("messageId", "userId")
+);
+CREATE TABLE "UserBlock" (
+  "id" text NOT NULL PRIMARY KEY,
+  "blockerId" text NOT NULL,
+  "blockedId" text NOT NULL,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE ("blockerId", "blockedId"),
+  CONSTRAINT "UserBlock_blockerId_blockedId_key" UNIQUE ("blockerId", "blockedId")
 );
 CREATE TABLE "DirectMessage" (
   "id" text NOT NULL PRIMARY KEY,
@@ -276,6 +369,7 @@ CREATE TABLE "DirectMessage" (
   "content" text NOT NULL,
   "mediaUrl" text,
   "mediaType" "MediaType",
+  "mediaName" text,
   "isRead" boolean NOT NULL DEFAULT false,
   "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   "editedAt" timestamp(3),
@@ -366,6 +460,8 @@ CREATE TABLE "Page" (
   "coverUrl" text,
   "address" text,
   "city" text,
+  "latitude" double precision,
+  "longitude" double precision,
   "phone" text,
   "website" text,
   "email" text,
@@ -390,6 +486,9 @@ CREATE TABLE "InterestGroup" (
   "description" text,
   "coverImage" text,
   "category" text NOT NULL,
+  "city" text,
+  "latitude" double precision,
+  "longitude" double precision,
   "isPrivate" boolean NOT NULL DEFAULT false,
   "memberCount" integer NOT NULL DEFAULT 0,
   "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -520,6 +619,41 @@ CREATE TABLE "Advertisement" (
   "endDate" timestamp(3) NOT NULL,
   "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE "ImageBlob" (
+  "id" text NOT NULL PRIMARY KEY,
+  "ownerId" text NOT NULL,
+  "data" bytea NOT NULL,
+  "mime" text NOT NULL DEFAULT 'image/webp',
+  "name" text,
+  "width" integer,
+  "height" integer,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE "ContactMessage" (
+  "id" text NOT NULL PRIMARY KEY,
+  "userId" text,
+  "email" text NOT NULL,
+  "name" text,
+  "subject" text NOT NULL,
+  "message" text NOT NULL,
+  "handled" boolean NOT NULL DEFAULT false,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE "IntroCard" (
+  "id" text NOT NULL PRIMARY KEY,
+  "userId" text NOT NULL,
+  "title" text NOT NULL,
+  "about" text NOT NULL,
+  "lookingFor" text,
+  "photoUrl" text,
+  "photos" text[] NOT NULL DEFAULT '[]',
+  "passions" text[] NOT NULL DEFAULT '[]',
+  "profession" text,
+  "education" text,
+  "createdAt" timestamp(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updatedAt" timestamp(3) NOT NULL,
+  CONSTRAINT "IntroCard_userId_key" UNIQUE ("userId")
+);
 CREATE INDEX "_InterestToUser_B_index" ON "_InterestToUser" ("B");
 ALTER TABLE "_InterestToUser" ADD CONSTRAINT "_InterestToUser_A_fkey" FOREIGN KEY ("A") REFERENCES "Interest" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "_InterestToUser" ADD CONSTRAINT "_InterestToUser_B_fkey" FOREIGN KEY ("B") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -530,7 +664,13 @@ CREATE INDEX "User_latitude_longitude_idx" ON "User" ("latitude", "longitude");
 CREATE INDEX "User_city_idx" ON "User" ("city");
 CREATE INDEX "User_averageRating_idx" ON "User" ("averageRating");
 CREATE INDEX "ProfilePhoto_userId_idx" ON "ProfilePhoto" ("userId");
+CREATE INDEX "ProfilePhoto_albumId_idx" ON "ProfilePhoto" ("albumId");
 ALTER TABLE "ProfilePhoto" ADD CONSTRAINT "ProfilePhoto_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "ProfilePhoto" ADD CONSTRAINT "ProfilePhoto_albumId_fkey" FOREIGN KEY ("albumId") REFERENCES "PhotoAlbum" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE INDEX "PhotoAlbum_userId_idx" ON "PhotoAlbum" ("userId");
+ALTER TABLE "PhotoAlbum" ADD CONSTRAINT "PhotoAlbum_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "ConnectedAccount_userId_idx" ON "ConnectedAccount" ("userId");
+ALTER TABLE "ConnectedAccount" ADD CONSTRAINT "ConnectedAccount_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 CREATE INDEX "VerificationCode_target_type_idx" ON "VerificationCode" ("target", "type");
 ALTER TABLE "VerificationCode" ADD CONSTRAINT "VerificationCode_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "UserBadge" ADD CONSTRAINT "UserBadge_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -541,6 +681,9 @@ CREATE INDEX "Friendship_userAId_idx" ON "Friendship" ("userAId");
 CREATE INDEX "Friendship_userBId_idx" ON "Friendship" ("userBId");
 ALTER TABLE "Friendship" ADD CONSTRAINT "Friendship_userAId_fkey" FOREIGN KEY ("userAId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Friendship" ADD CONSTRAINT "Friendship_userBId_fkey" FOREIGN KEY ("userBId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "EventLike_userId_idx" ON "EventLike" ("userId");
+ALTER TABLE "EventLike" ADD CONSTRAINT "EventLike_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "EventLike" ADD CONSTRAINT "EventLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 CREATE INDEX "Event_latitude_longitude_idx" ON "Event" ("latitude", "longitude");
 CREATE INDEX "Event_city_idx" ON "Event" ("city");
 CREATE INDEX "Event_startDate_idx" ON "Event" ("startDate");
@@ -554,6 +697,16 @@ ALTER TABLE "EventCollaborator" ADD CONSTRAINT "EventCollaborator_eventId_fkey" 
 CREATE INDEX "EventParticipation_userId_idx" ON "EventParticipation" ("userId");
 ALTER TABLE "EventParticipation" ADD CONSTRAINT "EventParticipation_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "EventParticipation" ADD CONSTRAINT "EventParticipation_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "Story_authorId_idx" ON "Story" ("authorId");
+CREATE INDEX "Story_createdAt_idx" ON "Story" ("createdAt");
+ALTER TABLE "Story" ADD CONSTRAINT "Story_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "SavedStory_userId_idx" ON "SavedStory" ("userId");
+ALTER TABLE "SavedStory" ADD CONSTRAINT "SavedStory_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "SavedStory" ADD CONSTRAINT "SavedStory_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "Story" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "StoryLike_storyId_idx" ON "StoryLike" ("storyId");
+CREATE INDEX "StoryLike_userId_idx" ON "StoryLike" ("userId");
+ALTER TABLE "StoryLike" ADD CONSTRAINT "StoryLike_storyId_fkey" FOREIGN KEY ("storyId") REFERENCES "Story" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "StoryLike" ADD CONSTRAINT "StoryLike_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 CREATE INDEX "WaitlistEntry_eventId_position_idx" ON "WaitlistEntry" ("eventId", "position");
 ALTER TABLE "WaitlistEntry" ADD CONSTRAINT "WaitlistEntry_eventId_fkey" FOREIGN KEY ("eventId") REFERENCES "Event" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "WaitlistEntry" ADD CONSTRAINT "WaitlistEntry_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -564,6 +717,11 @@ ALTER TABLE "EventChatMessage" ADD CONSTRAINT "EventChatMessage_eventId_fkey" FO
 ALTER TABLE "EventChatMessage" ADD CONSTRAINT "EventChatMessage_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "ConversationMember" ADD CONSTRAINT "ConversationMember_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "Conversation" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "ConversationMember" ADD CONSTRAINT "ConversationMember_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "MessageHide" ADD CONSTRAINT "MessageHide_messageId_fkey" FOREIGN KEY ("messageId") REFERENCES "DirectMessage" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "MessageHide" ADD CONSTRAINT "MessageHide_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX "UserBlock_blockedId_idx" ON "UserBlock" ("blockedId");
+ALTER TABLE "UserBlock" ADD CONSTRAINT "UserBlock_blockerId_fkey" FOREIGN KEY ("blockerId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "UserBlock" ADD CONSTRAINT "UserBlock_blockedId_fkey" FOREIGN KEY ("blockedId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 CREATE INDEX "DirectMessage_conversationId_createdAt_idx" ON "DirectMessage" ("conversationId", "createdAt");
 ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_conversationId_fkey" FOREIGN KEY ("conversationId") REFERENCES "Conversation" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "DirectMessage" ADD CONSTRAINT "DirectMessage_senderId_fkey" FOREIGN KEY ("senderId") REFERENCES "User" ("id") ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -602,3 +760,7 @@ CREATE INDEX "Notification_userId_isRead_createdAt_idx" ON "Notification" ("user
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "PushSubscription" ADD CONSTRAINT "PushSubscription_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "Advertisement" ADD CONSTRAINT "Advertisement_partnerId_fkey" FOREIGN KEY ("partnerId") REFERENCES "Partner" ("id") ON DELETE SET NULL ON UPDATE CASCADE;
+CREATE INDEX "ImageBlob_ownerId_idx" ON "ImageBlob" ("ownerId");
+CREATE INDEX "ContactMessage_handled_createdAt_idx" ON "ContactMessage" ("handled", "createdAt");
+CREATE INDEX "IntroCard_createdAt_idx" ON "IntroCard" ("createdAt");
+ALTER TABLE "IntroCard" ADD CONSTRAINT "IntroCard_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE;

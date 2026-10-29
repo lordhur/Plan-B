@@ -18,20 +18,9 @@ export async function GET(req: Request, { params }: { params: Promise<{ provider
   const base = baseUrl(req)
 
   if (!isProviderConfigured(p)) {
-    return new Response(
-      `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connexion ${p} — PlanB</title></head>
-       <body style="font-family:system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;background:#fafafa">
-       <div style="max-width:26rem;padding:2rem;background:#fff;border-radius:1rem;box-shadow:0 4px 24px rgba(0,0,0,.08);text-align:center">
-         <h1 style="font-size:1.1rem;margin:0 0 .5rem">Connexion ${p} pas encore activée</h1>
-         <p style="font-size:.9rem;color:#555;line-height:1.5">
-           Pour activer la connexion ${p}, renseignez <code>${p.toUpperCase()}_CLIENT_ID</code> et
-           <code>${p.toUpperCase()}_CLIENT_SECRET</code> dans les variables d'environnement Vercel,
-           avec l'URI de redirection <code>${base}/api/oauth/${p}/callback</code>.
-         </p>
-         <a href="/login" style="display:inline-block;margin-top:.75rem;padding:.5rem 1.25rem;background:#7c3aed;color:#fff;border-radius:.6rem;text-decoration:none;font-weight:600">Retour à la connexion</a>
-       </div></body></html>`,
-      { status: 503, headers: { 'Content-Type': 'text/html; charset=utf-8' } },
-    )
+    // Fournisseur non configuré : retour à la connexion avec un message clair
+    // (les boutons correspondants ne sont de toute façon pas affichés).
+    return NextResponse.redirect(new URL(`/login?oauth=unavailable&provider=${p}`, req.url))
   }
 
   const state = crypto.randomUUID()

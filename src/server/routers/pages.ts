@@ -191,13 +191,47 @@ export const pagesRouter = createTRPCRouter({
     }),
 
   /** Mes pages. */
+  /** Pages que je possède ET pages que je suis (profil → Social). */
   mine: publicProcedure.query(async ({ ctx }) => {
     if (!ctx.user) return []
-    return prisma.page.findMany({
-      where: { ownerId: ctx.user.id },
-      select: { id: true, name: true, slug: true, category: true, followerCount: true, isVerified: true },
-      orderBy: { createdAt: 'desc' },
-    })
+    const [owned, follows] = await Promise.all([
+      prisma.page.findMany({
+        where: { ownerId: ctx.user.id },
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+          category: true,
+          followerCount: true,
+          isVerified: true,
+          coverUrl: true,
+        },
+        orderBy: { createdAt: 'desc' },
+      }),
+      prisma.pageFollow.findMany({
+        where: { userId: ctx.user.id },
+        select: {
+          page: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+              category: true,
+              followerCount: true,
+              isVerified: true,
+              coverUrl: true,
+            },
+          },
+        },
+      }),
+    ])
+    const ownedIds = new Set(owned.map((p) => p.id))
+    return [
+      ...owned.map((p) => ({ ...p, relation: 'owner' as const })),
+      ...follows
+        .filter((f) => !ownedIds.has(f.page.id))
+        .map((f) => ({ ...f.page, relation: 'follower' as const })),
+    ]
   }),
 
   /** Suivre / ne plus suivre. */
