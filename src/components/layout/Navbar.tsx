@@ -7,7 +7,6 @@ import {
   CalendarHeart,
   CalendarPlus,
   HelpCircle,
-  Home,
   LogOut,
   MessageCircle,
   Moon,
@@ -18,6 +17,7 @@ import {
   User as UserIcon,
   Users,
   UsersRound,
+  type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -41,24 +41,43 @@ import { trpc } from '@/lib/trpc'
 import { cn } from '@/lib/utils'
 
 /**
- * Barre de navigation — reproduction du visuel produit :
+ * Barre de navigation — calquée au pixel sur la maquette produit :
  *
- *   ( + )            (logo) Plan B              (cloche)
- *   Communauté · Activité · ⬤ACCUEIL⬤ · Message · Profil
+ *   ( + )                (logo) Plan B                 (🔔)
+ *   Communauté · Activité · ⌾ Accueil ⌾ · Message · Profil
  *
- * Deux rangées, fond blanc, filet de séparation ; l'onglet Accueil est posé
- * dans une pastille blanche en relief qui déborde légèrement du filet, avec
- * une animation de « clic » à chaque appui.
+ * Deux rangées, filet de séparation, l'onglet Accueil posé dans un double
+ * cercle blanc en relief qui chevauche le filet, et animation de « clic ».
  */
 
-const TABS = [
+interface NavTab {
+  href: string
+  labelKey: string
+  icon?: LucideIcon
+  home?: boolean
+}
+
+const TABS: NavTab[] = [
   { href: '/community', labelKey: 'nav_community', icon: Users },
   { href: '/events/calendar', labelKey: 'nav_activity', icon: CalendarDays },
-  { href: '/', labelKey: 'nav_feed', icon: Home, home: true },
+  { href: '/', labelKey: 'nav_feed', home: true },
   { href: '/messages', labelKey: 'nav_message', icon: MessageCircle },
   { href: '/profile', labelKey: 'nav_profile_tab', icon: UserIcon },
-] as const
+]
 
+/** Maison pleine, porte évidée — dessin de la maquette. */
+function HouseIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
+      <path
+        fill="currentColor"
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M11.29 2.29a1 1 0 0 1 1.42 0l9 9a1 1 0 0 1-1.42 1.42l-.29-.3V21a1 1 0 0 1-1 1h-4.25v-5.5a1 1 0 0 0-1-1h-3.5a1 1 0 0 0-1 1V22H5a1 1 0 0 1-1-1v-8.59l-.29.3a1 1 0 0 1-1.42-1.42z"
+      />
+    </svg>
+  )
+}
 /** Menu « Créer » — nouveau plan, story, groupe ou page, sous le bouton +. */
 export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   const { t } = useLang()
@@ -99,49 +118,30 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   )
 }
 
-/** Maison pleine, porte évidée en bas — dessin de la maquette. */
-function HouseIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.29 2.29a1 1 0 0 1 1.42 0l9 9a1 1 0 0 1-1.42 1.42l-.29-.3V21a1 1 0 0 1-1 1h-4.25v-5.5a1 1 0 0 0-1-1h-3.5a1 1 0 0 0-1 1V22H5a1 1 0 0 1-1-1v-8.59l-.29.3a1 1 0 0 1-1.42-1.42z"
-      />
-    </svg>
-  )
-}
-
 /** Onglet standard (hors Accueil). */
-function TabLink({
-  href,
-  label,
-  icon: Icon,
-}: {
-  href: string
-  label: string
-  icon: typeof Home
-}) {
+function TabLink({ href, label, icon: Icon }: { href: string; label: string; icon: LucideIcon }) {
   const pathname = usePathname()
   const active = pathname === href || (href !== '/' && pathname.startsWith(href))
   return (
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className={cn(
-        'group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-1 rounded-xl px-0.5 pb-0.5 text-[11px] font-semibold transition-colors',
-        active ? 'text-fg' : 'text-fg-muted hover:text-fg',
-      )}
+      className="group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-2 rounded-xl px-0.5 pb-0.5 transition-colors"
     >
       <Icon
         className={cn(
-          'h-[22px] w-[22px] transition-transform duration-200 group-active:scale-90',
-          active ? 'stroke-[2.3]' : 'stroke-[1.9]',
+          'h-[21px] w-[21px] transition-transform duration-200 group-active:scale-90',
+          active ? 'text-fg' : 'text-fg/85 group-hover:text-fg',
         )}
+        strokeWidth={active ? 2.1 : 1.9}
         aria-hidden
       />
-      <span className="max-w-full truncate text-[10px] leading-none tracking-tight min-[380px]:text-[11px]">
+      <span
+        className={cn(
+          'max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
+          active ? 'font-bold text-fg' : 'font-medium text-fg/85',
+        )}
+      >
         {label}
       </span>
     </Link>
@@ -149,8 +149,8 @@ function TabLink({
 }
 
 /**
- * Onglet Accueil — pastille blanche en relief, icône orange, et animation de
- * pression à chaque clic (même si l'on est déjà sur le fil).
+ * Onglet Accueil — DOUBLE cercle blanc en relief (anneau extérieur + pastille
+ * intérieure), icône orange, et animation de « clic » à chaque appui.
  */
 function HomeTab({ label }: { label: string }) {
   const pathname = usePathname()
@@ -164,7 +164,6 @@ function HomeTab({ label }: { label: string }) {
       aria-label={label}
       onClick={() => {
         setTap((n) => n + 1)
-        // Retour haptique léger sur mobile — renforce l'effet de « clic ».
         if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
           try {
             navigator.vibrate(8)
@@ -173,47 +172,50 @@ function HomeTab({ label }: { label: string }) {
           }
         }
       }}
-      className="home-tab group relative flex flex-1 flex-col items-center justify-end pb-0.5"
+      className="group relative z-10 flex flex-1 flex-col items-center justify-end"
     >
-      {/* Cercle de fond en absolu : il déborde du filet comme sur la maquette,
-          tandis que l'icône et le libellé restent sur la même ligne de base
-          que les autres onglets. */}
+      {/* Anneau extérieur (le cercle qui manquait) */}
       <span
         key={tap}
-        aria-hidden
         className={cn(
-          'home-pill pointer-events-none absolute bottom-[-0.3rem] left-1/2 -ml-[1.8rem] h-[3.6rem] w-[3.6rem] rounded-full bg-card',
-          'shadow-[0_0_0_3px_rgba(255,255,255,0.95),0_0_0_4px_rgba(15,23,42,0.10),0_6px_18px_rgba(15,23,42,0.18)]',
-          'transition-all duration-200 ease-out',
+          'home-pill relative -mb-[14px] flex h-16 w-16 shrink-0 items-center justify-center rounded-full min-[380px]:h-[4.5rem] min-[380px]:w-[4.5rem]',
+          'transition-transform duration-150 group-active:scale-95',
           tap > 0 && 'animate-home-tap',
         )}
-      />
-      {tap > 0 && (
-        <span
-          aria-hidden
-          className="animate-home-ring pointer-events-none absolute bottom-[-0.3rem] left-1/2 -ml-[1.8rem] h-[3.6rem] w-[3.6rem] rounded-full bg-accent-500/30"
-        />
-      )}
-      <HouseIcon
-        className={cn(
-          'home-icon relative z-10 mb-[3px] h-[23px] w-[23px] transition-colors duration-200',
-          active ? 'text-accent-500' : 'text-fg-muted',
-        )}
-      />
-      <span
-        className={cn(
-          'home-label relative z-10 max-w-full truncate px-1 text-[10px] leading-none tracking-tight transition-colors duration-200 min-[380px]:text-[11px]',
-          active ? 'font-extrabold text-fg' : 'font-semibold text-fg-muted',
-        )}
       >
-        {label}
+        {tap > 0 && (
+          <span aria-hidden className="animate-home-ring pointer-events-none absolute inset-0 rounded-full" />
+        )}
+        {/* Pastille intérieure */}
+        <span className="home-pill-inner flex h-[3.375rem] w-[3.375rem] flex-col items-center justify-center gap-[3px] rounded-full min-[380px]:h-[3.75rem] min-[380px]:w-[3.75rem]">
+          <HouseIcon
+            className={cn(
+              'h-[21px] w-[21px] transition-colors duration-200',
+              active ? 'text-accent-600' : 'text-fg/70',
+            )}
+          />
+          <span
+            className={cn(
+              'max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
+              active ? 'font-bold text-fg' : 'font-medium text-fg/85',
+            )}
+          >
+            {label}
+          </span>
+        </span>
       </span>
     </Link>
   )
 }
 
 /** Menu du compte — notifications, messages, agenda, thème, réglages, sortie. */
-function AccountMenu({ unreadCount, unreadMsgCount }: { unreadCount: number; unreadMsgCount: number }) {
+function AccountMenu({
+  unreadCount,
+  unreadMsgCount,
+}: {
+  unreadCount: number
+  unreadMsgCount: number
+}) {
   const router = useRouter()
   const { t } = useLang()
   const { theme, setTheme } = useTheme()
@@ -232,9 +234,9 @@ function AccountMenu({ unreadCount, unreadMsgCount }: { unreadCount: number; unr
         <button
           type="button"
           aria-label={t('nav_notifications')}
-          className="relative flex h-11 w-11 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary focus-visible:outline-none"
+          className="relative flex h-10 w-10 min-h-0 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary focus-visible:outline-none sm:h-11 sm:w-11"
         >
-          <Bell className="h-[22px] w-[22px]" aria-hidden />
+          <Bell className="h-[23px] w-[23px]" strokeWidth={1.9} aria-hidden />
           {unreadCount > 0 && (
             <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger-500 px-1 text-[10px] font-bold text-white">
               {unreadCount > 9 ? '9+' : unreadCount}
@@ -271,17 +273,21 @@ function AccountMenu({ unreadCount, unreadMsgCount }: { unreadCount: number; unr
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
-          onClick={() => setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark')}
+          onClick={() =>
+            setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark')
+          }
         >
           {theme === 'dark' ? (
             <Moon className="h-4 w-4" aria-hidden />
-          ) : theme === 'light' ? (
-            <Sun className="h-4 w-4" aria-hidden />
           ) : (
             <Sun className="h-4 w-4" aria-hidden />
           )}
           {t('nav_theme')} :{' '}
-          {theme === 'dark' ? t('nav_theme_dark') : theme === 'light' ? t('nav_theme_light') : t('nav_theme_auto')}
+          {theme === 'dark'
+            ? t('nav_theme_dark')
+            : theme === 'light'
+              ? t('nav_theme_light')
+              : t('nav_theme_auto')}
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
           <Link href="/agenda">
@@ -349,36 +355,38 @@ export function Navbar() {
       ref={headerRef}
       className="fixed inset-x-0 top-0 z-50 border-b border-border bg-bg/95 pt-[env(safe-area-inset-top,0px)] backdrop-blur-lg supports-[backdrop-filter]:bg-bg/85"
     >
-      <div className="mx-auto w-full max-w-3xl px-2 sm:px-4">
-        {/* Rangée 1 : bouton + · logo + nom centrés · langue + notifications */}
-        <div className="grid h-16 grid-cols-[1fr_auto_1fr] items-center gap-1">
+      <div className="mx-auto w-full max-w-2xl px-4 pt-3.5 sm:px-6">
+        {/* Rangée 1 : + · logo + « Plan B » · langue + cloche */}
+        <div className="grid h-[4.25rem] grid-cols-[1fr_auto_1fr] items-center gap-2">
           <div className="flex items-center">
             <CreateMenu
               trigger={
                 <button
                   type="button"
                   aria-label={t('nav_create')}
-                  className="flex h-11 w-11 items-center justify-center rounded-full border-[1.8px] border-fg/85 bg-transparent text-fg transition-all duration-200 hover:border-accent-500 hover:bg-accent-500 hover:text-white hover:shadow-[0_4px_14px_rgba(249,115,22,0.4)] active:scale-90"
+                  className="flex h-10 w-10 min-h-0 items-center justify-center rounded-full transition-transform duration-150 hover:bg-bg-secondary active:scale-90 sm:h-11 sm:w-11"
                 >
-                  <Plus className="h-[22px] w-[22px]" strokeWidth={2} aria-hidden />
+                  {/* cercle parfaitement rond : carré + border-radius 50 % */}
+                  <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-fg sm:h-[34px] sm:w-[34px]">
+                    <Plus className="h-[15px] w-[15px] sm:h-4 sm:w-4" strokeWidth={2.4} aria-hidden />
+                  </span>
                 </button>
               }
             />
           </div>
 
-          <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
-            <LogoMark className="h-10 w-10 sm:h-11 sm:w-11" />
-            <span className="whitespace-nowrap text-[1.35rem] font-extrabold leading-none tracking-tight text-fg sm:text-2xl">
-              Plan{' '}
-              <span className="text-primary-600 drop-shadow-[0_1px_1px_rgba(124,58,237,0.25)]">B</span>
+          <Link href="/" className="flex items-center gap-2.5" aria-label="Plan B — accueil">
+            <LogoMark className="h-10 w-10 shrink-0 drop-shadow-[0_2px_4px_rgba(15,23,42,0.18)] min-[380px]:h-11 min-[380px]:w-11 sm:h-12 sm:w-12" />
+            <span className="whitespace-nowrap text-[1.55rem] font-extrabold leading-none tracking-[-0.02em] text-fg min-[380px]:text-[1.75rem] sm:text-[1.9rem]">
+              Plan<span className="wordmark-b">B</span>
             </span>
           </Link>
 
-          <div className="flex items-center justify-end gap-0.5">
+          <div className="flex items-center justify-end gap-1">
             <button
               type="button"
               onClick={toggleLang}
-              className="flex h-9 min-h-9 items-center justify-center rounded-full border border-border px-2 text-[11px] font-black tracking-wide text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg"
+              className="flex h-6 min-h-0 w-7 items-center justify-center rounded-full border border-border text-[9px] font-black tracking-wide text-fg-muted transition-colors hover:bg-bg-secondary hover:text-fg min-[380px]:h-7 min-[380px]:w-9 min-[380px]:text-[10px]"
               aria-label={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
               title={lang === 'fr' ? 'Switch to English' : 'Passer en français'}
             >
@@ -388,7 +396,10 @@ export function Navbar() {
             {isLoading ? (
               <div className="h-9 w-9 animate-pulse-soft rounded-full bg-border" aria-hidden />
             ) : isAuthenticated ? (
-              <AccountMenu unreadCount={unread?.count ?? 0} unreadMsgCount={unreadMessages?.count ?? 0} />
+              <AccountMenu
+                unreadCount={unread?.count ?? 0}
+                unreadMsgCount={unreadMessages?.count ?? 0}
+              />
             ) : (
               <Button asChild size="sm" className="h-9 rounded-full px-3 text-xs">
                 <Link href="/login">{t('nav_login')}</Link>
@@ -397,13 +408,13 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Rangée 2 : les cinq onglets, Accueil dans sa pastille en relief */}
+        {/* Rangée 2 : les cinq onglets, Accueil dans son double cercle */}
         <nav
           aria-label="Navigation principale"
-          className="relative flex items-end justify-between gap-0.5 pb-2 pt-2"
+          className="relative flex items-end justify-between gap-0.5 pb-2.5 pt-2"
         >
           {TABS.map((tab) =>
-            'home' in tab && tab.home ? (
+            tab.home || !tab.icon ? (
               <HomeTab key={tab.href} label={t(tab.labelKey)} />
             ) : (
               <TabLink key={tab.href} href={tab.href} label={t(tab.labelKey)} icon={tab.icon} />
