@@ -126,19 +126,19 @@ function TabLink({ href, label, icon: Icon }: { href: string; label: string; ico
     <Link
       href={href}
       aria-current={active ? 'page' : undefined}
-      className="group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-2 rounded-xl px-0.5 pb-0.5 transition-colors"
+      className="nav-tab group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-2 rounded-xl px-0.5 pb-0.5 transition-colors"
     >
       <Icon
         className={cn(
-          'h-[21px] w-[21px] transition-transform duration-200 group-active:scale-90',
-          active ? 'text-fg' : 'text-fg/85 group-hover:text-fg',
+          'nav-tab-glyph h-[21px] w-[21px] transition-transform duration-200 group-active:scale-90',
+          active ? 'text-fg' : 'text-fg/85',
         )}
         strokeWidth={active ? 2.1 : 1.9}
         aria-hidden
       />
       <span
         className={cn(
-          'max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
+          'nav-tab-glyph max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
           active ? 'font-bold text-fg' : 'font-medium text-fg/85',
         )}
       >
@@ -172,7 +172,7 @@ function HomeTab({ label }: { label: string }) {
           }
         }
       }}
-      className="group relative z-10 flex flex-1 flex-col items-center justify-end"
+      className="nav-home group relative z-10 flex flex-1 flex-col items-center justify-end"
     >
       {/* Anneau extérieur (le cercle qui manquait) */}
       <span
@@ -190,13 +190,13 @@ function HomeTab({ label }: { label: string }) {
         <span className="home-pill-inner flex h-[3.375rem] w-[3.375rem] flex-col items-center justify-center gap-[3px] rounded-full min-[380px]:h-[3.75rem] min-[380px]:w-[3.75rem]">
           <HouseIcon
             className={cn(
-              'h-[21px] w-[21px] transition-colors duration-200',
+              'nav-home-glyph h-[21px] w-[21px] transition-colors duration-200',
               active ? 'text-accent-600' : 'text-fg/70',
             )}
           />
           <span
             className={cn(
-              'max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
+              'nav-home-glyph max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
               active ? 'font-bold text-fg' : 'font-medium text-fg/85',
             )}
           >
