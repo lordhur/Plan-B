@@ -1023,6 +1023,10 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           <EmojiPicker
             onPick={(e: string) => setInput((v) => v + e)}
             onClose={() => setShowEmoji(false)}
+            onOpenGifs={() => {
+              setShowEmoji(false)
+              setShowGif(true)
+            }}
           />
         )}
         {showGif && (
@@ -1091,14 +1095,17 @@ export function ChatThread({ kind, id, className }: ChatThreadProps) {
           <Button
             type="button"
             variant={showGif ? 'secondary' : 'ghost'}
-            size="icon"
-            className="h-10 w-10"
+            className={cn(
+              'h-10 min-w-[3.75rem] gap-1 rounded-full px-2.5 text-[11px] font-extrabold uppercase tracking-wide',
+              showGif ? '' : 'text-primary-600',
+            )}
             aria-label={t('msg_sticker')}
             title={t('msg_sticker')}
             aria-expanded={showGif}
             onClick={() => { setShowGif((v) => !v); setShowEmoji(false) }}
           >
             <Sticker className="h-[18px] w-[18px]" aria-hidden />
+            GIF
           </Button>
           <Button
             type="button"

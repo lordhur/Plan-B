@@ -152,7 +152,7 @@ export function GifPicker({ onPick, onClose }: GifPickerProps) {
       ref={ref}
       role="dialog"
       aria-label="GIF et stickers"
-      className="absolute bottom-full left-0 right-0 z-30 mb-2 flex h-[min(72vh,27rem)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
+      className="absolute bottom-full left-0 right-0 z-30 mb-2 flex h-[min(64vh,27rem)] max-h-[calc(100dvh-var(--nav-h,3.5rem)-7.5rem)] flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-2xl"
     >
       {/* En-tête : recherche + fermeture */}
       <div className="flex items-center gap-1.5 border-b border-border p-2">
