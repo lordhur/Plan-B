@@ -27,9 +27,15 @@ export default function MyProfilePage() {
   const router = useRouter()
   const { isLoading, isAuthenticated } = useCurrentUser()
   const { data: me } = trpc.auth.me.useQuery(undefined, { enabled: isAuthenticated })
-  const { data: upcoming } = trpc.events.mine.useQuery({ role: 'participating' })
-  const { data: past } = trpc.events.mine.useQuery({ role: 'past' })
-  const { data: organized } = trpc.events.mine.useQuery({ role: 'organized' })
+  const { data: upcoming } = trpc.events.mine.useQuery(
+    { role: 'participating' },
+    { enabled: isAuthenticated },
+  )
+  const { data: past } = trpc.events.mine.useQuery({ role: 'past' }, { enabled: isAuthenticated })
+  const { data: organized } = trpc.events.mine.useQuery(
+    { role: 'organized' },
+    { enabled: isAuthenticated },
+  )
   const { data: stories } = trpc.stories.feed.useQuery(undefined, { enabled: isAuthenticated })
   const [tab, setTab] = useState<ProfileTab>('media')
 
