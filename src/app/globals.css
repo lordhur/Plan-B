@@ -8,7 +8,7 @@
 @layer base {
   :root {
     /* Hauteur approx. de la barre fixe avant mesure JS (évite tout saut) */
-    --nav-h: 8.25rem;
+    --nav-h: 8.5rem;
     /* Hauteur réservée à la barre de navigation mobile (0 sur desktop) */
     --bottom-nav-h: 0px;
     --bg: 255 255 255;
@@ -17,6 +17,9 @@
     --border: 226 232 240;
     --fg: 15 23 42;
     --fg-muted: 100 116 139;
+    /* Pastille Accueil : teinte de l'anneau et contour du « B » du wordmark */
+    --pill-bg: 255 255 255;
+    --wordmark-outline: #ffffff;
   }
 
   .dark {
@@ -26,6 +29,8 @@
     --border: 51 65 85;
     --fg: 241 245 249;
     --fg-muted: 148 163 184;
+    --pill-bg: 23 30 51;
+    --wordmark-outline: #0a0e1c;
   }
 
   * {
@@ -121,8 +126,8 @@
 
 @media (max-width: 767px) {
   :root {
-    /* Barre à deux rangées : ~8.25rem mesurées en JS, valeur de repli ici */
-    --nav-h: 8.25rem;
+    /* Barre à deux rangées : ~8.5rem mesurées en JS, valeur de repli ici */
+    --nav-h: 8.5rem;
     --bottom-nav-h: 0px;
   }
 }
@@ -744,6 +749,50 @@ nav * {
 }
 
 /* ============================================================
+   Onglet Accueil — double cercle blanc en relief (maquette)
+   ============================================================ */
+.home-pill {
+  background: rgb(var(--pill-bg));
+  box-shadow:
+    0 8px 18px -4px rgba(15, 23, 42, 0.22),
+    0 2px 5px rgba(15, 23, 42, 0.10),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+}
+.home-pill-inner {
+  background: rgb(var(--pill-bg));
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.14),
+    0 0 0 1px rgba(15, 23, 42, 0.05);
+}
+.dark .home-pill {
+  box-shadow:
+    0 6px 16px -2px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(148, 163, 184, 0.18);
+}
+.dark .home-pill-inner {
+  box-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(148, 163, 184, 0.16);
+}
+
+/* « B » du wordmark : contour blanc + ombre portée derrière (maquette) */
+.wordmark-b {
+  color: #6d22d9;
+  margin-left: 0.18em;
+  text-shadow:
+    0 1px 0 var(--wordmark-outline),
+    0 -1px 0 var(--wordmark-outline),
+    1px 0 0 var(--wordmark-outline),
+    -1px 0 0 var(--wordmark-outline),
+    1px 1px 0 var(--wordmark-outline),
+    -1px 1px 0 var(--wordmark-outline),
+    1px -1px 0 var(--wordmark-outline),
+    -1px -1px 0 var(--wordmark-outline),
+    0 3px 6px rgba(109, 34, 217, 0.38),
+    0 2px 3px rgba(15, 23, 42, 0.22);
+}
+
+/* ============================================================
    Onglet Accueil — animation de « clic » à chaque appui
    ============================================================ */
 @keyframes homeTap {
@@ -754,8 +803,12 @@ nav * {
   100% { transform: scale(1); }
 }
 @keyframes homeRing {
-  0% { opacity: 0.55; transform: scale(0.85); }
-  100% { opacity: 0; transform: scale(1.7); }
+  0% { opacity: 0.55; transform: scale(0.9); }
+  100% { opacity: 0; transform: scale(1.45); }
+}
+.animate-home-ring {
+  background: rgba(249, 115, 22, 0.22);
+  box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.25);
 }
 .animate-home-tap {
   animation: homeTap 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
