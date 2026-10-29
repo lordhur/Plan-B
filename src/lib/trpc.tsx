@@ -40,6 +40,15 @@ export function TRPCProvider({ children }: { children: React.ReactNode }) {
         httpBatchLink({
           url: `${getBaseUrl()}/api/trpc`,
           transformer: superjson,
+          // Jamais de réponse tRPC servie depuis le cache HTTP : c'est ce qui
+          // faisait réapparaître une session « connectée » après déconnexion.
+          fetch(url, options) {
+            return fetch(url, {
+              ...options,
+              cache: 'no-store',
+              credentials: 'same-origin',
+            })
+          },
         }),
       ],
     }),
