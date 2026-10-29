@@ -135,9 +135,10 @@
 
 @media (max-width: 767px) {
   :root {
-    /* Barre à deux rangées : ~8.5rem mesurées en JS, valeur de repli ici */
-    --nav-h: 8.5rem;
-    --bottom-nav-h: 0px;
+    /* Mobile : seule la rangée de marque reste en haut (~4.6rem mesurés),
+       les onglets vivent dans la barre du bas (~5.2rem + zone sûre). */
+    --nav-h: 4.6rem;
+    --bottom-nav-h: calc(5.2rem + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -802,6 +803,13 @@ nav * {
 }
 
 /* ============================================================
+   Barre de navigation mobile (bas d'écran)
+   ============================================================ */
+.mobile-tabbar {
+  /* le double cercle de l'Accueil dépasse au-dessus de la barre */
+  overflow: visible;
+}
+/* ============================================================
    Communauté — arrivée du panneau (l'encart violet, lui, glisse
    dans la barre d'onglets, voir community/page.tsx)
    ============================================================ */
@@ -918,6 +926,7 @@ nav * {
   position: absolute;
   left: 50%;
   bottom: -1.875rem;
+  z-index: -1;
   width: 6.75rem;
   height: 6.75rem;
   border-radius: 9999px;

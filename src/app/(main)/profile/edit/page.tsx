@@ -18,6 +18,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { ProfileMediaSection } from '@/components/profile/ProfileMediaSection'
+import { ProfileCoverSection } from '@/components/profile/ProfileCoverSection'
 
 const profileFormSchema = z.object({
   displayName: z.string().trim().max(60),
@@ -32,6 +33,10 @@ const profileFormSchema = z.object({
   showLastName: z.boolean(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
+  instagram: z.string().max(200).optional(),
+  tiktok: z.string().max(200).optional(),
+  youtube: z.string().max(200).optional(),
+  spotify: z.string().max(200).optional(),
 })
 type ProfileForm = z.infer<typeof profileFormSchema>
 
@@ -70,6 +75,10 @@ export default function ProfileEditPage() {
         showLastName: me.showLastName,
         latitude: me.latitude ?? null,
         longitude: me.longitude ?? null,
+        instagram: me.instagram ?? '',
+        tiktok: me.tiktok ?? '',
+        youtube: me.youtube ?? '',
+        spotify: me.spotify ?? '',
       })
     }
   }, [me, reset])
@@ -130,10 +139,58 @@ export default function ProfileEditPage() {
             orientation: data.orientation ?? undefined,
             profession: data.profession || null,
             education: data.education || null,
+            instagram: data.instagram || null,
+            tiktok: data.tiktok || null,
+            youtube: data.youtube || null,
+            spotify: data.spotify || null,
           }),
         )}
         className="space-y-5"
       >
+        <ProfileCoverSection />
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Réseaux sociaux</CardTitle>
+            <CardDescription>
+              Affichés en icônes sur votre profil (pseudo ou lien complet).
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="instagram">Instagram</Label>
+              <Input
+                id="instagram"
+                placeholder="@monpseudo"
+                maxLength={200}
+                {...register('instagram')}
+              />
+            </div>
+            <div>
+              <Label htmlFor="tiktok">TikTok</Label>
+              <Input id="tiktok" placeholder="@monpseudo" maxLength={200} {...register('tiktok')} />
+            </div>
+            <div>
+              <Label htmlFor="youtube">YouTube</Label>
+              <Input
+                id="youtube"
+                placeholder="@machaine"
+                maxLength={200}
+                {...register('youtube')}
+              />
+            </div>
+            <div>
+              <Label htmlFor="spotify">Spotify</Label>
+              <Input
+                id="spotify"
+                placeholder="Lien de mon profil"
+                maxLength={200}
+                {...register('spotify')}
+              />
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Informations</CardTitle>
@@ -141,11 +198,21 @@ export default function ProfileEditPage() {
           <CardContent className="space-y-4">
             <div>
               <Label htmlFor="displayName">Pseudo (optionnel)</Label>
-              <Input id="displayName" placeholder="Comment voulez-vous apparaître ?" {...register('displayName')} />
+              <Input
+                id="displayName"
+                placeholder="Comment voulez-vous apparaître ?"
+                {...register('displayName')}
+              />
             </div>
             <div>
               <Label htmlFor="bio">Bio</Label>
-              <Textarea id="bio" rows={3} maxLength={500} placeholder="Parlez-nous de vous en quelques mots…" {...register('bio')} />
+              <Textarea
+                id="bio"
+                rows={3}
+                maxLength={500}
+                placeholder="Parlez-nous de vous en quelques mots…"
+                {...register('bio')}
+              />
             </div>
             <div>
               <Label htmlFor="phone">Téléphone</Label>
@@ -203,7 +270,8 @@ export default function ProfileEditPage() {
                 </p>
               </div>
               <p className="mt-1 text-xs text-fg-muted">
-                Utilisé pour la vérification (badge Profil vérifié) et les alerts de dernière minute.
+                Utilisé pour la vérification (badge Profil vérifié) et les alerts de dernière
+                minute.
               </p>
             </div>
           </CardContent>
@@ -220,7 +288,10 @@ export default function ProfileEditPage() {
             <div className="relative">
               <Label htmlFor="city-search">Ma ville</Label>
               <div className="relative mt-1.5">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted" aria-hidden />
+                <Search
+                  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-fg-muted"
+                  aria-hidden
+                />
                 <Input
                   id="city-search"
                   className="pl-9"
@@ -237,7 +308,8 @@ export default function ProfileEditPage() {
                         type="button"
                         className="w-full px-3.5 py-2.5 text-left text-sm hover:bg-bg-secondary"
                         onClick={() => {
-                          const city = r.display_name.split(',').slice(-3)[0]?.trim() ?? r.display_name
+                          const city =
+                            r.display_name.split(',').slice(-3)[0]?.trim() ?? r.display_name
                           setValue('city', city)
                           setValue('latitude', parseFloat(r.lat))
                           setValue('longitude', parseFloat(r.lon))
@@ -288,7 +360,11 @@ export default function ProfileEditPage() {
             Annuler
           </Button>
           <Button type="submit" disabled={update.isPending}>
-            {update.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Save className="h-4 w-4" aria-hidden />}
+            {update.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : (
+              <Save className="h-4 w-4" aria-hidden />
+            )}
             Enregistrer
           </Button>
         </div>

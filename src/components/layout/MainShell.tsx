@@ -16,7 +16,8 @@ export function MainShell({ children }: { children: React.ReactNode }) {
   const immersive = /^\/(messages\/[^/]+|events\/[^/]+\/chat)\/?$/.test(pathname ?? '')
 
   return (
-    <>
+    /* La marge basse englobe le pied de page : rien ne passe sous la barre mobile. */
+    <div className="flex flex-1 flex-col pb-[var(--bottom-nav-h,0px)] md:pb-0">
       <div
         className="mx-auto flex w-full max-w-6xl flex-1 flex-col"
         style={{ paddingTop: 'var(--nav-h, 4.5rem)' }}
@@ -24,15 +25,13 @@ export function MainShell({ children }: { children: React.ReactNode }) {
         <main
           id="main"
           className={
-            immersive
-              ? 'flex min-h-0 w-full flex-1 flex-col'
-              : 'w-full min-w-0 flex-1 px-4 py-6'
+            immersive ? 'flex min-h-0 w-full flex-1 flex-col' : 'w-full min-w-0 flex-1 px-4 py-6'
           }
         >
           {children}
         </main>
       </div>
       {!immersive && <Footer />}
-    </>
+    </div>
   )
 }

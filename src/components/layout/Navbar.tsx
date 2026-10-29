@@ -3,7 +3,6 @@
 import {
   Bell,
   Camera,
-  CalendarDays,
   CalendarHeart,
   CalendarPlus,
   HelpCircle,
@@ -14,10 +13,7 @@ import {
   Settings,
   Store,
   Sun,
-  User as UserIcon,
-  Users,
   UsersRound,
-  type LucideIcon,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
@@ -35,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { LogoMark } from '@/components/common/Logo'
+import { NavTabs } from './NavTabs'
 import { useLang } from '@/lib/i18n'
 import { useCurrentUser } from '@/lib/session'
 import { trpc } from '@/lib/trpc'
@@ -50,34 +47,6 @@ import { cn } from '@/lib/utils'
  * cercle blanc en relief qui chevauche le filet, et animation de « clic ».
  */
 
-interface NavTab {
-  href: string
-  labelKey: string
-  icon?: LucideIcon
-  home?: boolean
-}
-
-const TABS: NavTab[] = [
-  { href: '/community', labelKey: 'nav_community', icon: Users },
-  { href: '/events/calendar', labelKey: 'nav_activity', icon: CalendarDays },
-  { href: '/', labelKey: 'nav_feed', home: true },
-  { href: '/messages', labelKey: 'nav_message', icon: MessageCircle },
-  { href: '/profile', labelKey: 'nav_profile_tab', icon: UserIcon },
-]
-
-/** Maison pleine, porte évidée — dessin de la maquette. */
-function HouseIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
-      <path
-        fill="currentColor"
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.29 2.29a1 1 0 0 1 1.42 0l9 9a1 1 0 0 1-1.42 1.42l-.29-.3V21a1 1 0 0 1-1 1h-4.25v-5.5a1 1 0 0 0-1-1h-3.5a1 1 0 0 0-1 1V22H5a1 1 0 0 1-1-1v-8.59l-.29.3a1 1 0 0 1-1.42-1.42z"
-      />
-    </svg>
-  )
-}
 /** Menu « Créer » — nouveau plan, story, groupe ou page, sous le bouton +. */
 export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   const { t } = useLang()
@@ -118,100 +87,6 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   )
 }
 
-/** Onglet standard (hors Accueil). */
-function TabLink({ href, label, icon: Icon }: { href: string; label: string; icon: LucideIcon }) {
-  const pathname = usePathname()
-  const active = pathname === href || (href !== '/' && pathname.startsWith(href))
-  return (
-    <Link
-      href={href}
-      aria-current={active ? 'page' : undefined}
-      className="nav-tab group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-2 rounded-xl px-0.5 pb-0.5 transition-colors"
-    >
-      <Icon
-        className={cn(
-          'nav-tab-glyph h-[21px] w-[21px] transition-transform duration-200 group-active:scale-90',
-          // la couleur de l'onglet actif vient du CSS (.nav-tab[aria-current])
-          !active && 'text-fg/85',
-        )}
-        strokeWidth={active ? 2.1 : 1.9}
-        aria-hidden
-      />
-      <span
-        className={cn(
-          'nav-tab-glyph nav-tab-label max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
-          active ? 'font-bold' : 'font-medium text-fg/85',
-        )}
-      >
-        {label}
-      </span>
-    </Link>
-  )
-}
-
-/**
- * Onglet Accueil — DOUBLE cercle blanc en relief (anneau extérieur + pastille
- * intérieure), icône orange, et animation de « clic » à chaque appui.
- */
-function HomeTab({ label }: { label: string }) {
-  const pathname = usePathname()
-  const active = pathname === '/'
-  const [tap, setTap] = useState(0)
-
-  return (
-    <Link
-      href="/"
-      aria-current={active ? 'page' : undefined}
-      aria-label={label}
-      onClick={() => {
-        setTap((n) => n + 1)
-        if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
-          try {
-            navigator.vibrate(8)
-          } catch {
-            /* ignoré si l'appareil refuse */
-          }
-        }
-      }}
-      className="nav-home group relative z-10 flex flex-1 flex-col items-center justify-end"
-    >
-      {/* Aura orange : halo en dégradé qui se dégage du bouton au survol */}
-      <span aria-hidden className="home-aura" />
-
-      {/* Anneau extérieur (le cercle qui manquait) */}
-      <span
-        key={tap}
-        className={cn(
-          'home-pill relative -mb-[14px] flex h-16 w-16 shrink-0 items-center justify-center rounded-full min-[380px]:h-[4.5rem] min-[380px]:w-[4.5rem]',
-          'transition-transform duration-150 group-active:scale-95',
-          tap > 0 && 'animate-home-tap',
-        )}
-      >
-        {tap > 0 && (
-          <span aria-hidden className="animate-home-ring pointer-events-none absolute inset-0 rounded-full" />
-        )}
-        {/* Pastille intérieure */}
-        <span className="home-pill-inner relative flex h-[3.375rem] w-[3.375rem] flex-col items-center justify-center gap-[3px] rounded-full min-[380px]:h-[3.75rem] min-[380px]:w-[3.75rem]">
-          <HouseIcon
-            className={cn(
-              'nav-home-glyph h-[21px] w-[21px] transition-colors duration-200',
-              !active && 'text-fg/70',
-            )}
-          />
-          <span
-            className={cn(
-              'nav-home-glyph nav-home-label max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
-              active ? 'font-bold' : 'font-medium text-fg/85',
-            )}
-          >
-            {label}
-          </span>
-        </span>
-      </span>
-    </Link>
-  )
-}
-
 /** Menu du compte — notifications, messages, agenda, thème, réglages, sortie. */
 function AccountMenu({
   unreadCount,
@@ -238,7 +113,7 @@ function AccountMenu({
         <button
           type="button"
           aria-label={t('nav_notifications')}
-          className="relative flex h-10 w-10 min-h-0 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary focus-visible:outline-none sm:h-11 sm:w-11"
+          className="relative flex h-10 min-h-0 w-10 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary focus-visible:outline-none sm:h-11 sm:w-11"
         >
           <Bell className="h-[23px] w-[23px]" strokeWidth={1.9} aria-hidden />
           {unreadCount > 0 && (
@@ -368,11 +243,15 @@ export function Navbar() {
                 <button
                   type="button"
                   aria-label={t('nav_create')}
-                  className="flex h-10 w-10 min-h-0 items-center justify-center rounded-full transition-transform duration-150 hover:bg-bg-secondary active:scale-90 sm:h-11 sm:w-11"
+                  className="flex h-10 min-h-0 w-10 items-center justify-center rounded-full transition-transform duration-150 hover:bg-bg-secondary active:scale-90 sm:h-11 sm:w-11"
                 >
                   {/* cercle parfaitement rond : carré + border-radius 50 % */}
                   <span className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-fg sm:h-[34px] sm:w-[34px]">
-                    <Plus className="h-[15px] w-[15px] sm:h-4 sm:w-4" strokeWidth={2.4} aria-hidden />
+                    <Plus
+                      className="h-[15px] w-[15px] sm:h-4 sm:w-4"
+                      strokeWidth={2.4}
+                      aria-hidden
+                    />
                   </span>
                 </button>
               }
@@ -412,18 +291,12 @@ export function Navbar() {
           </div>
         </div>
 
-        {/* Rangée 2 : les cinq onglets, Accueil dans son double cercle */}
+        {/* Rangée 2 : les cinq onglets (site ; sur mobile ils passent en bas) */}
         <nav
           aria-label="Navigation principale"
-          className="relative flex items-end justify-between gap-0.5 pb-2.5 pt-2"
+          className="relative hidden items-end justify-between gap-0.5 pb-2.5 pt-2 md:flex"
         >
-          {TABS.map((tab) =>
-            tab.home || !tab.icon ? (
-              <HomeTab key={tab.href} label={t(tab.labelKey)} />
-            ) : (
-              <TabLink key={tab.href} href={tab.href} label={t(tab.labelKey)} icon={tab.icon} />
-            ),
-          )}
+          <NavTabs unreadMessages={unreadMessages?.count ?? 0} />
         </nav>
       </div>
     </header>

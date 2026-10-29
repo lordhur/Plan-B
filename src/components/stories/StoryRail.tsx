@@ -1,6 +1,15 @@
 'use client'
 
-import { Bookmark, BookmarkCheck, ChevronLeft, ChevronRight, Heart, Plus, Trash2, X } from 'lucide-react'
+import {
+  Bookmark,
+  BookmarkCheck,
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Plus,
+  Trash2,
+  X,
+} from 'lucide-react'
 import * as React from 'react'
 import { trpc } from '@/lib/trpc'
 import { useLang } from '@/lib/i18n'
@@ -39,7 +48,7 @@ type StoryGroup = {
 /** Barre de stories (24 h) — moi + mes amis, plusieurs stories par personne. */
 export function StoryRail() {
   const { t } = useLang()
-  const { isAuthenticated } = useCurrentUser()
+  const { user, isAuthenticated } = useCurrentUser()
   const stories = trpc.stories.feed.useQuery(undefined, { enabled: isAuthenticated })
   const [viewFrom, setViewFrom] = React.useState<number | null>(null)
   const [creating, setCreating] = React.useState(false)
@@ -49,18 +58,32 @@ export function StoryRail() {
   const groups = stories.data ?? []
 
   return (
-    <section aria-label="Stories" className="scrollbar-none -mx-4 flex gap-3 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
-      {/* Ajouter ma story */}
+    <section
+      aria-label="Stories"
+      className="scrollbar-none -mx-4 flex items-start gap-4 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0"
+    >
+      {/* Votre Story : anneau dégradé + badge « + » posé sur l'anneau */}
       <button
         type="button"
         onClick={() => setCreating(true)}
-        className="flex w-16 shrink-0 flex-col items-center gap-1"
+        className="flex w-[4.5rem] shrink-0 flex-col items-center gap-1.5"
         aria-label={t('story_add')}
       >
-        <span className="relative flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-primary-400 bg-primary-50 dark:bg-primary-500/10">
-          <Plus className="h-6 w-6 text-primary-600" aria-hidden />
+        <span className="relative">
+          <span className="block rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[2.5px]">
+            <Avatar
+              src={user?.avatarUrl ?? null}
+              name={user?.displayName || user?.firstName || 'Moi'}
+              className="h-[62px] w-[62px] border-[3px] border-bg"
+            />
+          </span>
+          <span className="absolute -bottom-0.5 -right-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-accent-600 text-white ring-[2.5px] ring-bg">
+            <Plus className="h-4 w-4" strokeWidth={3} aria-hidden />
+          </span>
         </span>
-        <span className="text-[10px] font-semibold text-fg-muted">{t('story_my')}</span>
+        <span className="w-full truncate text-center text-[12px] font-semibold text-fg">
+          {t('story_my')}
+        </span>
       </button>
 
       {groups.map((g, gi) => {
@@ -70,14 +93,14 @@ export function StoryRail() {
             key={g.author.id}
             type="button"
             onClick={() => setViewFrom(gi)}
-            className="relative flex w-16 shrink-0 flex-col items-center gap-1"
+            className="relative flex w-[4.5rem] shrink-0 flex-col items-center gap-1.5"
             aria-label={`Voir les ${g.items.length} story${g.items.length > 1 ? 's' : ''} de ${name}`}
           >
-            <span className="rounded-full bg-gradient-to-tr from-primary-600 to-secondary-500 p-[2.5px]">
+            <span className="rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[2.5px]">
               <Avatar
                 src={g.author.avatarUrl}
                 name={name}
-                className="h-[59px] w-[59px] border-2 border-card"
+                className="h-[62px] w-[62px] border-[3px] border-bg"
               />
             </span>
             {g.items.length > 1 && (
@@ -85,7 +108,7 @@ export function StoryRail() {
                 {g.items.length}
               </span>
             )}
-            <span className="w-full truncate text-center text-[10px] font-semibold text-fg-muted">
+            <span className="w-full truncate text-center text-[12px] font-semibold text-fg">
               {g.isMe ? t('story_my') : g.author.firstName}
             </span>
           </button>
@@ -178,10 +201,18 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
         />
 
         <div className="mb-3 flex gap-2">
-          <Button variant={type === 'PHOTO' ? 'default' : 'outline'} className="flex-1" onClick={() => pick('PHOTO')}>
+          <Button
+            variant={type === 'PHOTO' ? 'default' : 'outline'}
+            className="flex-1"
+            onClick={() => pick('PHOTO')}
+          >
             📷 {t('story_photo')}
           </Button>
-          <Button variant={type === 'VIDEO' ? 'default' : 'outline'} className="flex-1" onClick={() => pick('VIDEO')}>
+          <Button
+            variant={type === 'VIDEO' ? 'default' : 'outline'}
+            className="flex-1"
+            onClick={() => pick('VIDEO')}
+          >
             🎬 {t('story_video')}
           </Button>
         </div>
@@ -201,7 +232,11 @@ export function StoryCreateDialog({ onClose }: { onClose: () => void }) {
           aria-label="Légende de la story"
         />
 
-        <Button className="w-full" disabled={!file || uploading || create.isPending} onClick={publish}>
+        <Button
+          className="w-full"
+          disabled={!file || uploading || create.isPending}
+          onClick={publish}
+        >
           {uploading || create.isPending ? '…' : t('story_publish')}
         </Button>
         <p className="mt-2 text-center text-[11px] text-fg-muted">
@@ -317,7 +352,12 @@ function StoryViewer({
   if (!group || !item) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95" role="dialog" aria-modal="true" aria-label={`Story de ${name}`}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/95"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Story de ${name}`}
+    >
       <div className="relative flex h-full w-full max-w-md flex-col">
         {/* Barres de progression */}
         <div className="flex gap-1 p-3">
@@ -347,9 +387,7 @@ function StoryViewer({
                 aria-label={isSaved ? t('story_unsave') : t('story_save')}
                 title={isSaved ? t('story_unsave') : t('story_save')}
                 onClick={() =>
-                  isSaved
-                    ? unsave.mutate({ storyId: item.id })
-                    : save.mutate({ storyId: item.id })
+                  isSaved ? unsave.mutate({ storyId: item.id }) : save.mutate({ storyId: item.id })
                 }
               >
                 {isSaved ? (
@@ -376,9 +414,7 @@ function StoryViewer({
                   className={cn('h-5 w-5', item.likedByMe && 'fill-rose-500 text-rose-500')}
                   aria-hidden
                 />
-                {(item.likes ?? 0) > 0 && (
-                  <span className="text-xs font-bold">{item.likes}</span>
-                )}
+                {(item.likes ?? 0) > 0 && <span className="text-xs font-bold">{item.likes}</span>}
               </button>
             )}
             {group.isMe && (
@@ -391,7 +427,12 @@ function StoryViewer({
                 <Trash2 className="h-4 w-4" aria-hidden />
               </button>
             )}
-            <button type="button" className="rounded-lg p-2 hover:bg-white/15" aria-label="Fermer" onClick={onClose}>
+            <button
+              type="button"
+              className="rounded-lg p-2 hover:bg-white/15"
+              aria-label="Fermer"
+              onClick={onClose}
+            >
               <X className="h-5 w-5" aria-hidden />
             </button>
           </span>

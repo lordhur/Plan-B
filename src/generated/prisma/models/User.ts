@@ -68,7 +68,13 @@ export type UserMinAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  coverImage: string | null
+  lastSeenAt: Date | null
   videoUrl: string | null
+  instagram: string | null
+  tiktok: string | null
+  youtube: string | null
+  spotify: string | null
   privacyLevel: $Enums.PrivacyLevel | null
   allowMessagesFrom: $Enums.MessagePermission | null
   allowFriendRequests: boolean | null
@@ -108,7 +114,13 @@ export type UserMaxAggregateOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  coverImage: string | null
+  lastSeenAt: Date | null
   videoUrl: string | null
+  instagram: string | null
+  tiktok: string | null
+  youtube: string | null
+  spotify: string | null
   privacyLevel: $Enums.PrivacyLevel | null
   allowMessagesFrom: $Enums.MessagePermission | null
   allowFriendRequests: boolean | null
@@ -148,7 +160,13 @@ export type UserCountAggregateOutputType = {
   latitude: number
   longitude: number
   avatarUrl: number
+  coverImage: number
+  lastSeenAt: number
   videoUrl: number
+  instagram: number
+  tiktok: number
+  youtube: number
+  spotify: number
   privacyLevel: number
   allowMessagesFrom: number
   allowFriendRequests: number
@@ -212,7 +230,13 @@ export type UserMinAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  coverImage?: true
+  lastSeenAt?: true
   videoUrl?: true
+  instagram?: true
+  tiktok?: true
+  youtube?: true
+  spotify?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -252,7 +276,13 @@ export type UserMaxAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  coverImage?: true
+  lastSeenAt?: true
   videoUrl?: true
+  instagram?: true
+  tiktok?: true
+  youtube?: true
+  spotify?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -292,7 +322,13 @@ export type UserCountAggregateInputType = {
   latitude?: true
   longitude?: true
   avatarUrl?: true
+  coverImage?: true
+  lastSeenAt?: true
   videoUrl?: true
+  instagram?: true
+  tiktok?: true
+  youtube?: true
+  spotify?: true
   privacyLevel?: true
   allowMessagesFrom?: true
   allowFriendRequests?: true
@@ -419,7 +455,13 @@ export type UserGroupByOutputType = {
   latitude: number | null
   longitude: number | null
   avatarUrl: string | null
+  coverImage: string | null
+  lastSeenAt: Date | null
   videoUrl: string | null
+  instagram: string | null
+  tiktok: string | null
+  youtube: string | null
+  spotify: string | null
   privacyLevel: $Enums.PrivacyLevel
   allowMessagesFrom: $Enums.MessagePermission
   allowFriendRequests: boolean
@@ -482,7 +524,13 @@ export type UserWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"User"> | string | null
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  instagram?: Prisma.StringNullableFilter<"User"> | string | null
+  tiktok?: Prisma.StringNullableFilter<"User"> | string | null
+  youtube?: Prisma.StringNullableFilter<"User"> | string | null
+  spotify?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -567,7 +615,13 @@ export type UserOrderByWithRelationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagram?: Prisma.SortOrderInput | Prisma.SortOrder
+  tiktok?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtube?: Prisma.SortOrderInput | Prisma.SortOrder
+  spotify?: Prisma.SortOrderInput | Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -655,7 +709,13 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"User"> | string | null
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  instagram?: Prisma.StringNullableFilter<"User"> | string | null
+  tiktok?: Prisma.StringNullableFilter<"User"> | string | null
+  youtube?: Prisma.StringNullableFilter<"User"> | string | null
+  spotify?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -740,7 +800,13 @@ export type UserOrderByWithAggregationInput = {
   latitude?: Prisma.SortOrderInput | Prisma.SortOrder
   longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   avatarUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrderInput | Prisma.SortOrder
   videoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  instagram?: Prisma.SortOrderInput | Prisma.SortOrder
+  tiktok?: Prisma.SortOrderInput | Prisma.SortOrder
+  youtube?: Prisma.SortOrderInput | Prisma.SortOrder
+  spotify?: Prisma.SortOrderInput | Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -788,7 +854,13 @@ export type UserScalarWhereWithAggregatesInput = {
   latitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableWithAggregatesFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  lastSeenAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   videoUrl?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  instagram?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  tiktok?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  youtube?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  spotify?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelWithAggregatesFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionWithAggregatesFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
@@ -828,7 +900,13 @@ export type UserCreateInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -913,7 +991,13 @@ export type UserUncheckedCreateInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -998,7 +1082,13 @@ export type UserUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1083,7 +1173,13 @@ export type UserUncheckedUpdateInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1168,7 +1264,13 @@ export type UserCreateManyInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -1208,7 +1310,13 @@ export type UserUpdateManyMutationInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1248,7 +1356,13 @@ export type UserUncheckedUpdateManyInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -1288,7 +1402,13 @@ export type UserCountOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  tiktok?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  spotify?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1339,7 +1459,13 @@ export type UserMaxOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  tiktok?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  spotify?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1379,7 +1505,13 @@ export type UserMinOrderByAggregateInput = {
   latitude?: Prisma.SortOrder
   longitude?: Prisma.SortOrder
   avatarUrl?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
+  lastSeenAt?: Prisma.SortOrder
   videoUrl?: Prisma.SortOrder
+  instagram?: Prisma.SortOrder
+  tiktok?: Prisma.SortOrder
+  youtube?: Prisma.SortOrder
+  spotify?: Prisma.SortOrder
   privacyLevel?: Prisma.SortOrder
   allowMessagesFrom?: Prisma.SortOrder
   allowFriendRequests?: Prisma.SortOrder
@@ -1460,6 +1592,10 @@ export type NullableFloatFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type NullableDateTimeFieldUpdateOperationsInput = {
+  set?: Date | string | null
 }
 
 export type EnumPrivacyLevelFieldUpdateOperationsInput = {
@@ -2188,7 +2324,13 @@ export type UserCreateWithoutProfilePhotosInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2272,7 +2414,13 @@ export type UserUncheckedCreateWithoutProfilePhotosInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2372,7 +2520,13 @@ export type UserUpdateWithoutProfilePhotosInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2456,7 +2610,13 @@ export type UserUncheckedUpdateWithoutProfilePhotosInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2540,7 +2700,13 @@ export type UserCreateWithoutPhotoAlbumsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2624,7 +2790,13 @@ export type UserUncheckedCreateWithoutPhotoAlbumsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2724,7 +2896,13 @@ export type UserUpdateWithoutPhotoAlbumsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2808,7 +2986,13 @@ export type UserUncheckedUpdateWithoutPhotoAlbumsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -2892,7 +3076,13 @@ export type UserCreateWithoutConnectedAccountsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -2976,7 +3166,13 @@ export type UserUncheckedCreateWithoutConnectedAccountsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3076,7 +3272,13 @@ export type UserUpdateWithoutConnectedAccountsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3160,7 +3362,13 @@ export type UserUncheckedUpdateWithoutConnectedAccountsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3244,7 +3452,13 @@ export type UserCreateWithoutVerificationCodesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3328,7 +3542,13 @@ export type UserUncheckedCreateWithoutVerificationCodesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3428,7 +3648,13 @@ export type UserUpdateWithoutVerificationCodesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3512,7 +3738,13 @@ export type UserUncheckedUpdateWithoutVerificationCodesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -3596,7 +3828,13 @@ export type UserCreateWithoutInterestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3680,7 +3918,13 @@ export type UserUncheckedCreateWithoutInterestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3788,7 +4032,13 @@ export type UserScalarWhereInput = {
   latitude?: Prisma.FloatNullableFilter<"User"> | number | null
   longitude?: Prisma.FloatNullableFilter<"User"> | number | null
   avatarUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  coverImage?: Prisma.StringNullableFilter<"User"> | string | null
+  lastSeenAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   videoUrl?: Prisma.StringNullableFilter<"User"> | string | null
+  instagram?: Prisma.StringNullableFilter<"User"> | string | null
+  tiktok?: Prisma.StringNullableFilter<"User"> | string | null
+  youtube?: Prisma.StringNullableFilter<"User"> | string | null
+  spotify?: Prisma.StringNullableFilter<"User"> | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFilter<"User"> | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFilter<"User"> | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFilter<"User"> | boolean
@@ -3828,7 +4078,13 @@ export type UserCreateWithoutBadgesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -3912,7 +4168,13 @@ export type UserUncheckedCreateWithoutBadgesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4012,7 +4274,13 @@ export type UserUpdateWithoutBadgesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4096,7 +4364,13 @@ export type UserUncheckedUpdateWithoutBadgesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4180,7 +4454,13 @@ export type UserCreateWithoutSentFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4264,7 +4544,13 @@ export type UserUncheckedCreateWithoutSentFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4353,7 +4639,13 @@ export type UserCreateWithoutReceivedFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4437,7 +4729,13 @@ export type UserUncheckedCreateWithoutReceivedFriendRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4537,7 +4835,13 @@ export type UserUpdateWithoutSentFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4621,7 +4925,13 @@ export type UserUncheckedUpdateWithoutSentFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4716,7 +5026,13 @@ export type UserUpdateWithoutReceivedFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4800,7 +5116,13 @@ export type UserUncheckedUpdateWithoutReceivedFriendRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -4884,7 +5206,13 @@ export type UserCreateWithoutFriendshipsAInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -4968,7 +5296,13 @@ export type UserUncheckedCreateWithoutFriendshipsAInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5057,7 +5391,13 @@ export type UserCreateWithoutFriendshipsBInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5141,7 +5481,13 @@ export type UserUncheckedCreateWithoutFriendshipsBInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5241,7 +5587,13 @@ export type UserUpdateWithoutFriendshipsAInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5325,7 +5677,13 @@ export type UserUncheckedUpdateWithoutFriendshipsAInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5420,7 +5778,13 @@ export type UserUpdateWithoutFriendshipsBInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5504,7 +5868,13 @@ export type UserUncheckedUpdateWithoutFriendshipsBInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5588,7 +5958,13 @@ export type UserCreateWithoutEventLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5672,7 +6048,13 @@ export type UserUncheckedCreateWithoutEventLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -5772,7 +6154,13 @@ export type UserUpdateWithoutEventLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5856,7 +6244,13 @@ export type UserUncheckedUpdateWithoutEventLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -5940,7 +6334,13 @@ export type UserCreateWithoutFavoriteCategoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6024,7 +6424,13 @@ export type UserUncheckedCreateWithoutFavoriteCategoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6129,7 +6535,13 @@ export type UserCreateWithoutOrganizedEventsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6213,7 +6625,13 @@ export type UserUncheckedCreateWithoutOrganizedEventsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6313,7 +6731,13 @@ export type UserUpdateWithoutOrganizedEventsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6397,7 +6821,13 @@ export type UserUncheckedUpdateWithoutOrganizedEventsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6481,7 +6911,13 @@ export type UserCreateWithoutEventParticipationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6565,7 +7001,13 @@ export type UserUncheckedCreateWithoutEventParticipationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6665,7 +7107,13 @@ export type UserUpdateWithoutEventParticipationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6749,7 +7197,13 @@ export type UserUncheckedUpdateWithoutEventParticipationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -6833,7 +7287,13 @@ export type UserCreateWithoutStoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -6917,7 +7377,13 @@ export type UserUncheckedCreateWithoutStoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7017,7 +7483,13 @@ export type UserUpdateWithoutStoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7101,7 +7573,13 @@ export type UserUncheckedUpdateWithoutStoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7185,7 +7663,13 @@ export type UserCreateWithoutSavedStoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7269,7 +7753,13 @@ export type UserUncheckedCreateWithoutSavedStoriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7369,7 +7859,13 @@ export type UserUpdateWithoutSavedStoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7453,7 +7949,13 @@ export type UserUncheckedUpdateWithoutSavedStoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7537,7 +8039,13 @@ export type UserCreateWithoutStoryLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7621,7 +8129,13 @@ export type UserUncheckedCreateWithoutStoryLikesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7721,7 +8235,13 @@ export type UserUpdateWithoutStoryLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7805,7 +8325,13 @@ export type UserUncheckedUpdateWithoutStoryLikesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -7889,7 +8415,13 @@ export type UserCreateWithoutWaitlistEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -7973,7 +8505,13 @@ export type UserUncheckedCreateWithoutWaitlistEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8073,7 +8611,13 @@ export type UserUpdateWithoutWaitlistEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8157,7 +8701,13 @@ export type UserUncheckedUpdateWithoutWaitlistEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8241,7 +8791,13 @@ export type UserCreateWithoutEventInvitationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8325,7 +8881,13 @@ export type UserUncheckedCreateWithoutEventInvitationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8425,7 +8987,13 @@ export type UserUpdateWithoutEventInvitationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8509,7 +9077,13 @@ export type UserUncheckedUpdateWithoutEventInvitationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8593,7 +9167,13 @@ export type UserCreateWithoutEventChatMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8677,7 +9257,13 @@ export type UserUncheckedCreateWithoutEventChatMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -8777,7 +9363,13 @@ export type UserUpdateWithoutEventChatMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8861,7 +9453,13 @@ export type UserUncheckedUpdateWithoutEventChatMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -8945,7 +9543,13 @@ export type UserCreateWithoutConversationMembersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9029,7 +9633,13 @@ export type UserUncheckedCreateWithoutConversationMembersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9129,7 +9739,13 @@ export type UserUpdateWithoutConversationMembersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9213,7 +9829,13 @@ export type UserUncheckedUpdateWithoutConversationMembersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9297,7 +9919,13 @@ export type UserCreateWithoutMessageHidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9381,7 +10009,13 @@ export type UserUncheckedCreateWithoutMessageHidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9481,7 +10115,13 @@ export type UserUpdateWithoutMessageHidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9565,7 +10205,13 @@ export type UserUncheckedUpdateWithoutMessageHidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -9649,7 +10295,13 @@ export type UserCreateWithoutBlocksGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9733,7 +10385,13 @@ export type UserUncheckedCreateWithoutBlocksGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9822,7 +10480,13 @@ export type UserCreateWithoutBlocksReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -9906,7 +10570,13 @@ export type UserUncheckedCreateWithoutBlocksReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10006,7 +10676,13 @@ export type UserUpdateWithoutBlocksGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10090,7 +10766,13 @@ export type UserUncheckedUpdateWithoutBlocksGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10185,7 +10867,13 @@ export type UserUpdateWithoutBlocksReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10269,7 +10957,13 @@ export type UserUncheckedUpdateWithoutBlocksReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10353,7 +11047,13 @@ export type UserCreateWithoutSentMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10437,7 +11137,13 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10526,7 +11232,13 @@ export type UserCreateWithoutReceivedMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10610,7 +11322,13 @@ export type UserUncheckedCreateWithoutReceivedMessagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -10710,7 +11428,13 @@ export type UserUpdateWithoutSentMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10794,7 +11518,13 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10889,7 +11619,13 @@ export type UserUpdateWithoutReceivedMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -10973,7 +11709,13 @@ export type UserUncheckedUpdateWithoutReceivedMessagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11057,7 +11799,13 @@ export type UserCreateWithoutUploadedMediaInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11141,7 +11889,13 @@ export type UserUncheckedCreateWithoutUploadedMediaInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11241,7 +11995,13 @@ export type UserUpdateWithoutUploadedMediaInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11325,7 +12085,13 @@ export type UserUncheckedUpdateWithoutUploadedMediaInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11409,7 +12175,13 @@ export type UserCreateWithoutMediaIdentificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11493,7 +12265,13 @@ export type UserUncheckedCreateWithoutMediaIdentificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11593,7 +12371,13 @@ export type UserUpdateWithoutMediaIdentificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11677,7 +12461,13 @@ export type UserUncheckedUpdateWithoutMediaIdentificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -11761,7 +12551,13 @@ export type UserCreateWithoutRatingsGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11845,7 +12641,13 @@ export type UserUncheckedCreateWithoutRatingsGivenInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -11934,7 +12736,13 @@ export type UserCreateWithoutRatingsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12018,7 +12826,13 @@ export type UserUncheckedCreateWithoutRatingsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12118,7 +12932,13 @@ export type UserUpdateWithoutRatingsGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12202,7 +13022,13 @@ export type UserUncheckedUpdateWithoutRatingsGivenInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12297,7 +13123,13 @@ export type UserUpdateWithoutRatingsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12381,7 +13213,13 @@ export type UserUncheckedUpdateWithoutRatingsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12465,7 +13303,13 @@ export type UserCreateWithoutReportsMadeInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12549,7 +13393,13 @@ export type UserUncheckedCreateWithoutReportsMadeInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12638,7 +13488,13 @@ export type UserCreateWithoutReportsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12722,7 +13578,13 @@ export type UserUncheckedCreateWithoutReportsReceivedInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -12822,7 +13684,13 @@ export type UserUpdateWithoutReportsMadeInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -12906,7 +13774,13 @@ export type UserUncheckedUpdateWithoutReportsMadeInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13001,7 +13875,13 @@ export type UserUpdateWithoutReportsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13085,7 +13965,13 @@ export type UserUncheckedUpdateWithoutReportsReceivedInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13169,7 +14055,13 @@ export type UserCreateWithoutOfferedRidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13253,7 +14145,13 @@ export type UserUncheckedCreateWithoutOfferedRidesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13353,7 +14251,13 @@ export type UserUpdateWithoutOfferedRidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13437,7 +14341,13 @@ export type UserUncheckedUpdateWithoutOfferedRidesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13521,7 +14431,13 @@ export type UserCreateWithoutCarpoolRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13605,7 +14521,13 @@ export type UserUncheckedCreateWithoutCarpoolRequestsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13705,7 +14627,13 @@ export type UserUpdateWithoutCarpoolRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13789,7 +14717,13 @@ export type UserUncheckedUpdateWithoutCarpoolRequestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -13873,7 +14807,13 @@ export type UserCreateWithoutOwnedPagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -13957,7 +14897,13 @@ export type UserUncheckedCreateWithoutOwnedPagesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -14057,7 +15003,13 @@ export type UserUpdateWithoutOwnedPagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14141,7 +15093,13 @@ export type UserUncheckedUpdateWithoutOwnedPagesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14225,7 +15183,13 @@ export type UserCreateWithoutPageFollowsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -14309,7 +15273,13 @@ export type UserUncheckedCreateWithoutPageFollowsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -14409,7 +15379,13 @@ export type UserUpdateWithoutPageFollowsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14493,7 +15469,13 @@ export type UserUncheckedUpdateWithoutPageFollowsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14577,7 +15559,13 @@ export type UserCreateWithoutGroupMembershipsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -14661,7 +15649,13 @@ export type UserUncheckedCreateWithoutGroupMembershipsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -14761,7 +15755,13 @@ export type UserUpdateWithoutGroupMembershipsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14845,7 +15845,13 @@ export type UserUncheckedUpdateWithoutGroupMembershipsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -14929,7 +15935,13 @@ export type UserCreateWithoutForumPostsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15013,7 +16025,13 @@ export type UserUncheckedCreateWithoutForumPostsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15113,7 +16131,13 @@ export type UserUpdateWithoutForumPostsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15197,7 +16221,13 @@ export type UserUncheckedUpdateWithoutForumPostsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15281,7 +16311,13 @@ export type UserCreateWithoutForumRepliesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15365,7 +16401,13 @@ export type UserUncheckedCreateWithoutForumRepliesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15465,7 +16507,13 @@ export type UserUpdateWithoutForumRepliesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15549,7 +16597,13 @@ export type UserUncheckedUpdateWithoutForumRepliesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15633,7 +16687,13 @@ export type UserCreateWithoutRedeemedOffersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15717,7 +16777,13 @@ export type UserUncheckedCreateWithoutRedeemedOffersInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -15817,7 +16883,13 @@ export type UserUpdateWithoutRedeemedOffersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15901,7 +16973,13 @@ export type UserUncheckedUpdateWithoutRedeemedOffersInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -15985,7 +17063,13 @@ export type UserCreateWithoutSubscriptionInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16069,7 +17153,13 @@ export type UserUncheckedCreateWithoutSubscriptionInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16169,7 +17259,13 @@ export type UserUpdateWithoutSubscriptionInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16253,7 +17349,13 @@ export type UserUncheckedUpdateWithoutSubscriptionInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16337,7 +17439,13 @@ export type UserCreateWithoutLeaderboardEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16421,7 +17529,13 @@ export type UserUncheckedCreateWithoutLeaderboardEntriesInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16521,7 +17635,13 @@ export type UserUpdateWithoutLeaderboardEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16605,7 +17725,13 @@ export type UserUncheckedUpdateWithoutLeaderboardEntriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16689,7 +17815,13 @@ export type UserCreateWithoutNotificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16773,7 +17905,13 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -16873,7 +18011,13 @@ export type UserUpdateWithoutNotificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -16957,7 +18101,13 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17041,7 +18191,13 @@ export type UserCreateWithoutPushSubscriptionsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -17125,7 +18281,13 @@ export type UserUncheckedCreateWithoutPushSubscriptionsInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -17225,7 +18387,13 @@ export type UserUpdateWithoutPushSubscriptionsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17309,7 +18477,13 @@ export type UserUncheckedUpdateWithoutPushSubscriptionsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17393,7 +18567,13 @@ export type UserCreateWithoutIntroCardInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -17477,7 +18657,13 @@ export type UserUncheckedCreateWithoutIntroCardInput = {
   latitude?: number | null
   longitude?: number | null
   avatarUrl?: string | null
+  coverImage?: string | null
+  lastSeenAt?: Date | string | null
   videoUrl?: string | null
+  instagram?: string | null
+  tiktok?: string | null
+  youtube?: string | null
+  spotify?: string | null
   privacyLevel?: $Enums.PrivacyLevel
   allowMessagesFrom?: $Enums.MessagePermission
   allowFriendRequests?: boolean
@@ -17577,7 +18763,13 @@ export type UserUpdateWithoutIntroCardInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17661,7 +18853,13 @@ export type UserUncheckedUpdateWithoutIntroCardInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17745,7 +18943,13 @@ export type UserUpdateWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17829,7 +19033,13 @@ export type UserUncheckedUpdateWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17913,7 +19123,13 @@ export type UserUncheckedUpdateManyWithoutInterestsInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -17953,7 +19169,13 @@ export type UserUpdateWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -18037,7 +19259,13 @@ export type UserUncheckedUpdateWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -18121,7 +19349,13 @@ export type UserUncheckedUpdateManyWithoutFavoriteCategoriesInput = {
   latitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   longitude?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  lastSeenAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   videoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  instagram?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tiktok?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  youtube?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  spotify?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   privacyLevel?: Prisma.EnumPrivacyLevelFieldUpdateOperationsInput | $Enums.PrivacyLevel
   allowMessagesFrom?: Prisma.EnumMessagePermissionFieldUpdateOperationsInput | $Enums.MessagePermission
   allowFriendRequests?: Prisma.BoolFieldUpdateOperationsInput | boolean
@@ -18570,7 +19804,13 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  coverImage?: boolean
+  lastSeenAt?: boolean
   videoUrl?: boolean
+  instagram?: boolean
+  tiktok?: boolean
+  youtube?: boolean
+  spotify?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -18656,7 +19896,13 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  coverImage?: boolean
+  lastSeenAt?: boolean
   videoUrl?: boolean
+  instagram?: boolean
+  tiktok?: boolean
+  youtube?: boolean
+  spotify?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -18696,7 +19942,13 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  coverImage?: boolean
+  lastSeenAt?: boolean
   videoUrl?: boolean
+  instagram?: boolean
+  tiktok?: boolean
+  youtube?: boolean
+  spotify?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -18736,7 +19988,13 @@ export type UserSelectScalar = {
   latitude?: boolean
   longitude?: boolean
   avatarUrl?: boolean
+  coverImage?: boolean
+  lastSeenAt?: boolean
   videoUrl?: boolean
+  instagram?: boolean
+  tiktok?: boolean
+  youtube?: boolean
+  spotify?: boolean
   privacyLevel?: boolean
   allowMessagesFrom?: boolean
   allowFriendRequests?: boolean
@@ -18756,7 +20014,7 @@ export type UserSelectScalar = {
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "videoUrl" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "emailVerified" | "phone" | "phoneVerified" | "passwordHash" | "firstName" | "lastName" | "displayName" | "dateOfBirth" | "gender" | "orientation" | "bio" | "profession" | "education" | "city" | "latitude" | "longitude" | "avatarUrl" | "coverImage" | "lastSeenAt" | "videoUrl" | "instagram" | "tiktok" | "youtube" | "spotify" | "privacyLevel" | "allowMessagesFrom" | "allowFriendRequests" | "showAge" | "showLastName" | "averageRating" | "totalRatings" | "trustScore" | "eventsCreated" | "eventsAttended" | "friendCount" | "isActive" | "isBanned" | "banReason" | "lastActiveAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   profilePhotos?: boolean | Prisma.User$profilePhotosArgs<ExtArgs>
   photoAlbums?: boolean | Prisma.User$photoAlbumsArgs<ExtArgs>
@@ -18877,7 +20135,13 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     latitude: number | null
     longitude: number | null
     avatarUrl: string | null
+    coverImage: string | null
+    lastSeenAt: Date | null
     videoUrl: string | null
+    instagram: string | null
+    tiktok: string | null
+    youtube: string | null
+    spotify: string | null
     privacyLevel: $Enums.PrivacyLevel
     allowMessagesFrom: $Enums.MessagePermission
     allowFriendRequests: boolean
@@ -19382,7 +20646,13 @@ export interface UserFieldRefs {
   readonly latitude: Prisma.FieldRef<"User", 'Float'>
   readonly longitude: Prisma.FieldRef<"User", 'Float'>
   readonly avatarUrl: Prisma.FieldRef<"User", 'String'>
+  readonly coverImage: Prisma.FieldRef<"User", 'String'>
+  readonly lastSeenAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly videoUrl: Prisma.FieldRef<"User", 'String'>
+  readonly instagram: Prisma.FieldRef<"User", 'String'>
+  readonly tiktok: Prisma.FieldRef<"User", 'String'>
+  readonly youtube: Prisma.FieldRef<"User", 'String'>
+  readonly spotify: Prisma.FieldRef<"User", 'String'>
   readonly privacyLevel: Prisma.FieldRef<"User", 'PrivacyLevel'>
   readonly allowMessagesFrom: Prisma.FieldRef<"User", 'MessagePermission'>
   readonly allowFriendRequests: Prisma.FieldRef<"User", 'Boolean'>

@@ -11,6 +11,7 @@ const memberUserSelect = {
   lastName: true,
   displayName: true,
   avatarUrl: true,
+  lastSeenAt: true,
 } as const
 
 /** Vérifie la confidentialité des messages du destinataire (spec allowMessagesFrom). */
