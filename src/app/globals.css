@@ -799,6 +799,53 @@ nav * {
    Communauté — arrivée du panneau (l'encart violet, lui, glisse
    dans la barre d'onglets, voir community/page.tsx)
    ============================================================ */
+/* L'encart violet de la Communauté — transition écrite en CSS pur.
+   (les classes Tailwind arbitraires du type `transition-[transform,width]`
+   ne sont pas générées par la configuration du projet : sans cette règle,
+   l'encart sautait d'un onglet à l'autre au lieu de glisser) */
+.community-pill {
+  transform: translate3d(0, 0, 0);
+  will-change: transform, width;
+  backface-visibility: hidden;
+}
+.community-pill--animate {
+  transition-property: transform, width;
+  transition-duration: 380ms;
+  /* courbe régulière (proche du mouvement d'un segmented control iOS) :
+     le déplacement est réparti sur toute la durée, sans à-coup au départ */
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .community-pill--animate {
+    transition: none;
+  }
+}
+
+/* Onglets de la Communauté : le survol ne change QUE la couleur du texte.
+   Aucun fond ne doit apparaître, sinon un encart clair « flashe » pendant
+   que l'encart violet glisse d'un onglet à l'autre. */
+.community-tab {
+  transition: color 180ms ease;
+}
+/* L'onglet qui reçoit l'encart ne passe au blanc qu'une fois le violet
+   arrivé sous lui : le texte ne « flotte » plus sur le fond clair. */
+.community-tab[aria-selected='true'] {
+  transition: color 200ms ease 180ms;
+}
+@media (hover: hover) and (pointer: fine) {
+  .community-tab:not([aria-selected='true']):hover {
+    color: rgb(var(--fg));
+    transition-delay: 0ms;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .community-tab,
+  .community-tab[aria-selected='true'] {
+    transition-delay: 0ms;
+    transition-duration: 0ms;
+  }
+}
+
 @keyframes communityPanelIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }

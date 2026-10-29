@@ -86,10 +86,10 @@ export default function CommunityPage() {
   }, [])
 
   React.useEffect(() => {
-    if (!pill || canAnimate) return
+    if (!pill || !mounted || canAnimate) return
     const id = window.requestAnimationFrame(() => setCanAnimate(true))
     return () => window.cancelAnimationFrame(id)
-  }, [pill, canAnimate])
+  }, [pill, mounted, canAnimate])
 
   const select = (next: CommunityTab) => {
     setTab(next)
@@ -138,10 +138,10 @@ export default function CommunityPage() {
           <span
             aria-hidden
             className={cn(
-              'pointer-events-none absolute inset-y-1.5 left-0 rounded-xl bg-primary-600 shadow-md shadow-primary-600/30 will-change-transform',
-              canAnimate && 'transition-[transform,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+              'community-pill pointer-events-none absolute inset-y-1.5 left-0 rounded-xl bg-primary-600 shadow-md shadow-primary-600/30',
+              canAnimate && mounted && 'community-pill--animate',
             )}
-            style={{ width: pill.width, transform: `translateX(${pill.left}px)` }}
+            style={{ width: pill.width, transform: `translate3d(${pill.left}px,0,0)` }}
           />
         )}
 
@@ -161,8 +161,8 @@ export default function CommunityPage() {
               tabIndex={active ? 0 : -1}
               onClick={() => select(id)}
               className={cn(
-                'relative z-10 flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[12px] font-bold transition-colors duration-200 sm:text-sm',
-                active ? 'text-white' : 'text-fg-muted hover:bg-bg-secondary hover:text-fg',
+                'community-tab relative z-10 flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl bg-transparent px-1 py-2 text-[12px] font-bold sm:text-sm',
+                active ? 'text-white' : 'text-fg-muted',
                 // Avant la mesure (rendu serveur), l'onglet actif porte lui-même
                 // le violet : aucun clignotement au chargement.
                 active && !pill && 'bg-primary-600 shadow-md shadow-primary-600/25',
