@@ -8,7 +8,7 @@
 @layer base {
   :root {
     /* Hauteur approx. de la barre fixe avant mesure JS (évite tout saut) */
-    --nav-h: 7rem;
+    --nav-h: 8.25rem;
     /* Hauteur réservée à la barre de navigation mobile (0 sur desktop) */
     --bottom-nav-h: 0px;
     --bg: 255 255 255;
@@ -121,8 +121,9 @@
 
 @media (max-width: 767px) {
   :root {
-    --nav-h: 3.9rem;
-    --bottom-nav-h: calc(4.75rem + env(safe-area-inset-bottom, 0px));
+    /* Barre à deux rangées : ~8.25rem mesurées en JS, valeur de repli ici */
+    --nav-h: 8.25rem;
+    --bottom-nav-h: 0px;
   }
 }
 
@@ -740,6 +741,33 @@ nav * {
   border-radius: 8px;
   font-weight: 700;
   font-size: 12px;
+}
+
+/* ============================================================
+   Onglet Accueil — animation de « clic » à chaque appui
+   ============================================================ */
+@keyframes homeTap {
+  0% { transform: scale(1); }
+  25% { transform: scale(0.88); }
+  55% { transform: scale(1.09); }
+  78% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+@keyframes homeRing {
+  0% { opacity: 0.55; transform: scale(0.85); }
+  100% { opacity: 0; transform: scale(1.7); }
+}
+.animate-home-tap {
+  animation: homeTap 460ms cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+.animate-home-ring {
+  animation: homeRing 560ms ease-out both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-home-tap,
+  .animate-home-ring {
+    animation: none;
+  }
 }
 
 /* Météo animée des lignes d'activités */

@@ -3,8 +3,8 @@ import type { MetadataRoute } from 'next'
 /** Manifest PWA — PlanB installable comme une app native. */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'PlanB — Le réseau social du futur',
-    short_name: 'PlanB',
+    name: 'Plan B — Le réseau social du futur',
+    short_name: 'Plan B',
     description: 'Postez ce que vous allez faire. Les autres rejoignent en un clic.',
     start_url: '/',
     scope: '/',
