@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Camera, CalendarPlus, Plus, Store, UsersRound } from 'lucide-react'
+import { Bell, Camera, CalendarPlus, LogIn, Plus, Store, UsersRound } from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
@@ -173,13 +173,21 @@ export function Navbar() {
               {lang === 'fr' ? 'FR' : 'EN'}
             </button>
 
-            {isLoading ? (
-              <div className="h-9 w-9 animate-pulse-soft rounded-full bg-border" aria-hidden />
-            ) : isAuthenticated ? (
+            {/*
+              Hors connexion, on n'affiche JAMAIS la cloche : c'est le bouton
+              « Connexion ». L'état est mémorisé (lib/session) pour que la barre
+              ne clignote pas entre les deux pendant les rechargements.
+            */}
+            {isAuthenticated ? (
               <BellLink unreadCount={unread?.count ?? 0} />
+            ) : isLoading ? (
+              <div className="h-9 w-[5.75rem] rounded-full bg-border/40" aria-hidden />
             ) : (
-              <Button asChild size="sm" className="h-9 rounded-full px-3 text-xs">
-                <Link href="/login">{t('nav_login')}</Link>
+              <Button asChild size="sm" className="h-9 gap-1.5 rounded-full px-3 text-xs">
+                <Link href="/login" aria-label={t('nav_login')}>
+                  <LogIn className="h-4 w-4" aria-hidden />
+                  {t('nav_login')}
+                </Link>
               </Button>
             )}
           </div>

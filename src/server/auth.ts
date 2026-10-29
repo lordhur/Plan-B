@@ -206,19 +206,39 @@ export async function consumeVerificationCode(
   return true
 }
 
+/** Un service d'envoi d'e-mails est-il configuré ? (Resend, gratuit à 100/jour) */
+export function isEmailDeliveryConfigured(): boolean {
+  return Boolean(process.env.RESEND_API_KEY)
+}
+
+export interface EmailDelivery {
+  /** true = l'e-mail est parti ; false = aucun envoi possible (voir `error`). */
+  delivered: boolean
+  reason?: 'not_configured' | 'provider_error'
+  error?: string
+}
+
 /**
  * Envoie un code par email.
- * - Production (RESEND_API_KEY définie) : appel API Resend.
- * - Développement : log serveur (le code est aussi renvoyé à l'UI en dev).
+ *
+ * - RESEND_API_KEY définie → API Resend.
+ * - Sinon (ou si Resend refuse l'envoi) → `delivered: false` : l'appelant
+ *   affiche alors le code directement dans l'interface pour que la
+ *   vérification reste possible sans service e-mail. Aucun compte ne reste
+ *   bloqué faute d'avoir reçu un message.
  */
 export async function sendCodeEmail(
   to: string,
   code: string,
   subject: string,
-): Promise<void> {
+): Promise<EmailDelivery> {
   const apiKey = process.env.RESEND_API_KEY
-  const from = process.env.EMAIL_FROM ?? 'PlanB <onboarding@planb.app>'
-  if (apiKey) {
+  const from = process.env.EMAIL_FROM ?? 'PlanB <onboarding@resend.dev>'
+  if (!apiKey) {
+    console.warn(`[email] RESEND_API_KEY absente — code pour ${to} : ${code}`)
+    return { delivered: false, reason: 'not_configured' }
+  }
+  try {
     const res = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
@@ -227,17 +247,23 @@ export async function sendCodeEmail(
         to,
         subject,
         html: `<div style="font-family:sans-serif;max-width:480px;margin:auto">
-          <h2 style="color:#7c3aed">PlanB</h2>
+          <h2 style="color:#7c3aed">Plan B</h2>
           <p>Votre code de vérification :</p>
           <p style="font-size:32px;font-weight:bold;letter-spacing:8px;color:#0f172a">${code}</p>
           <p style="color:#64748b;font-size:13px">Valable 15 minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet email.</p>
         </div>`,
       }),
     })
-    if (!res.ok) console.error('[email] Erreur Resend :', await res.text())
-    return
+    if (!res.ok) {
+      const detail = await res.text()
+      console.error('[email] Erreur Resend :', detail)
+      return { delivered: false, reason: 'provider_error', error: detail.slice(0, 300) }
+    }
+    return { delivered: true }
+  } catch (err) {
+    console.error('[email] Envoi impossible :', err)
+    return { delivered: false, reason: 'provider_error', error: String(err) }
   }
-  console.log(`[dev] Code pour ${to} — ${subject} : ${code}`)
 }
 
 // ----------------------------- Rate limiting (anti-abus) -----------------------------
@@ -248,7 +274,11 @@ export async function sendCodeEmail(
  */
 const buckets = new Map<string, { count: number; resetAt: number }>()
 
-export function rateLimit(key: string, max: number, windowMs: number): { ok: boolean; retryAfterS: number } {
+export function rateLimit(
+  key: string,
+  max: number,
+  windowMs: number,
+): { ok: boolean; retryAfterS: number } {
   const now = Date.now()
   const bucket = buckets.get(key)
   if (!bucket || bucket.resetAt <= now) {

@@ -15,6 +15,68 @@ import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
+/**
+ * ÉTAT DES CONNEXIONS SOCIALES
+ * Affiche en un coup d'œil quels fournisseurs OAuth sont réellement actifs
+ * (variables d'environnement posées sur Vercel). Guide : docs/oauth-setup.md
+ */
+function SocialProvidersCard() {
+  const { data } = trpc.auth.providers.useQuery(undefined, { staleTime: 60_000 })
+  const { data: delivery } = trpc.auth.deliveryStatus.useQuery(undefined, { staleTime: 60_000 })
+  const rows = [
+    { key: 'google', label: 'Google' },
+    { key: 'facebook', label: 'Facebook' },
+    { key: 'instagram', label: 'Instagram' },
+  ] as const
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2 text-base">
+          <Shield className="h-4 w-4 text-primary-600" aria-hidden /> Connexions sociales
+        </CardTitle>
+        <CardDescription>
+          Boutons affichés sur la page de connexion. Ils s’activent dès que les identifiants sont
+          renseignés dans Vercel (guide : <code className="text-[11px]">docs/oauth-setup.md</code>).
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <ul className="divide-y divide-border">
+          {rows.map(({ key, label }) => {
+            const active = Boolean(data?.[key])
+            return (
+              <li key={key} className="flex items-center justify-between gap-3 py-2.5">
+                <span className="text-sm font-semibold">{label}</span>
+                <span
+                  className={
+                    active
+                      ? 'rounded-full bg-success-500/15 px-2.5 py-1 text-[11px] font-bold text-success-700 dark:text-success-400'
+                      : 'rounded-full bg-bg-secondary px-2.5 py-1 text-[11px] font-bold text-fg-muted'
+                  }
+                >
+                  {active ? 'Activé' : 'Non configuré'}
+                </span>
+              </li>
+            )
+          })}
+          <li className="flex items-center justify-between gap-3 py-2.5">
+            <span className="text-sm font-semibold">E-mail (codes)</span>
+            <span
+              className={
+                delivery?.email
+                  ? 'rounded-full bg-success-500/15 px-2.5 py-1 text-[11px] font-bold text-success-700 dark:text-success-400'
+                  : 'rounded-full bg-warning-500/15 px-2.5 py-1 text-[11px] font-bold text-warning-700 dark:text-warning-400'
+              }
+            >
+              {delivery?.email ? 'Envoi actif' : 'Code affiché à l’écran'}
+            </span>
+          </li>
+        </ul>
+      </CardContent>
+    </Card>
+  )
+}
+
 /** PARAMÈTRES — thème, notifications, confidentialité, déconnexion. */
 export default function SettingsPage() {
   const router = useRouter()
@@ -102,6 +164,8 @@ export default function SettingsPage() {
       {/* Réglages sociaux */}
       <SocialPrivacyCard />
 
+      <SocialProvidersCard />
+
       {/* Confidentialité */}
       <Card>
         <CardHeader>
@@ -111,8 +175,8 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent className="space-y-3">
           <p className="text-sm text-fg-muted">
-            PlanB est conforme au RGPD : export et suppression de vos données disponibles sur
-            simple demande (support@planb.app). Aucune donnée bancaire n’est stockée chez nous.
+            PlanB est conforme au RGPD : export et suppression de vos données disponibles sur simple
+            demande (support@planb.app). Aucune donnée bancaire n’est stockée chez nous.
           </p>
           <div className="rounded-xl border border-border p-3.5">
             <Label htmlFor="delete-account" className="text-sm font-semibold text-danger-500">
@@ -126,7 +190,9 @@ export default function SettingsPage() {
               variant="destructive"
               size="sm"
               className="mt-3"
-              onClick={() => toast.info('Bientôt disponible', 'Écrivez à support@planb.app en attendant.')}
+              onClick={() =>
+                toast.info('Bientôt disponible', 'Écrivez à support@planb.app en attendant.')
+              }
             >
               Supprimer mon compte
             </Button>
@@ -135,7 +201,12 @@ export default function SettingsPage() {
       </Card>
 
       {/* Déconnexion */}
-      <Button variant="secondary" className="w-full" onClick={() => logout.mutate()} disabled={logout.isPending}>
+      <Button
+        variant="secondary"
+        className="w-full"
+        onClick={() => logout.mutate()}
+        disabled={logout.isPending}
+      >
         Se déconnecter
       </Button>
     </div>

@@ -128,8 +128,15 @@ npm run db:seed && npm run dev
 2. **Migrations** : `npx prisma migrate dev` (machine avec accès réseau complet) puis `prisma migrate deploy`
 3. **Vercel** : importer le repo, définir les variables (voir `.env.example`)
 4. Optionnel : `RESEND_API_KEY` (emails), Stripe (Phase 4)
+5. **Connexion Google / Facebook / Instagram** : guide pas à pas dans
+   [`docs/oauth-setup.md`](docs/oauth-setup.md) (identifiants, URI de redirection,
+   mode test, dépannage).
 
 Le fichier `.env.example` documente toutes les variables.
+
+> Sans `RESEND_API_KEY`, les codes de vérification à 6 chiffres sont **affichés
+> directement dans l'interface** (page `/verify`) : aucun compte ne reste bloqué
+> et la connexion n'exige pas d'e-mail vérifié.
 
 ## 📁 Architecture
 

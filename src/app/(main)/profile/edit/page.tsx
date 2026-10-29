@@ -19,6 +19,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { ProfileMediaSection } from '@/components/profile/ProfileMediaSection'
 import { ProfileCoverSection } from '@/components/profile/ProfileCoverSection'
+import { SocialLinksEditor } from '@/components/profile/SocialLinksEditor'
+import { normalizeLinkInput, parseSocialLinks, type ProfileLink } from '@/lib/socialLinks'
 
 const profileFormSchema = z.object({
   displayName: z.string().trim().max(60),
@@ -33,10 +35,6 @@ const profileFormSchema = z.object({
   showLastName: z.boolean(),
   latitude: z.number().nullable(),
   longitude: z.number().nullable(),
-  instagram: z.string().max(200).optional(),
-  tiktok: z.string().max(200).optional(),
-  youtube: z.string().max(200).optional(),
-  spotify: z.string().max(200).optional(),
 })
 type ProfileForm = z.infer<typeof profileFormSchema>
 
@@ -53,6 +51,8 @@ export default function ProfileEditPage() {
   const utils = trpc.useUtils()
   const [cityQuery, setCityQuery] = useState('')
   const [cityResults, setCityResults] = useState<NominatimResult[]>([])
+  // Liens du profil : liste ordonnée, indépendante du formulaire principal.
+  const [links, setLinks] = useState<ProfileLink[]>([])
 
   const { data: me } = trpc.auth.me.useQuery(undefined, { enabled: isAuthenticated })
 
@@ -75,11 +75,20 @@ export default function ProfileEditPage() {
         showLastName: me.showLastName,
         latitude: me.latitude ?? null,
         longitude: me.longitude ?? null,
-        instagram: me.instagram ?? '',
-        tiktok: me.tiktok ?? '',
-        youtube: me.youtube ?? '',
-        spotify: me.spotify ?? '',
       })
+      // Reprise des liens déjà enregistrés (le JSON fait foi) ; à défaut, on
+      // récupère les anciens champs Instagram/TikTok/YouTube/Spotify.
+      const saved = parseSocialLinks(me.socialLinks)
+      if (saved.length > 0) {
+        setLinks(saved)
+      } else {
+        const legacy: ProfileLink[] = []
+        if (me.instagram) legacy.push({ type: 'instagram', url: me.instagram })
+        if (me.tiktok) legacy.push({ type: 'tiktok', url: me.tiktok })
+        if (me.youtube) legacy.push({ type: 'youtube', url: me.youtube })
+        if (me.spotify) legacy.push({ type: 'spotify', url: me.spotify })
+        setLinks(legacy)
+      }
     }
   }, [me, reset])
 
@@ -126,6 +135,11 @@ export default function ProfileEditPage() {
   if (sessionLoading) return <LoadingSpinner className="py-20" />
   if (!isAuthenticated) return null
 
+  // Liens valides, normalisés, DANS L'ORDRE choisi (les lignes vides sautent).
+  const cleanedLinks: ProfileLink[] = links
+    .filter((link) => link.url.trim().length > 0)
+    .map((link) => ({ type: link.type, url: normalizeLinkInput(link.type, link.url) }))
+
   return (
     <div className="mx-auto max-w-xl">
       <h1 className="mb-1 text-2xl font-extrabold tracking-tight">Modifier mon profil</h1>
@@ -139,10 +153,12 @@ export default function ProfileEditPage() {
             orientation: data.orientation ?? undefined,
             profession: data.profession || null,
             education: data.education || null,
-            instagram: data.instagram || null,
-            tiktok: data.tiktok || null,
-            youtube: data.youtube || null,
-            spotify: data.spotify || null,
+            socialLinks: cleanedLinks,
+            // Miroir des 4 réseaux historiques (compatibilité).
+            instagram: cleanedLinks.find((l) => l.type === 'instagram')?.url ?? null,
+            tiktok: cleanedLinks.find((l) => l.type === 'tiktok')?.url ?? null,
+            youtube: cleanedLinks.find((l) => l.type === 'youtube')?.url ?? null,
+            spotify: cleanedLinks.find((l) => l.type === 'spotify')?.url ?? null,
           }),
         )}
         className="space-y-5"
@@ -151,43 +167,14 @@ export default function ProfileEditPage() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Réseaux sociaux</CardTitle>
+            <CardTitle className="text-base">Liens et réseaux</CardTitle>
             <CardDescription>
-              Affichés en icônes sur votre profil (pseudo ou lien complet).
+              Choisissez le type de lien, collez l’adresse, puis utilisez les flèches pour définir
+              l’ordre des logos sur votre profil. Seuls les liens remplis s’affichent.
             </CardDescription>
           </CardHeader>
-          <CardContent className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <Label htmlFor="instagram">Instagram</Label>
-              <Input
-                id="instagram"
-                placeholder="@monpseudo"
-                maxLength={200}
-                {...register('instagram')}
-              />
-            </div>
-            <div>
-              <Label htmlFor="tiktok">TikTok</Label>
-              <Input id="tiktok" placeholder="@monpseudo" maxLength={200} {...register('tiktok')} />
-            </div>
-            <div>
-              <Label htmlFor="youtube">YouTube</Label>
-              <Input
-                id="youtube"
-                placeholder="@machaine"
-                maxLength={200}
-                {...register('youtube')}
-              />
-            </div>
-            <div>
-              <Label htmlFor="spotify">Spotify</Label>
-              <Input
-                id="spotify"
-                placeholder="Lien de mon profil"
-                maxLength={200}
-                {...register('spotify')}
-              />
-            </div>
+          <CardContent>
+            <SocialLinksEditor value={links} onChange={setLinks} />
           </CardContent>
         </Card>
 
@@ -214,8 +201,8 @@ export default function ProfileEditPage() {
                 {...register('bio')}
               />
               <p className="mt-1 text-[11px] text-fg-muted">
-                Astuce : collez vos liens (https://instagram.com/moncompte, tiktok.com/@moi…) — ils
-                deviennent cliquables et le logo du site s’affiche sous votre description.
+                Astuce : une adresse écrite dans la bio devient cliquable. Pour afficher un logo
+                sous votre description, utilisez plutôt la carte « Liens et réseaux » ci-dessus.
               </p>
             </div>
             <div>

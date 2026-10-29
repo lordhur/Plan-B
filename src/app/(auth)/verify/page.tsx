@@ -1,6 +1,6 @@
 'use client'
 
-import { Loader2, MailCheck, RefreshCw } from 'lucide-react'
+import { Check, Copy, Loader2, MailCheck, RefreshCw } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Suspense, useEffect, useState } from 'react'
@@ -19,8 +19,15 @@ function VerifyForm() {
   const codeParam = searchParams.get('code') ?? ''
 
   const { data: me, isLoading: meLoading } = trpc.auth.me.useQuery(undefined, { retry: false })
+  const { data: delivery } = trpc.auth.deliveryStatus.useQuery(undefined, {
+    retry: false,
+    staleTime: 5 * 60_000,
+  })
   const [email, setEmail] = useState(emailParam)
   const [code, setCode] = useState(codeParam)
+  // Code affiché à l'écran : uniquement si l'e-mail n'a pas pu partir.
+  const [shownCode, setShownCode] = useState(codeParam || null)
+  const [copied, setCopied] = useState(false)
   const utils = trpc.useUtils()
 
   useEffect(() => {
@@ -30,7 +37,7 @@ function VerifyForm() {
   const verify = trpc.auth.verifyEmail.useMutation({
     onSuccess: async () => {
       await utils.auth.me.invalidate()
-      toast.success('Email vérifié ! Bienvenue sur PlanB 🎉')
+      toast.success('Email vérifié ! Bienvenue sur Plan B 🎉')
       router.push('/')
       router.refresh()
     },
@@ -39,11 +46,15 @@ function VerifyForm() {
 
   const resend = trpc.auth.resendCode.useMutation({
     onSuccess: (res) => {
-      if (res.devCode) {
-        setCode(res.devCode)
-        toast.info('Nouveau code envoyé', `Code de démo : ${res.devCode}`)
+      if (res.fallbackCode) {
+        // Aucun e-mail n'est parti : on montre le code, sinon la vérification
+        // serait impossible.
+        setShownCode(res.fallbackCode)
+        setCode(res.fallbackCode)
+        toast.info('Nouveau code généré', 'Il est affiché ci-dessous (e-mail non configuré).')
       } else {
-        toast.success('Code renvoyé par email')
+        setShownCode(null)
+        toast.success('Code renvoyé par email', `Consultez la boîte ${email}.`)
       }
     },
     onError: (err) => toast.error(err.message),
@@ -54,6 +65,17 @@ function VerifyForm() {
     if (me?.emailVerified) router.replace('/')
   }, [me, router])
 
+  const copyCode = async () => {
+    if (!shownCode) return
+    try {
+      await navigator.clipboard.writeText(shownCode)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast.info('Copie impossible', `Code : ${shownCode}`)
+    }
+  }
+
   if (meLoading) return null
 
   return (
@@ -63,11 +85,51 @@ function VerifyForm() {
           <MailCheck className="h-5 w-5 text-primary-600" aria-hidden /> Vérifiez votre email
         </CardTitle>
         <CardDescription>
-          Saisissez le code à 6 chiffres envoyé à{' '}
-          <strong>{email || 'votre adresse'}</strong>. Il expire après 15 minutes.
+          Saisissez le code à 6 chiffres envoyé à <strong>{email || 'votre adresse'}</strong>. Il
+          expire après 15 minutes.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Aucun service e-mail configuré : on le dit clairement et on affiche le code. */}
+        {delivery && !delivery.email && (
+          <div
+            role="status"
+            className="rounded-xl border border-warning-500/40 bg-warning-50 px-3.5 py-3 text-sm dark:bg-warning-500/10"
+          >
+            <p className="font-semibold text-warning-700 dark:text-warning-400">
+              Le service d’envoi d’e-mails n’est pas encore activé sur Plan B.
+            </p>
+            <p className="mt-1 text-xs text-fg-muted">
+              Votre code s’affiche directement ici (et dans les journaux du serveur). Pour recevoir
+              les prochains codes par e-mail, ajoutez une clé <code>RESEND_API_KEY</code> dans les
+              variables d’environnement Vercel — c’est gratuit jusqu’à 100 e-mails par jour.
+            </p>
+          </div>
+        )}
+
+        {shownCode && (
+          <div
+            role="status"
+            className="rounded-xl border border-primary-500/40 bg-primary-50 px-3.5 py-3 text-center dark:bg-primary-950"
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide text-primary-700 dark:text-primary-300">
+              Votre code de vérification
+            </p>
+            <p className="mt-1 text-3xl font-black tracking-[0.35em] text-fg">{shownCode}</p>
+            <Button type="button" variant="ghost" size="sm" className="mt-2" onClick={copyCode}>
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4" aria-hidden /> Copié
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" aria-hidden /> Copier le code
+                </>
+              )}
+            </Button>
+          </div>
+        )}
+
         <div>
           <Label htmlFor="verify-email">Email</Label>
           <Input
@@ -99,7 +161,11 @@ function VerifyForm() {
           disabled={verify.isPending || code.length !== 6 || !email}
           onClick={() => verify.mutate({ target: email, code })}
         >
-          {verify.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <MailCheck className="h-4 w-4" aria-hidden />}
+          {verify.isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+          ) : (
+            <MailCheck className="h-4 w-4" aria-hidden />
+          )}
           Vérifier mon email
         </Button>
 
@@ -112,16 +178,13 @@ function VerifyForm() {
           <RefreshCw className="h-4 w-4" aria-hidden /> Renvoyer un code
         </Button>
 
-        {process.env.NODE_ENV === 'development' && (
-          <p className="rounded-lg bg-bg-secondary p-3 text-center text-xs text-fg-muted">
-            🧪 Mode démo : sans service email configuré, le code est affiché dans le terminal serveur
-            (et pré-rempli ici si vous arrivez depuis l’inscription).
-          </p>
-        )}
-
         <p className="text-center text-sm text-fg-muted">
           <Link href="/login" className="font-semibold text-primary-600 hover:underline">
             ← Retour à la connexion
+          </Link>
+          {' · '}
+          <Link href="/" className="font-semibold text-primary-600 hover:underline">
+            Continuer sans vérifier
           </Link>
         </p>
       </CardContent>

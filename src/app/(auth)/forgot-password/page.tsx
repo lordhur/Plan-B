@@ -24,9 +24,9 @@ export default function ForgotPasswordPage() {
   const forgot = trpc.auth.forgotPassword.useMutation({
     onSuccess: (res) => {
       setStep('reset')
-      if (res.devCode) {
-        setCode(res.devCode)
-        toast.info('Code envoyé', `Code de démo : ${res.devCode}`)
+      if (res.fallbackCode) {
+        setCode(res.fallbackCode)
+        toast.info('Code généré', `E-mail non configuré — votre code : ${res.fallbackCode}`)
       } else {
         toast.success('Si ce compte existe, un code vient d’être envoyé par email.')
       }
@@ -90,14 +90,24 @@ export default function ForgotPasswordPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="new-password"
               />
-              <p className="mt-1 text-xs text-fg-muted">8 caractères min., une lettre et un chiffre.</p>
+              <p className="mt-1 text-xs text-fg-muted">
+                8 caractères min., une lettre et un chiffre.
+              </p>
             </div>
           </>
         )}
 
         {step === 'request' ? (
-          <Button className="w-full" disabled={forgot.isPending || !email} onClick={() => forgot.mutate({ email })}>
-            {forgot.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <MailCheck className="h-4 w-4" aria-hidden />}
+          <Button
+            className="w-full"
+            disabled={forgot.isPending || !email}
+            onClick={() => forgot.mutate({ email })}
+          >
+            {forgot.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : (
+              <MailCheck className="h-4 w-4" aria-hidden />
+            )}
             Recevoir un code
           </Button>
         ) : (
@@ -106,7 +116,11 @@ export default function ForgotPasswordPage() {
             disabled={reset.isPending || code.length !== 6 || password.length < 8}
             onClick={() => reset.mutate({ email, code, password })}
           >
-            {reset.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <KeyRound className="h-4 w-4" aria-hidden />}
+            {reset.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : (
+              <KeyRound className="h-4 w-4" aria-hidden />
+            )}
             Réinitialiser
           </Button>
         )}

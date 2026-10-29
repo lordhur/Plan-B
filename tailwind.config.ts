@@ -52,18 +52,26 @@ const config: Config = {
         },
         success: {
           50: '#f0fdf4',
+          400: '#4ade80',
           500: '#22c55e',
           600: '#16a34a',
+          700: '#15803d',
         },
         danger: {
           50: '#fef2f2',
+          300: '#fca5a5',
+          400: '#f87171',
           500: '#ef4444',
           600: '#dc2626',
+          700: '#b91c1c',
+          950: '#450a0a',
         },
         warning: {
           50: '#fffbeb',
+          400: '#fbbf24',
           500: '#f59e0b',
           600: '#d97706',
+          700: '#b45309',
         },
         surface: {
           light: '#ffffff',
@@ -88,11 +96,9 @@ const config: Config = {
       },
       boxShadow: {
         card: '0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06)',
-        'card-hover':
-          '0 18px 45px -12px rgba(76, 29, 149, 0.25), 0 8px 20px rgba(0,0,0,0.12)',
+        'card-hover': '0 18px 45px -12px rgba(76, 29, 149, 0.25), 0 8px 20px rgba(0,0,0,0.12)',
         glow: '0 0 20px rgba(139, 92, 246, 0.3)',
-        'glow-lg':
-          '0 0 24px rgba(139, 92, 246, 0.45), 0 0 60px rgba(34, 211, 238, 0.18)',
+        'glow-lg': '0 0 24px rgba(139, 92, 246, 0.45), 0 0 60px rgba(34, 211, 238, 0.18)',
         'glow-accent': '0 0 22px rgba(249, 115, 22, 0.4)',
       },
       keyframes: {

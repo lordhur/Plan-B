@@ -26,7 +26,6 @@ function RegisterForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
-  const [devCode, setDevCode] = useState<string | null>(null)
 
   const {
     register,
@@ -38,12 +37,17 @@ function RegisterForm() {
 
   const registerMutation = trpc.auth.register.useMutation({
     onSuccess: (res) => {
-      setDevCode(res.devCode ?? null)
-      if (res.devCode) {
-        // Mode démo : code affiché, on passe direct à la vérification
-        toast.success('Compte créé !', `Code de vérification : ${res.devCode}`)
+      // Compte créé : on file directement sur la vérification. Si l'e-mail n'a
+      // pas pu être envoyé (service non configuré), le code est transmis à la
+      // page pour être affiché à l'écran ; sinon on annonce l'envoi.
+      if (res.fallbackCode) {
+        toast.info('Compte créé !', 'Le code de vérification est affiché à l’écran.')
+      } else {
+        toast.success('Compte créé !', `Code envoyé à ${res.email}`)
       }
-      router.push(`/verify?email=${encodeURIComponent(res.email)}${res.devCode ? `&code=${res.devCode}` : ''}`)
+      const params = new URLSearchParams({ email: res.email })
+      if (res.fallbackCode) params.set('code', res.fallbackCode)
+      router.push(`/verify?${params.toString()}`)
     },
     onError: (err) => toast.error('Inscription impossible', err.message),
   })
@@ -54,9 +58,7 @@ function RegisterForm() {
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="h-5 w-5 text-primary-600" aria-hidden /> {tl('auth_create')}
         </CardTitle>
-        <CardDescription>
-          {tl('auth_register_sub')}
-        </CardDescription>
+        <CardDescription>{tl('auth_register_sub')}</CardDescription>
       </CardHeader>
       <CardContent>
         <form
@@ -67,29 +69,69 @@ function RegisterForm() {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <Label htmlFor="firstName">{tl('auth_firstname')} *</Label>
-              <Input id="firstName" autoComplete="given-name" aria-invalid={!!errors.firstName} {...register('firstName')} />
-              {errors.firstName && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.firstName.message}</p>}
+              <Input
+                id="firstName"
+                autoComplete="given-name"
+                aria-invalid={!!errors.firstName}
+                {...register('firstName')}
+              />
+              {errors.firstName && (
+                <p role="alert" className="mt-1 text-xs text-danger-500">
+                  {errors.firstName.message}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="lastName">{tl('auth_lastname')} *</Label>
-              <Input id="lastName" autoComplete="family-name" aria-invalid={!!errors.lastName} {...register('lastName')} />
-              {errors.lastName && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.lastName.message}</p>}
+              <Input
+                id="lastName"
+                autoComplete="family-name"
+                aria-invalid={!!errors.lastName}
+                {...register('lastName')}
+              />
+              {errors.lastName && (
+                <p role="alert" className="mt-1 text-xs text-danger-500">
+                  {errors.lastName.message}
+                </p>
+              )}
             </div>
           </div>
 
           <div>
             <Label htmlFor="email">{tl('auth_email')} *</Label>
-            <Input id="email" type="email" autoComplete="email" placeholder={tl('auth_email_ph')} aria-invalid={!!errors.email} {...register('email')} />
-            {errors.email && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.email.message}</p>}
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              placeholder={tl('auth_email_ph')}
+              aria-invalid={!!errors.email}
+              {...register('email')}
+            />
+            {errors.email && (
+              <p role="alert" className="mt-1 text-xs text-danger-500">
+                {errors.email.message}
+              </p>
+            )}
           </div>
 
           <div>
             <Label htmlFor="password">{tl('auth_password')} *</Label>
-            <Input id="password" type="password" autoComplete="new-password" aria-describedby="password-hint" aria-invalid={!!errors.password} {...register('password')} />
+            <Input
+              id="password"
+              type="password"
+              autoComplete="new-password"
+              aria-describedby="password-hint"
+              aria-invalid={!!errors.password}
+              {...register('password')}
+            />
             <p id="password-hint" className="mt-1 text-xs text-fg-muted">
               {tl('auth_pwd_hint')}
             </p>
-            {errors.password && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.password.message}</p>}
+            {errors.password && (
+              <p role="alert" className="mt-1 text-xs text-danger-500">
+                {errors.password.message}
+              </p>
+            )}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
@@ -102,7 +144,11 @@ function RegisterForm() {
                 aria-invalid={!!errors.dateOfBirth}
                 {...register('dateOfBirth', { valueAsDate: true })}
               />
-              {errors.dateOfBirth && <p role="alert" className="mt-1 text-xs text-danger-500">{errors.dateOfBirth.message}</p>}
+              {errors.dateOfBirth && (
+                <p role="alert" className="mt-1 text-xs text-danger-500">
+                  {errors.dateOfBirth.message}
+                </p>
+              )}
             </div>
             <div>
               <Label htmlFor="gender">{tl('auth_gender')}</Label>
@@ -125,9 +171,7 @@ function RegisterForm() {
             {tl('auth_continue')}
           </Button>
 
-          <p className="text-center text-xs text-fg-muted">
-            {tl('auth_terms')}
-          </p>
+          <p className="text-center text-xs text-fg-muted">{tl('auth_terms')}</p>
 
           <p className="text-center text-sm text-fg-muted">
             {tl('auth_already')}{' '}

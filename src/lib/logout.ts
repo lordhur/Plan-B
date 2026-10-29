@@ -28,5 +28,10 @@ export async function purgeCaches(): Promise<void> {
 export async function hardSignOut(): Promise<void> {
   if (typeof window === 'undefined') return
   await purgeCaches()
+  try {
+    window.localStorage.setItem('planb.auth.hint', '0')
+  } catch {
+    /* ignore */
+  }
   window.location.assign('/login?signedOut=1')
 }

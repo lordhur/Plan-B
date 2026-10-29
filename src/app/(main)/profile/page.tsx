@@ -17,6 +17,7 @@ import { ProfileSocialTab } from '@/components/profile/ProfileSocialTab'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { formatFullDate } from '@/lib/date'
+import { parseSocialLinks } from '@/lib/socialLinks'
 import { useCurrentUser } from '@/lib/session'
 import { trpc } from '@/lib/trpc'
 import { ageFromBirthDate } from '@/lib/utils'
@@ -41,6 +42,22 @@ export default function MyProfilePage() {
 
   const displayName = me.displayName || `${me.firstName} ${me.lastName}`
 
+  // Liens du profil dans l'ordre choisi ; à défaut, reprise des 4 anciens champs.
+  const savedLinks = parseSocialLinks(me.socialLinks)
+  const profileLinks =
+    savedLinks.length > 0
+      ? savedLinks
+      : (
+          [
+            ['instagram', me.instagram],
+            ['tiktok', me.tiktok],
+            ['youtube', me.youtube],
+            ['spotify', me.spotify],
+          ] as const
+        )
+          .filter(([, url]) => Boolean(url))
+          .map(([type, url]) => ({ type, url: url as string }))
+
   // L'anneau de l'avatar n'apparaît que si une story est en ligne (la mienne).
   const hasStory = Boolean(stories?.some((group) => group.isMe && group.items.length > 0))
 
@@ -60,10 +77,7 @@ export default function MyProfilePage() {
           averageRating: me.averageRating,
           totalRatings: me.totalRatings,
           bio: me.bio,
-          instagram: me.instagram,
-          tiktok: me.tiktok,
-          youtube: me.youtube,
-          spotify: me.spotify,
+          links: profileLinks,
         }}
         activeTab={tab}
         onTabChange={setTab}
@@ -72,7 +86,7 @@ export default function MyProfilePage() {
 
       <div className="space-y-6 px-4 pt-6 md:px-2">
         {!me.emailVerified && (
-          <p className="text-warning-700 dark:text-warning-400 rounded-xl border border-warning-500/40 bg-warning-50 px-4 py-3 text-sm font-semibold dark:bg-warning-500/10">
+          <p className="rounded-xl border border-warning-500/40 bg-warning-50 px-4 py-3 text-sm font-semibold text-warning-700 dark:bg-warning-500/10 dark:text-warning-400">
             ⚠️ Email non vérifié —{' '}
             <Link href="/verify" className="underline">
               vérifier maintenant
