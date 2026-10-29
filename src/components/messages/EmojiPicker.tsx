@@ -1,6 +1,6 @@
 'use client'
 
-import { Clock3, Search, X } from 'lucide-react'
+import { Clock3, Search, Sticker, X } from 'lucide-react'
 import * as React from 'react'
 import {
   EMOJI_CATEGORIES,
@@ -13,6 +13,8 @@ import { cn } from '@/lib/utils'
 interface EmojiPickerProps {
   onPick: (emoji: string) => void
   onClose: () => void
+  /** Ouvre le sélecteur de GIF & stickers (lien visible en pied de panneau). */
+  onOpenGifs?: () => void
 }
 
 const RECENT_KEY = 'planb_emoji_recent'
@@ -32,7 +34,7 @@ function loadRecent(): string[] {
  * un menu de catégories VERTICAL sur le côté (demande produit), une recherche
  * par mots-clés français et les derniers émojis utilisés.
  */
-export function EmojiPicker({ onPick, onClose }: EmojiPickerProps) {
+export function EmojiPicker({ onPick, onClose, onOpenGifs }: EmojiPickerProps) {
   const ref = React.useRef<HTMLDivElement>(null)
   const scrollRef = React.useRef<HTMLDivElement>(null)
   const [query, setQuery] = React.useState('')
@@ -215,9 +217,21 @@ export function EmojiPicker({ onPick, onClose }: EmojiPickerProps) {
         </div>
       </div>
 
-      <p className="border-t border-border px-2 py-1.5 text-center text-[10px] font-medium text-fg-muted">
-        {count > 0 ? `${count.toLocaleString('fr-FR')} émojis disponibles` : 'Émojis Unicode'}
-      </p>
+      <div className="flex items-center gap-2 border-t border-border px-2 py-1.5">
+        <span className="text-[10px] font-medium text-fg-muted">
+          {count > 0 ? `${count.toLocaleString('fr-FR')} émojis` : 'Émojis Unicode'}
+        </span>
+        {onOpenGifs && (
+          <button
+            type="button"
+            onClick={onOpenGifs}
+            className="ml-auto inline-flex min-h-8 items-center gap-1 rounded-full border border-primary-300 bg-primary-50 px-2.5 text-[11px] font-extrabold uppercase tracking-wide text-primary-700 hover:bg-primary-100 dark:bg-primary-500/10 dark:text-primary-300"
+          >
+            <Sticker className="h-3.5 w-3.5" aria-hidden />
+            GIF &amp; stickers
+          </button>
+        )}
+      </div>
     </div>
   )
 }
