@@ -796,6 +796,21 @@ nav * {
 }
 
 /* ============================================================
+   Communauté — arrivée du panneau (l'encart violet, lui, glisse
+   dans la barre d'onglets, voir community/page.tsx)
+   ============================================================ */
+@keyframes communityPanelIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.community-panel-in {
+  animation: communityPanelIn 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .community-panel-in { animation: none; }
+}
+
+/* ============================================================
    Survol souris de la navigation — orange du logo Accueil (#EA580C)
    - onglets secondaires : icône + libellé passent en orange
    - bouton Accueil : TOUT le bouton devient orange, l'icône et le
