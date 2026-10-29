@@ -101,7 +101,7 @@ export default function MessagesPage() {
   const myName = user ? user.displayName || `${user.firstName} ${user.lastName}` : 'Moi'
 
   return (
-    <div className="mx-auto max-w-2xl md:space-y-6 md:py-6">
+    <div className="-mt-6 mx-auto max-w-2xl md:mt-0 md:space-y-6 md:py-6">
       {/* En-tête : avatar à anneau dégradé, pseudo, stylo (nouveau message), menu */}
       <header className="flex items-center gap-3 px-4 pb-3 pt-3 md:hidden">
         <span className="shrink-0 rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[2.5px]">
