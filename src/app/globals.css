@@ -19,6 +19,8 @@
     --fg-muted: 100 116 139;
     /* Pastille Accueil : teinte de l'anneau et contour du « B » du wordmark */
     --pill-bg: 255 255 255;
+    /* Teinte très légèrement chaude au survol (jamais d'orange plein) */
+    --pill-bg-warm: 255 249 245;
     --wordmark-outline: #ffffff;
     /* Survol de la navigation : l'orange exact de l'icône Accueil (#EA580C) */
     --nav-hover: 234 88 12;
@@ -32,6 +34,7 @@
     --fg: 241 245 249;
     --fg-muted: 148 163 184;
     --pill-bg: 23 30 51;
+    --pill-bg-warm: 31 26 34;
     --wordmark-outline: #0a0e1c;
     --nav-hover: 234 88 12;
   }
@@ -860,8 +863,9 @@ nav * {
 /* ============================================================
    Survol souris de la navigation — orange du logo Accueil (#EA580C)
    - onglets secondaires : icône + libellé passent en orange
-   - bouton Accueil : TOUT le bouton devient orange, l'icône et le
-     mot « Accueil » passent en blanc
+   - bouton Accueil : les cercles RESTENT clairs ; c'est une AURA orange en
+     dégradé qui se dégage autour du bouton, avec une teinte chaude qui
+     remonte doucement sur les cercles (jamais d'orange plein)
    (uniquement sur les appareils qui ont un vrai curseur : sur mobile
    aucun état ne reste « collé » après un appui)
    ============================================================ */
@@ -872,9 +876,63 @@ nav * {
 .home-pill,
 .home-pill-inner {
   transition:
-    background-color 180ms ease,
-    box-shadow 200ms ease,
+    background-color 220ms ease,
+    box-shadow 260ms ease,
     transform 150ms ease;
+}
+
+/* Dégradé chaud posé SUR les cercles (derrière l'icône et le mot) */
+.home-pill::before,
+.home-pill-inner::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+.home-pill::before {
+  background: radial-gradient(
+    circle at 50% 118%,
+    rgba(249, 115, 22, 0.22) 0%,
+    rgba(249, 115, 22, 0.1) 38%,
+    rgba(253, 186, 116, 0.04) 58%,
+    rgba(253, 186, 116, 0) 72%
+  );
+}
+.home-pill-inner::before {
+  background: radial-gradient(
+    circle at 50% 106%,
+    rgba(249, 115, 22, 0.18) 0%,
+    rgba(251, 146, 60, 0.08) 45%,
+    rgba(251, 146, 60, 0) 70%
+  );
+}
+
+/* L'aura : un halo flou en dégradé, plus grand que le bouton, placé DERRIÈRE */
+.home-aura {
+  position: absolute;
+  left: 50%;
+  bottom: -1.875rem;
+  width: 6.75rem;
+  height: 6.75rem;
+  border-radius: 9999px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.72);
+  filter: blur(3px);
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(249, 115, 22, 0.32) 0%,
+    rgba(249, 115, 22, 0.2) 32%,
+    rgba(251, 146, 60, 0.1) 52%,
+    rgba(251, 146, 60, 0.035) 68%,
+    rgba(251, 146, 60, 0) 78%
+  );
+  transition:
+    opacity 280ms ease,
+    transform 340ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -882,29 +940,31 @@ nav * {
     color: rgb(var(--nav-hover));
   }
 
-  .nav-home:hover .home-pill,
-  .nav-home:hover .home-pill-inner {
-    background-color: rgb(var(--nav-hover));
+  .nav-home:hover .home-aura {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
   }
+  .nav-home:hover .home-pill::before,
+  .nav-home:hover .home-pill-inner::before {
+    opacity: 1;
+  }
+  /* les cercles restent clairs : seule la lumière change */
   .nav-home:hover .home-pill {
+    background-color: var(--pill-bg-warm);
     box-shadow:
-      0 12px 26px -6px rgba(234, 88, 12, 0.5),
-      0 3px 8px rgba(234, 88, 12, 0.32),
-      0 0 0 1px rgb(var(--nav-hover));
+      0 0 0 1px rgba(249, 115, 22, 0.16),
+      0 0 22px 2px rgba(249, 115, 22, 0.28),
+      0 10px 28px -8px rgba(234, 88, 12, 0.42);
   }
-  /* liseré blanc entre les deux cercles, comme sur la maquette */
   .nav-home:hover .home-pill-inner {
+    background-color: rgb(var(--pill-bg));
     box-shadow:
-      0 0 0 2px rgba(255, 255, 255, 0.92),
-      0 1px 3px rgba(124, 45, 18, 0.3);
+      0 0 0 1px rgba(249, 115, 22, 0.12),
+      0 1px 3px rgba(15, 23, 42, 0.14);
   }
-  .nav-home:hover .nav-home-glyph {
-    color: #ffffff;
-  }
-  /* le mot garde sa graisse, seul le contraste change */
-  .nav-home:hover .home-pill-inner .nav-home-glyph,
-  .nav-home:focus-visible .home-pill-inner .nav-home-glyph {
-    text-shadow: 0 1px 1px rgba(124, 45, 18, 0.45);
+  /* le texte redevient foncé (lisible sur cercle clair), l'icône s'intensifie */
+  .nav-home:hover .home-pill-inner .nav-home-glyph:first-of-type {
+    color: rgb(var(--nav-hover));
   }
 }
 
@@ -912,12 +972,19 @@ nav * {
 .nav-tab:focus-visible .nav-tab-glyph {
   color: rgb(var(--nav-hover));
 }
-.nav-home:focus-visible .home-pill,
-.nav-home:focus-visible .home-pill-inner {
-  background-color: rgb(var(--nav-hover));
+.nav-home:focus-visible .home-aura {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
 }
-.nav-home:focus-visible .nav-home-glyph {
-  color: #ffffff;
+.nav-home:focus-visible .home-pill::before,
+.nav-home:focus-visible .home-pill-inner::before {
+  opacity: 1;
+}
+.nav-home:focus-visible .home-pill {
+  box-shadow:
+    0 0 0 1px rgba(249, 115, 22, 0.16),
+    0 0 22px 2px rgba(249, 115, 22, 0.28),
+    0 10px 28px -8px rgba(234, 88, 12, 0.42);
 }
 
 /* ============================================================
@@ -948,6 +1015,10 @@ nav * {
   .animate-home-tap,
   .animate-home-ring {
     animation: none;
+  }
+  .home-aura {
+    transform: translateX(-50%) scale(1);
+    transition: none;
   }
 }
 
