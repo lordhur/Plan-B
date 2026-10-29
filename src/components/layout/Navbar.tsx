@@ -131,15 +131,16 @@ function TabLink({ href, label, icon: Icon }: { href: string; label: string; ico
       <Icon
         className={cn(
           'nav-tab-glyph h-[21px] w-[21px] transition-transform duration-200 group-active:scale-90',
-          active ? 'text-fg' : 'text-fg/85',
+          // la couleur de l'onglet actif vient du CSS (.nav-tab[aria-current])
+          !active && 'text-fg/85',
         )}
         strokeWidth={active ? 2.1 : 1.9}
         aria-hidden
       />
       <span
         className={cn(
-          'nav-tab-glyph max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
-          active ? 'font-bold text-fg' : 'font-medium text-fg/85',
+          'nav-tab-glyph nav-tab-label max-w-full truncate text-[10px] leading-none tracking-tight sm:text-[11px]',
+          active ? 'font-bold' : 'font-medium text-fg/85',
         )}
       >
         {label}
@@ -194,13 +195,13 @@ function HomeTab({ label }: { label: string }) {
           <HouseIcon
             className={cn(
               'nav-home-glyph h-[21px] w-[21px] transition-colors duration-200',
-              active ? 'text-accent-600' : 'text-fg/70',
+              !active && 'text-fg/70',
             )}
           />
           <span
             className={cn(
-              'nav-home-glyph max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
-              active ? 'font-bold text-fg' : 'font-medium text-fg/85',
+              'nav-home-glyph nav-home-label max-w-full truncate px-1 text-[10px] leading-none tracking-tight sm:text-[11px]',
+              active ? 'font-bold' : 'font-medium text-fg/85',
             )}
           >
             {label}
