@@ -41,6 +41,7 @@ import {
 } from './CallOverlay'
 import { uploadToStorage } from '@/lib/supabaseUpload'
 import { useLang } from '@/lib/i18n'
+import { gifSrc } from '@/lib/gifs'
 import { detectLang, useTranslation } from '@/lib/translate'
 import { trpc } from '@/lib/trpc'
 import { useCurrentUser } from '@/lib/session'
@@ -210,7 +211,7 @@ function AttachmentView({
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={url}
+        src={gifSrc(url)}
         alt={name ?? 'Image'}
         className={cn('max-w-full rounded-lg object-cover', compact ? 'max-h-48' : 'max-h-64')}
       />
