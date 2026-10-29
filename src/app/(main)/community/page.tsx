@@ -24,23 +24,72 @@ function readTab(): CommunityTab {
   return isTab(value) ? value : 'membres'
 }
 
+// `useLayoutEffect` côté client uniquement (aucun avertissement en SSR).
+const useIsoLayoutEffect = typeof window !== 'undefined' ? React.useLayoutEffect : React.useEffect
+
 /**
  * COMMUNAUTÉ — hub à trois grands sous-onglets (demande produit) :
  * « Les membres », « Les groupes », « Les pages ».
  *
- * Chaque sous-onglet réutilise l'annuaire existant (aucune fonction perdue) ;
- * l'onglet actif est reflété dans l'URL (`?tab=`), donc partageable et
- * conservé au rechargement.
+ * L'encart violet n'est pas trois fonds différents : c'est **un seul** bloc
+ * qui glisse du sous-onglet quitté vers celui sur lequel on clique (position et
+ * largeur mesurées sur le bouton réel, donc parfait à toutes les tailles et en
+ * zones sûres). L'onglet actif reste reflété dans l'URL (`?tab=`).
  */
 export default function CommunityPage() {
   const { t } = useLang()
   const [tab, setTab] = React.useState<CommunityTab>('membres')
-  const [ready, setReady] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
+
+  const listRef = React.useRef<HTMLDivElement | null>(null)
+  const btnRefs = React.useRef<Partial<Record<CommunityTab, HTMLButtonElement | null>>>({})
+  // Position de l'encart (px, relative au conteneur des onglets).
+  const [pill, setPill] = React.useState<{ left: number; width: number } | null>(null)
+  // L'animation n'est activée qu'après le premier positionnement, sinon
+  // l'encart « glisserait » depuis la gauche au chargement de la page.
+  const [canAnimate, setCanAnimate] = React.useState(false)
 
   React.useEffect(() => {
     setTab(readTab())
-    setReady(true)
+    setMounted(true)
   }, [])
+
+  // --- mesure de l'encart sur le bouton actif ---
+  const measure = React.useCallback(() => {
+    const el = btnRefs.current[tab]
+    if (!el) return
+    setPill({ left: el.offsetLeft, width: el.offsetWidth })
+  }, [tab])
+
+  useIsoLayoutEffect(() => {
+    measure()
+  }, [measure, mounted])
+
+  // Recalcul au redimensionnement / rotation / chargement des polices.
+  const measureRef = React.useRef(measure)
+  measureRef.current = measure
+
+  React.useEffect(() => {
+    const list = listRef.current
+    if (!list) return
+    const remeasure = () => measureRef.current()
+    const ro = new ResizeObserver(remeasure)
+    ro.observe(list)
+    window.addEventListener('resize', remeasure)
+    window.addEventListener('orientationchange', remeasure)
+    void document.fonts?.ready.then(remeasure).catch(() => {})
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', remeasure)
+      window.removeEventListener('orientationchange', remeasure)
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (!pill || canAnimate) return
+    const id = window.requestAnimationFrame(() => setCanAnimate(true))
+    return () => window.cancelAnimationFrame(id)
+  }, [pill, canAnimate])
 
   const select = (next: CommunityTab) => {
     setTab(next)
@@ -51,6 +100,16 @@ export default function CommunityPage() {
     } catch {
       /* historique indisponible : l'onglet reste actif malgré tout */
     }
+  }
+
+  // Navigation clavier dans la liste d'onglets (flèches ← →).
+  const onKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'ArrowRight' && event.key !== 'ArrowLeft') return
+    event.preventDefault()
+    const index = TAB_IDS.indexOf(tab)
+    const next = TAB_IDS[(index + (event.key === 'ArrowRight' ? 1 : TAB_IDS.length - 1)) % TAB_IDS.length]!
+    select(next)
+    btnRefs.current[next]?.focus()
   }
 
   const TABS = [
@@ -66,28 +125,47 @@ export default function CommunityPage() {
         <p className="text-sm text-fg-muted">{t('community_subtitle')}</p>
       </header>
 
-      {/* Trois grands sous-onglets */}
+      {/* Trois grands sous-onglets — encart violet coulissant */}
       <div
+        ref={listRef}
         role="tablist"
         aria-label={t('community_title')}
-        className="grid grid-cols-3 gap-2 rounded-2xl border border-border bg-card p-1.5"
+        onKeyDown={onKeyDown}
+        className="relative grid grid-cols-3 gap-2 rounded-2xl border border-border bg-card p-1.5"
       >
+        {/* L'encart : un seul bloc, qui glisse latéralement */}
+        {pill && (
+          <span
+            aria-hidden
+            className={cn(
+              'pointer-events-none absolute inset-y-1.5 left-0 rounded-xl bg-primary-600 shadow-md shadow-primary-600/30 will-change-transform',
+              canAnimate && 'transition-[transform,width] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]',
+            )}
+            style={{ width: pill.width, transform: `translateX(${pill.left}px)` }}
+          />
+        )}
+
         {TABS.map(({ id, label, icon: Icon }) => {
           const active = tab === id
           return (
             <button
               key={id}
+              ref={(node) => {
+                btnRefs.current[id] = node
+              }}
               type="button"
               role="tab"
               id={`community-tab-${id}`}
               aria-selected={active}
               aria-controls={`community-panel-${id}`}
+              tabIndex={active ? 0 : -1}
               onClick={() => select(id)}
               className={cn(
-                'flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[12px] font-bold transition-all duration-200 sm:text-sm',
-                active
-                  ? 'bg-primary-600 text-white shadow-md shadow-primary-600/25'
-                  : 'text-fg-muted hover:bg-bg-secondary hover:text-fg',
+                'relative z-10 flex min-h-[3.25rem] flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[12px] font-bold transition-colors duration-200 sm:text-sm',
+                active ? 'text-white' : 'text-fg-muted hover:bg-bg-secondary hover:text-fg',
+                // Avant la mesure (rendu serveur), l'onglet actif porte lui-même
+                // le violet : aucun clignotement au chargement.
+                active && !pill && 'bg-primary-600 shadow-md shadow-primary-600/25',
               )}
             >
               <Icon className="h-5 w-5" aria-hidden />
@@ -105,11 +183,12 @@ export default function CommunityPage() {
         role="tabpanel"
         id={`community-panel-${tab}`}
         aria-labelledby={`community-tab-${tab}`}
-        className="min-w-0"
+        key={tab}
+        className="community-panel-in min-w-0"
       >
-        {ready && tab === 'membres' && <MembersPanel embedded />}
-        {ready && tab === 'groupes' && <GroupsDirectory embedded />}
-        {ready && tab === 'pages' && <PagesDirectory embedded />}
+        {mounted && tab === 'membres' && <MembersPanel embedded />}
+        {mounted && tab === 'groupes' && <GroupsDirectory embedded />}
+        {mounted && tab === 'pages' && <PagesDirectory embedded />}
       </div>
     </div>
   )
