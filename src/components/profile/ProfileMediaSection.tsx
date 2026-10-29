@@ -1,6 +1,15 @@
 'use client'
 
-import { ChevronLeft, ChevronRight, Film, GripVertical, ImagePlus, Star, Trash2, Upload } from 'lucide-react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Film,
+  GripVertical,
+  ImagePlus,
+  Star,
+  Trash2,
+  Upload,
+} from 'lucide-react'
 import * as React from 'react'
 import { trpc } from '@/lib/trpc'
 import { toast } from '@/components/ui/toast'
@@ -12,7 +21,7 @@ import { EVENT_CATEGORIES } from '@/lib/constants'
 import { CategoryIcon } from '@/components/common/CategoryIcon'
 
 /** Photos, vidéo de présentation et catégories favorites du profil. */
-export function ProfileMediaSection() {
+export function ProfileMediaSection({ showFavorites = true }: { showFavorites?: boolean } = {}) {
   const utils = trpc.useUtils()
   const { data: me } = trpc.auth.me.useQuery()
   const photos = trpc.users.myPhotos.useQuery()
@@ -198,7 +207,13 @@ export function ProfileMediaSection() {
                 )}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={p.url} alt="" loading="lazy" draggable={false} className="h-full w-full object-cover" />
+                <img
+                  src={p.url}
+                  alt=""
+                  loading="lazy"
+                  draggable={false}
+                  className="h-full w-full object-cover"
+                />
                 {p.isPrimary ? (
                   <span
                     className="absolute left-1 top-1 rounded-full bg-primary-600 p-1 text-white"
@@ -219,7 +234,7 @@ export function ProfileMediaSection() {
                     1re
                   </span>
                 )}
-                <span className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-black/60 p-1 opacity-100 transition-opacity md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100">
+                <span className="absolute inset-x-0 bottom-0 flex justify-center gap-1 bg-black/60 p-1 opacity-100 transition-opacity md:opacity-0 md:group-focus-within:opacity-100 md:group-hover:opacity-100">
                   <button
                     type="button"
                     onClick={() => movePhoto(p.id, -1)}
@@ -305,7 +320,11 @@ export function ProfileMediaSection() {
               </Button>
             </div>
           ) : (
-            <Button variant="outline" onClick={() => videoInput.current?.click()} disabled={uploading}>
+            <Button
+              variant="outline"
+              onClick={() => videoInput.current?.click()}
+              disabled={uploading}
+            >
               <Upload className="h-4 w-4" aria-hidden />
               {uploading ? 'Envoi en cours…' : 'Choisir une vidéo'}
             </Button>
@@ -314,39 +333,41 @@ export function ProfileMediaSection() {
       </Card>
 
       {/* ---------- Catégories favorites ---------- */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Mes catégories favorites</CardTitle>
-          <CardDescription>
-            Les activités que vous aimez — elles boostent les plans suggérés dans votre fil.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-wrap gap-2">
-            {EVENT_CATEGORIES.map((cat) => {
-              const active = favSlugs.includes(cat.slug)
-              return (
-                <button
-                  key={cat.slug}
-                  type="button"
-                  aria-pressed={active}
-                  onClick={() => toggleFav(cat.slug)}
-                  className={cn(
-                    'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
-                    active
-                      ? 'border-transparent text-white'
-                      : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
-                  )}
-                  style={active ? { backgroundColor: cat.color } : undefined}
-                >
-                  <CategoryIcon name={cat.icon} className="h-3.5 w-3.5" />
-                  {cat.name}
-                </button>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
+      {showFavorites && (
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-base">Mes catégories favorites</CardTitle>
+            <CardDescription>
+              Les activités que vous aimez — elles boostent les plans suggérés dans votre fil.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-wrap gap-2">
+              {EVENT_CATEGORIES.map((cat) => {
+                const active = favSlugs.includes(cat.slug)
+                return (
+                  <button
+                    key={cat.slug}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => toggleFav(cat.slug)}
+                    className={cn(
+                      'inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold transition-colors',
+                      active
+                        ? 'border-transparent text-white'
+                        : 'border-border bg-card text-fg-muted hover:border-primary-300 hover:text-fg',
+                    )}
+                    style={active ? { backgroundColor: cat.color } : undefined}
+                  >
+                    <CategoryIcon name={cat.icon} className="h-3.5 w-3.5" />
+                    {cat.name}
+                  </button>
+                )
+              })}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }

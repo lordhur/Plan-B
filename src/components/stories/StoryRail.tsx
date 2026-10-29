@@ -70,7 +70,7 @@ export function StoryRail() {
         aria-label={t('story_add')}
       >
         <span className="relative">
-          <span className="block rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[2.5px]">
+          <span className="story-ring block rounded-full p-[2.5px]">
             <Avatar
               src={user?.avatarUrl ?? null}
               name={user?.displayName || user?.firstName || 'Moi'}
@@ -96,7 +96,7 @@ export function StoryRail() {
             className="relative flex w-[4.5rem] shrink-0 flex-col items-center gap-1.5"
             aria-label={`Voir les ${g.items.length} story${g.items.length > 1 ? 's' : ''} de ${name}`}
           >
-            <span className="rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[2.5px]">
+            <span className="story-ring rounded-full p-[2.5px]">
               <Avatar
                 src={g.author.avatarUrl}
                 name={name}

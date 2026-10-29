@@ -21,6 +21,8 @@ function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const next = searchParams.get('next') ?? '/'
+  const signedOut = searchParams.get('signedOut') === '1'
+  const oauthUnavailable = searchParams.get('oauth') === 'unavailable'
   const utils = trpc.useUtils()
 
   const {
@@ -29,9 +31,15 @@ function LoginForm() {
     formState: { errors },
   } = useForm<LoginInput>({ resolver: zodResolver(loginSchema) })
 
+  useEffect(() => {
+    if (signedOut) toast.success('Vous êtes déconnecté 👋', 'À bientôt sur Plan B')
+  }, [signedOut])
+
   const login = trpc.auth.login.useMutation({
     onSuccess: async (res) => {
-      await utils.auth.me.invalidate()
+      // On recharge toutes les données : aucune chance de réutiliser un cache
+      // « déconnecté » (service worker ou client tRPC).
+      await utils.invalidate()
       toast.success('Content de vous revoir ! 👋')
       router.push(res.needsOnboarding ? '/verify' : next)
       router.refresh()
@@ -46,7 +54,28 @@ function LoginForm() {
         <CardDescription>{tl('auth_login_sub')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit((data) => login.mutate(data))} className="space-y-4" noValidate>
+        {oauthUnavailable && (
+          <p
+            role="status"
+            className="text-warning-700 dark:text-warning-400 mb-4 rounded-xl border border-warning-500/40 bg-warning-50 px-3 py-2 text-center text-sm font-medium dark:bg-warning-500/10"
+          >
+            Cette connexion sociale n’est pas encore activée. Utilisez votre email et mot de passe,
+            ou créez un compte en quelques secondes.
+          </p>
+        )}
+        {signedOut && (
+          <p
+            role="status"
+            className="text-success-700 dark:text-success-400 mb-4 rounded-xl border border-success-500/40 bg-success-50 px-3 py-2 text-center text-sm font-semibold dark:bg-success-500/10"
+          >
+            ✅ Vous êtes bien déconnecté.
+          </p>
+        )}
+        <form
+          onSubmit={handleSubmit((data) => login.mutate(data))}
+          className="space-y-4"
+          noValidate
+        >
           <div>
             <Label htmlFor="email">{tl('auth_email')}</Label>
             <Input
@@ -67,7 +96,10 @@ function LoginForm() {
           <div>
             <div className="flex items-center justify-between">
               <Label htmlFor="password">{tl('auth_password')}</Label>
-              <Link href="/forgot-password" className="text-xs font-medium text-primary-600 hover:underline">
+              <Link
+                href="/forgot-password"
+                className="text-xs font-medium text-primary-600 hover:underline"
+              >
                 {tl('auth_forgot')}
               </Link>
             </div>
@@ -86,7 +118,11 @@ function LoginForm() {
           </div>
 
           <Button type="submit" className="w-full" disabled={login.isPending}>
-            {login.isPending ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <LogIn className="h-4 w-4" aria-hidden />}
+            {login.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            ) : (
+              <LogIn className="h-4 w-4" aria-hidden />
+            )}
             {tl('auth_login')}
           </Button>
 
@@ -98,7 +134,8 @@ function LoginForm() {
           </p>
 
           <p className="rounded-lg bg-bg-secondary p-3 text-center text-xs text-fg-muted">
-            🧪 {tl('auth_demo')} : <code className="font-semibold">thomas@planb.app</code> / <code className="font-semibold">planb1234</code>
+            🧪 {tl('auth_demo')} : <code className="font-semibold">thomas@planb.app</code> /{' '}
+            <code className="font-semibold">planb1234</code>
           </p>
         </form>
 

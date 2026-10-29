@@ -1,26 +1,8 @@
 'use client'
 
-import {
-  Bell,
-  Camera,
-  CalendarHeart,
-  CalendarPlus,
-  HelpCircle,
-  LogOut,
-  MessageCircle,
-  Moon,
-  Plus,
-  Settings,
-  Store,
-  Sun,
-  UsersRound,
-} from 'lucide-react'
+import { Bell, Camera, CalendarPlus, Plus, Store, UsersRound } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useRef, useState } from 'react'
-import { useTheme } from 'next-themes'
-
-import { Avatar } from '@/components/ui/avatar'
+import { useEffect, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -87,111 +69,26 @@ export function CreateMenu({ trigger }: { trigger: React.ReactNode }) {
   )
 }
 
-/** Menu du compte — notifications, messages, agenda, thème, réglages, sortie. */
-function AccountMenu({
-  unreadCount,
-  unreadMsgCount,
-}: {
-  unreadCount: number
-  unreadMsgCount: number
-}) {
-  const router = useRouter()
+/** Cloche — accès direct aux notifications (aucun autre menu ici). */
+function BellLink({ unreadCount }: { unreadCount: number }) {
   const { t } = useLang()
-  const { theme, setTheme } = useTheme()
-  const utils = trpc.useUtils()
-  const logout = trpc.auth.logout.useMutation({
-    onSuccess: () => {
-      utils.auth.me.setData(undefined, undefined as never)
-      router.push('/login')
-      router.refresh()
-    },
-  })
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label={t('nav_notifications')}
-          className="relative flex h-10 min-h-0 w-10 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary focus-visible:outline-none sm:h-11 sm:w-11"
-        >
-          <Bell className="h-[23px] w-[23px]" strokeWidth={1.9} aria-hidden />
-          {unreadCount > 0 && (
-            <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger-500 px-1 text-[10px] font-bold text-white">
-              {unreadCount > 9 ? '9+' : unreadCount}
-            </span>
-          )}
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        align="end"
-        alignOffset={-6}
-        sideOffset={8}
-        avoidCollisions={false}
-        className="z-[70] max-h-[min(72vh,32rem)] w-60 overflow-y-auto overscroll-contain"
-      >
-        <DropdownMenuItem asChild>
-          <Link href="/notifications">
-            <Bell className="h-4 w-4" aria-hidden /> {t('nav_notifications')}
-            {unreadCount > 0 && (
-              <span className="ml-auto rounded-full bg-danger-500 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                {unreadCount > 9 ? '9+' : unreadCount}
-              </span>
-            )}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/messages">
-            <MessageCircle className="h-4 w-4" aria-hidden /> {t('nav_messages')}
-            {unreadMsgCount > 0 && (
-              <span className="ml-auto rounded-full bg-primary-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
-                {unreadMsgCount > 9 ? '9+' : unreadMsgCount}
-              </span>
-            )}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          onClick={() =>
-            setTheme(theme === 'dark' ? 'light' : theme === 'light' ? 'system' : 'dark')
-          }
-        >
-          {theme === 'dark' ? (
-            <Moon className="h-4 w-4" aria-hidden />
-          ) : (
-            <Sun className="h-4 w-4" aria-hidden />
-          )}
-          {t('nav_theme')} :{' '}
-          {theme === 'dark'
-            ? t('nav_theme_dark')
-            : theme === 'light'
-              ? t('nav_theme_light')
-              : t('nav_theme_auto')}
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/agenda">
-            <CalendarHeart className="h-4 w-4" aria-hidden /> {t('nav_agenda')}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem asChild>
-          <Link href="/profile/settings">
-            <Settings className="h-4 w-4" aria-hidden /> {t('nav_settings')}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem asChild>
-          <Link href="/contact">
-            <HelpCircle className="h-4 w-4" aria-hidden /> {t('nav_contact')}
-          </Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => logout.mutate()}
-          className="text-danger-500 focus:text-danger-600"
-        >
-          <LogOut className="h-4 w-4" aria-hidden /> {t('nav_logout')}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Link
+      href="/notifications"
+      aria-label={
+        unreadCount > 0
+          ? `${t('nav_notifications')} (${unreadCount} non lues)`
+          : t('nav_notifications')
+      }
+      className="relative flex h-10 min-h-0 w-10 items-center justify-center rounded-full text-fg transition-colors hover:bg-bg-secondary hover:text-accent-600 focus-visible:outline-none sm:h-11 sm:w-11"
+    >
+      <Bell className="h-[23px] w-[23px]" strokeWidth={1.9} aria-hidden />
+      {unreadCount > 0 && (
+        <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-danger-500 px-1 text-[10px] font-bold text-white">
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
+    </Link>
   )
 }
 
@@ -279,10 +176,7 @@ export function Navbar() {
             {isLoading ? (
               <div className="h-9 w-9 animate-pulse-soft rounded-full bg-border" aria-hidden />
             ) : isAuthenticated ? (
-              <AccountMenu
-                unreadCount={unread?.count ?? 0}
-                unreadMsgCount={unreadMessages?.count ?? 0}
-              />
+              <BellLink unreadCount={unread?.count ?? 0} />
             ) : (
               <Button asChild size="sm" className="h-9 rounded-full px-3 text-xs">
                 <Link href="/login">{t('nav_login')}</Link>

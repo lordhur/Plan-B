@@ -17,6 +17,7 @@ import {
   verifyPassword,
 } from '../auth'
 import { prisma } from '../db'
+import { isProviderConfigured } from '@/lib/oauth'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 /** En dev sans service email, on renvoie le code à l'UI pour la démo. */
@@ -161,6 +162,13 @@ export const authRouter = createTRPCRouter({
   }),
 
   /** Déconnexion. */
+  /** Quels fournisseurs sociaux sont réellement configurés (boutons affichés). */
+  providers: publicProcedure.query(() => ({
+    google: isProviderConfigured('google'),
+    facebook: isProviderConfigured('facebook'),
+    instagram: isProviderConfigured('instagram'),
+  })),
+
   logout: publicProcedure.mutation(async () => {
     await clearSessionCookie()
     return { ok: true }

@@ -120,6 +120,28 @@ export const groupsRouter = createTRPCRouter({
   }),
 
   /** Créer un groupe (compte vérifié). Le créateur devient ADMIN. */
+  /** Groupes dont je suis membre (profil → Social). */
+  mine: protectedProcedure.query(async ({ ctx }) => {
+    const memberships = await prisma.groupMember.findMany({
+      where: { userId: ctx.user.id },
+      include: {
+        group: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+            category: true,
+            coverImage: true,
+            memberCount: true,
+            city: true,
+          },
+        },
+      },
+      orderBy: { joinedAt: 'desc' },
+    })
+    return memberships.map((m) => ({ role: m.role, joinedAt: m.joinedAt, group: m.group }))
+  }),
+
   create: verifiedProcedure
     .input(
       z.object({

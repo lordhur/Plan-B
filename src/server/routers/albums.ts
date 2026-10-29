@@ -122,6 +122,61 @@ export const albumsRouter = createTRPCRouter({
       return { ok: true as const }
     }),
 
+  /**
+   * MES SOUVENIRS — uniquement les photos et vidéos liées aux événements :
+   *  - postées dans un événement auquel j'ai participé (ou que j'organise) ;
+   *  - ou sur lesquelles je suis identifié (par moi ou par quelqu'un d'autre).
+   */
+  memories: protectedProcedure.query(async ({ ctx }) => {
+    const media = await prisma.media.findMany({
+      where: {
+        OR: [
+          { identifications: { some: { userId: ctx.user.id } } },
+          { uploaderId: ctx.user.id },
+          {
+            album: {
+              event: {
+                OR: [
+                  { organizerId: ctx.user.id },
+                  {
+                    participations: {
+                      some: {
+                        userId: ctx.user.id,
+                        status: { in: ['CONFIRMED', 'ATTENDED', 'PENDING'] },
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          },
+        ],
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 90,
+      select: {
+        id: true,
+        url: true,
+        thumbnailUrl: true,
+        type: true,
+        caption: true,
+        createdAt: true,
+        album: {
+          select: {
+            id: true,
+            event: { select: { id: true, slug: true, title: true, city: true, startDate: true } },
+          },
+        },
+        identifications: {
+          where: { userId: ctx.user.id },
+          select: { id: true, confirmed: true },
+        },
+        uploader: { select: { id: true, firstName: true, lastName: true } },
+      },
+    })
+    return media
+  }),
+
   /** Dernières photos/vidéos publiées sur les événements (fil d'actualité). */
   recent: publicProcedure
     .input(z.object({ limit: z.number().int().min(1).max(30).default(18) }).nullish())

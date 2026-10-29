@@ -30,9 +30,7 @@ export function SavedStoriesSection() {
         <h3 className="flex items-center gap-1.5 text-sm font-bold text-fg-muted">
           <Bookmark className="h-3.5 w-3.5" aria-hidden /> {t('saved_title')}
         </h3>
-        <p className="mt-1 text-xs text-fg-muted">
-          {t('saved_empty')}
-        </p>
+        <p className="mt-1 text-xs text-fg-muted">{t('saved_empty')}</p>
       </section>
     )
   }
@@ -66,7 +64,12 @@ export function SavedStoriesSection() {
                 </span>
               ) : (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={r.story.mediaUrl} alt="" loading="lazy" className="h-full w-full object-cover" />
+                <img
+                  src={r.story.mediaUrl}
+                  alt=""
+                  loading="lazy"
+                  className="h-full w-full object-cover"
+                />
               )}
               <span className="absolute inset-x-0 bottom-0 bg-black/60 px-1 py-0.5 text-[9px] font-semibold text-white">
                 {r.story.author.firstName}

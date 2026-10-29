@@ -1,23 +1,19 @@
 'use client'
 
-import {
-  CalendarDays,
-  History,
-  Image as ImageIcon,
-  Menu,
-  Pencil,
-  Plus,
-  Star,
-  Users,
-} from 'lucide-react'
+import { CalendarDays, History, Images, Link2, Plus, Star, Users } from 'lucide-react'
 import Link from 'next/link'
 import * as React from 'react'
 
 import { Avatar } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 
-/** Icônes de marque (tracés officiels, jamais le nom en texte). */
-function InstagramGlyph({ className }: { className?: string }) {
+import { AccountMenu } from '@/components/layout/AccountMenu'
+
+/* ============================================================
+   Icônes de marque (tracés officiels, jamais le nom en texte)
+   ============================================================ */
+
+export function InstagramGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
       <path
@@ -28,7 +24,7 @@ function InstagramGlyph({ className }: { className?: string }) {
   )
 }
 
-function TikTokGlyph({ className }: { className?: string }) {
+export function TikTokGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
       <path
@@ -39,7 +35,7 @@ function TikTokGlyph({ className }: { className?: string }) {
   )
 }
 
-function YoutubeGlyph({ className }: { className?: string }) {
+export function YoutubeGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
       <path
@@ -50,7 +46,7 @@ function YoutubeGlyph({ className }: { className?: string }) {
   )
 }
 
-function SpotifyGlyph({ className }: { className?: string }) {
+export function SpotifyGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-hidden focusable="false">
       <path
@@ -61,17 +57,34 @@ function SpotifyGlyph({ className }: { className?: string }) {
   )
 }
 
-type Social = {
-  key: 'instagram' | 'tiktok' | 'youtube' | 'spotify'
-  label: string
-  value: string | null
-  href: string
-  glyph: (p: { className?: string }) => React.JSX.Element
-  className: string
+/** Reconnaît un réseau à partir d'une URL ou d'un pseudo. */
+export type SocialKey = 'instagram' | 'tiktok' | 'youtube' | 'spotify'
+
+const BRANDS: Record<
+  SocialKey,
+  { label: string; glyph: (p: { className?: string }) => React.JSX.Element; className: string }
+> = {
+  instagram: {
+    label: 'Instagram',
+    glyph: InstagramGlyph,
+    className: 'bg-[linear-gradient(45deg,#f9ce34,#ee2a7b_45%,#6228d7)] text-white',
+  },
+  tiktok: { label: 'TikTok', glyph: TikTokGlyph, className: 'bg-[#010101] text-white' },
+  youtube: { label: 'YouTube', glyph: YoutubeGlyph, className: 'bg-[#ff0000] text-white' },
+  spotify: { label: 'Spotify', glyph: SpotifyGlyph, className: 'bg-[#1db954] text-black' },
+}
+
+export function detectBrand(url: string): SocialKey | null {
+  const value = url.toLowerCase()
+  if (value.includes('instagram.com')) return 'instagram'
+  if (value.includes('tiktok.com')) return 'tiktok'
+  if (value.includes('youtube.com') || value.includes('youtu.be')) return 'youtube'
+  if (value.includes('spotify.com')) return 'spotify'
+  return null
 }
 
 /** Transforme un pseudo (ou une URL) en lien ouvrable. */
-function socialHref(key: Social['key'], raw: string): string {
+export function socialHref(key: SocialKey, raw: string): string {
   const value = raw.trim()
   if (/^https?:\/\//i.test(value)) return value
   const handle = value.replace(/^@/, '').replace(/\s+/g, '')
@@ -87,81 +100,111 @@ function socialHref(key: Social['key'], raw: string): string {
   }
 }
 
-export type ProfileTab = 'photos' | 'events' | 'memories' | 'social'
+const URL_RE =
+  /((?:https?:\/\/|www\.)[^\s<>"']+|(?:[a-z0-9-]+\.)+(?:fr|com|net|org|io|co|app|be|ch|me)(?:\/[^\s<>"']*)?)/gi
 
-export interface ProfileHeaderUser {
-  displayName: string | null
-  firstName: string
-  lastName: string
-  showLastName: boolean
-  coverImage: string | null
-  avatarUrl: string | null
-  friendCount: number
-  averageRating: number
-  totalRatings: number
-  bio: string | null
-  instagram: string | null
-  tiktok: string | null
-  youtube: string | null
-  spotify: string | null
+/** Extrait les liens présents dans une description. */
+export function extractLinks(text: string | null): string[] {
+  if (!text) return []
+  const found = text.match(URL_RE) ?? []
+  return Array.from(new Set(found.map((u) => (u.startsWith('http') ? u : `https://${u}`))))
 }
 
-/** Les quatre réseaux du profil (icônes de marque, lien externe si renseigné). */
+/** Description avec liens cliquables (réseaux reconnus = pastille de marque). */
+function RichBio({ text }: { text: string }) {
+  const parts = text.split(URL_RE)
+  return (
+    <p className="whitespace-pre-line text-[15px] leading-snug text-fg">
+      {parts.map((part, index) => {
+        if (!part) return null
+        if (!URL_RE.test(part)) return <React.Fragment key={index}>{part}</React.Fragment>
+        URL_RE.lastIndex = 0
+        const href = part.startsWith('http') ? part : `https://${part}`
+        const brand = detectBrand(href)
+        if (brand) {
+          const { label, glyph: Glyph } = BRANDS[brand]
+          return (
+            <a
+              key={index}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer me"
+              className="mx-0.5 inline-flex items-center gap-1 rounded-md bg-bg-secondary px-1.5 py-0.5 align-baseline font-semibold text-fg hover:text-accent-600"
+            >
+              <Glyph className="h-3.5 w-3.5" />
+              {label}
+            </a>
+          )
+        }
+        return (
+          <a
+            key={index}
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mx-0.5 inline-flex items-center gap-0.5 align-baseline font-semibold text-accent-600 underline decoration-accent-500/40 underline-offset-2 hover:decoration-accent-500"
+          >
+            <Link2 className="h-3.5 w-3.5" aria-hidden />
+            {part.replace(/^https?:\/\//, '').replace(/\/$/, '')}
+          </a>
+        )
+      })}
+    </p>
+  )
+}
+
+/* ============================================================
+   Réseaux : pastilles sous la description
+   ============================================================ */
+
 export function SocialLinks({
   instagram,
   tiktok,
   youtube,
   spotify,
+  bio,
   editable = true,
 }: {
   instagram: string | null
   tiktok: string | null
   youtube: string | null
   spotify: string | null
+  bio?: string | null
   editable?: boolean
 }) {
-  const socials: Social[] = [
-    {
-      key: 'instagram',
-      label: 'Instagram',
-      value: instagram,
-      href: socialHref('instagram', instagram ?? ''),
-      glyph: InstagramGlyph,
-      className: 'bg-[linear-gradient(45deg,#f9ce34,#ee2a7b_45%,#6228d7)] text-white',
-    },
-    {
-      key: 'tiktok',
-      label: 'TikTok',
-      value: tiktok,
-      href: socialHref('tiktok', tiktok ?? ''),
-      glyph: TikTokGlyph,
-      className: 'bg-[#010101] text-white',
-    },
-    {
-      key: 'youtube',
-      label: 'YouTube',
-      value: youtube,
-      href: socialHref('youtube', youtube ?? ''),
-      glyph: YoutubeGlyph,
-      className: 'bg-[#ff0000] text-white',
-    },
-    {
-      key: 'spotify',
-      label: 'Spotify',
-      value: spotify,
-      href: socialHref('spotify', spotify ?? ''),
-      glyph: SpotifyGlyph,
-      className: 'bg-[#1db954] text-black',
-    },
-  ]
+  const values: Record<SocialKey, string | null> = { instagram, tiktok, youtube, spotify }
 
-  const shown = editable ? socials : socials.filter((s) => s.value)
-  if (shown.length === 0) return null
+  // Liens trouvés dans la description (en plus des 4 réseaux déclarés)
+  const fromBio = extractLinks(bio ?? null)
+  const extra = fromBio.filter((url) => {
+    const brand = detectBrand(url)
+    return brand ? !values[brand] : true
+  })
+
+  const items = (Object.keys(BRANDS) as SocialKey[]).map((key) => {
+    const value = values[key]
+    const bioLink = fromBio.find((url) => detectBrand(url) === key)
+    const href = value ? socialHref(key, value) : (bioLink ?? '')
+    return { key, href, active: Boolean(href), ...BRANDS[key] }
+  })
+
+  const others = extra
+    .filter((url) => !detectBrand(url))
+    .map((url) => ({
+      key: url,
+      href: url,
+      active: true,
+      label: new URL(url).hostname.replace(/^www\./, ''),
+      glyph: Link2,
+      className: 'border border-border bg-card text-fg-muted',
+    }))
+
+  const shown = editable ? items : items.filter((i) => i.active)
+  if (shown.length === 0 && others.length === 0) return null
 
   return (
-    <ul className="mt-4 flex items-center gap-3 px-4 md:px-2" aria-label="Réseaux sociaux">
-      {shown.map(({ key, label, value, href, glyph: Glyph, className }) => {
-        const active = Boolean(value)
+    <ul className="flex flex-wrap items-center gap-3" aria-label="Liens et réseaux sociaux">
+      {shown.map(({ key, href, active, label, glyph: Glyph, className }) => {
         const inner = (
           <span
             className={cn(
@@ -199,28 +242,69 @@ export function SocialLinks({
           </li>
         )
       })}
+      {others.map(({ key, href, label }) => (
+        <li key={key}>
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${label} (nouvel onglet)`}
+            className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-semibold transition-transform hover:scale-105"
+          >
+            <Link2 className="h-4 w-4" aria-hidden />
+            <span className="max-w-24 truncate">{label}</span>
+          </a>
+        </li>
+      ))}
     </ul>
   )
 }
 
-/**
- * EN-TÊTE DE PROFIL — photo de couverture plein écran importable, avatar à
- * anneau dégradé qui chevauche la couverture (badge « + »), pseudo, amis,
- * note, bio, quatre réseaux et quatre tuiles de contenu.
- */
+/* ============================================================
+   En-tête de profil
+   ============================================================ */
+
+export type ProfileTab = 'media' | 'events' | 'memories' | 'social'
+
+export interface ProfileHeaderUser {
+  displayName: string | null
+  firstName: string
+  lastName: string
+  showLastName: boolean
+  coverImage: string | null
+  avatarUrl: string | null
+  friendCount: number
+  /** Participations à des plans (plans rejoints). */
+  eventsAttended: number
+  /** Plans organisés. */
+  eventsCreated: number
+  averageRating: number
+  totalRatings: number
+  bio: string | null
+  instagram: string | null
+  tiktok: string | null
+  youtube: string | null
+  spotify: string | null
+}
+
 export function ProfileHeader({
   user,
   activeTab,
   onTabChange,
+  hasStory,
+  unreadCount,
 }: {
   user: ProfileHeaderUser
   activeTab: ProfileTab
   onTabChange: (tab: ProfileTab) => void
+  /** Une story est-elle disponible ? Sinon, l'avatar n'a pas d'anneau. */
+  hasStory: boolean
+  unreadCount?: number
 }) {
   const name = user.displayName || `${user.firstName} ${user.lastName}`
 
-  const tiles: { key: ProfileTab; label: string; icon: typeof ImageIcon }[] = [
-    { key: 'photos', label: 'Photos', icon: ImageIcon },
+  const tiles: { key: ProfileTab; label: string; icon: typeof Images }[] = [
+    { key: 'media', label: 'Média', icon: Images },
     { key: 'events', label: 'Evenements', icon: CalendarDays },
     { key: 'memories', label: 'Souvenirs', icon: History },
     { key: 'social', label: 'Social', icon: Users },
@@ -246,32 +330,62 @@ export function ProfileHeader({
             </div>
           )}
 
-          {/* Stylo + menu, posés sur la couverture */}
-          <div className="absolute right-3 top-3 flex items-center gap-1">
+          {/* Menu « trois tirets » + réglages, posés sur la couverture */}
+          <div className="absolute right-2 top-2 flex items-center gap-1">
             <Link
               href="/profile/edit"
               aria-label="Modifier le profil"
               className="flex h-11 w-11 items-center justify-center rounded-full text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:bg-black/20"
             >
-              <Pencil className="h-6 w-6" strokeWidth={1.9} aria-hidden />
+              <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden focusable="false">
+                <path
+                  d="M12 20h9M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.9"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
             </Link>
-            <Link
-              href="/profile/settings"
-              aria-label="Paramètres du profil"
-              className="flex h-11 w-11 items-center justify-center rounded-full text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:bg-black/20"
-            >
-              <Menu className="h-6 w-6" strokeWidth={2.2} aria-hidden />
-            </Link>
+            <AccountMenu
+              unreadCount={unreadCount}
+              trigger={
+                <button
+                  type="button"
+                  aria-label="Menu du compte"
+                  className="flex h-11 w-11 items-center justify-center rounded-full text-white/95 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)] transition-colors hover:bg-black/20"
+                >
+                  <svg viewBox="0 0 24 24" className="h-6 w-6" aria-hidden focusable="false">
+                    <path
+                      d="M4 7h16M4 12h16M4 17h16"
+                      stroke="currentColor"
+                      strokeWidth="2.2"
+                      strokeLinecap="round"
+                      fill="none"
+                    />
+                  </svg>
+                </button>
+              }
+            />
           </div>
         </div>
 
-        {/* 2. Avatar à anneau dégradé, chevauchant la couverture */}
+        {/* 2. Avatar — anneau dégradé UNIQUEMENT si une story est disponible */}
         <div className="flex items-center gap-4 px-4 pt-0 md:px-2">
-          <span className="relative -mt-[54px] shrink-0 rounded-full bg-gradient-to-tr from-accent-500 via-danger-500 to-secondary-600 p-[3px] shadow-lg md:-mt-[58px]">
+          <span
+            className={cn(
+              'relative -mt-[54px] shrink-0 rounded-full p-[3px] shadow-lg md:-mt-[58px]',
+              hasStory ? 'story-ring' : 'story-ring-muted',
+            )}
+          >
             <Avatar
               src={user.avatarUrl}
               name={name}
-              className="h-[86px] w-[86px] border-[3px] border-bg md:h-[96px] md:w-[96px]"
+              className={cn(
+                'h-[86px] w-[86px] md:h-[96px] md:w-[96px]',
+                hasStory ? 'border-[3px] border-bg' : 'ring-[3px] ring-border',
+              )}
             />
             <Link
               href="/profile/edit"
@@ -286,37 +400,54 @@ export function ProfileHeader({
             <h1 className="truncate text-[1.6rem] font-extrabold leading-tight tracking-tight md:text-3xl">
               {name}
             </h1>
-            <div className="mt-1.5 flex items-center gap-3 text-[15px]">
-              <Link href="/friends" className="flex items-center gap-1.5 hover:underline">
-                <Users className="h-5 w-5 text-fg" strokeWidth={1.9} aria-hidden />
-                <span className="font-bold">{user.friendCount}</span>
-                <span className="text-fg-muted">Amis</span>
-              </Link>
-              <span aria-hidden className="h-6 w-px bg-border" />
-              <span className="flex items-center gap-1.5" title={`${user.totalRatings} avis`}>
-                <Star className="h-5 w-5 fill-accent-500 text-accent-500" aria-hidden />
-                <span className="font-bold">{user.averageRating.toFixed(1).replace('.', ',')}</span>
-                <span className="sr-only">étoiles sur 5</span>
-              </span>
-            </div>
+
+            {/* Amis · Participations · Organisés · Note */}
+            <dl className="mt-1.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
+              <div className="flex items-center gap-1">
+                <Users className="h-4 w-4" strokeWidth={1.9} aria-hidden />
+                <dd className="font-bold">{user.friendCount}</dd>
+                <dt className="text-fg-muted">Amis</dt>
+              </div>
+              <span aria-hidden className="h-5 w-px bg-border" />
+              <div className="flex items-center gap-1">
+                <CalendarDays className="h-4 w-4" strokeWidth={1.9} aria-hidden />
+                <dd className="font-bold">{user.eventsAttended}</dd>
+                <dt className="text-fg-muted">Participations</dt>
+              </div>
+              <span aria-hidden className="h-5 w-px bg-border" />
+              <div className="flex items-center gap-1">
+                <Star className="h-4 w-4 fill-secondary-500 text-secondary-500" aria-hidden />
+                <dd className="font-bold">{user.eventsCreated}</dd>
+                <dt className="text-fg-muted">Organisés</dt>
+              </div>
+              <span aria-hidden className="h-5 w-px bg-border" />
+              <div className="flex items-center gap-1" title={`${user.totalRatings} avis`}>
+                <Star className="h-4 w-4 fill-accent-500 text-accent-500" aria-hidden />
+                <dd className="font-bold">{user.averageRating.toFixed(1).replace('.', ',')}</dd>
+                <dt className="sr-only">note sur 5</dt>
+              </div>
+            </dl>
           </div>
         </div>
       </div>
 
-      {/* 3. Bio */}
+      {/* 3. Description (liens cliquables) */}
       {user.bio && (
-        <p className="mt-3 whitespace-pre-line px-4 text-[15px] leading-snug text-fg md:px-2">
-          {user.bio}
-        </p>
+        <div className="mt-3 px-4 md:px-2">
+          <RichBio text={user.bio} />
+        </div>
       )}
 
-      {/* 4. Réseaux sociaux */}
-      <SocialLinks
-        instagram={user.instagram}
-        tiktok={user.tiktok}
-        youtube={user.youtube}
-        spotify={user.spotify}
-      />
+      {/* 4. Réseaux et liens — logos sous la description */}
+      <div className="mt-4 px-4 md:px-2">
+        <SocialLinks
+          instagram={user.instagram}
+          tiktok={user.tiktok}
+          youtube={user.youtube}
+          spotify={user.spotify}
+          bio={user.bio}
+        />
+      </div>
 
       {/* 5. Tuiles de contenu */}
       <div

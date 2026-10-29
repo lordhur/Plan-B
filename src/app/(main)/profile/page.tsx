@@ -1,6 +1,6 @@
 'use client'
 
-import { Award, CalendarDays, Sparkles, Star, UserPlus, Users } from 'lucide-react'
+import { Award, CalendarDays, Sparkles, Star, Users } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -9,9 +9,11 @@ import { EmptyState } from '@/components/common/EmptyState'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { EventCard } from '@/components/events/EventCard'
 import { AlbumsSection } from '@/components/profile/AlbumsSection'
+import { MemoriesSection } from '@/components/profile/MemoriesSection'
+import { ProfileFavorites } from '@/components/profile/ProfileFavorites'
 import { ProfileHeader, type ProfileTab } from '@/components/profile/ProfileHeader'
 import { ProfileMediaSection } from '@/components/profile/ProfileMediaSection'
-import { SavedStoriesSection } from '@/components/profile/SavedStoriesSection'
+import { ProfileSocialTab } from '@/components/profile/ProfileSocialTab'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { formatFullDate } from '@/lib/date'
@@ -27,7 +29,8 @@ export default function MyProfilePage() {
   const { data: upcoming } = trpc.events.mine.useQuery({ role: 'participating' })
   const { data: past } = trpc.events.mine.useQuery({ role: 'past' })
   const { data: organized } = trpc.events.mine.useQuery({ role: 'organized' })
-  const [tab, setTab] = useState<ProfileTab>('photos')
+  const { data: stories } = trpc.stories.feed.useQuery(undefined, { enabled: isAuthenticated })
+  const [tab, setTab] = useState<ProfileTab>('media')
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) router.replace('/login?next=/profile')
@@ -37,6 +40,9 @@ export default function MyProfilePage() {
   if (!isAuthenticated || !me) return null
 
   const displayName = me.displayName || `${me.firstName} ${me.lastName}`
+
+  // L'anneau de l'avatar n'apparaît que si une story est en ligne (la mienne).
+  const hasStory = Boolean(stories?.some((group) => group.isMe && group.items.length > 0))
 
   return (
     <div className="mx-auto -mt-6 max-w-2xl pb-6 md:mt-0">
@@ -49,6 +55,8 @@ export default function MyProfilePage() {
           coverImage: me.coverImage,
           avatarUrl: me.avatarUrl,
           friendCount: me.friendCount,
+          eventsAttended: me.eventsAttended,
+          eventsCreated: me.eventsCreated,
           averageRating: me.averageRating,
           totalRatings: me.totalRatings,
           bio: me.bio,
@@ -59,6 +67,7 @@ export default function MyProfilePage() {
         }}
         activeTab={tab}
         onTabChange={setTab}
+        hasStory={hasStory}
       />
 
       <div className="space-y-6 px-4 pt-6 md:px-2">
@@ -71,10 +80,10 @@ export default function MyProfilePage() {
           </p>
         )}
 
-        {/* PHOTOS */}
-        {tab === 'photos' && (
-          <section aria-label="Mes photos" className="space-y-6">
-            <ProfileMediaSection />
+        {/* MÉDIA — mes photos, mes albums créés et mes vidéos (rien d'autre) */}
+        {tab === 'media' && (
+          <section aria-label="Mes médias" className="space-y-6">
+            <ProfileMediaSection showFavorites={false} />
             <AlbumsSection userId={me.id} isMe />
           </section>
         )}
@@ -178,45 +187,14 @@ export default function MyProfilePage() {
           </div>
         )}
 
-        {/* SOUVENIRS */}
-        {tab === 'memories' && (
-          <section aria-label="Mes souvenirs" className="space-y-6">
-            <SavedStoriesSection />
-            <AlbumsSection userId={me.id} isMe />
-          </section>
-        )}
+        {/* SOUVENIRS — photos/vidéos des événements + photos où je suis identifié */}
+        {tab === 'memories' && <MemoriesSection />}
 
-        {/* SOCIAL */}
+        {/* SOCIAL — amis, groupes et pages */}
         {tab === 'social' && (
-          <div className="space-y-5">
-            <section aria-labelledby="profile-social-links">
-              <h2
-                id="profile-social-links"
-                className="mb-3 flex items-center gap-2 text-lg font-bold"
-              >
-                <Users className="h-5 w-5 text-primary-600" aria-hidden /> Mon réseau
-              </h2>
-              <ul className="grid gap-2.5 sm:grid-cols-2">
-                {[
-                  { href: '/friends', label: 'Mes amis', hint: `${me.friendCount} amis` },
-                  { href: '/friends/requests', label: 'Demandes d’amis', hint: 'En attente' },
-                  { href: '/community', label: 'Communauté', hint: 'Membres, groupes, pages' },
-                  { href: '/leaderboard', label: 'Classement', hint: 'Les plus actifs' },
-                ].map((item) => (
-                  <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="flex items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm font-semibold transition-colors hover:border-accent-500/60 hover:text-accent-600"
-                    >
-                      <span className="flex items-center gap-2">
-                        <UserPlus className="h-4 w-4" aria-hidden /> {item.label}
-                      </span>
-                      <span className="text-xs font-normal text-fg-muted">{item.hint}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
+          <div className="space-y-7">
+            <ProfileSocialTab />
+            <ProfileFavorites />
 
             <section aria-labelledby="profile-social-about">
               <h2 id="profile-social-about" className="mb-2 text-lg font-bold">

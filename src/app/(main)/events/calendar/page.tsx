@@ -12,7 +12,16 @@ import {
   startOfWeek,
 } from 'date-fns'
 import { fr } from 'date-fns/locale'
-import { Activity, Archive, CalendarDays, Camera, ChevronLeft, ChevronRight, List, MapPin } from 'lucide-react'
+import {
+  Activity,
+  Archive,
+  CalendarDays,
+  Camera,
+  ChevronLeft,
+  ChevronRight,
+  List,
+  MapPin,
+} from 'lucide-react'
 import Link from 'next/link'
 import { useEffect, useMemo, useState } from 'react'
 import { trpc } from '@/lib/trpc'
@@ -52,9 +61,9 @@ interface HourWeather {
 
 /** Prévisions matin (8 h) / après-midi (14 h) / soir (20 h) via Open-Meteo (gratuit, sans clé). */
 function useWeather(lat: number, lon: number) {
-  const [byDate, setByDate] = useState<Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }>>(
-    () => new Map(),
-  )
+  const [byDate, setByDate] = useState<
+    Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }>
+  >(() => new Map())
   const [hourly, setHourly] = useState<Map<string, HourWeather[]>>(() => new Map())
   const [tick, setTick] = useState(0)
 
@@ -72,43 +81,54 @@ function useWeather(lat: number, lon: number) {
 
     fetch(url)
       .then((r) => (r.ok ? r.json() : null))
-      .then((data: { hourly?: { time: string[]; temperature_2m: number[]; weather_code: number[] } } | null) => {
-        if (cancelled || !data?.hourly) return
-        const map = new Map<string, { matin: HourWeather; aprem: HourWeather; soir: HourWeather }>()
-        const h = data.hourly
-        const times = h.time ?? []
-        const temps = h.temperature_2m ?? []
-        const codes = h.weather_code ?? []
-        for (let i = 0; i < times.length; i++) {
-          const t = times[i]
-          const temp = temps[i]
-          const code = codes[i]
-          if (!t || temp == null || code == null) continue
-          const date = t.slice(0, 10)
-          const hour = t.slice(11, 13)
-          const entry = { time: t, temp, code }
-          const day = map.get(date) ?? ({} as { matin?: HourWeather; aprem?: HourWeather; soir?: HourWeather })
-          if (hour === '08') day.matin = entry
-          if (hour === '14') day.aprem = entry
-          if (hour === '20') day.soir = entry
-          if (day.matin && day.aprem && day.soir)
-            map.set(date, day as { matin: HourWeather; aprem: HourWeather; soir: HourWeather })
-        }
-        setByDate(map)
-        // Toutes les heures par date (pour la météo à l'heure exacte d'un plan)
-        const all = new Map<string, HourWeather[]>()
-        for (let i = 0; i < times.length; i++) {
-          const t = times[i]
-          const temp = temps[i]
-          const code = codes[i]
-          if (!t || temp == null || code == null) continue
-          const d = t.slice(0, 10)
-          const arr = all.get(d) ?? []
-          arr.push({ time: t, temp, code })
-          all.set(d, arr)
-        }
-        setHourly(all)
-      })
+      .then(
+        (
+          data: {
+            hourly?: { time: string[]; temperature_2m: number[]; weather_code: number[] }
+          } | null,
+        ) => {
+          if (cancelled || !data?.hourly) return
+          const map = new Map<
+            string,
+            { matin: HourWeather; aprem: HourWeather; soir: HourWeather }
+          >()
+          const h = data.hourly
+          const times = h.time ?? []
+          const temps = h.temperature_2m ?? []
+          const codes = h.weather_code ?? []
+          for (let i = 0; i < times.length; i++) {
+            const t = times[i]
+            const temp = temps[i]
+            const code = codes[i]
+            if (!t || temp == null || code == null) continue
+            const date = t.slice(0, 10)
+            const hour = t.slice(11, 13)
+            const entry = { time: t, temp, code }
+            const day =
+              map.get(date) ??
+              ({} as { matin?: HourWeather; aprem?: HourWeather; soir?: HourWeather })
+            if (hour === '08') day.matin = entry
+            if (hour === '14') day.aprem = entry
+            if (hour === '20') day.soir = entry
+            if (day.matin && day.aprem && day.soir)
+              map.set(date, day as { matin: HourWeather; aprem: HourWeather; soir: HourWeather })
+          }
+          setByDate(map)
+          // Toutes les heures par date (pour la météo à l'heure exacte d'un plan)
+          const all = new Map<string, HourWeather[]>()
+          for (let i = 0; i < times.length; i++) {
+            const t = times[i]
+            const temp = temps[i]
+            const code = codes[i]
+            if (!t || temp == null || code == null) continue
+            const d = t.slice(0, 10)
+            const arr = all.get(d) ?? []
+            arr.push({ time: t, temp, code })
+            all.set(d, arr)
+          }
+          setHourly(all)
+        },
+      )
       .catch(() => {
         /* météo indisponible : on ignore silencieusement */
       })
@@ -131,7 +151,8 @@ function weatherAt(hourly: Map<string, HourWeather[]>, date: Date) {
   const h = date.getHours()
   let best = first
   for (const w of arr ?? []) {
-    if (Math.abs(Number(w.time.slice(11, 13)) - h) < Math.abs(Number(best.time.slice(11, 13)) - h)) best = w
+    if (Math.abs(Number(w.time.slice(11, 13)) - h) < Math.abs(Number(best.time.slice(11, 13)) - h))
+      best = w
   }
   return weatherMeta(best.code)
 }
@@ -160,7 +181,9 @@ function DayWeather({
         const meta = weatherMeta(s.value.code)
         return (
           <div key={s.label} className="min-w-12" title={`${s.label} : ${meta.label}`}>
-            <div className="text-[10px] font-bold uppercase tracking-wide text-fg-muted">{s.label.slice(0, 4)}</div>
+            <div className="text-[10px] font-bold uppercase tracking-wide text-fg-muted">
+              {s.label.slice(0, 4)}
+            </div>
             <div className="text-base leading-tight" aria-hidden>
               {meta.icon}
             </div>
@@ -181,6 +204,7 @@ type EventRow = {
   price: number | null
   currentParticipants: number
   maxParticipants: number | null
+  isOnline?: boolean
   category: { slug: string; name: string; icon: string; color: string }
   coverImage: string | null
   organizer: { id: string; firstName: string; lastName: string; displayName: string | null } | null
@@ -190,7 +214,7 @@ type EventRow = {
  * Ligne d'événement compacte : image en fond sur toute la ligne, long dégradé
  * naturel vers la couleur de la catégorie, encart heure collé à gauche
  * (10 px de marge) sur quasi toute la hauteur, textes avec ombre portée.
- * Ordre : heure → icône catégorie → titre → ville + organisateur → inscrits.
+ * Ordre : météo → heure → icône catégorie → titre → **ville** → inscrits.
  */
 function EventRowLink({
   e,
@@ -218,7 +242,11 @@ function EventRowLink({
             className="absolute inset-0 h-full w-full object-cover"
           />
         ) : (
-          <span className="absolute inset-0" style={{ backgroundColor: `${color}33` }} aria-hidden />
+          <span
+            className="absolute inset-0"
+            style={{ backgroundColor: `${color}33` }}
+            aria-hidden
+          />
         )}
 
         {/* Dégradé de lisibilité */}
@@ -250,13 +278,13 @@ function EventRowLink({
           <CategoryIcon name={e.category.icon} className="h-3.5 w-3.5 shrink-0" />
           <span className="truncate text-[13px] font-bold">{e.title}</span>
           <span className="ml-auto flex shrink-0 items-center gap-2 text-[11px] font-semibold">
-            {e.organizer && (
+            {/* La ville de l'événement remplace le nom de l'organisateur */}
+            {!e.isOnline && e.city && (
               <span className="flex max-w-32 items-center gap-1 truncate font-semibold opacity-90">
-                <span className="hidden sm:inline">{tl('by')}</span>
-                <span className="truncate">{e.organizer.displayName || `${e.organizer.firstName} ${e.organizer.lastName.charAt(0)}.`}</span>
+                <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+                <span className="truncate">{e.city}</span>
               </span>
             )}
-            <span className="hidden max-w-28 truncate sm:inline">{e.city}</span>
             <span className="rounded-full bg-white/20 px-1.5 py-0.5 tabular-nums">
               {e.currentParticipants}
               {e.maxParticipants != null ? `/${e.maxParticipants}` : ''}
@@ -396,7 +424,7 @@ export default function ActivitePage() {
   )
 
   const today = new Date()
-  const selectedEvents = selected ? byDay.get(format(selected, 'yyyy-MM-dd')) ?? [] : []
+  const selectedEvents = selected ? (byDay.get(format(selected, 'yyyy-MM-dd')) ?? []) : []
 
   return (
     <div className="mx-auto max-w-4xl space-y-6 px-4 py-8 md:px-0">
@@ -408,13 +436,23 @@ export default function ActivitePage() {
           <p className="text-sm text-fg-muted">Tout ce qui se passe près de chez vous.</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" aria-label={tl('cal_prev_month')} onClick={() => setMonth((m) => addMonths(m, -1))}>
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label={tl('cal_prev_month')}
+            onClick={() => setMonth((m) => addMonths(m, -1))}
+          >
             <ChevronLeft className="h-4 w-4" aria-hidden />
           </Button>
           <span aria-live="polite" className="min-w-40 text-center font-semibold capitalize">
             {format(month, 'MMMM yyyy', { locale: fr })}
           </span>
-          <Button variant="outline" size="icon" aria-label={tl('cal_next_month')} onClick={() => setMonth((m) => addMonths(m, 1))}>
+          <Button
+            variant="outline"
+            size="icon"
+            aria-label={tl('cal_next_month')}
+            onClick={() => setMonth((m) => addMonths(m, 1))}
+          >
             <ChevronRight className="h-4 w-4" aria-hidden />
           </Button>
         </div>
@@ -470,9 +508,12 @@ export default function ActivitePage() {
               const date = first.startDate
               const isToday = isSameDay(date, today)
               return (
-                <section key={dayKey} aria-label={`Plans du ${format(date, 'd MMMM', { locale: fr })}`}>
+                <section
+                  key={dayKey}
+                  aria-label={`Plans du ${format(date, 'd MMMM', { locale: fr })}`}
+                >
                   <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="text-lg font-extrabold tracking-tight capitalize">
+                    <h2 className="text-lg font-extrabold capitalize tracking-tight">
                       {format(date, 'EEEE d', { locale: fr })}
                       {isToday && (
                         <span className="ml-2 rounded-full bg-primary-600 px-2 py-0.5 align-middle text-[10px] font-bold uppercase tracking-wide text-white">
@@ -556,9 +597,18 @@ export default function ActivitePage() {
             </div>
 
             <section aria-labelledby="day-events-title">
-              <h2 id="day-events-title" className="mb-3 flex flex-wrap items-center justify-between gap-2 font-semibold capitalize">
-                <span>{selected ? format(selected, 'EEEE d MMMM', { locale: fr }) : 'Sélectionnez un jour'}</span>
-                {selected && <DayWeather day={format(selected, 'yyyy-MM-dd')} weather={weatherByDate} />}
+              <h2
+                id="day-events-title"
+                className="mb-3 flex flex-wrap items-center justify-between gap-2 font-semibold capitalize"
+              >
+                <span>
+                  {selected
+                    ? format(selected, 'EEEE d MMMM', { locale: fr })
+                    : 'Sélectionnez un jour'}
+                </span>
+                {selected && (
+                  <DayWeather day={format(selected, 'yyyy-MM-dd')} weather={weatherByDate} />
+                )}
               </h2>
               {selectedEvents.length === 0 ? (
                 <EmptyState
