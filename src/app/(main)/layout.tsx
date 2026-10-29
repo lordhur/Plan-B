@@ -1,12 +1,13 @@
 import { Navbar } from '@/components/layout/Navbar'
-import { BottomNav } from '@/components/layout/BottomNav'
 import { MainShell } from '@/components/layout/MainShell'
 import { ErrorBoundary } from '@/components/common/ErrorBoundary'
 import { AuroraBackground } from '@/components/common/AuroraBackground'
 
 /**
- * Layout principal : barre de navigation FIXE (toujours visible, y compris en
- * bas de page), contenu décalé de sa hauteur exacte, bottom nav mobile.
+ * Layout principal : barre de navigation FIXE à deux rangées (toujours
+ * visible, y compris en bas de page) + contenu décalé de sa hauteur exacte.
+ * La navigation mobile est désormais intégrée à cette barre unique : plus de
+ * barre du bas, donc plus aucun risque de zoom ou de disparition.
  */
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +17,6 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <MainShell>
         <ErrorBoundary>{children}</ErrorBoundary>
       </MainShell>
-      <BottomNav />
     </div>
   )
 }
