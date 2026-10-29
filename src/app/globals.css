@@ -20,9 +20,8 @@
     /* Pastille Accueil : teinte de l'anneau et contour du « B » du wordmark */
     --pill-bg: 255 255 255;
     --wordmark-outline: #ffffff;
-    /* Survol jaune de la navigation */
-    --nav-gold: 224 162 0;
-    --nav-pill-hover: 255 193 7;
+    /* Survol de la navigation : l'orange exact de l'icône Accueil (#EA580C) */
+    --nav-hover: 234 88 12;
   }
 
   .dark {
@@ -34,8 +33,7 @@
     --fg-muted: 148 163 184;
     --pill-bg: 23 30 51;
     --wordmark-outline: #0a0e1c;
-    --nav-gold: 250 204 21;
-    --nav-pill-hover: 255 199 26;
+    --nav-hover: 234 88 12;
   }
 
   * {
@@ -798,9 +796,9 @@ nav * {
 }
 
 /* ============================================================
-   Survol souris de la navigation
-   - onglets secondaires : icône + libellé passent en jaune
-   - bouton Accueil : TOUT le bouton devient jaune, l'icône et le
+   Survol souris de la navigation — orange du logo Accueil (#EA580C)
+   - onglets secondaires : icône + libellé passent en orange
+   - bouton Accueil : TOUT le bouton devient orange, l'icône et le
      mot « Accueil » passent en blanc
    (uniquement sur les appareils qui ont un vrai curseur : sur mobile
    aucun état ne reste « collé » après un appui)
@@ -819,23 +817,24 @@ nav * {
 
 @media (hover: hover) and (pointer: fine) {
   .nav-tab:hover .nav-tab-glyph {
-    color: rgb(var(--nav-gold));
+    color: rgb(var(--nav-hover));
   }
 
   .nav-home:hover .home-pill,
   .nav-home:hover .home-pill-inner {
-    background-color: rgb(var(--nav-pill-hover));
+    background-color: rgb(var(--nav-hover));
   }
   .nav-home:hover .home-pill {
     box-shadow:
-      0 12px 24px -6px rgba(255, 193, 7, 0.55),
-      0 3px 8px rgba(255, 193, 7, 0.35),
-      0 0 0 1px rgb(var(--nav-pill-hover));
+      0 12px 26px -6px rgba(234, 88, 12, 0.5),
+      0 3px 8px rgba(234, 88, 12, 0.32),
+      0 0 0 1px rgb(var(--nav-hover));
   }
+  /* liseré blanc entre les deux cercles, comme sur la maquette */
   .nav-home:hover .home-pill-inner {
     box-shadow:
-      0 1px 3px rgba(146, 100, 0, 0.28),
-      0 0 0 1px rgba(255, 255, 255, 0.55);
+      0 0 0 2px rgba(255, 255, 255, 0.92),
+      0 1px 3px rgba(124, 45, 18, 0.3);
   }
   .nav-home:hover .nav-home-glyph {
     color: #ffffff;
@@ -843,17 +842,17 @@ nav * {
   /* le mot garde sa graisse, seul le contraste change */
   .nav-home:hover .home-pill-inner .nav-home-glyph,
   .nav-home:focus-visible .home-pill-inner .nav-home-glyph {
-    text-shadow: 0 1px 1px rgba(146, 100, 0, 0.28);
+    text-shadow: 0 1px 1px rgba(124, 45, 18, 0.45);
   }
 }
 
 /* Parité clavier (WCAG 2.4.7) : le focus produit le même repère visuel */
 .nav-tab:focus-visible .nav-tab-glyph {
-  color: rgb(var(--nav-gold));
+  color: rgb(var(--nav-hover));
 }
 .nav-home:focus-visible .home-pill,
 .nav-home:focus-visible .home-pill-inner {
-  background-color: rgb(var(--nav-pill-hover));
+  background-color: rgb(var(--nav-hover));
 }
 .nav-home:focus-visible .nav-home-glyph {
   color: #ffffff;
