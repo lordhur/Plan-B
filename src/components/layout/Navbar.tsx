@@ -174,6 +174,9 @@ function HomeTab({ label }: { label: string }) {
       }}
       className="nav-home group relative z-10 flex flex-1 flex-col items-center justify-end"
     >
+      {/* Aura orange : halo en dégradé qui se dégage du bouton au survol */}
+      <span aria-hidden className="home-aura" />
+
       {/* Anneau extérieur (le cercle qui manquait) */}
       <span
         key={tap}
@@ -187,7 +190,7 @@ function HomeTab({ label }: { label: string }) {
           <span aria-hidden className="animate-home-ring pointer-events-none absolute inset-0 rounded-full" />
         )}
         {/* Pastille intérieure */}
-        <span className="home-pill-inner flex h-[3.375rem] w-[3.375rem] flex-col items-center justify-center gap-[3px] rounded-full min-[380px]:h-[3.75rem] min-[380px]:w-[3.75rem]">
+        <span className="home-pill-inner relative flex h-[3.375rem] w-[3.375rem] flex-col items-center justify-center gap-[3px] rounded-full min-[380px]:h-[3.75rem] min-[380px]:w-[3.75rem]">
           <HouseIcon
             className={cn(
               'nav-home-glyph h-[21px] w-[21px] transition-colors duration-200',
