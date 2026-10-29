@@ -173,37 +173,40 @@ function HomeTab({ label }: { label: string }) {
           }
         }
       }}
-      className="group relative z-10 flex flex-1 flex-col items-center justify-start"
+      className="home-tab group relative flex flex-1 flex-col items-center justify-end pb-0.5"
     >
+      {/* Cercle de fond en absolu : il déborde du filet comme sur la maquette,
+          tandis que l'icône et le libellé restent sur la même ligne de base
+          que les autres onglets. */}
       <span
         key={tap}
+        aria-hidden
         className={cn(
-          'relative -mb-3 -mt-2 flex h-[3.75rem] w-[3.75rem] flex-col items-center justify-center gap-0.5 rounded-full bg-card',
-          'shadow-[0_2px_10px_rgba(15,23,42,0.16),0_0_0_1px_rgba(15,23,42,0.06)]',
-          'transition-transform duration-150 group-active:scale-95',
+          'home-pill pointer-events-none absolute bottom-[-0.3rem] left-1/2 -ml-[1.8rem] h-[3.6rem] w-[3.6rem] rounded-full bg-card',
+          'shadow-[0_0_0_3px_rgba(255,255,255,0.95),0_0_0_4px_rgba(15,23,42,0.10),0_6px_18px_rgba(15,23,42,0.18)]',
+          'transition-all duration-200 ease-out',
           tap > 0 && 'animate-home-tap',
         )}
-      >
-        {tap > 0 && (
-          <span
-            aria-hidden
-            className="animate-home-ring pointer-events-none absolute inset-0 rounded-full bg-accent-500/25"
-          />
-        )}
-        <HouseIcon
-          className={cn(
-            'relative h-[23px] w-[23px] transition-colors duration-200',
-            active ? 'text-accent-600' : 'text-fg-muted group-hover:text-accent-600',
-          )}
-        />
+      />
+      {tap > 0 && (
         <span
-          className={cn(
-            'relative max-w-full truncate px-1 text-[10px] leading-none tracking-tight min-[380px]:text-[11px]',
-            active ? 'font-extrabold text-fg' : 'font-semibold text-fg-muted',
-          )}
-        >
-          {label}
-        </span>
+          aria-hidden
+          className="animate-home-ring pointer-events-none absolute bottom-[-0.3rem] left-1/2 -ml-[1.8rem] h-[3.6rem] w-[3.6rem] rounded-full bg-accent-500/30"
+        />
+      )}
+      <HouseIcon
+        className={cn(
+          'home-icon relative z-10 mb-[3px] h-[23px] w-[23px] transition-colors duration-200',
+          active ? 'text-accent-500' : 'text-fg-muted',
+        )}
+      />
+      <span
+        className={cn(
+          'home-label relative z-10 max-w-full truncate px-1 text-[10px] leading-none tracking-tight transition-colors duration-200 min-[380px]:text-[11px]',
+          active ? 'font-extrabold text-fg' : 'font-semibold text-fg-muted',
+        )}
+      >
+        {label}
       </span>
     </Link>
   )
@@ -355,16 +358,16 @@ export function Navbar() {
                 <button
                   type="button"
                   aria-label={t('nav_create')}
-                  className="flex h-10 w-10 items-center justify-center rounded-full border-[1.7px] border-fg text-fg transition-transform duration-150 hover:bg-bg-secondary active:scale-90"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border-[1.8px] border-fg/85 bg-transparent text-fg transition-all duration-200 hover:border-accent-500 hover:bg-accent-500 hover:text-white hover:shadow-[0_4px_14px_rgba(249,115,22,0.4)] active:scale-90"
                 >
-                  <Plus className="h-5 w-5" strokeWidth={2} aria-hidden />
+                  <Plus className="h-[22px] w-[22px]" strokeWidth={2} aria-hidden />
                 </button>
               }
             />
           </div>
 
           <Link href="/" className="flex items-center gap-2" aria-label="PlanB — accueil">
-            <LogoMark className="h-9 w-9 sm:h-10 sm:w-10" />
+            <LogoMark className="h-10 w-10 sm:h-11 sm:w-11" />
             <span className="whitespace-nowrap text-[1.35rem] font-extrabold leading-none tracking-tight text-fg sm:text-2xl">
               Plan{' '}
               <span className="text-primary-600 drop-shadow-[0_1px_1px_rgba(124,58,237,0.25)]">B</span>

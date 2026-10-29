@@ -770,6 +770,27 @@ nav * {
   }
 }
 
+/* ============================================================
+   Onglet Accueil — survol souris : la pastille s'illumine en orange
+   ============================================================ */
+@media (hover: hover) and (pointer: fine) {
+  .home-tab:hover .home-pill {
+    background-color: #f97316;
+    transform: translateY(-2px) scale(1.07);
+    box-shadow:
+      0 0 0 3px rgba(255, 255, 255, 0.95),
+      0 0 0 4px rgba(249, 115, 22, 0.28),
+      0 10px 26px rgba(249, 115, 22, 0.5);
+  }
+  .home-tab:hover .home-icon,
+  .home-tab:hover .home-label {
+    color: #ffffff;
+  }
+  .home-tab:active .home-pill {
+    transform: scale(0.94);
+  }
+}
+
 /* Météo animée des lignes d'activités */
 .weather-anim {
   display: inline-block;
@@ -792,6 +813,8 @@ nav * {
   content-visibility: auto;
   contain-intrinsic-size: auto 52px;
 }
-img, video {
+/* Fond de chargement des images DISTANTES uniquement : le logo et les
+   visuels locaux (PNG transparents) ne doivent jamais recevoir de fond. */
+img[src^='http'], img[src^='//'], img[src^='/api/'] {
   background-color: rgba(100, 116, 139, 0.08);
 }

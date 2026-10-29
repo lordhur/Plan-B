@@ -15,10 +15,15 @@ export function LogoMark({ className }: { className?: string }) {
     <img
       src="/brand/logo-planb.png"
       alt=""
-      width={512}
-      height={512}
+      width={384}
+      height={384}
       decoding="async"
-      className={cn('h-9 w-9 select-none object-contain', className)}
+      draggable={false}
+      // `bg-transparent` : le PNG garde son tour transparent (aucun fond ajouté).
+      className={cn(
+        'h-10 w-10 select-none bg-transparent object-contain drop-shadow-[0_1px_2px_rgba(15,23,42,0.18)]',
+        className,
+      )}
     />
   )
 }
