@@ -2,10 +2,10 @@
 
 import { AlertTriangle, ChevronDown, Link2, Loader2, RefreshCw, Search, Sparkles, Sticker, X } from 'lucide-react'
 import * as React from 'react'
+import { GifImage } from './GifImage'
 import {
   GIF_CATEGORIES,
   fetchGifs,
-  gifSrc,
   type CombinedGifPage,
   type GifItem,
   type GifKind,
@@ -366,12 +366,8 @@ export function GifPicker({ onPick, onClose }: GifPickerProps) {
                   aria-label={`Envoyer ce ${item.kind === 'sticker' ? 'sticker' : 'GIF'} (${item.provider})`}
                   title={item.title}
                 >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={gifSrc(item.preview)}
-                    alt=""
-                    loading="lazy"
-                    referrerPolicy="no-referrer"
+                  <GifImage
+                    src={item.preview}
                     className="h-24 w-full object-cover transition-transform duration-200 group-hover:scale-105"
                   />
                   <span className="absolute bottom-0.5 right-0.5 rounded bg-black/60 px-1 text-[9px] font-bold uppercase text-white">
