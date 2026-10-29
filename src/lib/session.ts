@@ -103,8 +103,12 @@ export function useCurrentUser() {
 
   return {
     user,
-    /** Emplacement neutre : uniquement tant qu'on n'a jamais su. */
-    isLoading: !authKnown,
+    /**
+     * Chargement : soit on ne sait encore rien, soit on se sait connecté mais
+     * le profil n'est pas encore arrivé (les pages affichent alors leur
+     * indicateur au lieu d'un écran vide).
+     */
+    isLoading: !authKnown || (isAuthenticated && !user && !query.isError),
     isAuthenticated,
     needsEmailVerification: !!user && !user.emailVerified,
     refetch: query.refetch,
