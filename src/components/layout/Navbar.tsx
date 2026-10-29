@@ -130,7 +130,7 @@ function TabLink({
       href={href}
       aria-current={active ? 'page' : undefined}
       className={cn(
-        'group flex min-h-[3.25rem] flex-1 flex-col items-center justify-start gap-1 rounded-xl px-0.5 pt-1.5 text-[11px] font-semibold transition-colors',
+        'group flex min-h-[3.25rem] flex-1 flex-col items-center justify-end gap-1 rounded-xl px-0.5 pb-0.5 text-[11px] font-semibold transition-colors',
         active ? 'text-fg' : 'text-fg-muted hover:text-fg',
       )}
     >
