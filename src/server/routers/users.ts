@@ -32,6 +32,7 @@ const publicProfileSelect = {
   tiktok: true,
   youtube: true,
   spotify: true,
+  socialLinks: true,
   lastSeenAt: true,
   profilePhotos: { orderBy: { order: 'asc' }, take: 12 },
   favoriteCategories: { select: { id: true, slug: true, name: true, icon: true, color: true } },
@@ -39,7 +40,18 @@ const publicProfileSelect = {
   privacyLevel: true,
   interests: { select: { id: true, name: true, icon: true } },
   badges: {
-    include: { badge: { select: { code: true, name: true, icon: true, color: true, description: true, category: true } } },
+    include: {
+      badge: {
+        select: {
+          code: true,
+          name: true,
+          icon: true,
+          color: true,
+          description: true,
+          category: true,
+        },
+      },
+    },
     orderBy: { earnedAt: 'desc' },
     take: 12,
   },
@@ -199,48 +211,44 @@ export const usersRouter = createTRPCRouter({
     }),
 
   /** Mise à jour de mon profil. */
-  updateProfile: protectedProcedure
-    .input(updateProfileSchema)
-    .mutation(async ({ input, ctx }) => {
-      const data: Record<string, unknown> = { ...input }
-      // Téléphone modifié → repasse en non-vérifié (nouveau code requis)
-      if (input.phone !== undefined) {
-        if (input.phone === '') {
-          data.phone = null
-          data.phoneVerified = false
-        } else {
-          data.phone = input.phone
-          data.phoneVerified = false
-        }
+  updateProfile: protectedProcedure.input(updateProfileSchema).mutation(async ({ input, ctx }) => {
+    const data: Record<string, unknown> = { ...input }
+    // Téléphone modifié → repasse en non-vérifié (nouveau code requis)
+    if (input.phone !== undefined) {
+      if (input.phone === '') {
+        data.phone = null
+        data.phoneVerified = false
+      } else {
+        data.phone = input.phone
+        data.phoneVerified = false
       }
-      const user = await prisma.user.update({
-        where: { id: ctx.user.id },
-        data,
-        select: { id: true, email: true, firstName: true, lastName: true, city: true },
-      })
-      return user
-    }),
+    }
+    const user = await prisma.user.update({
+      where: { id: ctx.user.id },
+      data,
+      select: { id: true, email: true, firstName: true, lastName: true, city: true },
+    })
+    return user
+  }),
 
   /** Sélection des centres d'intérêt (onboarding / préférences). */
-  setInterests: protectedProcedure
-    .input(setInterestsSchema)
-    .mutation(async ({ input, ctx }) => {
-      // Crée les intérêts manquants puis remplace la sélection de l'utilisateur
-      await Promise.all(
-        input.interests.map((name) =>
-          prisma.interest.upsert({ where: { name }, update: {}, create: { name } }),
-        ),
-      )
-      const interests = await prisma.interest.findMany({
-        where: { name: { in: input.interests } },
-        select: { id: true },
-      })
-      await prisma.user.update({
-        where: { id: ctx.user.id },
-        data: { interests: { set: interests } },
-      })
-      return { count: interests.length }
-    }),
+  setInterests: protectedProcedure.input(setInterestsSchema).mutation(async ({ input, ctx }) => {
+    // Crée les intérêts manquants puis remplace la sélection de l'utilisateur
+    await Promise.all(
+      input.interests.map((name) =>
+        prisma.interest.upsert({ where: { name }, update: {}, create: { name } }),
+      ),
+    )
+    const interests = await prisma.interest.findMany({
+      where: { name: { in: input.interests } },
+      select: { id: true },
+    })
+    await prisma.user.update({
+      where: { id: ctx.user.id },
+      data: { interests: { set: interests } },
+    })
+    return { count: interests.length }
+  }),
 
   /** Position géographique (onboarding : « autour de moi »). */
   setLocation: protectedProcedure
@@ -313,7 +321,11 @@ export const usersRouter = createTRPCRouter({
         }
         // âge <= maxAge ⇔ naissance >= aujourd'hui - (maxAge + 1) ans + 1 jour
         if (input.maxAge) {
-          dob.gte = new Date(now.getFullYear() - input.maxAge - 1, now.getMonth(), now.getDate() + 1)
+          dob.gte = new Date(
+            now.getFullYear() - input.maxAge - 1,
+            now.getMonth(),
+            now.getDate() + 1,
+          )
         }
         where.dateOfBirth = dob
       }
@@ -412,7 +424,13 @@ export const usersRouter = createTRPCRouter({
         where: { toId: input.userId },
         include: {
           from: {
-            select: { id: true, firstName: true, lastName: true, displayName: true, avatarUrl: true },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              displayName: true,
+              avatarUrl: true,
+            },
           },
         },
         orderBy: { createdAt: 'desc' },

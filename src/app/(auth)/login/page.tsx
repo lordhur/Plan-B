@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { SocialAuthButtons } from '@/components/auth/SocialAuthButtons'
 import { useLang } from '@/lib/i18n'
+import { markAuthenticated } from '@/lib/session'
 
 function LoginForm() {
   const { t: tl } = useLang()
@@ -40,8 +41,17 @@ function LoginForm() {
       // On recharge toutes les données : aucune chance de réutiliser un cache
       // « déconnecté » (service worker ou client tRPC).
       await utils.invalidate()
+      // La barre passe à la cloche tout de suite, sans repasser par « Connexion ».
+      markAuthenticated()
       toast.success('Content de vous revoir ! 👋')
-      router.push(res.needsOnboarding ? '/verify' : next)
+      if (!res.emailVerified) {
+        // On entre quand même : une bannière proposera de vérifier l'adresse.
+        toast.info(
+          'E-mail non vérifié',
+          'Vous pouvez utiliser Plan B dès maintenant. Vérifiez votre adresse quand vous voulez.',
+        )
+      }
+      router.push(next)
       router.refresh()
     },
     onError: (err) => toast.error('Connexion impossible', err.message),
@@ -57,7 +67,7 @@ function LoginForm() {
         {oauthUnavailable && (
           <p
             role="status"
-            className="text-warning-700 dark:text-warning-400 mb-4 rounded-xl border border-warning-500/40 bg-warning-50 px-3 py-2 text-center text-sm font-medium dark:bg-warning-500/10"
+            className="mb-4 rounded-xl border border-warning-500/40 bg-warning-50 px-3 py-2 text-center text-sm font-medium text-warning-700 dark:bg-warning-500/10 dark:text-warning-400"
           >
             Cette connexion sociale n’est pas encore activée. Utilisez votre email et mot de passe,
             ou créez un compte en quelques secondes.
@@ -66,7 +76,7 @@ function LoginForm() {
         {signedOut && (
           <p
             role="status"
-            className="text-success-700 dark:text-success-400 mb-4 rounded-xl border border-success-500/40 bg-success-50 px-3 py-2 text-center text-sm font-semibold dark:bg-success-500/10"
+            className="mb-4 rounded-xl border border-success-500/40 bg-success-50 px-3 py-2 text-center text-sm font-semibold text-success-700 dark:bg-success-500/10 dark:text-success-400"
           >
             ✅ Vous êtes bien déconnecté.
           </p>

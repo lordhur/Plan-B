@@ -60,11 +60,14 @@ export function providerConfig(provider: OAuthProvider, baseUrl: string): Provid
         label: 'Facebook',
       }
     case 'instagram':
+      // « Instagram API with Instagram Login » (compte professionnel requis).
+      // 1. autorisation → 2. code échangé contre un jeton court (1 h) sur
+      // api.instagram.com → 3. (optionnel) jeton long via graph.instagram.com.
       return {
         clientId: id,
         clientSecret: secret,
         authorizeUrl: 'https://www.instagram.com/oauth/authorize',
-        tokenUrl: 'https://graph.instagram.com/access_token',
+        tokenUrl: 'https://api.instagram.com/oauth/access_token',
         scopes: 'instagram_business_basic',
         label: 'Instagram',
       }
@@ -81,7 +84,11 @@ export function redirectUri(provider: OAuthProvider, baseUrl: string): string {
 }
 
 /** URL d'autorisation (avec état anti-CSRF). */
-export function authorizeUrl(provider: OAuthProvider, baseUrl: string, state: string): string | null {
+export function authorizeUrl(
+  provider: OAuthProvider,
+  baseUrl: string,
+  state: string,
+): string | null {
   const cfg = providerConfig(provider, baseUrl)
   if (!cfg) return null
   const params = new URLSearchParams({
@@ -108,7 +115,10 @@ export interface SocialProfile {
   avatarUrl: string | null
 }
 
-async function postForm(url: string, body: Record<string, string>): Promise<Record<string, unknown>> {
+async function postForm(
+  url: string,
+  body: Record<string, string>,
+): Promise<Record<string, unknown>> {
   const res = await fetch(url, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -159,10 +169,7 @@ export async function exchangeCode(
 }
 
 /** Profil de l'utilisateur connecté chez le fournisseur. */
-export async function fetchProfile(
-  provider: OAuthProvider,
-  token: string,
-): Promise<SocialProfile> {
+export async function fetchProfile(provider: OAuthProvider, token: string): Promise<SocialProfile> {
   if (provider === 'google') {
     const res = await fetch('https://openidconnect.googleapis.com/v1/userinfo', {
       headers: { Authorization: `Bearer ${token}` },

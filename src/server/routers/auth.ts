@@ -11,6 +11,7 @@ import {
   consumeVerificationCode,
   createVerificationCode,
   hashPassword,
+  isEmailDeliveryConfigured,
   rateLimit,
   sendCodeEmail,
   setSessionCookie,
@@ -20,9 +21,18 @@ import { prisma } from '../db'
 import { isProviderConfigured } from '@/lib/oauth'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
-/** En dev sans service email, on renvoie le code à l'UI pour la démo. */
-function devCode(code: string): string | undefined {
-  return process.env.NODE_ENV === 'development' && !process.env.RESEND_API_KEY ? code : undefined
+/**
+ * Le code est-il affichable dans l'interface ?
+ *
+ * On ne le renvoie JAMAIS en silence : uniquement quand l'e-mail n'a pas pu
+ * partir (aucun service configuré ou refus de Resend). Sans cela, une
+ * inscription restait bloquée pour toujours sur « nous vous avons envoyé un
+ * code » alors que rien n'arrivait dans la boîte mail.
+ */
+type Delivery = 'email' | 'on-screen'
+
+function fallbackCode(code: string, delivered: boolean): string | undefined {
+  return delivered ? undefined : code
 }
 
 export const authRouter = createTRPCRouter({
@@ -58,31 +68,46 @@ export const authRouter = createTRPCRouter({
     })
 
     const { code } = await createVerificationCode(user.email, 'EMAIL_VERIFICATION', user.id)
-    await sendCodeEmail(user.email, code, 'Votre code de vérification PlanB')
+    const sent = await sendCodeEmail(user.email, code, 'Votre code de vérification Plan B')
+    const delivery: Delivery = sent.delivered ? 'email' : 'on-screen'
 
-    return { userId: user.id, email: user.email, devCode: devCode(code), alreadyLoggedIn: !!ctx.user }
+    return {
+      userId: user.id,
+      email: user.email,
+      delivery,
+      fallbackCode: fallbackCode(code, sent.delivered),
+      alreadyLoggedIn: !!ctx.user,
+    }
   }),
 
   /** Renvoie un code de vérification email. */
-  resendCode: publicProcedure
-    .input(forgotPasswordSchema)
-    .mutation(async ({ input }) => {
-      const user = await prisma.user.findUnique({ where: { email: input.email } })
-      if (!user) {
-        // Anti-énumération : on répond OK même si l'email n'existe pas
-        return { sent: true, devCode: undefined }
-      }
-      const limit = rateLimit(`resend:${user.id}`, 5, 15 * 60 * 1000)
-      if (!limit.ok) {
-        throw new TRPCError({
-          code: 'TOO_MANY_REQUESTS',
-          message: 'Trop de codes demandés — réessayez plus tard',
-        })
-      }
-      const { code } = await createVerificationCode(user.email, 'EMAIL_VERIFICATION', user.id)
-      await sendCodeEmail(user.email, code, 'Votre code de vérification PlanB')
-      return { sent: true, devCode: devCode(code) }
-    }),
+  resendCode: publicProcedure.input(forgotPasswordSchema).mutation(async ({ input }) => {
+    const user = await prisma.user.findUnique({ where: { email: input.email } })
+    if (!user) {
+      // Anti-énumération : on répond OK même si l'email n'existe pas
+      return { sent: true as const, delivery: 'email' as Delivery, fallbackCode: undefined }
+    }
+    const limit = rateLimit(`resend:${user.id}`, 5, 15 * 60 * 1000)
+    if (!limit.ok) {
+      throw new TRPCError({
+        code: 'TOO_MANY_REQUESTS',
+        message: 'Trop de codes demandés — réessayez plus tard',
+      })
+    }
+    const { code } = await createVerificationCode(user.email, 'EMAIL_VERIFICATION', user.id)
+    const sent = await sendCodeEmail(user.email, code, 'Votre code de vérification Plan B')
+    const delivery: Delivery = sent.delivered ? 'email' : 'on-screen'
+    return {
+      sent: true as const,
+      delivery,
+      fallbackCode: fallbackCode(code, sent.delivered),
+    }
+  }),
+
+  /** Le service e-mail est-il configuré ? (l'UI adapte son message) */
+  deliveryStatus: publicProcedure.query(() => ({
+    email: isEmailDeliveryConfigured(),
+  })),
 
   /** Étape 2 : vérification du code email → session ouverte. */
   verifyEmail: publicProcedure.input(verifyCodeSchema).mutation(async ({ input }) => {
@@ -120,12 +145,15 @@ export const authRouter = createTRPCRouter({
     .mutation(async ({ input, ctx }) => {
       const limit = rateLimit(`phone:${ctx.user.id}`, 5, 15 * 60 * 1000)
       if (!limit.ok) {
-        throw new TRPCError({ code: 'TOO_MANY_REQUESTS', message: 'Trop de demandes — réessayez plus tard' })
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message: 'Trop de demandes — réessayez plus tard',
+        })
       }
       const { code } = await createVerificationCode(input.target, 'PHONE_VERIFICATION', ctx.user.id)
-      // Production : Supabase Auth SMS ou Twilio Verify. Dev : log serveur + UI.
+      // SMS non branché (Twilio = payant) : le code est affiché dans l'interface.
       console.log(`[dev] Code SMS pour ${input.target} : ${code}`)
-      return { sent: true, devCode: devCode(code) }
+      return { sent: true, delivery: 'on-screen' as Delivery, fallbackCode: code }
     }),
 
   /** Connexion email + mot de passe. */
@@ -157,7 +185,10 @@ export const authRouter = createTRPCRouter({
 
     return {
       userId: user.id,
+      // Un e-mail non vérifié n'empêche PLUS d'utiliser l'application : une
+      // bannière propose de vérifier, mais personne ne reste bloqué dehors.
       needsOnboarding: !user.emailVerified,
+      emailVerified: user.emailVerified,
     }
   }),
 
@@ -184,7 +215,14 @@ export const authRouter = createTRPCRouter({
         badges: {
           include: {
             badge: {
-              select: { code: true, name: true, icon: true, color: true, description: true, category: true },
+              select: {
+                code: true,
+                name: true,
+                icon: true,
+                color: true,
+                description: true,
+                category: true,
+              },
             },
           },
           orderBy: { earnedAt: 'desc' },
@@ -200,10 +238,17 @@ export const authRouter = createTRPCRouter({
   /** Mot de passe oublié : envoie un code de réinitialisation. */
   forgotPassword: publicProcedure.input(forgotPasswordSchema).mutation(async ({ input }) => {
     const user = await prisma.user.findUnique({ where: { email: input.email } })
-    if (!user) return { sent: true, devCode: undefined } // anti-énumération
+    // Anti-énumération : réponse identique (et sans code) si l'email est inconnu.
+    if (!user)
+      return { sent: true as const, delivery: 'email' as Delivery, fallbackCode: undefined }
     const { code } = await createVerificationCode(user.email, 'PASSWORD_RESET', user.id)
-    await sendCodeEmail(user.email, code, 'Réinitialisation de votre mot de passe PlanB')
-    return { sent: true, devCode: devCode(code) }
+    const sent = await sendCodeEmail(
+      user.email,
+      code,
+      'Réinitialisation de votre mot de passe Plan B',
+    )
+    const delivery: Delivery = sent.delivered ? 'email' : 'on-screen'
+    return { sent: true as const, delivery, fallbackCode: fallbackCode(code, sent.delivered) }
   }),
 
   /** Réinitialisation avec code + nouveau mot de passe. */

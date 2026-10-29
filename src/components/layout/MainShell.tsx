@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import { Footer } from './Footer'
+import { VerifyEmailBanner } from './VerifyEmailBanner'
 
 /**
  * Coquille du contenu principal.
@@ -22,6 +23,7 @@ export function MainShell({ children }: { children: React.ReactNode }) {
         className="mx-auto flex w-full max-w-6xl flex-1 flex-col"
         style={{ paddingTop: 'var(--nav-h, 4.5rem)' }}
       >
+        <VerifyEmailBanner />
         <main
           id="main"
           className={

@@ -61,6 +61,27 @@ export const updateProfileSchema = z.object({
   avatarUrl: z.string().url().nullable().optional(),
   coverImage: z.string().url().nullable().optional(),
   videoUrl: z.string().url().nullable().optional(),
+  // Liens du profil, ORDONNÉS : l'index du tableau = l'ordre d'affichage.
+  // On accepte un pseudo (« @moi ») comme une URL complète ; la normalisation
+  // se fait côté client (lib/socialLinks) et l'affichage tolère les deux.
+  socialLinks: z
+    .array(
+      z.object({
+        type: z.enum([
+          'instagram',
+          'tiktok',
+          'youtube',
+          'spotify',
+          'twitter',
+          'facebook',
+          'website',
+          'custom',
+        ]),
+        url: z.string().trim().min(1).max(300),
+      }),
+    )
+    .max(12)
+    .optional(),
   // Réseaux sociaux : on accepte un pseudo ou une URL complète (200 car. max)
   instagram: z.string().trim().max(200).nullish(),
   tiktok: z.string().trim().max(200).nullish(),
@@ -98,7 +119,11 @@ export const createEventSchema = z
     // Étape 1 — les bases
     title: z.string().trim().min(3, 'Titre trop court').max(120),
     categoryId: z.string().min(1, 'Catégorie requise'),
-    description: z.string().trim().min(10, 'Description trop courte (10 caractères min.)').max(5000),
+    description: z
+      .string()
+      .trim()
+      .min(10, 'Description trop courte (10 caractères min.)')
+      .max(5000),
     shortDescription: z.string().trim().max(180).optional(),
     coverImage: z
       .string()
@@ -137,7 +162,9 @@ export const createEventSchema = z
     registrationType: z.enum(['OPEN', 'APPROVAL_REQUIRED', 'INVITATION_ONLY']).default('OPEN'),
     minAge: z.number().int().min(0).max(120).nullable().optional(),
     maxAge: z.number().int().min(0).max(120).nullable().optional(),
-    genderRestriction: z.enum(['ALL', 'MALE_ONLY', 'FEMALE_ONLY', 'NON_BINARY_ONLY']).default('ALL'),
+    genderRestriction: z
+      .enum(['ALL', 'MALE_ONLY', 'FEMALE_ONLY', 'NON_BINARY_ONLY'])
+      .default('ALL'),
     minRating: z.number().min(0).max(5).nullable().optional(),
     // Étape 4 — accessibilité & options
     wheelchairAccessible: z.boolean().default(false),
@@ -153,13 +180,25 @@ export const createEventSchema = z
   })
   .superRefine((data, ctx) => {
     if (data.startDate < new Date()) {
-      ctx.addIssue({ code: 'custom', path: ['startDate'], message: 'La date doit être dans le futur' })
+      ctx.addIssue({
+        code: 'custom',
+        path: ['startDate'],
+        message: 'La date doit être dans le futur',
+      })
     }
     if (data.endDate && data.endDate <= data.startDate) {
-      ctx.addIssue({ code: 'custom', path: ['endDate'], message: 'La fin doit être après le début' })
+      ctx.addIssue({
+        code: 'custom',
+        path: ['endDate'],
+        message: 'La fin doit être après le début',
+      })
     }
     if (!data.isFree && (data.price == null || data.price <= 0)) {
-      ctx.addIssue({ code: 'custom', path: ['price'], message: 'Prix requis pour un événement payant' })
+      ctx.addIssue({
+        code: 'custom',
+        path: ['price'],
+        message: 'Prix requis pour un événement payant',
+      })
     }
     if (data.minAge != null && data.maxAge != null && data.minAge > data.maxAge) {
       ctx.addIssue({ code: 'custom', path: ['maxAge'], message: 'Âge max inférieur au min' })

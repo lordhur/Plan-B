@@ -14,16 +14,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 import { AlbumsSection } from '@/components/profile/AlbumsSection'
 import { SocialLinks } from '@/components/profile/ProfileHeader'
+import { parseSocialLinks } from '@/lib/socialLinks'
 import { SavedStoriesSection } from '@/components/profile/SavedStoriesSection'
 import { FriendButton } from '@/components/friends/FriendButton'
 
 /** PROFIL PUBLIC d'un autre utilisateur. */
 export default function PublicProfilePage() {
   const params = useParams<{ userId: string }>()
-  const { data: profile, isLoading, error } = trpc.users.byId.useQuery(
-    { id: params.userId },
-    { enabled: !!params.userId },
-  )
+  const {
+    data: profile,
+    isLoading,
+    error,
+  } = trpc.users.byId.useQuery({ id: params.userId }, { enabled: !!params.userId })
   const { data: ratings } = trpc.users.ratings.useQuery(
     { userId: params.userId },
     { enabled: !!params.userId },
@@ -45,7 +47,10 @@ export default function PublicProfilePage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-5">
-      <Link href="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted hover:text-fg">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-fg-muted hover:text-fg"
+      >
         <ArrowLeft className="h-4 w-4" aria-hidden /> Retour
       </Link>
 
@@ -53,7 +58,9 @@ export default function PublicProfilePage() {
         <CardContent className="flex flex-col items-center pt-8 text-center">
           <Avatar src={profile.avatarUrl} name={displayName} size="xl" />
           <h1 className="mt-4 text-2xl font-extrabold">
-            {profile.showLastName ? displayName : `${profile.firstName} ${profile.lastName.charAt(0)}.`}
+            {profile.showLastName
+              ? displayName
+              : `${profile.firstName} ${profile.lastName.charAt(0)}.`}
             {profile.showAge ? `, ${ageFromBirthDate(new Date(profile.dateOfBirth))} ans` : ''}
           </h1>
           {profile.city && (
@@ -64,9 +71,7 @@ export default function PublicProfilePage() {
           {profile.profession && (
             <p className="mt-1 text-sm font-semibold">💼 {profile.profession}</p>
           )}
-          {profile.education && (
-            <p className="text-sm text-fg-muted">🎓 {profile.education}</p>
-          )}
+          {profile.education && <p className="text-sm text-fg-muted">🎓 {profile.education}</p>}
           <p className="mt-2 flex items-center gap-2 text-sm">
             <span className="font-semibold text-warning-600">
               <Star className="mr-0.5 inline h-3.5 w-3.5 fill-current" aria-hidden />
@@ -109,13 +114,23 @@ export default function PublicProfilePage() {
 
           {profile.bio && <p className="mt-4 max-w-md text-sm text-fg-muted">{profile.bio}</p>}
 
-          <SocialLinks
-            instagram={profile.instagram}
-            tiktok={profile.tiktok}
-            youtube={profile.youtube}
-            spotify={profile.spotify}
-            editable={false}
-          />
+          {(() => {
+            const saved = parseSocialLinks(profile.socialLinks)
+            const links =
+              saved.length > 0
+                ? saved
+                : (
+                    [
+                      ['instagram', profile.instagram],
+                      ['tiktok', profile.tiktok],
+                      ['youtube', profile.youtube],
+                      ['spotify', profile.spotify],
+                    ] as const
+                  )
+                    .filter(([, url]) => Boolean(url))
+                    .map(([type, url]) => ({ type, url: url as string }))
+            return links.length > 0 ? <SocialLinks links={links} /> : null
+          })()}
 
           {/* Galerie de photos */}
           {profile.profilePhotos.length > 0 && (
@@ -202,7 +217,9 @@ export default function PublicProfilePage() {
                   <div className="min-w-0 flex-1">
                     <p className="text-sm font-semibold">
                       {r.from.firstName} {r.from.lastName.charAt(0)}.{' '}
-                      <span className="font-normal text-fg-muted">· {formatRelative(r.createdAt)}</span>
+                      <span className="font-normal text-fg-muted">
+                        · {formatRelative(r.createdAt)}
+                      </span>
                     </p>
                     <p aria-label={`Note : ${r.rating} sur 5`} className="text-warning-500">
                       {'★'.repeat(r.rating)}
@@ -219,7 +236,6 @@ export default function PublicProfilePage() {
     </div>
   )
 }
-
 
 /** Ouvre (ou crée) la conversation privée avec cet utilisateur. */
 function MessageUserButton({ userId }: { userId: string }) {

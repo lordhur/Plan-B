@@ -60,6 +60,10 @@ model User {
   tiktok    String? @db.VarChar(200)
   youtube   String? @db.VarChar(200)
   spotify   String? @db.VarChar(200)
+  // Liens du profil, DANS L'ORDRE D'AFFICHAGE choisi par l'utilisateur.
+  // [{ "type": "instagram" | "tiktok" | "youtube" | "spotify" | "twitter"
+  //            | "facebook" | "website" | "custom", "url": "https://…" }, …]
+  socialLinks Json?
   stories       Story[]
   savedStories SavedStory[]
   storyLikes   StoryLike[]
