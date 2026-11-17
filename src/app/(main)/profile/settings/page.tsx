@@ -1,6 +1,6 @@
 'use client'
 
-import { Bell, Moon, Palette, Shield, Sun, Monitor } from 'lucide-react'
+import { Bell, Check, Copy, ExternalLink, Moon, Palette, Shield, Sun, Monitor } from 'lucide-react'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -16,18 +16,58 @@ import { Label } from '@/components/ui/label'
 import { LoadingSpinner } from '@/components/common/LoadingSpinner'
 
 /**
- * ÉTAT DES CONNEXIONS SOCIALES
- * Affiche en un coup d'œil quels fournisseurs OAuth sont réellement actifs
- * (variables d'environnement posées sur Vercel). Guide : docs/oauth-setup.md
+ * ASSISTANT DE CONNEXION SOCIALE
+ *
+ * Affiche l'état réel de chaque fournisseur (variables d'environnement posées
+ * sur Vercel) et, pour ceux qui restent à configurer, l'URI de redirection
+ * exacte à copier-coller dans la console du fournisseur + le lien direct vers
+ * cette console. Aucune valeur secrète n'est affichée.
  */
+const PROVIDER_HELP: Record<
+  'google' | 'facebook' | 'instagram',
+  { label: string; consoleUrl: string; consoleLabel: string; env: string }
+> = {
+  google: {
+    label: 'Google',
+    consoleUrl: 'https://console.cloud.google.com/auth/clients',
+    consoleLabel: 'Google Auth Platform → Clients',
+    env: 'GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET',
+  },
+  facebook: {
+    label: 'Facebook',
+    consoleUrl: 'https://developers.facebook.com/apps',
+    consoleLabel: 'Meta for Developers → votre app',
+    env: 'FACEBOOK_CLIENT_ID / FACEBOOK_CLIENT_SECRET',
+  },
+  instagram: {
+    label: 'Instagram',
+    consoleUrl: 'https://developers.facebook.com/apps',
+    consoleLabel: 'Meta → Instagram → API setup with Instagram login',
+    env: 'INSTAGRAM_CLIENT_ID / INSTAGRAM_CLIENT_SECRET',
+  },
+}
+
 function SocialProvidersCard() {
   const { data } = trpc.auth.providers.useQuery(undefined, { staleTime: 60_000 })
   const { data: delivery } = trpc.auth.deliveryStatus.useQuery(undefined, { staleTime: 60_000 })
-  const rows = [
-    { key: 'google', label: 'Google' },
-    { key: 'facebook', label: 'Facebook' },
-    { key: 'instagram', label: 'Instagram' },
-  ] as const
+  const [copied, setCopied] = useState<string | null>(null)
+
+  // Adresse publique réelle (fonctionne en production comme en preview).
+  const origin = typeof window === 'undefined' ? '' : window.location.origin
+  const callback = (key: string) => `${origin}/api/oauth/${key}/callback`
+
+  const copy = async (key: string) => {
+    try {
+      await navigator.clipboard.writeText(callback(key))
+      setCopied(key)
+      toast.success('URI copiée', 'Collez-la dans la console du fournisseur.')
+      setTimeout(() => setCopied(null), 2500)
+    } catch {
+      toast.info('Copie impossible', callback(key))
+    }
+  }
+
+  const rows = ['google', 'facebook', 'instagram'] as const
 
   return (
     <Card>
@@ -36,17 +76,20 @@ function SocialProvidersCard() {
           <Shield className="h-4 w-4 text-primary-600" aria-hidden /> Connexions sociales
         </CardTitle>
         <CardDescription>
-          Boutons affichés sur la page de connexion. Ils s’activent dès que les identifiants sont
-          renseignés dans Vercel (guide : <code className="text-[11px]">docs/oauth-setup.md</code>).
+          Les boutons de la page de connexion s’activent dès que les identifiants sont posés dans
+          Vercel puis redéployés. Un fournisseur « non configuré » n’est jamais proposé aux
+          visiteurs.
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ul className="divide-y divide-border">
-          {rows.map(({ key, label }) => {
-            const active = Boolean(data?.[key])
-            return (
-              <li key={key} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="text-sm font-semibold">{label}</span>
+      <CardContent className="space-y-3">
+        {rows.map((key) => {
+          const active = Boolean(data?.[key])
+          const help = PROVIDER_HELP[key]
+          const isCopied = copied === key
+          return (
+            <div key={key} className="rounded-xl border border-border p-3">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-semibold">{help.label}</span>
                 <span
                   className={
                     active
@@ -56,22 +99,76 @@ function SocialProvidersCard() {
                 >
                   {active ? 'Activé' : 'Non configuré'}
                 </span>
-              </li>
-            )
-          })}
-          <li className="flex items-center justify-between gap-3 py-2.5">
-            <span className="text-sm font-semibold">E-mail (codes)</span>
-            <span
-              className={
-                delivery?.email
-                  ? 'rounded-full bg-success-500/15 px-2.5 py-1 text-[11px] font-bold text-success-700 dark:text-success-400'
-                  : 'rounded-full bg-warning-500/15 px-2.5 py-1 text-[11px] font-bold text-warning-700 dark:text-warning-400'
-              }
-            >
-              {delivery?.email ? 'Envoi actif' : 'Code affiché à l’écran'}
-            </span>
-          </li>
-        </ul>
+              </div>
+
+              {active ? (
+                <p className="mt-1.5 text-[11px] text-fg-muted">
+                  Le bouton « Continuer avec {help.label} » est visible sur la page de connexion.
+                </p>
+              ) : (
+                <div className="mt-2 space-y-2">
+                  <p className="text-[11px] text-fg-muted">
+                    À déclarer dans{' '}
+                    <span className="font-semibold text-fg">{help.consoleLabel}</span>, puis dans
+                    Vercel : <code className="text-[10px]">{help.env}</code>
+                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <code className="min-w-0 flex-1 truncate rounded-lg bg-bg-secondary px-2 py-1.5 text-[10px]">
+                      {callback(key)}
+                    </code>
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      size="sm"
+                      className="shrink-0 px-2"
+                      onClick={() => copy(key)}
+                      aria-label={`Copier l’URI de redirection ${help.label}`}
+                    >
+                      {isCopied ? (
+                        <Check className="h-3.5 w-3.5" aria-hidden />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5" aria-hidden />
+                      )}
+                      <span className="sr-only sm:not-sr-only sm:ml-1">Copier</span>
+                    </Button>
+                    <a
+                      href={help.consoleUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border px-2 text-[11px] font-semibold text-fg transition-colors hover:border-primary-400"
+                    >
+                      <ExternalLink className="h-3.5 w-3.5" aria-hidden /> Console
+                    </a>
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-border p-3">
+          <div>
+            <p className="text-sm font-semibold">E-mail (codes à 6 chiffres)</p>
+            <p className="mt-0.5 text-[11px] text-fg-muted">
+              {delivery?.email
+                ? 'Les codes partent par e-mail.'
+                : 'Resend n’est pas configuré : le code s’affiche dans la page de vérification.'}
+            </p>
+          </div>
+          <span
+            className={
+              delivery?.email
+                ? 'shrink-0 rounded-full bg-success-500/15 px-2.5 py-1 text-[11px] font-bold text-success-700 dark:text-success-400'
+                : 'shrink-0 rounded-full bg-warning-500/15 px-2.5 py-1 text-[11px] font-bold text-warning-700 dark:text-warning-400'
+            }
+          >
+            {delivery?.email ? 'Envoi actif' : 'Affiché à l’écran'}
+          </span>
+        </div>
+
+        <p className="text-[11px] text-fg-muted">
+          Guide détaillé pas à pas : <code className="text-[10px]">docs/oauth-setup.md</code>
+        </p>
       </CardContent>
     </Card>
   )
